@@ -1,6 +1,6 @@
 import { FirebaseOptions, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, persistentMultipleTabManager, persistentLocalCache, initializeFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getSystem } from "hooks/useGameSystem";
 import { GAME_SYSTEMS, GameSystemChooser } from "types/GameSystems.type";
@@ -27,12 +27,16 @@ const firebaseConfigs: GameSystemChooser<FirebaseOptions> = {
   },
 };
 
+
+
 export const projectId = firebaseConfigs[gameSystem].projectId;
 
 export const firebaseApp = initializeApp(firebaseConfigs[gameSystem]);
 
 export const firebaseAuth = getAuth(firebaseApp);
 
-export const firestore = getFirestore(firebaseApp);
+initializeFirestore(firebaseApp, {localCache: persistentLocalCache({tabManager: persistentMultipleTabManager()})})
+
+export const firestore = getFirestore(firebaseApp)
 
 export const storage = getStorage(firebaseApp);
