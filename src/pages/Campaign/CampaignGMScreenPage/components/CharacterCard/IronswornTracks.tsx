@@ -49,7 +49,8 @@ export function IronswornTracks(props: IronswornTracksProps) {
           {new Array(earnedExp - spentExp).fill(undefined).map((key, index) => (
             <EarnedIcon key={index} color={"action"} fontSize={"small"} />
           ))}
-          {new Array(totalExp - earnedExp).fill(undefined).map((key, index) => (
+
+        {new Array(Math.max(totalExp, earnedExp) - earnedExp).fill(undefined).map((key, index) => (
             <EmptyIcon key={index} color={"action"} fontSize={"small"} />
           ))}
         </Box>
