@@ -1,8 +1,11 @@
-import { Box, Button, Grid, Stack } from "@mui/material";
-import { AssetCard } from "components/features/assets/NewAssetCard";
-import { AssetCardDialog } from "components/features/assets/NewAssetCardDialog";
+import { Breadcrumbs, Button, Link, Stack, Typography } from "@mui/material";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { useState } from "react";
+import { AssetCollectionsList } from "./AssetCollections/AssetCollectionsList";
+import { AssetCollectionDialog } from "./AssetCollections/AssetCollectionDialog";
+import { useStore } from "stores/store";
+import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
+import { AssetDialog } from "./Assets/AssetDialog";
 
 export interface AssetsSectionProps {
   homebrewId: string;
@@ -10,57 +13,115 @@ export interface AssetsSectionProps {
 
 export function AssetsSection(props: AssetsSectionProps) {
   const { homebrewId } = props;
-  console.debug(homebrewId);
 
-  const [open, setOpen] = useState(false);
+  const [assetCollectionDialogState, setAssetCollectionDialogState] = useState<{
+    open: boolean;
+    collectionId?: string;
+  }>({ open: false });
+  const [assetDialogState, setAssetDialogState] = useState<{
+    open: boolean;
+    assetId?: string;
+  }>({ open: false });
+
+  const assetCollections = useStore(
+    (store) =>
+      store.homebrew.collections[homebrewId]?.assetCollections?.data ?? {}
+  );
+  const [openCollectionKey, setOpenCollectionKey] = useState<string>();
+  const openCollection =
+    assetCollections && openCollectionKey
+      ? assetCollections[openCollectionKey]
+      : undefined;
 
   return (
-    <>
-      <SectionHeading
-        label={"Homebrew Asset Categories"}
-        sx={{ mt: 2 }}
-        floating
-        action={
-          <Button variant={"outlined"} color={"inherit"}>
-            Add Asset Category
-          </Button>
-        }
-      />
-      <SectionHeading
-        label={"Homebrew Assets"}
-        sx={{ mt: 2 }}
-        floating
-        action={
-          <Button variant={"outlined"} color={"inherit"}>
-            Add Asset
-          </Button>
-        }
-      />
-      <Grid container spacing={2}></Grid>
-      <Stack direction={"row"} spacing={2} sx={{ mt: 2 }} flexWrap={"wrap"}>
-        <Box sx={{ mt: 2, maxWidth: 300, width: "100%" }}>
-          <AssetCard
-            showSharedIcon
-            onAssetRemove={() => {}}
-            assetId='starforged/assets/command_vehicle/starship'
+    <Stack spacing={2} mt={2}>
+      {openCollectionKey && openCollection ? (
+        <>
+          <Breadcrumbs>
+            <Link
+              component={"button"}
+              underline='hover'
+              color='inherit'
+              sx={{ lineHeight: "1rem" }}
+              onClick={() => setOpenCollectionKey(undefined)}
+            >
+              Asset Collections
+            </Link>
+            <Typography color='text.primary'>{openCollection.label}</Typography>
+          </Breadcrumbs>
+          <SectionHeading
+            label={"Collection Info"}
+            floating
+            action={
+              <Button
+                color={"inherit"}
+                onClick={() =>
+                  setAssetCollectionDialogState({
+                    open: true,
+                    collectionId: openCollectionKey,
+                  })
+                }
+              >
+                Edit Collection
+              </Button>
+            }
           />
-        </Box>
-        <Box sx={{ mt: 2, maxWidth: 300, width: "100%" }}>
-          <AssetCard assetId='starforged/assets/companion/sprite' />
-        </Box>
-        {/* <Box sx={{ mt: 2, maxWidth: 300, width: "100%" }}>
-        <AssetCard assetId='starforged/assets/deed/bonded' />
-      </Box> */}
-        <Box sx={{ mt: 2, maxWidth: 300, width: "100%" }}>
-          <AssetCard assetId='starforged/assets/path/blademaster' />
-        </Box>
-        <Button onClick={() => setOpen(true)}>Open dialog</Button>
-        <AssetCardDialog
-          open={open}
-          handleClose={() => setOpen(false)}
-          handleAssetSelection={() => {}}
-        />
-      </Stack>
-    </>
+          {openCollection.description && (
+            <MarkdownRenderer markdown={openCollection.description} />
+          )}
+          <SectionHeading
+            label={"Collection Assets"}
+            floating
+            action={
+              <Button
+                color={"inherit"}
+                onClick={() =>
+                  setAssetDialogState({
+                    open: true,
+                  })
+                }
+              >
+                Create Asset
+              </Button>
+            }
+          />
+        </>
+      ) : (
+        <>
+          <SectionHeading
+            label={"Homebrew Asset Collections"}
+            floating
+            action={
+              <Button
+                variant={"outlined"}
+                color={"inherit"}
+                onClick={() => setAssetCollectionDialogState({ open: true })}
+              >
+                Add Asset Collection
+              </Button>
+            }
+          />
+          <AssetCollectionsList
+            homebrewId={homebrewId}
+            openCreateAssetCollectionDialog={() =>
+              setAssetCollectionDialogState({ open: true })
+            }
+            setOpenCollection={setOpenCollectionKey}
+          />
+        </>
+      )}
+      <AssetCollectionDialog
+        open={assetCollectionDialogState.open}
+        onClose={() => setAssetCollectionDialogState({ open: false })}
+        homebrewId={homebrewId}
+        existingAssetCollectionId={assetCollectionDialogState.collectionId}
+      />
+      <AssetDialog
+        open={assetDialogState.open}
+        onClose={() => setAssetDialogState({ open: false })}
+        homebrewId={homebrewId}
+        existingAssetId={assetDialogState.assetId}
+      />
+    </Stack>
   );
 }

@@ -13,26 +13,3 @@ export interface StoredAsset {
   inputs?: Record<string, string> | null;
   trackValue?: number | null;
 }
-
-export interface StoredHomebrewAssetCollection {
-  collectionId: string; // Homebrew collection id
-  label: string;
-  enhances?: string;
-  replaces?: string;
-}
-
-export interface StoredHomebrewAsset {
-  collectionId: string; // Homebrew collection id
-  categoryKey: string;
-
-  label: string;
-  requirement?: string;
-  shared?: boolean;
-
-  // controls?:
-  // options?:
-  abilities: [];
-
-  enhances?: string;
-  replaces?: string;
-}

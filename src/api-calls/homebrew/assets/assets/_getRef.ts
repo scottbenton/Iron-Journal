@@ -5,7 +5,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { firestore } from "config/firebase.config";
-import { StoredHomebrewAsset } from "types/Asset.type";
+import { StoredHomebrewAsset } from "types/homebrew/HomebrewAssets.type";
 
 export function constructHomebrewAssetCollectionPath() {
   return `homebrew/homebrew/assets`;

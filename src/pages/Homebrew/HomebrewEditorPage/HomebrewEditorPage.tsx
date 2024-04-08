@@ -135,7 +135,9 @@ export function HomebrewEditorPage() {
             )}
             {selectedTab === TABS.ORACLES && <OracleSection id={homebrewId} />}
             {selectedTab === TABS.RULES && <RulesSection id={homebrewId} />}
-            {selectedTab === TABS.ASSETS && <AssetsSection />}
+            {selectedTab === TABS.ASSETS && (
+              <AssetsSection homebrewId={homebrewId} />
+            )}
           </Box>
         </Box>
       </PageContent>

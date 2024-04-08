@@ -3,7 +3,7 @@ import { Unsubscribe } from "firebase/firestore";
 import {
   StoredHomebrewAsset,
   StoredHomebrewAssetCollection,
-} from "types/Asset.type";
+} from "types/homebrew/HomebrewAssets.type";
 import {
   ExpansionDocument,
   HomebrewCollectionDocument,

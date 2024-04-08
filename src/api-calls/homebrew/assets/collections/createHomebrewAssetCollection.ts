@@ -1,6 +1,7 @@
 import { createApiFunction } from "api-calls/createApiFunction";
 import { addDoc } from "firebase/firestore";
-import { StoredHomebrewAssetCollection } from "types/Asset.type";
+import { StoredHomebrewAssetCollection } from "types/homebrew/HomebrewAssets.type";
+
 import { getHomebrewAssetCollectionCollection } from "./_getRef";
 
 export const createHomebrewAssetCollection = createApiFunction<
