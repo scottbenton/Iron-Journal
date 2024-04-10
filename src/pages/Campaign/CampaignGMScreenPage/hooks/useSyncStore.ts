@@ -28,6 +28,9 @@ export function useSyncStore() {
 
   useEffect(() => {
     setCampaignId(campaignId);
+    return () => {
+      setCampaignId(undefined);
+    };
   }, [campaignId, setCampaignId]);
 
   useListenToCurrentCampaignCharacters();
