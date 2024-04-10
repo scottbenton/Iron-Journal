@@ -12,6 +12,8 @@ import {
 import { firebaseAuth } from "../config/firebase.config";
 import { BASE_ROUTES, basePaths } from "routes";
 import { getErrorMessage } from "functions/getErrorMessage";
+import { updateUserDoc } from "api-calls/user/updateUserDoc";
+import { UserDocument } from "types/User.type";
 
 const googleAuthProvider = new GoogleAuthProvider();
 
@@ -119,15 +121,27 @@ export function getUser(): Promise<User | null> {
   });
 }
 
-export function updateUserName(name: string): Promise<void> {
+export function updateUser(userDoc: UserDocument): Promise<void> {
   return new Promise((resolve, reject) => {
     const user = firebaseAuth.currentUser;
     if (!user) {
       reject(new Error("User is not logged in."));
       return;
     }
-    updateProfile(user, { displayName: name })
-      .then(() => resolve())
+    updateProfile(user, { displayName: userDoc.displayName })
+      .then(() => {
+        updateUserDoc({
+          uid: user.uid,
+          user: userDoc,
+        })
+          .then(() => {
+            resolve();
+          })
+          .catch((e) => {
+            console.error(e);
+            reject("Failed to update user.");
+          });
+      })
       .catch((e) => {
         console.error(e);
         reject("Failed to update user name.");
