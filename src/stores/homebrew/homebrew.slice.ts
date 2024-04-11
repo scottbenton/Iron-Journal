@@ -107,6 +107,19 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
   subscribeToHomebrewContent: (homebrewIds) => {
     getState().rules.setExpansionIds(homebrewIds);
 
+    const defaultHomebrewIds = homebrewIds.filter(
+      (homebrewId) => defaultExpansions[homebrewId]
+    );
+
+    if (defaultHomebrewIds.length > 0) {
+      getState().rules.rebuildOracles();
+      getState().rules.rebuildMoves();
+      getState().rules.rebuildStats();
+      getState().rules.rebuildConditionMeters();
+      getState().rules.rebuildSpecialTracks();
+      getState().rules.rebuildImpacts();
+    }
+
     const filteredHomebrewIds = homebrewIds.filter(
       (homebrewId) => !defaultExpansions[homebrewId]
     );

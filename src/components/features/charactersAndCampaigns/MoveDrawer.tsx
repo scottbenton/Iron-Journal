@@ -13,7 +13,6 @@ function MoveDrawerUnMemoized(props: MoveDrawerProps) {
   const { open, onClose } = props;
 
   const useNewMoves = useNewCustomContentPage();
-
   const openCallback = useCallback(() => {}, []);
   return (
     <SwipeableDrawer

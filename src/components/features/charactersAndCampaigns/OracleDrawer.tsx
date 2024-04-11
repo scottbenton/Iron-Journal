@@ -1,6 +1,8 @@
 import { SwipeableDrawer } from "@mui/material";
-import { OracleSection } from "./OracleSection";
+import { OracleSection as OracleSectionOld } from "./OracleSection";
+import { OracleSection } from "./NewOracleSection";
 import React, { useCallback } from "react";
+import { useNewCustomContentPage } from "hooks/featureFlags/useNewCustomContentPage";
 
 export interface OracleDrawerProps {
   open?: boolean;
@@ -10,6 +12,7 @@ export interface OracleDrawerProps {
 function OracleDrawerUnMemoized(props: OracleDrawerProps) {
   const { open, onClose } = props;
 
+  const showNewOracles = useNewCustomContentPage();
   const openCallback = useCallback(() => {}, []);
   return (
     <SwipeableDrawer
@@ -20,7 +23,7 @@ function OracleDrawerUnMemoized(props: OracleDrawerProps) {
       disableDiscovery
       onClose={onClose}
     >
-      <OracleSection />
+      {showNewOracles ? <OracleSection /> : <OracleSectionOld />}
     </SwipeableDrawer>
   );
 }
