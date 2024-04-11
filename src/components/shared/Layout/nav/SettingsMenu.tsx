@@ -31,6 +31,8 @@ import { useStore } from "stores/store";
 import { AUTH_STATE } from "stores/auth/auth.slice.type";
 import { UserNameDialog } from "components/shared/UserNameDialog";
 import UsernameIcon from "@mui/icons-material/AccountCircle";
+import TokenIcon from "@mui/icons-material/Contacts";
+import { CustomTokenDialog } from "./CustomTokenDialog/CustomTokenDialog";
 
 export function SettingsMenu() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -46,6 +48,7 @@ export function SettingsMenu() {
 
   const [betaTestsOpen, setBetaTestsOpen] = useState(false);
   const [usernameDialogOpen, setUsernameDialogOpen] = useState(false);
+  const [customTokenDialogOpen, setCustomTokenDialogOpen] = useState(false);
 
   const isMobile = useIsMobile();
 
@@ -178,6 +181,14 @@ export function SettingsMenu() {
             <ListItemText>Switch System</ListItemText>
           </MenuItem>
         )}
+        {isLocal && (
+          <MenuItem onClick={() => setCustomTokenDialogOpen(true)}>
+            <ListItemIcon>
+              <TokenIcon />
+            </ListItemIcon>
+            <ListItemText>Login with Custom Token</ListItemText>
+          </MenuItem>
+        )}
       </Menu>
       <AccessibilitySettingsDialog
         open={accessibilitySettingsOpen}
@@ -192,6 +203,12 @@ export function SettingsMenu() {
         handleClose={() => setUsernameDialogOpen(false)}
         updating
       />
+      {isLocal && (
+        <CustomTokenDialog
+          open={customTokenDialogOpen}
+          onClose={() => setCustomTokenDialogOpen(false)}
+        />
+      )}
     </>
   );
 }

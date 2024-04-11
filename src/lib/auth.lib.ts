@@ -3,6 +3,7 @@ import {
   isSignInWithEmailLink,
   onAuthStateChanged,
   sendSignInLinkToEmail,
+  signInWithCustomToken,
   signInWithEmailLink,
   signInWithPopup,
   signOut,
@@ -20,6 +21,19 @@ const googleAuthProvider = new GoogleAuthProvider();
 export function loginWithGoogle() {
   return new Promise((resolve, reject) => {
     signInWithPopup(firebaseAuth, googleAuthProvider)
+      .then(() => {
+        resolve(true);
+      })
+      .catch((e) => {
+        console.error(e);
+        reject(e);
+      });
+  });
+}
+
+export function loginWithToken(token: string) {
+  return new Promise((resolve, reject) => {
+    signInWithCustomToken(firebaseAuth, token)
       .then(() => {
         resolve(true);
       })
