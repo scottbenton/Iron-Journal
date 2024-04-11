@@ -26,7 +26,7 @@ export function GameLogEntry(props: GameLogEntryProps) {
   );
 
   const logCreatorName = useStore(
-    (store) => store.users.userMap[log.uid].doc?.displayName
+    (store) => store.users.userMap[log.uid]?.doc?.displayName
   );
 
   const isYourEntry = log.characterId
