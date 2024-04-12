@@ -41,6 +41,7 @@ export function OracleTableRollableAutocomplete(
       )}
       value={value ?? null}
       onChange={(evt, value) => {
+        console.debug(value);
         onChange(value ?? undefined);
       }}
       onBlur={onBlur}

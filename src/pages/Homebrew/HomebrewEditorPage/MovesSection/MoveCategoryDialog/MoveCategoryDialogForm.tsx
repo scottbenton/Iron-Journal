@@ -144,7 +144,7 @@ export function MoveCategoryDialogForm(props: MoveCategoryFormDialogProps) {
               }}
             />
             <Controller
-              name='description'
+              name="description"
               control={control}
               render={({ field }) => (
                 <MarkdownEditor
@@ -162,7 +162,7 @@ export function MoveCategoryDialogForm(props: MoveCategoryFormDialogProps) {
                 <MoveCategoryAutocomplete
                   label={"Replaces Category"}
                   value={field.value}
-                  onChange={(ids) => field.onChange(ids)}
+                  onChange={(ids) => field.onChange(ids ?? null)}
                   onBlur={field.onBlur}
                   helperText={
                     "Replaces the category (and all moves within) with this category"
@@ -177,7 +177,7 @@ export function MoveCategoryDialogForm(props: MoveCategoryFormDialogProps) {
                 <MoveCategoryAutocomplete
                   label={"Enhances Category"}
                   value={field.value}
-                  onChange={(ids) => field.onChange(ids)}
+                  onChange={(ids) => field.onChange(ids ?? null)}
                   onBlur={field.onBlur}
                   helperText={
                     "Adds moves in this category to the entered category"
