@@ -65,26 +65,28 @@ export function OracleEditorPane(props: OracleEditorPaneProps) {
 
   return (
     <Stack spacing={2}>
-      <Breadcrumbs aria-label={"Oracle Breadcrumbs"}>
-        {breadcrumbs.map((breadcrumb, index) =>
-          breadcrumb.readOnly ? (
-            <Typography key={index} color='text.primary'>
-              {breadcrumb.label}
-            </Typography>
-          ) : (
-            <Link
-              key={index}
-              component={"button"}
-              underline='hover'
-              color='inherit'
-              sx={{ lineHeight: "1rem" }}
-              onClick={() => setOpenCollectionId(breadcrumb.id)}
-            >
-              {breadcrumb.label}
-            </Link>
-          )
-        )}
-      </Breadcrumbs>
+      {breadcrumbs.length > 1 && (
+        <Breadcrumbs aria-label={"Oracle Breadcrumbs"}>
+          {breadcrumbs.map((breadcrumb, index) =>
+            breadcrumb.readOnly ? (
+              <Typography key={index} color="text.primary">
+                {breadcrumb.label}
+              </Typography>
+            ) : (
+              <Link
+                key={index}
+                component={"button"}
+                underline="hover"
+                color="inherit"
+                sx={{ lineHeight: "1rem" }}
+                onClick={() => setOpenCollectionId(breadcrumb.id)}
+              >
+                {breadcrumb.label}
+              </Link>
+            )
+          )}
+        </Breadcrumbs>
+      )}
       {openCollectionId && oracleCollections[openCollectionId] && (
         <OracleInfoSection
           homebrewId={homebrewId}

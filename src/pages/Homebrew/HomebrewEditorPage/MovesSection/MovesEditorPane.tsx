@@ -1,8 +1,9 @@
 import {
+  Box,
   Breadcrumbs,
   Button,
   Card,
-  CardActionArea,
+  IconButton,
   Link,
   Stack,
   Typography,
@@ -19,6 +20,9 @@ import { MoveCategoryDialog } from "./MoveCategoryDialog";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import { MoveDialog } from "./MoveDialog";
 import EditIcon from "@mui/icons-material/Edit";
+import { useStore } from "stores/store";
+import { useConfirm } from "material-ui-confirm";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export interface MovesEditorPaneProps {
   homebrewId: string;
@@ -52,6 +56,49 @@ export function MovesEditorPane(props: MovesEditorPaneProps) {
         .sort((k1, k2) => moves[k1].label.localeCompare(moves[k2].label))
     : [];
 
+  const confirm = useConfirm();
+
+  const deleteMoveCategory = useStore(
+    (store) => store.homebrew.deleteMoveCategory
+  );
+  const handleDeleteMoveCategory = (
+    categoryName: string,
+    categoryId: string
+  ) => {
+    confirm({
+      title: `Delete ${categoryName}`,
+      description:
+        "Are you sure you want to delete this move category? This will also delete the moves under this category. This cannot be undone.",
+      confirmationText: "Delete",
+      confirmationButtonProps: {
+        variant: "contained",
+        color: "error",
+      },
+    })
+      .then(() => {
+        setOpenMoveCategoryId(undefined);
+        deleteMoveCategory(homebrewId, categoryId).catch(() => {});
+      })
+      .catch(() => {});
+  };
+  const deleteMove = useStore((store) => store.homebrew.deleteMove);
+  const handleDeleteMove = (moveName: string, moveId: string) => {
+    confirm({
+      title: `Delete ${moveName}`,
+      description:
+        "Are you sure you want to delete this move? This cannot be undone.",
+      confirmationText: "Delete",
+      confirmationButtonProps: {
+        variant: "contained",
+        color: "error",
+      },
+    })
+      .then(() => {
+        deleteMove(moveId).catch(() => {});
+      })
+      .catch(() => {});
+  };
+
   return (
     <>
       <Stack spacing={2}>
@@ -60,14 +107,14 @@ export function MovesEditorPane(props: MovesEditorPaneProps) {
             <Breadcrumbs>
               <Link
                 component={"button"}
-                underline='hover'
-                color='inherit'
+                underline="hover"
+                color="inherit"
                 sx={{ lineHeight: "1rem" }}
                 onClick={() => setOpenMoveCategoryId(undefined)}
               >
                 Move Categories
               </Link>
-              <Typography color='text.primary'>
+              <Typography color="text.primary">
                 {openMoveCategory.label}
               </Typography>
             </Breadcrumbs>
@@ -75,17 +122,31 @@ export function MovesEditorPane(props: MovesEditorPaneProps) {
               label={"Category Info"}
               floating
               action={
-                <Button
-                  color={"inherit"}
-                  onClick={() =>
-                    setCategoryDialogState({
-                      open: true,
-                      openCategoryId: openMoveCategoryId,
-                    })
-                  }
-                >
-                  Edit Category
-                </Button>
+                <>
+                  <Button
+                    color={"error"}
+                    onClick={() =>
+                      handleDeleteMoveCategory(
+                        openMoveCategory.label,
+                        openMoveCategoryId
+                      )
+                    }
+                  >
+                    Delete Category
+                  </Button>
+                  <Button
+                    color={"inherit"}
+                    variant={"outlined"}
+                    onClick={() =>
+                      setCategoryDialogState({
+                        open: true,
+                        openCategoryId: openMoveCategoryId,
+                      })
+                    }
+                  >
+                    Edit Category
+                  </Button>
+                </>
               }
             />
             {openMoveCategory.description && (
@@ -110,27 +171,40 @@ export function MovesEditorPane(props: MovesEditorPaneProps) {
             {sortedMoveIds.length > 0 ? (
               <>
                 {sortedMoveIds.map((moveId) => (
-                  <Card variant={"outlined"} key={moveId}>
-                    <CardActionArea
-                      onClick={() =>
-                        setMoveDialogState({ open: true, openMoveId: moveId })
-                      }
-                      sx={{
-                        p: 2,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Typography>{moves[moveId].label}</Typography>
-                      <EditIcon color={"action"} />
-                    </CardActionArea>
+                  <Card
+                    variant={"outlined"}
+                    key={moveId}
+                    sx={{
+                      px: 2,
+                      py: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Typography>{moves[moveId].label}</Typography>
+                    <Box>
+                      <IconButton
+                        onClick={() =>
+                          setMoveDialogState({ open: true, openMoveId: moveId })
+                        }
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        onClick={() =>
+                          handleDeleteMove(moves[moveId].label, moveId)
+                        }
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Box>
                   </Card>
                 ))}
               </>
             ) : (
               <EmptyState
-                message='Add a move to get started'
+                message="Add a move to get started"
                 callToAction={
                   <Button
                     color={"inherit"}
@@ -163,10 +237,10 @@ export function MovesEditorPane(props: MovesEditorPaneProps) {
             />
             {sortedCategoryIds.length === 0 && (
               <EmptyState
-                message='Add a move category to group your moves together'
+                message="Add a move category to group your moves together"
                 callToAction={
                   <Button
-                    variant='outlined'
+                    variant="outlined"
                     color={"inherit"}
                     onClick={() => setCategoryDialogState({ open: true })}
                   >
