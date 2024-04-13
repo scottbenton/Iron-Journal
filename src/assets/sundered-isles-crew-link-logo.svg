@@ -17,12 +17,12 @@
        transform="rotate(-90,62.056,74.039)"
        id="g5">
       <path
-         style="fill:none;stroke:#0891b2;stroke-width:9.57204;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:none;stroke:#2dd4bf;stroke-width:9.57204;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
          id="path6"
          d="M 97.657778,59.716194 48.225528,88.255917 -1.2067207,59.716194 -1.2067205,2.636749 48.225529,-25.902973 97.657778,2.6367495 Z"
          transform="matrix(0,0.69226155,-0.69226155,0,99.806155,38.599149)" />
       <path
-         style="fill:#0891b2;fill-opacity:1;stroke:#0891b2;stroke-width:0;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#2dd4bf;fill-opacity:1;stroke:#2dd4bf;stroke-width:0;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
          d="m 78.983183,37.916631 c 0,0 18.013401,16.332591 -0.716143,35.50794 -15.167195,15.528208 1.614946,30.465949 1.614946,30.465949 L 59.491914,104.05926 40.6588,72.096662 59.230971,39.899796 Z"
          id="path7" />
     </g>

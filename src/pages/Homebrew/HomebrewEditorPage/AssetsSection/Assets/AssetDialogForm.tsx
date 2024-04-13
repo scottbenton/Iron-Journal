@@ -16,12 +16,14 @@ import { useStore } from "stores/store";
 import {
   StoredHomebrewAsset,
   StoredHomebrewAssetAbility,
+  StoredHomebrewAssetOption,
 } from "types/homebrew/HomebrewAssets.type";
 import { AssetAutocomplete } from "./AssetAutocomplete";
 import { Preview } from "../../Preview";
 import { AssetCardPreview } from "./AssetCardPreview";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { AssetAbilities } from "./AssetAbilities";
+import { AssetOptions } from "./AssetOptions";
 
 export interface AssetDialogFormProps {
   homebrewId: string;
@@ -35,6 +37,7 @@ export interface Form {
   requirement?: string;
   replacesId?: string;
   abilities: StoredHomebrewAssetAbility[];
+  options: StoredHomebrewAssetOption[];
 }
 
 export function AssetDialogForm(props: AssetDialogFormProps) {
@@ -60,6 +63,9 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
           label: existingAsset.label,
           categoryId: existingAsset.categoryKey,
           requirement: existingAsset.requirement,
+          replacesId: existingAsset.replacesId,
+          abilities: existingAsset.abilities,
+          options: existingAsset.options,
         }
       : {},
   });
@@ -74,11 +80,14 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
       collectionId: homebrewId,
       categoryKey: values.categoryId,
       label: values.label,
-      abilities: [],
+      abilities: values.abilities,
     };
 
     if (values.requirement) {
       asset.requirement = values.requirement;
+    }
+    if (values.options) {
+      asset.options = values.options;
     }
 
     if (existingAssetId) {
@@ -165,7 +174,7 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
                   }}
                 />
                 <Controller
-                  name='requirement'
+                  name="requirement"
                   control={control}
                   render={({ field }) => (
                     <MarkdownEditor
@@ -189,14 +198,10 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
                     />
                   )}
                 />
-                <SectionHeading
-                  floating
-                  label={"Options"}
-                  action={
-                    <Button variant={"outlined"} color={"inherit"}>
-                      Add Option
-                    </Button>
-                  }
+                <AssetOptions
+                  control={control}
+                  register={register}
+                  disabled={disabled}
                 />
                 <AssetAbilities
                   control={control}

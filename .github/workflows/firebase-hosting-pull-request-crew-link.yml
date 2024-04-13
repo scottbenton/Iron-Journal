@@ -40,13 +40,13 @@ jobs:
     environment: Dev
     steps:
       - uses: actions/checkout@v2
-      - uses: w9jds/firebase-action@master
+      - uses: w9jds/firebase-action@v13.5.2
         with:
           args: deploy --only firestore
         env:
           GCP_SA_KEY: ${{ secrets.CREW_LINK_FIREBASE_SERVICE_ACCOUNT }}
           PROJECT_ID: "${{secrets.CREW_LINK_FIREBASE_PROJECTID}}"
-      - uses: w9jds/firebase-action@master
+      - uses: w9jds/firebase-action@v13.5.2
         with:
           args: deploy --only storage --debug
         env:

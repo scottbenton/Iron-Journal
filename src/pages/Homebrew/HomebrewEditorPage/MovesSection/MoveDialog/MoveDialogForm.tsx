@@ -206,7 +206,7 @@ export function MoveDialogForm(props: MoveFormDialogProps) {
               }}
             />
             <Controller
-              name='text'
+              name="text"
               control={control}
               render={({ field }) => (
                 <MarkdownEditor
@@ -224,7 +224,7 @@ export function MoveDialogForm(props: MoveFormDialogProps) {
                 <MoveAutocomplete
                   label={"Replaces Move"}
                   value={field.value}
-                  onChange={(ids) => field.onChange(ids)}
+                  onChange={(ids) => field.onChange(ids ?? null)}
                   onBlur={field.onBlur}
                   disabled={disabled}
                   helperText={"Replaces an existing move with this one."}
@@ -292,7 +292,7 @@ export function MoveDialogForm(props: MoveFormDialogProps) {
                   <LegacyTrackAutocomplete
                     multiple
                     value={field.value}
-                    onChange={(ids) => field.onChange(ids)}
+                    onChange={(ids) => field.onChange(ids ?? [])}
                     onBlur={field.onBlur}
                     disabled={disabled}
                     helperText={"Legacy Tracks you would like to roll against"}

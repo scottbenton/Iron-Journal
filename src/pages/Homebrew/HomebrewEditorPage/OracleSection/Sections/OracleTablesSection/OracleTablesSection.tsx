@@ -27,7 +27,7 @@ export function OracleTablesSection(props: OracleTablesSectionProps) {
   return (
     <>
       <SectionHeading
-        label='Tables'
+        label="Tables"
         action={
           <Button
             color={"inherit"}
@@ -44,6 +44,7 @@ export function OracleTablesSection(props: OracleTablesSectionProps) {
           {sortedKeys.map((key) => (
             <OracleTableCard
               key={key}
+              oracleId={key}
               oracle={tables[key]}
               onClick={() =>
                 setOracleTableDialogState({
@@ -56,7 +57,7 @@ export function OracleTablesSection(props: OracleTablesSectionProps) {
         </List>
       ) : (
         <EmptyState
-          message='Add an oracle table to get started'
+          message="Add an oracle table to get started"
           callToAction={
             <Button
               color={"inherit"}

@@ -161,7 +161,7 @@ export function OracleTablesCollectionDialogForm(
               }}
             />
             <Controller
-              name='description'
+              name="description"
               control={control}
               render={({ field }) => (
                 <MarkdownEditor
@@ -179,7 +179,7 @@ export function OracleTablesCollectionDialogForm(
                 <OracleCollectionAutocomplete
                   label={"Replaces Collection"}
                   value={field.value}
-                  onChange={(ids) => field.onChange(ids)}
+                  onChange={(ids) => field.onChange(ids ?? null)}
                   onBlur={field.onBlur}
                   helperText={
                     "Replaces all oracles within the given collection"
@@ -194,7 +194,7 @@ export function OracleTablesCollectionDialogForm(
                 <OracleCollectionAutocomplete
                   label={"Enhances Collection"}
                   value={field.value}
-                  onChange={(ids) => field.onChange(ids)}
+                  onChange={(ids) => field.onChange(ids ?? null)}
                   onBlur={field.onBlur}
                   helperText={
                     "Adds oracles in this collection to the entered collection"

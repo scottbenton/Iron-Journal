@@ -1,8 +1,8 @@
 export const sunderedIslesBlue = {
-  light: "#0891b2",
-  main: "#0e7490",
-  dark: "#155e75",
-  // dark: "#854d0e",
+  // light: "#14b8a6",
+  light: "#5eead4",
+  main: "#2dd4bf",
+  dark: "#14b8a6",
 };
 
 /*

@@ -160,7 +160,7 @@ export function OracleTableSimpleForm(props: OracleTableSimpleFormProps) {
               }}
             />
             <Controller
-              name='description'
+              name="description"
               control={control}
               render={({ field }) => (
                 <MarkdownEditor
@@ -178,7 +178,7 @@ export function OracleTableSimpleForm(props: OracleTableSimpleFormProps) {
                 <OracleTableRollableAutocomplete
                   label={"Replaces Table"}
                   value={field.value}
-                  onChange={(ids) => field.onChange(ids)}
+                  onChange={(ids) => field.onChange(ids ?? null)}
                   onBlur={field.onBlur}
                   helperText={"Replaces an existing oracle table with this one"}
                 />
@@ -191,7 +191,7 @@ export function OracleTableSimpleForm(props: OracleTableSimpleFormProps) {
                 disabled={disabled}
                 control={
                   <Controller
-                    name='showDetails'
+                    name="showDetails"
                     control={control}
                     defaultValue={false}
                     render={({ field }) => (

@@ -57,7 +57,7 @@ export function AssetAbilities(props: AssetAbilitiesProps) {
       {fields.length === 0 && <EmptyState message={"No Abilities added"} />}
       <div>
         {fields.map((field, index) => (
-          <Accordion key={index} sx={{ w: "100%" }} variant='outlined'>
+          <Accordion key={field.id} sx={{ w: "100%" }} variant="outlined">
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
               Ability {index + 1}
             </AccordionSummary>

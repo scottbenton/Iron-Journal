@@ -57,7 +57,7 @@ export function OracleTable(props: OracleTableProps) {
   return (
     <TableContainer component={Paper} variant={"outlined"}>
       {errors.columnValues?.root?.message && (
-        <Alert severity='error'>{errors.columnValues.root.message}</Alert>
+        <Alert severity="error">{errors.columnValues.root.message}</Alert>
       )}
       <Table size={"small"}>
         <TableHead>
@@ -81,7 +81,7 @@ export function OracleTable(props: OracleTableProps) {
         </TableHead>
         <TableBody>
           {fields.map((row, index) => (
-            <TableRow key={index}>
+            <TableRow key={row.id}>
               <TableCell>
                 <TextField
                   disabled={disabled}

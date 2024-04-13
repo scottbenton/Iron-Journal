@@ -12,6 +12,12 @@ export interface StoredHomebrewAssetAbility {
   defaultEnabled?: boolean;
 }
 
+export interface StoredHomebrewAssetOption {
+  type: "text" | "select";
+  label: string;
+  options?: string[];
+}
+
 export interface StoredHomebrewAsset {
   collectionId: string; // Homebrew collection id
   categoryKey: string;
@@ -21,7 +27,7 @@ export interface StoredHomebrewAsset {
   shared?: boolean;
 
   // controls?:
-  // options?:
+  options?: StoredHomebrewAssetOption[];
   abilities: StoredHomebrewAssetAbility[];
 
   replacesId?: string;

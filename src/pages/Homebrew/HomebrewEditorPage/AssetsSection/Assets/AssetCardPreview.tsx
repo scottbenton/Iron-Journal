@@ -5,6 +5,7 @@ import { Datasworn } from "@datasworn/core";
 import { AssetHeader } from "components/features/assets/NewAssetCard/AssetHeader";
 import { AssetNameAndDescription } from "components/features/assets/NewAssetCard/AssetNameAndDescription";
 import { AssetAbilities } from "components/features/assets/NewAssetCard/AssetAbilities";
+import { AssetOptions } from "components/features/assets/NewAssetCard/AssetOptions";
 
 export interface AssetCardPreviewProps {
   control: Control<Form, unknown>;
@@ -16,6 +17,7 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
   const label = useWatch({ control, name: "label" });
   const requirement = useWatch({ control, name: "requirement" });
   const abilities = useWatch({ control, name: "abilities", defaultValue: [] });
+  const options = useWatch({ control, name: "options", defaultValue: [] });
 
   const dataswornAbilities: Datasworn.AssetAbility[] = abilities.map(
     (ability, index) => ({
@@ -25,6 +27,34 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
       enabled: ability.defaultEnabled ?? false,
     })
   );
+
+  const dataswornOptions: Record<string, Datasworn.AssetOptionField> = {};
+  options.forEach((option, index) => {
+    if (option.type === "text") {
+      dataswornOptions[option.label + index] = {
+        label: option.label,
+        field_type: "text",
+        value: "",
+      };
+    } else {
+      const choices: Record<string, Datasworn.SelectEnhancementFieldChoice> =
+        {};
+
+      (option.options ?? []).forEach((optionChoice, index) => {
+        choices[optionChoice + index] = {
+          label: optionChoice,
+          choice_type: "choice",
+        };
+      });
+
+      dataswornOptions[option.label + index] = {
+        label: option.label,
+        field_type: "select_enhancement",
+        value: "",
+        choices,
+      };
+    }
+  });
 
   const asset: Datasworn.Asset = {
     _id: "",
@@ -36,6 +66,7 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
     requirement: requirement,
     category: "Collection",
     abilities: dataswornAbilities,
+    options: dataswornOptions,
   };
 
   return (
@@ -62,6 +93,7 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
         })}
       >
         <AssetNameAndDescription asset={asset} />
+        <AssetOptions asset={asset} onAssetOptionChange={() => {}} />
         <AssetAbilities asset={asset} />
       </Box>
     </Card>

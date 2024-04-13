@@ -2,6 +2,7 @@ import { LoadingButton } from "@mui/lab";
 import { Box, Button } from "@mui/material";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import { SectionHeading } from "components/shared/SectionHeading";
+import { useConfirm } from "material-ui-confirm";
 import { useState } from "react";
 import { useStore } from "stores/store";
 import { StoredOracleCollection } from "types/homebrew/HomebrewOracles.type";
@@ -29,16 +30,30 @@ export function OracleInfoSection(props: OracleInfoSectionProps) {
 
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
+  const confirm = useConfirm();
   const handleDelete = () => {
-    setIsDeleteLoading(true);
-    deleteOracleCollection(homebrewId, oracleCollectionId)
+    confirm({
+      title: `Delete ${oracleCollection.label}`,
+      description:
+        "Are you sure you want to delete this oracle collection? This will also delete the oracles and collections under this category. This cannot be undone.",
+      confirmationText: "Delete",
+      confirmationButtonProps: {
+        variant: "contained",
+        color: "error",
+      },
+    })
       .then(() => {
-        closeCurrentOracleCollection();
+        setIsDeleteLoading(true);
+        deleteOracleCollection(homebrewId, oracleCollectionId)
+          .then(() => {
+            closeCurrentOracleCollection();
+          })
+          .catch(() => {})
+          .finally(() => {
+            setIsDeleteLoading(false);
+          });
       })
-      .catch(() => {})
-      .finally(() => {
-        setIsDeleteLoading(false);
-      });
+      .catch(() => {});
   };
 
   return (
@@ -46,18 +61,22 @@ export function OracleInfoSection(props: OracleInfoSectionProps) {
       <SectionHeading
         label={oracleCollection.label}
         action={
-          <div>
-            <Button color={"inherit"} onClick={openCollectionDialog}>
-              Edit
-            </Button>
+          <>
             <LoadingButton
-              color={"inherit"}
+              color={"error"}
               onClick={handleDelete}
               loading={isDeleteLoading}
             >
-              Delete
+              Delete Collection
             </LoadingButton>
-          </div>
+            <Button
+              color={"inherit"}
+              variant={"outlined"}
+              onClick={openCollectionDialog}
+            >
+              Edit Collection
+            </Button>
+          </>
         }
         floating
       />

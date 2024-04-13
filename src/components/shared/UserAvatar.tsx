@@ -4,25 +4,37 @@ import { Avatar, Skeleton } from "@mui/material";
 
 export interface UserAvatarProps {
   uid: string;
+  forceName?: string;
+  forceShowPhoto?: boolean;
 }
 
 export function UserAvatar(props: UserAvatarProps) {
-  const { uid } = props;
+  const { uid, forceShowPhoto, forceName } = props;
   const user = useStore((store) => store.users.userMap[uid]?.doc);
   const loadUser = useStore((store) => store.users.loadUserDocument);
   useEffect(() => {
     loadUser(uid);
   }, [loadUser, uid]);
 
-  const initials = getInitials(user?.displayName ?? "User");
+  const initials = getInitials(forceName ?? user?.displayName ?? "User");
   if (!user) {
-    <Skeleton variant={"circular"}>
-      <Avatar />
-    </Skeleton>;
+    return (
+      <Skeleton variant={"circular"}>
+        <Avatar />
+      </Skeleton>
+    );
   }
+
+  let shouldShowPhoto = false;
+  if (forceShowPhoto !== undefined) {
+    shouldShowPhoto = forceShowPhoto;
+  } else {
+    shouldShowPhoto = !user.hidePhoto;
+  }
+
   return (
     <Avatar
-      src={user?.photoURL ?? undefined}
+      src={shouldShowPhoto && user.photoURL ? user.photoURL : undefined}
       sx={(theme) => ({
         bgcolor: theme.palette.darkGrey.dark,
         color: theme.palette.darkGrey.contrastText,

@@ -30,6 +30,10 @@ import TestsIcon from "@mui/icons-material/AutoAwesome";
 import { useIsMobile } from "hooks/useIsMobile";
 import { useStore } from "stores/store";
 import { AUTH_STATE } from "stores/auth/auth.slice.type";
+import { UserNameDialog } from "components/shared/UserNameDialog";
+import UsernameIcon from "@mui/icons-material/AccountCircle";
+import TokenIcon from "@mui/icons-material/Contacts";
+import { CustomTokenDialog } from "./CustomTokenDialog/CustomTokenDialog";
 
 export function SettingsMenu() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -44,6 +48,9 @@ export function SettingsMenu() {
     useState(false);
 
   const [betaTestsOpen, setBetaTestsOpen] = useState(false);
+  const [usernameDialogOpen, setUsernameDialogOpen] = useState(false);
+  const [customTokenDialogOpen, setCustomTokenDialogOpen] = useState(false);
+
   const isMobile = useIsMobile();
 
   const isLoggedIn = useStore(
@@ -95,6 +102,19 @@ export function SettingsMenu() {
           ),
         }}
       >
+        {isLoggedIn && (
+          <MenuItem
+            onClick={() => {
+              setMenuOpen(false);
+              setUsernameDialogOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <UsernameIcon />
+            </ListItemIcon>
+            <ListItemText>Update Username</ListItemText>
+          </MenuItem>
+        )}
         {isLoggedIn && (
           <MenuItem
             onClick={() => {
@@ -169,6 +189,14 @@ export function SettingsMenu() {
             <ListItemText>Switch System</ListItemText>
           </MenuItem>
         )}
+        {isLocal && (
+          <MenuItem onClick={() => setCustomTokenDialogOpen(true)}>
+            <ListItemIcon>
+              <TokenIcon />
+            </ListItemIcon>
+            <ListItemText>Login with Custom Token</ListItemText>
+          </MenuItem>
+        )}
       </Menu>
       <AccessibilitySettingsDialog
         open={accessibilitySettingsOpen}
@@ -178,6 +206,17 @@ export function SettingsMenu() {
         open={betaTestsOpen}
         onClose={() => setBetaTestsOpen(false)}
       />
+      <UserNameDialog
+        open={usernameDialogOpen}
+        handleClose={() => setUsernameDialogOpen(false)}
+        updating
+      />
+      {isLocal && (
+        <CustomTokenDialog
+          open={customTokenDialogOpen}
+          onClose={() => setCustomTokenDialogOpen(false)}
+        />
+      )}
     </>
   );
 }

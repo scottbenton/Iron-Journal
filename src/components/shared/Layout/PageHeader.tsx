@@ -12,6 +12,8 @@ export interface PageHeaderProps extends PropsWithChildren {
   actions?: React.ReactNode;
 }
 
+const sunderedIslesBorder =
+  "data:image/svg+xml;utf8,<svg viewBox='0 0 1200  123' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M0 90L50 84C100 79 200 68 300 46C400 24 500 -9 600 2C700 13 800 68 900 90C1000 112 1100 101 1150 96L1200 90V123H1150C1100 123 1000 123 900 123C800 123 700 123 600 123C500 123 400 123 300 123C200 123 100 123 50 123H0V90Z' fill='%23e5e7eb'/></svg>";
 export function PageHeader(props: PageHeaderProps) {
   const { label, subLabel, actions, children } = props;
 
@@ -26,7 +28,10 @@ export function PageHeader(props: PageHeaderProps) {
     [GAME_SYSTEMS.STARFORGED]: false,
   });
 
-  const borderUrl = getPublicAssetPath("border.svg");
+  const borderUrl =
+    !isIronsworn && showNewSunderedIslesTheme
+      ? sunderedIslesBorder
+      : getPublicAssetPath("border.svg");
 
   return (
     <>
@@ -101,12 +106,13 @@ export function PageHeader(props: PageHeaderProps) {
           <Box
             sx={(theme) => ({
               backgroundImage:
-                isLightTheme &&
-                !showNewStarforgedTheme &&
-                !showNewSunderedIslesTheme
+                isLightTheme && !showNewStarforgedTheme
                   ? `url("${borderUrl}")`
                   : undefined,
-              height: theme.spacing(8),
+              backgroundColor: showNewSunderedIslesTheme
+                ? "darkGrey.main"
+                : undefined,
+              height: theme.spacing(showNewSunderedIslesTheme ? 2 : 8),
               backgroundRepeat: "repeat-x",
               backgroundSize: "contain",
               backgroundPositionX: "center",
