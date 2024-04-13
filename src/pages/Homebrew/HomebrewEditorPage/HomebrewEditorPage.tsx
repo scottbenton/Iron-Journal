@@ -91,7 +91,7 @@ export function HomebrewEditorPage() {
     <>
       <PageHeader
         label={homebrewName}
-        subLabel='Coming Soon'
+        subLabel="Coming Soon"
         actions={
           <Button
             variant={"outlined"}
@@ -123,10 +123,10 @@ export function HomebrewEditorPage() {
             })}
           >
             <StyledTab label={"About"} value={TABS.ABOUT} />
+            <StyledTab label={"Rules"} value={TABS.RULES} />
             <StyledTab label={"Moves"} value={TABS.MOVES} />
             <StyledTab label={"Oracles"} value={TABS.ORACLES} />
             <StyledTab label={"Assets"} value={TABS.ASSETS} />
-            <StyledTab label={"Rules"} value={TABS.RULES} />
           </StyledTabs>
           <Box role={"tabpanel"} sx={{ px: { xs: 2, sm: 3 } }}>
             {selectedTab === TABS.ABOUT && <AboutSection id={homebrewId} />}
@@ -135,7 +135,9 @@ export function HomebrewEditorPage() {
             )}
             {selectedTab === TABS.ORACLES && <OracleSection id={homebrewId} />}
             {selectedTab === TABS.RULES && <RulesSection id={homebrewId} />}
-            {selectedTab === TABS.ASSETS && <AssetsSection />}
+            {selectedTab === TABS.ASSETS && (
+              <AssetsSection homebrewId={homebrewId} />
+            )}
           </Box>
         </Box>
       </PageContent>

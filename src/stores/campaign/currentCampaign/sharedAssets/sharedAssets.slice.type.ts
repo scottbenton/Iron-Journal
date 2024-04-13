@@ -16,6 +16,7 @@ export interface SharedAssetSliceActions {
   updateAssetInput: (
     assetId: string,
     inputLabel: string,
+    inputKey: string,
     inputValue: string
   ) => Promise<void>;
   updateAssetCheckbox: (
@@ -29,6 +30,17 @@ export interface SharedAssetSliceActions {
     assetId: string,
     condition: string,
     checked: boolean
+  ) => Promise<void>;
+
+  updateAssetOption: (
+    assetId: string,
+    optionKey: string,
+    value: string
+  ) => Promise<void>;
+  updateAssetControl: (
+    assetId: string,
+    controlKey: string,
+    value: number | string | boolean
   ) => Promise<void>;
 
   resetStore: () => void;

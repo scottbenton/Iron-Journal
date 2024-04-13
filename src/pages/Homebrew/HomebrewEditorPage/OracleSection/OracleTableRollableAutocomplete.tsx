@@ -35,13 +35,12 @@ export function OracleTableRollableAutocomplete(
         <Box component={"li"} {...props}>
           <ListItemText
             primary={oracleTableRollableMap[option].name}
-            secondary={oracleTableRollableMap[option].id}
+            secondary={oracleTableRollableMap[option]._id}
           />
         </Box>
       )}
       value={value ?? null}
       onChange={(evt, value) => {
-        console.debug(value);
         onChange(value ?? undefined);
       }}
       onBlur={onBlur}

@@ -6,6 +6,7 @@ import ironswornRules from "@datasworn/ironsworn-classic/json/classic.json";
 import starforgedRules from "@datasworn/starforged/json/starforged.json";
 import { parseOraclesIntoMaps } from "./helpers/parseOraclesIntoMaps";
 import { parseMovesIntoMaps } from "./helpers/parseMovesIntoMaps";
+import { parseAssetsIntoMaps } from "./helpers/parseAssetsIntoMaps";
 
 const gameSystem = getSystem();
 
@@ -35,11 +36,12 @@ export const defaultRulesSlice: RulesSliceData = {
   specialTracks: defaultRuleset.rules.special_tracks,
   impacts: defaultRuleset.rules.impacts,
   rootOracleCollectionIds: Object.values(defaultRuleset.oracles).map(
-    (oracle) => oracle.id
+    (oracle) => oracle._id
   ),
   oracleMaps: parseOraclesIntoMaps(defaultRuleset.oracles),
   rootMoveCollectionIds: Object.values(defaultRuleset.moves).map(
-    (move) => move.id
+    (move) => move._id
   ),
   moveMaps: parseMovesIntoMaps(defaultRuleset.moves),
+  assetMaps: parseAssetsIntoMaps(defaultRuleset.assets),
 };

@@ -160,6 +160,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
               return (
                 <Link
                   component={"button"}
+                  type={"button"}
                   sx={{
                     cursor: "pointer",
                     verticalAlign: "baseline",
@@ -179,6 +180,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
                 return (
                   <Link
                     component={"button"}
+                    type={"button"}
                     sx={{
                       cursor: "pointer",
                       verticalAlign: "baseline",
@@ -216,6 +218,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
               return (
                 <Link
                   component={"button"}
+                  type={"button"}
                   sx={{
                     cursor: "pointer",
                     verticalAlign: "baseline",

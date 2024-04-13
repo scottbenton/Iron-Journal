@@ -5,9 +5,10 @@ import { Datasworn } from "@datasworn/core";
 import ironswornDelve from "@datasworn/ironsworn-classic-delve/json/delve.json";
 import { parseOraclesIntoMaps } from "./helpers/parseOraclesIntoMaps";
 import { parseMovesIntoMaps } from "./helpers/parseMovesIntoMaps";
+import { parseAssetsIntoMaps } from "./helpers/parseAssetsIntoMaps";
 
 export const defaultExpansions: Record<string, Datasworn.Expansion> = {
-  [ironswornDelve.id]: ironswornDelve as unknown as Datasworn.Expansion,
+  [ironswornDelve._id]: ironswornDelve as unknown as Datasworn.Expansion,
 };
 
 export const createRulesSlice: CreateSliceType<RulesSlice> = (
@@ -30,7 +31,7 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
       const baseRuleset = store.rules.baseRuleset;
       if (baseRuleset) {
         const rootOracleCollectionIds = Object.values(baseRuleset.oracles).map(
-          (oracle) => oracle.id
+          (oracle) => oracle._id
         );
         const baseRulesetMaps = parseOraclesIntoMaps(baseRuleset.oracles);
         let allOraclesMap = { ...baseRulesetMaps.allOraclesMap };
@@ -74,7 +75,7 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
 
           Object.values(expansionOracles).forEach((oracle) => {
             if (!oracle.replaces && !oracle.enhances) {
-              rootOracleCollectionIds.push(oracle.id);
+              rootOracleCollectionIds.push(oracle._id);
             }
           });
         });
@@ -95,7 +96,7 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
       const baseRuleset = store.rules.baseRuleset;
       if (baseRuleset) {
         const rootMoveCollectionIds = Object.values(baseRuleset.moves).map(
-          (move) => move.id
+          (move) => move._id
         );
         const baseRulesetMaps = parseMovesIntoMaps(baseRuleset.moves);
 
@@ -271,6 +272,63 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
         });
 
         store.rules.impacts = impacts;
+      }
+    });
+  },
+  rebuildAssets: () => {
+    set((store) => {
+      const baseRuleset = store.rules.baseRuleset;
+      if (baseRuleset) {
+        const baseRulesetMaps = parseAssetsIntoMaps(baseRuleset.assets);
+
+        let assetCollectionMap = { ...baseRulesetMaps.assetCollectionMap };
+        let assetMap = { ...baseRulesetMaps.assetMap };
+
+        store.rules.expansionIds.forEach((expansionId) => {
+          let expansionAssetCollections: Record<
+            string,
+            Datasworn.AssetCollection
+          >;
+          if (defaultExpansions[expansionId]) {
+            expansionAssetCollections =
+              defaultExpansions[expansionId].assets ?? {};
+          } else {
+            expansionAssetCollections =
+              store.homebrew.collections[expansionId]?.dataswornAssets ?? {};
+          }
+          const expansionAssetMaps = parseAssetsIntoMaps(
+            expansionAssetCollections
+          );
+
+          assetCollectionMap = {
+            ...assetCollectionMap,
+            ...expansionAssetMaps.assetCollectionMap,
+          };
+          assetMap = { ...assetMap, ...expansionAssetMaps.assetMap };
+
+          Object.keys(expansionAssetMaps.assetCollectionMap).forEach(
+            (collectionKey) => {
+              const collection =
+                expansionAssetMaps.assetCollectionMap[collectionKey];
+              if (collection.replaces) {
+                assetCollectionMap[collection.replaces] = collection;
+              } else if (collection.enhances) {
+                const original = assetCollectionMap[collection.enhances];
+                if (original) {
+                  assetCollectionMap[collection.enhances] = {
+                    ...original,
+                    contents: { ...original.contents, ...collection.contents },
+                  };
+                }
+              }
+            }
+          );
+        });
+
+        store.rules.assetMaps = {
+          assetCollectionMap,
+          assetMap,
+        };
       }
     });
   },
