@@ -3,6 +3,7 @@ import { AssetDialogForm } from "./AssetDialogForm";
 
 export interface AssetDialogProps {
   homebrewId: string;
+  categoryId: string;
   existingAssetId?: string;
   open: boolean;
   onClose: () => void;

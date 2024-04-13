@@ -18,6 +18,29 @@ export interface StoredHomebrewAssetOption {
   options?: string[];
 }
 
+interface StoredHomebrewAssetConditionMeter {
+  type: "conditionMeter";
+  label: string;
+  min: number;
+  max: number;
+}
+
+interface StoredHomebrewAssetCheckbox {
+  type: "checkbox";
+  label: string;
+}
+
+interface StoredHomebrewAssetSelect {
+  type: "select";
+  label: string;
+  options: string[];
+}
+
+export type StoredHomebrewAssetControl =
+  | StoredHomebrewAssetConditionMeter
+  | StoredHomebrewAssetCheckbox
+  | StoredHomebrewAssetSelect;
+
 export interface StoredHomebrewAsset {
   collectionId: string; // Homebrew collection id
   categoryKey: string;
@@ -26,7 +49,7 @@ export interface StoredHomebrewAsset {
   requirement?: string;
   shared?: boolean;
 
-  // controls?:
+  controls?: StoredHomebrewAssetControl[];
   options?: StoredHomebrewAssetOption[];
   abilities: StoredHomebrewAssetAbility[];
 

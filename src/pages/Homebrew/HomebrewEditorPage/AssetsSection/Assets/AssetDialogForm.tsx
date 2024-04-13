@@ -16,6 +16,7 @@ import { useStore } from "stores/store";
 import {
   StoredHomebrewAsset,
   StoredHomebrewAssetAbility,
+  StoredHomebrewAssetControl,
   StoredHomebrewAssetOption,
 } from "types/homebrew/HomebrewAssets.type";
 import { AssetAutocomplete } from "./AssetAutocomplete";
@@ -24,24 +25,26 @@ import { AssetCardPreview } from "./AssetCardPreview";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { AssetAbilities } from "./AssetAbilities";
 import { AssetOptions } from "./AssetOptions";
+import { AssetControls } from "./AssetControls";
 
 export interface AssetDialogFormProps {
   homebrewId: string;
+  categoryId: string;
   existingAssetId?: string;
   onClose: () => void;
 }
 
 export interface Form {
   label: string;
-  categoryId: string;
   requirement?: string;
   replacesId?: string;
   abilities: StoredHomebrewAssetAbility[];
   options: StoredHomebrewAssetOption[];
+  controls: StoredHomebrewAssetControl[];
 }
 
 export function AssetDialogForm(props: AssetDialogFormProps) {
-  const { homebrewId, existingAssetId, onClose } = props;
+  const { homebrewId, categoryId, existingAssetId, onClose } = props;
 
   const assets = useStore(
     (store) => store.homebrew.collections[homebrewId]?.assets?.data ?? {}
@@ -61,11 +64,11 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
     defaultValues: existingAsset
       ? {
           label: existingAsset.label,
-          categoryId: existingAsset.categoryKey,
           requirement: existingAsset.requirement,
           replacesId: existingAsset.replacesId,
           abilities: existingAsset.abilities,
           options: existingAsset.options,
+          controls: existingAsset.controls,
         }
       : {},
   });
@@ -78,7 +81,7 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
 
     const asset: StoredHomebrewAsset = {
       collectionId: homebrewId,
-      categoryKey: values.categoryId,
+      categoryKey: categoryId,
       label: values.label,
       abilities: values.abilities,
     };
@@ -88,6 +91,32 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
     }
     if (values.options) {
       asset.options = values.options;
+    }
+    if (values.controls) {
+      const controls: StoredHomebrewAssetControl[] = [];
+
+      values.controls.forEach((control) => {
+        if (control.type === "checkbox") {
+          controls.push({
+            type: control.type,
+            label: control.label,
+          });
+        } else if (control.type === "select") {
+          controls.push({
+            type: control.type,
+            label: control.label,
+            options: control.options ?? [],
+          });
+        } else if (control.type === "conditionMeter") {
+          controls.push({
+            type: control.type,
+            label: control.label,
+            min: control.min ?? 0,
+            max: control.max ?? 5,
+          });
+        }
+      });
+      asset.controls = controls;
     }
 
     if (existingAssetId) {
@@ -208,14 +237,10 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
                   register={register}
                   disabled={disabled}
                 />
-                <SectionHeading
-                  floating
-                  label={"Controls"}
-                  action={
-                    <Button variant={"outlined"} color={"inherit"}>
-                      Add Control
-                    </Button>
-                  }
+                <AssetControls
+                  control={control}
+                  register={register}
+                  disabled={disabled}
                 />
               </Stack>
             </Grid>

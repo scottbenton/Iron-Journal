@@ -40,14 +40,14 @@ export function AssetsSection(props: AssetsSectionProps) {
           <Breadcrumbs>
             <Link
               component={"button"}
-              underline='hover'
-              color='inherit'
+              underline="hover"
+              color="inherit"
               sx={{ lineHeight: "1rem" }}
               onClick={() => setOpenCollectionKey(undefined)}
             >
               Asset Collections
             </Link>
-            <Typography color='text.primary'>{openCollection.label}</Typography>
+            <Typography color="text.primary">{openCollection.label}</Typography>
           </Breadcrumbs>
           <SectionHeading
             label={"Collection Info"}
@@ -116,12 +116,15 @@ export function AssetsSection(props: AssetsSectionProps) {
         homebrewId={homebrewId}
         existingAssetCollectionId={assetCollectionDialogState.collectionId}
       />
-      <AssetDialog
-        open={assetDialogState.open}
-        onClose={() => setAssetDialogState({ open: false })}
-        homebrewId={homebrewId}
-        existingAssetId={assetDialogState.assetId}
-      />
+      {openCollectionKey && (
+        <AssetDialog
+          open={assetDialogState.open}
+          onClose={() => setAssetDialogState({ open: false })}
+          homebrewId={homebrewId}
+          categoryId={openCollectionKey}
+          existingAssetId={assetDialogState.assetId}
+        />
+      )}
     </Stack>
   );
 }

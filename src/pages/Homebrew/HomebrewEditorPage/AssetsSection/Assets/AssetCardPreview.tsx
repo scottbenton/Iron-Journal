@@ -6,6 +6,7 @@ import { AssetHeader } from "components/features/assets/NewAssetCard/AssetHeader
 import { AssetNameAndDescription } from "components/features/assets/NewAssetCard/AssetNameAndDescription";
 import { AssetAbilities } from "components/features/assets/NewAssetCard/AssetAbilities";
 import { AssetOptions } from "components/features/assets/NewAssetCard/AssetOptions";
+import { AssetControls } from "components/features/assets/NewAssetCard/AssetControls";
 
 export interface AssetCardPreviewProps {
   control: Control<Form, unknown>;
@@ -18,6 +19,7 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
   const requirement = useWatch({ control, name: "requirement" });
   const abilities = useWatch({ control, name: "abilities", defaultValue: [] });
   const options = useWatch({ control, name: "options", defaultValue: [] });
+  const controls = useWatch({ control, name: "controls", defaultValue: [] });
 
   const dataswornAbilities: Datasworn.AssetAbility[] = abilities.map(
     (ability, index) => ({
@@ -56,6 +58,45 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
     }
   });
 
+  const dataswornControls: Record<string, Datasworn.AssetControlField> = {};
+  controls.forEach((control, index) => {
+    if (control.type === "checkbox") {
+      dataswornControls[`${control.label}-${index}`] = {
+        field_type: "checkbox",
+        label: control.label,
+        value: false,
+        is_impact: false,
+        disables_asset: false,
+      };
+    } else if (control.type === "select") {
+      const choices: Record<string, Datasworn.SelectEnhancementFieldChoice> =
+        {};
+
+      (control.options ?? []).forEach((optionChoice, index) => {
+        choices[optionChoice + index] = {
+          label: optionChoice,
+          choice_type: "choice",
+        };
+      });
+
+      dataswornControls[`${control.label}-${index}`] = {
+        label: control.label,
+        field_type: "select_enhancement",
+        value: "",
+        choices,
+      };
+    } else if (control.type === "conditionMeter") {
+      dataswornControls[`${control.label}-${index}`] = {
+        label: control.label,
+        field_type: "condition_meter",
+        value: control.max,
+        max: control.max,
+        min: control.min,
+        rollable: true,
+      };
+    }
+  });
+
   const asset: Datasworn.Asset = {
     _id: "",
     name: label,
@@ -67,6 +108,7 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
     category: "Collection",
     abilities: dataswornAbilities,
     options: dataswornOptions,
+    controls: dataswornControls,
   };
 
   return (
@@ -95,6 +137,7 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
         <AssetNameAndDescription asset={asset} />
         <AssetOptions asset={asset} onAssetOptionChange={() => {}} />
         <AssetAbilities asset={asset} />
+        <AssetControls controls={asset.controls} onControlChange={() => {}} />
       </Box>
     </Card>
   );
