@@ -99,7 +99,6 @@ export const createSharedAssetsSlice: CreateSliceType<SharedAssetSlice> = (
     const campaignId = getState().campaigns.currentCampaign.currentCampaignId;
     const storedAssetId =
       getState().campaigns.currentCampaign.assets.assets[assetId]?.id;
-    console.debug(storedAssetId);
     if (!campaignId || !storedAssetId) {
       return new Promise((res, reject) => reject("Campaign ID not defined"));
     }
@@ -171,7 +170,6 @@ export const createSharedAssetsSlice: CreateSliceType<SharedAssetSlice> = (
   },
   updateAssetControl: (assetId, controlKey, value) => {
     const campaignId = getState().campaigns.currentCampaign.currentCampaignId;
-    console.debug(assetId, controlKey, value, campaignId);
     if (!campaignId) {
       return new Promise((res, reject) => reject("Campaign ID not defined"));
     }

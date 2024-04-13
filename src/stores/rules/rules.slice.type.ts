@@ -37,6 +37,7 @@ export interface RulesSliceActions {
   rebuildConditionMeters: () => void;
   rebuildSpecialTracks: () => void;
   rebuildImpacts: () => void;
+  rebuildAssets: () => void;
 }
 
 export type RulesSlice = RulesSliceData & RulesSliceActions;

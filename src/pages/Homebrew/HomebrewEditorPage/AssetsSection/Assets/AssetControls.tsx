@@ -79,7 +79,7 @@ export function AssetControls(props: AssetControlsProps) {
                   fullWidth
                   required
                   inputProps={{
-                    defaultValue: "",
+                    defaultValue: field.type,
                     ...register(`controls.${index}.type`),
                   }}
                 >

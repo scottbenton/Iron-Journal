@@ -19,9 +19,9 @@ import { MoveCategoryCard } from "./MoveCategoryCard";
 import { MoveCategoryDialog } from "./MoveCategoryDialog";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import { MoveDialog } from "./MoveDialog";
-import EditIcon from "@mui/icons-material/Edit";
 import { useStore } from "stores/store";
 import { useConfirm } from "material-ui-confirm";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 export interface MovesEditorPaneProps {

@@ -53,6 +53,7 @@ import { createHomebrewAsset } from "api-calls/homebrew/assets/assets/createHome
 import { updateHomebrewAsset } from "api-calls/homebrew/assets/assets/updateHomebrewAsset";
 import { listenToHomebrewAssetCollections } from "api-calls/homebrew/assets/collections/listenToHomebrewAssetCollections";
 import { listenToHomebrewAssets } from "api-calls/homebrew/assets/assets/listenToHomebrewAssets";
+import { convertStoredAssetsToCollections } from "functions/convertStoredAssetsToCollections";
 
 enum ListenerRefreshes {
   Oracles,
@@ -516,6 +517,21 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
   },
 
   updateDataswornAssets: (homebrewId) => {
-    console.debug("PLACEHOLDER - UPDATE DATASWORN ASSETS", homebrewId);
+    const homebrewCollection = getState().homebrew.collections[homebrewId];
+
+    const assetCollections = homebrewCollection?.assetCollections?.data;
+    const assets = homebrewCollection?.assets?.data;
+
+    if (assetCollections && assets) {
+      const collections = convertStoredAssetsToCollections(
+        homebrewId,
+        assetCollections,
+        assets
+      );
+      set((store) => {
+        store.homebrew.collections[homebrewId].dataswornAssets = collections;
+      });
+      getState().rules.rebuildAssets();
+    }
   },
 });

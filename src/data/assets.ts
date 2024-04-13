@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getSystem } from "hooks/useGameSystem";
 import {
   ironswornAssetCategories,
@@ -265,10 +266,10 @@ const compareAssets = (
   });
 };
 
-console.debug("COMPARING IRONSWORN ASSETS");
-compareAssets(oldIronswornAssets, newIronswornAssets);
-console.debug("COMPARING STARFORGED ASSETS");
-compareAssets(oldStarforgedAssets, newStarforgedAssets);
+// console.debug("COMPARING IRONSWORN ASSETS");
+// compareAssets(oldIronswornAssets, newIronswornAssets);
+// console.debug("COMPARING STARFORGED ASSETS");
+// compareAssets(oldStarforgedAssets, newStarforgedAssets);
 
 // Asset Diff
 /**

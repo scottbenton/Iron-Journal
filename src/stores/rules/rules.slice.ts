@@ -5,6 +5,7 @@ import { Datasworn } from "@datasworn/core";
 import ironswornDelve from "@datasworn/ironsworn-classic-delve/json/delve.json";
 import { parseOraclesIntoMaps } from "./helpers/parseOraclesIntoMaps";
 import { parseMovesIntoMaps } from "./helpers/parseMovesIntoMaps";
+import { parseAssetsIntoMaps } from "./helpers/parseAssetsIntoMaps";
 
 export const defaultExpansions: Record<string, Datasworn.Expansion> = {
   [ironswornDelve._id]: ironswornDelve as unknown as Datasworn.Expansion,
@@ -271,6 +272,45 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
         });
 
         store.rules.impacts = impacts;
+      }
+    });
+  },
+  rebuildAssets: () => {
+    set((store) => {
+      const baseRuleset = store.rules.baseRuleset;
+      if (baseRuleset) {
+        const baseRulesetMaps = parseAssetsIntoMaps(baseRuleset.assets);
+
+        let assetCollectionMap = { ...baseRulesetMaps.assetCollectionMap };
+        let assetMap = { ...baseRulesetMaps.assetMap };
+
+        store.rules.expansionIds.forEach((expansionId) => {
+          let expansionAssetCollections: Record<
+            string,
+            Datasworn.AssetCollection
+          >;
+          if (defaultExpansions[expansionId]) {
+            expansionAssetCollections =
+              defaultExpansions[expansionId].assets ?? {};
+          } else {
+            expansionAssetCollections =
+              store.homebrew.collections[expansionId]?.dataswornAssets ?? {};
+          }
+          const expansionAssetMaps = parseAssetsIntoMaps(
+            expansionAssetCollections
+          );
+
+          assetCollectionMap = {
+            ...assetCollectionMap,
+            ...expansionAssetMaps.assetCollectionMap,
+          };
+          assetMap = { ...assetMap, ...expansionAssetMaps.assetMap };
+        });
+
+        store.rules.assetMaps = {
+          assetCollectionMap,
+          assetMap,
+        };
       }
     });
   },
