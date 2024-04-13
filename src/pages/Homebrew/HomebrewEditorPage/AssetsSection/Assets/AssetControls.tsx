@@ -71,6 +71,7 @@ export function AssetControls(props: AssetControlsProps) {
                     defaultValue: "",
                     ...register(`controls.${index}.label`),
                   }}
+                  helperText={"Each control must have a unique label"}
                 />
                 <TextField
                   disabled={disabled}

@@ -25,15 +25,22 @@ export function AssetControls(props: AssetControlsProps) {
       spacing={row ? 1 : 2}
       sx={{ mt: row ? 0 : 2 }}
     >
-      {Object.keys(controls).map((controlId) => (
-        <AssetControl
-          key={controlId}
-          controlId={controlId}
-          control={controls[controlId]}
-          storedAsset={storedAsset}
-          onControlChange={onControlChange}
-        />
-      ))}
+      {Object.keys(controls)
+        .sort((c1, c2) => {
+          const control1 = controls[c1];
+          const control2 = controls[c2];
+
+          return control1.label.localeCompare(control2.label);
+        })
+        .map((controlId) => (
+          <AssetControl
+            key={controlId}
+            controlId={controlId}
+            control={controls[controlId]}
+            storedAsset={storedAsset}
+            onControlChange={onControlChange}
+          />
+        ))}
     </Stack>
   );
 }

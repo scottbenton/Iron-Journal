@@ -21,15 +21,22 @@ export function AssetOptions(props: AssetOptionsProps) {
 
   return (
     <Stack spacing={1} mt={0.5}>
-      {Object.keys(assetOptions).map((assetOptionKey) => (
-        <AssetOption
-          storedAsset={storedAsset}
-          key={assetOptionKey}
-          assetOptionKey={assetOptionKey}
-          assetOption={assetOptions[assetOptionKey]}
-          onAssetOptionChange={onAssetOptionChange}
-        />
-      ))}
+      {Object.keys(assetOptions)
+        .sort((o1, o2) => {
+          const option1 = assetOptions[o1];
+          const option2 = assetOptions[o2];
+
+          return option1.label.localeCompare(option2.label);
+        })
+        .map((assetOptionKey) => (
+          <AssetOption
+            storedAsset={storedAsset}
+            key={assetOptionKey}
+            assetOptionKey={assetOptionKey}
+            assetOption={assetOptions[assetOptionKey]}
+            onAssetOptionChange={onAssetOptionChange}
+          />
+        ))}
     </Stack>
   );
 }

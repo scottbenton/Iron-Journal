@@ -68,6 +68,7 @@ export function AssetOptions(props: AssetOptionsProps) {
                     defaultValue: "",
                     ...register(`options.${index}.label`),
                   }}
+                  helperText={"Each option must have a unique label"}
                 />
                 <TextField
                   disabled={disabled}

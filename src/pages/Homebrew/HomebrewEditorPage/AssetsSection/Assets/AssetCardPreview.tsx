@@ -7,6 +7,7 @@ import { AssetNameAndDescription } from "components/features/assets/NewAssetCard
 import { AssetAbilities } from "components/features/assets/NewAssetCard/AssetAbilities";
 import { AssetOptions } from "components/features/assets/NewAssetCard/AssetOptions";
 import { AssetControls } from "components/features/assets/NewAssetCard/AssetControls";
+import { convertIdPart } from "functions/dataswornIdEncoder";
 
 export interface AssetCardPreviewProps {
   control: Control<Form, unknown>;
@@ -31,9 +32,11 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
   );
 
   const dataswornOptions: Record<string, Datasworn.AssetOptionField> = {};
-  options.forEach((option, index) => {
+  options.forEach((option) => {
+    const optionId = convertIdPart(option.label);
+
     if (option.type === "text") {
-      dataswornOptions[option.label + index] = {
+      dataswornOptions[optionId] = {
         label: option.label,
         field_type: "text",
         value: "",
@@ -42,14 +45,14 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
       const choices: Record<string, Datasworn.SelectEnhancementFieldChoice> =
         {};
 
-      (option.options ?? []).forEach((optionChoice, index) => {
-        choices[optionChoice + index] = {
+      (option.options ?? []).forEach((optionChoice) => {
+        choices[optionChoice] = {
           label: optionChoice,
           choice_type: "choice",
         };
       });
 
-      dataswornOptions[option.label + index] = {
+      dataswornOptions[optionId] = {
         label: option.label,
         field_type: "select_enhancement",
         value: "",
@@ -59,9 +62,10 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
   });
 
   const dataswornControls: Record<string, Datasworn.AssetControlField> = {};
-  controls.forEach((control, index) => {
+  controls.forEach((control) => {
+    const controlId = convertIdPart(control.label);
     if (control.type === "checkbox") {
-      dataswornControls[`${control.label}-${index}`] = {
+      dataswornControls[controlId] = {
         field_type: "checkbox",
         label: control.label,
         value: false,
@@ -72,21 +76,21 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
       const choices: Record<string, Datasworn.SelectEnhancementFieldChoice> =
         {};
 
-      (control.options ?? []).forEach((optionChoice, index) => {
-        choices[optionChoice + index] = {
+      (control.options ?? []).forEach((optionChoice) => {
+        choices[optionChoice] = {
           label: optionChoice,
           choice_type: "choice",
         };
       });
 
-      dataswornControls[`${control.label}-${index}`] = {
+      dataswornControls[controlId] = {
         label: control.label,
         field_type: "select_enhancement",
         value: "",
         choices,
       };
     } else if (control.type === "conditionMeter") {
-      dataswornControls[`${control.label}-${index}`] = {
+      dataswornControls[controlId] = {
         label: control.label,
         field_type: "condition_meter",
         value: control.max,
