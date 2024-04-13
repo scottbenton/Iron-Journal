@@ -147,7 +147,7 @@ export function AssetCollectionDialogForm(
               }}
             />
             <Controller
-              name='description'
+              name="description"
               control={control}
               render={({ field }) => (
                 <MarkdownEditor
@@ -165,7 +165,7 @@ export function AssetCollectionDialogForm(
                 <AssetCollectionAutocomplete
                   label={"Replaces Collection"}
                   value={field.value}
-                  onChange={(ids) => field.onChange(ids)}
+                  onChange={(ids) => field.onChange(ids ?? null)}
                   onBlur={field.onBlur}
                   helperText={
                     "Replaces the collection (and all assets within) with this collection"
@@ -180,7 +180,7 @@ export function AssetCollectionDialogForm(
                 <AssetCollectionAutocomplete
                   label={"Enhances Collection"}
                   value={field.value}
-                  onChange={(ids) => field.onChange(ids)}
+                  onChange={(ids) => field.onChange(ids ?? null)}
                   onBlur={field.onBlur}
                   helperText={
                     "Adds assets in this collection to the entered collection"

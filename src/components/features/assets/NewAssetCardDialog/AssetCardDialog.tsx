@@ -85,13 +85,15 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
             variant={"scrollable"}
             scrollButtons={"auto"}
           >
-            {Object.keys(assetGroups).map((groupKey, index) => (
-              <Tab
-                label={assetGroups[groupKey].name}
-                value={groupKey}
-                key={index}
-              />
-            ))}
+            {Object.keys(assetGroups)
+              .filter((group) => !assetGroups[group].enhances)
+              .map((groupKey, index) => (
+                <Tab
+                  label={assetGroups[groupKey].name}
+                  value={groupKey}
+                  key={index}
+                />
+              ))}
           </Tabs>
         </Box>
         <Box py={1}>

@@ -67,7 +67,6 @@ export function AssetAbilities(props: AssetAbilitiesProps) {
                   disabled={disabled}
                   label={`Ability ${index + 1} Label`}
                   fullWidth
-                  required
                   inputProps={{
                     defaultValue: "",
                     ...register(`abilities.${index}.name`),

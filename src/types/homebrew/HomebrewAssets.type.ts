@@ -53,5 +53,5 @@ export interface StoredHomebrewAsset {
   options?: StoredHomebrewAssetOption[];
   abilities: StoredHomebrewAssetAbility[];
 
-  replacesId?: string;
+  // replacesId?: string;
 }

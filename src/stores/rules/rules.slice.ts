@@ -305,6 +305,24 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
             ...expansionAssetMaps.assetCollectionMap,
           };
           assetMap = { ...assetMap, ...expansionAssetMaps.assetMap };
+
+          Object.keys(expansionAssetMaps.assetCollectionMap).forEach(
+            (collectionKey) => {
+              const collection =
+                expansionAssetMaps.assetCollectionMap[collectionKey];
+              if (collection.replaces) {
+                assetCollectionMap[collection.replaces] = collection;
+              } else if (collection.enhances) {
+                const original = assetCollectionMap[collection.enhances];
+                if (original) {
+                  assetCollectionMap[collection.enhances] = {
+                    ...original,
+                    contents: { ...original.contents, ...collection.contents },
+                  };
+                }
+              }
+            }
+          );
         });
 
         store.rules.assetMaps = {

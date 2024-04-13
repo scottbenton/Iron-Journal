@@ -19,7 +19,7 @@ import {
   StoredHomebrewAssetControl,
   StoredHomebrewAssetOption,
 } from "types/homebrew/HomebrewAssets.type";
-import { AssetAutocomplete } from "./AssetAutocomplete";
+// import { AssetAutocomplete } from "./AssetAutocomplete";
 import { Preview } from "../../Preview";
 import { AssetCardPreview } from "./AssetCardPreview";
 import { SectionHeading } from "components/shared/SectionHeading";
@@ -37,7 +37,7 @@ export interface AssetDialogFormProps {
 export interface Form {
   label: string;
   requirement?: string;
-  replacesId?: string;
+  // replacesId?: string;
   abilities: StoredHomebrewAssetAbility[];
   options: StoredHomebrewAssetOption[];
   controls: StoredHomebrewAssetControl[];
@@ -65,7 +65,7 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
       ? {
           label: existingAsset.label,
           requirement: existingAsset.requirement,
-          replacesId: existingAsset.replacesId,
+          // replacesId: existingAsset.replacesId,
           abilities: existingAsset.abilities,
           options: existingAsset.options,
           controls: existingAsset.controls,
@@ -214,7 +214,7 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
                     />
                   )}
                 />
-                <Controller
+                {/* <Controller
                   name={"replacesId"}
                   control={control}
                   render={({ field }) => (
@@ -226,7 +226,7 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
                       helperText={"Replaces an existing asset with this one"}
                     />
                   )}
-                />
+                /> */}
                 <AssetOptions
                   control={control}
                   register={register}
@@ -244,7 +244,17 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
                 />
               </Stack>
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid
+              item
+              xs={12}
+              md={4}
+              sx={{
+                overflowY: "auto",
+                overflowX: "hidden",
+                pr: 1,
+                maxHeight: "100%",
+              }}
+            >
               <Preview>
                 <AssetCardPreview control={control} />
               </Preview>

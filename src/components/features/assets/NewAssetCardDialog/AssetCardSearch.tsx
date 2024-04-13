@@ -14,6 +14,7 @@ export function AssetCardSearch(props: AssetCardSearchProps) {
   );
   const options = useMemo(() => {
     return Object.values(assetGroups)
+      .filter((group) => !group.enhances)
       .flatMap((group) =>
         Object.values(group.contents ?? {}).map((asset) => ({
           groupId: group._id,
@@ -35,7 +36,7 @@ export function AssetCardSearch(props: AssetCardSearchProps) {
         <TextField
           sx={{ mr: 2, minWidth: 200 }}
           {...params}
-          placeholder='Search'
+          placeholder="Search"
         />
       )}
     />

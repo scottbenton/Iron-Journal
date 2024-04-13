@@ -12,7 +12,7 @@ export function StatsSection() {
 
   // We know character is defined at this point, hence the typecasting
   const stats = useStore(
-    (store) => store.characters.currentCharacter.currentCharacter?.stats
+    (store) => store.characters.currentCharacter.currentCharacter?.stats ?? {}
   ) as StatsMap;
   const customStats = useStore((store) => store.settings.customStats);
 
@@ -126,7 +126,7 @@ export function StatsSection() {
         )}
       </Box>
       <Divider
-        orientation='vertical'
+        orientation="vertical"
         flexItem
         sx={(theme) => ({
           mx: 1,
@@ -191,7 +191,7 @@ export function StatsSection() {
           </>
         )}
         <Divider
-          orientation='vertical'
+          orientation="vertical"
           flexItem
           sx={(theme) => ({
             mx: 1,
