@@ -17,6 +17,19 @@ export interface StoredConditionMeter {
   rollable: boolean;
 }
 
+export interface StoredNonLinearMeter {
+  dataswornId: string;
+  collectionId: string;
+  description?: string;
+  shared: boolean;
+  label: string;
+  options: {
+    value: number | string;
+    selectable: boolean;
+  }[];
+  rollable: boolean;
+}
+
 export interface StoredImpact {
   label: string;
   dataswornId: string;

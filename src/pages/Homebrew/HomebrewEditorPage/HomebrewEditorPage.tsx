@@ -35,12 +35,13 @@ export function HomebrewEditorPage() {
   const navigate = useNavigate();
 
   const loading = useStore((store) => store.homebrew.loading);
-  const homebrewName = useStore((store) =>
-    homebrewId && store.homebrew.collections[homebrewId]?.base
-      ? store.homebrew.collections[homebrewId].base.title ??
-        "Unnamed Collection"
-      : undefined
-  );
+  const homebrewName = useStore((store) => {
+    return homebrewId && store.homebrew.collections[homebrewId]?.base
+      ? store.homebrew.collections[homebrewId].base.title ||
+          "Unnamed Collection"
+      : undefined;
+  });
+
   const deleteCollection = useStore((store) => store.homebrew.deleteExpansion);
 
   const [searchParams] = useSearchParams();

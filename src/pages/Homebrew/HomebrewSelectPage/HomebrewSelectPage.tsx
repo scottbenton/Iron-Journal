@@ -36,9 +36,9 @@ export function HomebrewSelectPage() {
 
   const collectionKeys = Object.keys(homebrewCollections).sort((k1, k2) =>
     (
-      homebrewCollections[k1]?.base?.title ?? "Unnamed Collection"
+      homebrewCollections[k1]?.base?.title || "Unnamed Collection"
     )?.localeCompare(
-      homebrewCollections[k2]?.base?.title ?? "Unnamed Collection"
+      homebrewCollections[k2]?.base?.title || "Unnamed Collection"
     )
   );
 
@@ -76,7 +76,7 @@ export function HomebrewSelectPage() {
           ids={collectionIds}
         />
         {errorMessage && (
-          <Alert severity='error'>
+          <Alert severity="error">
             <AlertTitle>Error</AlertTitle>
             {errorMessage}
           </Alert>
@@ -132,7 +132,7 @@ export function HomebrewSelectPage() {
                   >
                     <Box>
                       <Typography variant={"h6"} component={"p"}>
-                        {homebrewCollections[collectionKey].base?.title ??
+                        {homebrewCollections[collectionKey].base?.title ||
                           "Unnamed Collection"}
                       </Typography>
                     </Box>

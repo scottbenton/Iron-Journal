@@ -2,6 +2,7 @@ import {
   Control,
   Controller,
   UseFormRegister,
+  UseFormReturn,
   useFieldArray,
 } from "react-hook-form";
 import { Form } from "./AssetDialogForm";
@@ -20,15 +21,18 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { EmptyState } from "components/shared/EmptyState";
 import { OptionalFieldWrapper } from "./OptionalFieldWrapper";
 import { NumberField } from "components/shared/NumberField";
+import { convertIdPart } from "functions/dataswornIdEncoder";
 
 export interface AssetControlsProps {
   control: Control<Form>;
   register: UseFormRegister<Form>;
-  disabled: boolean;
+  formState: UseFormReturn<Form>["formState"];
 }
 
 export function AssetControls(props: AssetControlsProps) {
-  const { control, register, disabled } = props;
+  const { control, register, formState } = props;
+
+  const { touchedFields, errors, disabled } = formState;
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -67,11 +71,29 @@ export function AssetControls(props: AssetControlsProps) {
                   label={`Control Label`}
                   fullWidth
                   required
+                  error={
+                    touchedFields.controls?.[index].label &&
+                    !!errors.controls?.[index]?.label
+                  }
+                  helperText={
+                    touchedFields.controls?.[index].label &&
+                    errors.controls?.[index]?.label
+                      ? errors.controls?.[index]?.label?.message ?? ""
+                      : "Each control must have a unique label"
+                  }
                   inputProps={{
                     defaultValue: "",
-                    ...register(`controls.${index}.label`),
+                    ...register(`controls.${index}.label`, {
+                      required: "This field is required.",
+                      validate: (value) => {
+                        try {
+                          convertIdPart(value);
+                        } catch (e) {
+                          return "Failed to parse a valid ID for your control. Please use at least three letters or numbers in your label.";
+                        }
+                      },
+                    }),
                   }}
-                  helperText={"Each control must have a unique label"}
                 />
                 <TextField
                   disabled={disabled}

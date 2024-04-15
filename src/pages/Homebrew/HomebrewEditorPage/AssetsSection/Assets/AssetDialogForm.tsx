@@ -54,12 +54,7 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
 
   const [loading, setLoading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, touchedFields, disabled },
-    control,
-  } = useForm<Form>({
+  const { register, handleSubmit, formState, control } = useForm<Form>({
     disabled: loading,
     defaultValues: existingAsset
       ? {
@@ -72,6 +67,8 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
         }
       : {},
   });
+
+  const { errors, touchedFields, disabled } = formState;
 
   const createAsset = useStore((store) => store.homebrew.createAsset);
   const updateAsset = useStore((store) => store.homebrew.updateAsset);
@@ -230,7 +227,7 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
                 <AssetOptions
                   control={control}
                   register={register}
-                  disabled={disabled}
+                  formState={formState}
                 />
                 <AssetAbilities
                   control={control}
@@ -240,7 +237,7 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
                 <AssetControls
                   control={control}
                   register={register}
-                  disabled={disabled}
+                  formState={formState}
                 />
               </Stack>
             </Grid>

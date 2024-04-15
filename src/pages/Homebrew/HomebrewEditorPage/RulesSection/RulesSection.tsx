@@ -24,6 +24,7 @@ export function RulesSection(props: RulesSectionProps) {
       <Stats homebrewId={id} />
       <SectionHeading breakContainer label={"Condition Meters"} />
       <ConditionMeters homebrewId={id} />
+      <SectionHeading breakContainer label={"Non-Linear Meters"} />
       <SectionHeading breakContainer label={"Impacts / Debilities"} />
       <Impacts homebrewId={id} />
       <SectionHeading breakContainer label={"Legacy Tracks"} />

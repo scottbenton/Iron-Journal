@@ -33,8 +33,13 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
 
   const dataswornOptions: Record<string, Datasworn.AssetOptionField> = {};
   options.forEach((option) => {
-    const optionId = convertIdPart(option.label);
+    let optionId: string;
 
+    try {
+      optionId = convertIdPart(option.label);
+    } catch (e) {
+      return;
+    }
     if (option.type === "text") {
       dataswornOptions[optionId] = {
         label: option.label,
@@ -63,7 +68,13 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
 
   const dataswornControls: Record<string, Datasworn.AssetControlField> = {};
   controls.forEach((control) => {
-    const controlId = convertIdPart(control.label);
+    let controlId: string;
+
+    try {
+      controlId = convertIdPart(control.label);
+    } catch (e) {
+      return;
+    }
     if (control.type === "checkbox") {
       dataswornControls[controlId] = {
         field_type: "checkbox",
