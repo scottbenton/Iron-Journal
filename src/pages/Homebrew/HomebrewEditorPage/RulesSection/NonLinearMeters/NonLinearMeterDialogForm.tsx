@@ -10,7 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { StoredNonLinearMeter } from "types/homebrew/HomebrewRules.type";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { convertIdPart } from "functions/dataswornIdEncoder";

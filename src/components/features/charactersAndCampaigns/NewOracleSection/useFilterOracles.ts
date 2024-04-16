@@ -9,6 +9,17 @@ export enum CATEGORY_VISIBILITY {
   ALL,
 }
 
+type omittedKeys = "oracle_type" | "contents";
+export interface IPinnedOracleCollection
+  extends Omit<Datasworn.OracleTablesCollection, omittedKeys> {
+  oracle_type: "pinned_oracles";
+  contents: Record<string, Datasworn.OracleRollable>;
+}
+
+export type CombinedCollectionType =
+  | Datasworn.OracleCollection
+  | IPinnedOracleCollection;
+
 export function useFilterOracles() {
   const [search, setSearch] = useState("");
   const oracleCollectionsWithoutPinnedOracles = useStore(
@@ -21,33 +32,39 @@ export function useFilterOracles() {
 
   const pinnedOracles = useStore((store) => store.settings.pinnedOraclesIds);
 
-  const { oracleCollections, rootOracles } = useMemo(() => {
+  const { oracleCollections, rootOracles } = useMemo<{
+    oracleCollections: Record<string, CombinedCollectionType>;
+    rootOracles: string[];
+  }>(() => {
     const pinnedOracleRollables: Record<string, Datasworn.OracleRollable> = {};
 
     Object.keys(pinnedOracles).forEach((id) => {
-      if (pinnedOracles[id] && oracles[id]) {
-        pinnedOracleRollables[id] = oracles[id];
+      const oracle = oracles[id];
+      if (pinnedOracles[id] && oracle) {
+        pinnedOracleRollables[id] = oracle;
       }
     });
 
     if (Object.keys(pinnedOracleRollables).length > 0) {
       const pinnedOracleId = "app/collections/oracles/pinned";
+
+      const collection: IPinnedOracleCollection = {
+        _id: pinnedOracleId,
+        name: "Pinned Oracles",
+        _source: {
+          title: "Pinned Oracles",
+          authors: [],
+          date: "2000-01-01",
+          url: "",
+          license: License.None,
+        },
+        contents: pinnedOracleRollables,
+        oracle_type: "pinned_oracles",
+      };
+
       return {
         oracleCollections: {
-          [pinnedOracleId]: {
-            _id: pinnedOracleId,
-            name: "Pinned Oracles",
-            _source: {
-              title: "Pinned Oracles",
-              authors: [],
-              date: "2000-01-01",
-              url: "",
-              license: License.None,
-            },
-            contents: pinnedOracleRollables,
-            oracle_type: "tables",
-          },
-
+          [pinnedOracleId]: collection,
           ...oracleCollectionsWithoutPinnedOracles,
         },
         rootOracles: [pinnedOracleId, ...rootOraclesWithoutPinnedOracles],
@@ -76,9 +93,7 @@ export function useFilterOracles() {
 
     const enhancesCollections: Record<string, string[]> = {};
 
-    const filterCollection = (
-      collection: Datasworn.OracleCollection
-    ): boolean => {
+    const filterCollection = (collection: CombinedCollectionType): boolean => {
       if (collection.enhances) {
         enhancesCollections[collection.enhances] = [
           ...(enhancesCollections[collection.enhances] ?? []),
@@ -88,7 +103,10 @@ export function useFilterOracles() {
 
       const hasChildren =
         (collection.oracle_type === "tables" &&
-          Object.keys(collection.collections ?? {}).length > 0) ||
+          Object.keys(
+            (collection as unknown as Datasworn.OracleTablesCollection)
+              .collections ?? {}
+          ).length > 0) ||
         Object.keys(collection.contents ?? {}).length > 0;
 
       const searchIncludesCollectionName =
