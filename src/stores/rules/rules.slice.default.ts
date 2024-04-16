@@ -44,4 +44,5 @@ export const defaultRulesSlice: RulesSliceData = {
   ),
   moveMaps: parseMovesIntoMaps(defaultRuleset.moves),
   assetMaps: parseAssetsIntoMaps(defaultRuleset.assets),
+  nonLinearMeters: {},
 };

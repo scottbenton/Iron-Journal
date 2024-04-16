@@ -6,6 +6,7 @@ import ironswornDelve from "@datasworn/ironsworn-classic-delve/json/delve.json";
 import { parseOraclesIntoMaps } from "./helpers/parseOraclesIntoMaps";
 import { parseMovesIntoMaps } from "./helpers/parseMovesIntoMaps";
 import { parseAssetsIntoMaps } from "./helpers/parseAssetsIntoMaps";
+import { StoredNonLinearMeter } from "types/homebrew/HomebrewRules.type";
 
 export const defaultExpansions: Record<string, Datasworn.Expansion> = {
   [ironswornDelve._id]: ironswornDelve as unknown as Datasworn.Expansion,
@@ -195,6 +196,22 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
 
         store.rules.conditionMeters = conditionMeters;
       }
+    });
+  },
+  rebuildNonLinearMeters: () => {
+    set((store) => {
+      let nonLinearMeters: Record<string, StoredNonLinearMeter> = {};
+
+      store.rules.expansionIds.forEach((expansionId) => {
+        if (!defaultExpansions[expansionId]) {
+          const expansionNonLinearMeters =
+            store.homebrew.collections[expansionId]?.nonLinearMeters?.data ??
+            {};
+          nonLinearMeters = { ...nonLinearMeters, ...expansionNonLinearMeters };
+        }
+
+        store.rules.nonLinearMeters = nonLinearMeters;
+      });
     });
   },
   rebuildSpecialTracks: () => {

@@ -25,7 +25,7 @@ export interface StoredNonLinearMeter {
   label: string;
   options: {
     value: number | string;
-    selectable: boolean;
+    readOnly: boolean;
   }[];
   rollable: boolean;
 }
