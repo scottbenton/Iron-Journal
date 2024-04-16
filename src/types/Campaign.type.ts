@@ -7,6 +7,7 @@ export interface StoredCampaign {
   gmIds?: string[];
   worldId?: string;
   expansionIds?: string[];
+  customTracks?: Record<string, number>;
   conditionMeters?: Record<string, number>;
   specialTracks?: Record<string, LegacyTrack>;
   // TODO - Remove once expansions are in

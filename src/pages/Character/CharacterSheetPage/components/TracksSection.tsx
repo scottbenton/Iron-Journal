@@ -13,6 +13,7 @@ import { useIsMobile } from "hooks/useIsMobile";
 import { MobileStatTrack } from "./MobileStatTrack";
 import { MomentumTrackMobile } from "./MomentumTrackMobile";
 import { useNewCustomContentPage } from "hooks/featureFlags/useNewCustomContentPage";
+import { NonLinearMeters } from "./NonLinearMeters";
 
 export type TRACK_KEYS = "health" | "spirit" | "supply" | "momentum";
 
@@ -199,6 +200,7 @@ export function TracksSection() {
               </Box>
             </Grid>
           )}
+          <NonLinearMeters />
         </>
       ) : (
         <>
@@ -242,6 +244,7 @@ export function TracksSection() {
                   resetValue={momentumResetValue ?? momentumTrack.startingValue}
                 />
               </Grid>
+              <CustomTracks />
             </>
           ) : (
             <>
@@ -306,10 +309,9 @@ export function TracksSection() {
                   </ButtonBase>
                 </Box>
               </Grid>
+              <CustomTracks />
             </>
           )}
-
-          <CustomTracks />
         </>
       )}
     </Grid>

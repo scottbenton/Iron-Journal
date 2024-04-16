@@ -54,12 +54,17 @@ import { updateHomebrewAsset } from "api-calls/homebrew/assets/assets/updateHome
 import { listenToHomebrewAssetCollections } from "api-calls/homebrew/assets/collections/listenToHomebrewAssetCollections";
 import { listenToHomebrewAssets } from "api-calls/homebrew/assets/assets/listenToHomebrewAssets";
 import { convertStoredAssetsToCollections } from "functions/convertStoredAssetsToCollections";
+import { listenToHomebrewNonLinearMeters } from "api-calls/homebrew/rules/nonLinearMeters/listenToHomebrewNonLinearMeters";
+import { createHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/createHomebrewNonLinearMeter";
+import { updateHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/updateHomebrewNonLinearMeter";
+import { deleteHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/deleteHomebrewNonLinearMeter";
 
 enum ListenerRefreshes {
   Oracles,
   Moves,
   Stats,
   ConditionMeters,
+  NonLinearConditionMeters,
   SpecialTracks,
   Impacts,
   Assets,
@@ -128,6 +133,7 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
       getState().rules.rebuildConditionMeters();
       getState().rules.rebuildSpecialTracks();
       getState().rules.rebuildImpacts();
+      getState().rules.rebuildNonLinearMeters();
     }
 
     const filteredHomebrewIds = homebrewIds.filter(
@@ -146,6 +152,12 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
         errorMessage: "Failed to load homebrew condition meters",
         sliceKey: "conditionMeters",
         refreshes: ListenerRefreshes.ConditionMeters,
+      },
+      {
+        listenerFunction: listenToHomebrewNonLinearMeters,
+        errorMessage: "Failed to load homebrew non-linear meters",
+        sliceKey: "nonLinearMeters",
+        refreshes: ListenerRefreshes.NonLinearConditionMeters,
       },
       {
         listenerFunction: listenToHomebrewImpacts,
@@ -234,6 +246,9 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
                   break;
                 case ListenerRefreshes.Assets:
                   getState().homebrew.updateDataswornAssets(homebrewId);
+                  break;
+                case ListenerRefreshes.NonLinearConditionMeters:
+                  getState().rules.rebuildNonLinearMeters();
               }
             },
             () => {
@@ -264,6 +279,7 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
       getState().rules.rebuildConditionMeters();
       getState().rules.rebuildSpecialTracks();
       getState().rules.rebuildImpacts();
+      getState().rules.rebuildNonLinearMeters();
     };
   },
 
@@ -295,6 +311,16 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
   },
   deleteConditionMeter: (conditionMeterId) => {
     return deleteHomebrewConditionMeter({ conditionMeterId });
+  },
+
+  createNonLinearMeter: (meter) => {
+    return createHomebrewNonLinearMeter({ meter });
+  },
+  updateNonLinearMeter: (meterId, meter) => {
+    return updateHomebrewNonLinearMeter({ meterId, meter });
+  },
+  deleteNonLinearMeter: (meterId) => {
+    return deleteHomebrewNonLinearMeter({ meterId });
   },
 
   createImpactCategory: (impactCategory) => {

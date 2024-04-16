@@ -4,6 +4,7 @@ import { Stats } from "./Stats";
 import { ConditionMeters } from "./ConditionMeters";
 import { Impacts } from "./Impacts";
 import { LegacyTracks } from "./LegacyTracks";
+import { NonLinearMeters } from "./NonLinearMeters";
 
 export interface RulesSectionProps {
   id: string;
@@ -24,6 +25,8 @@ export function RulesSection(props: RulesSectionProps) {
       <Stats homebrewId={id} />
       <SectionHeading breakContainer label={"Condition Meters"} />
       <ConditionMeters homebrewId={id} />
+      <SectionHeading breakContainer label={"Non-Linear Meters"} />
+      <NonLinearMeters homebrewId={id} />
       <SectionHeading breakContainer label={"Impacts / Debilities"} />
       <Impacts homebrewId={id} />
       <SectionHeading breakContainer label={"Legacy Tracks"} />

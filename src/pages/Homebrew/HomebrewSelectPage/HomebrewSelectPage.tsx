@@ -36,9 +36,9 @@ export function HomebrewSelectPage() {
 
   const collectionKeys = Object.keys(homebrewCollections).sort((k1, k2) =>
     (
-      homebrewCollections[k1]?.base?.title ?? "Unnamed Collection"
+      homebrewCollections[k1]?.base?.title || "Unnamed Collection"
     )?.localeCompare(
-      homebrewCollections[k2]?.base?.title ?? "Unnamed Collection"
+      homebrewCollections[k2]?.base?.title || "Unnamed Collection"
     )
   );
 
@@ -70,13 +70,19 @@ export function HomebrewSelectPage() {
           !homebrewCollections || Object.keys(homebrewCollections).length === 0
         }
       >
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          <AlertTitle>Beta Warning</AlertTitle>
+          This feature is still being tested. I <i>think</i> most of the major
+          changes are done, but there <b>will</b> be bugs while I continue to
+          work on these features. Thank you for your patience! -Scott
+        </Alert>
         <CreateExpansionDialog
           open={createExpansionDialogOpen}
           onClose={() => setCreateExpansionDialogOpen(false)}
           ids={collectionIds}
         />
         {errorMessage && (
-          <Alert severity='error'>
+          <Alert severity="error">
             <AlertTitle>Error</AlertTitle>
             {errorMessage}
           </Alert>
@@ -132,7 +138,7 @@ export function HomebrewSelectPage() {
                   >
                     <Box>
                       <Typography variant={"h6"} component={"p"}>
-                        {homebrewCollections[collectionKey].base?.title ??
+                        {homebrewCollections[collectionKey].base?.title ||
                           "Unnamed Collection"}
                       </Typography>
                     </Box>

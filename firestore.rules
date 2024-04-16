@@ -126,6 +126,12 @@ service cloud.firestore {
         allow write: if checkIsHomebrewOwner(resource.data.collectionId);
       }
 
+      match /non_linear_meters/{meterId} {
+        allow read: if request.auth.uid != null;
+        allow create: if request.auth.uid != null;
+        allow write: if checkIsHomebrewOwner(resource.data.collectionId);
+      }
+
       match /impacts/{impactCategoryId} {
         allow read: if request.auth.uid != null;
         allow create: if request.auth.uid != null;

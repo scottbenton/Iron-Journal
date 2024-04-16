@@ -21,6 +21,7 @@ import {
   StoredImpact,
   StoredImpactCategory,
   StoredLegacyTrack,
+  StoredNonLinearMeter,
   StoredStat,
 } from "types/homebrew/HomebrewRules.type";
 
@@ -35,6 +36,7 @@ export interface HomebrewEntry {
 
   stats?: HomebrewData<StoredStat>;
   conditionMeters?: HomebrewData<StoredConditionMeter>;
+  nonLinearMeters?: HomebrewData<StoredNonLinearMeter>;
   impactCategories?: HomebrewData<StoredImpactCategory>;
   legacyTracks?: HomebrewData<StoredLegacyTrack>;
 
@@ -78,6 +80,13 @@ export interface HomebrewSliceActions {
     conditionMeter: StoredConditionMeter
   ) => Promise<void>;
   deleteConditionMeter: (conditionMeterId: string) => Promise<void>;
+
+  createNonLinearMeter: (meter: StoredNonLinearMeter) => Promise<void>;
+  updateNonLinearMeter: (
+    meterId: string,
+    meter: StoredNonLinearMeter
+  ) => Promise<void>;
+  deleteNonLinearMeter: (meterId: string) => Promise<void>;
 
   createImpactCategory: (category: StoredImpactCategory) => Promise<void>;
   updateImpactCategory: (

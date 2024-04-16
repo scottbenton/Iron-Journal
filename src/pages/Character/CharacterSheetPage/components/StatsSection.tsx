@@ -43,6 +43,42 @@ export function StatsSection() {
 
     return conditionMeter.value;
   };
+  const nonLinearMeters = useStore((store) => store.rules.nonLinearMeters);
+  const characterNonLinearMeters = useStore(
+    (store) => store.characters.currentCharacter.currentCharacter?.customTracks
+  );
+  const campaignNonLinearMeters = useStore(
+    (store) => store.campaigns.currentCampaign.currentCampaign?.customTracks
+  );
+  const getNonLinearMeterValue = (meterKey: string): number => {
+    const meter = nonLinearMeters[meterKey];
+    let index = 0;
+
+    if (meter.shared && isInCampaign && campaignNonLinearMeters) {
+      index = campaignNonLinearMeters[meterKey] ?? 0;
+    } else if ((!meter.shared || !isInCampaign) && characterNonLinearMeters) {
+      index = characterNonLinearMeters[meterKey] ?? 0;
+    }
+
+    const option =
+      index < meter.options.length &&
+      index >= 0 &&
+      !meter.options[index].readOnly
+        ? meter.options[index]
+        : undefined;
+
+    if (option) {
+      const optionValueInt =
+        typeof option.value === "string"
+          ? parseInt(option.value)
+          : option.value;
+      if (!isNaN(optionValueInt)) {
+        return optionValueInt;
+      }
+    }
+
+    return 0;
+  };
 
   const health = useStore(
     (store) => store.characters.currentCharacter.currentCharacter?.health
@@ -147,6 +183,16 @@ export function StatsSection() {
                   key={conditionMeterKey}
                   label={conditionMeters[conditionMeterKey].label}
                   value={getConditionMeterValue(conditionMeterKey)}
+                  sx={{ my: 0.5, mr: 0.5 }}
+                />
+              ))}
+            {Object.keys(nonLinearMeters)
+              .filter((meterKey) => nonLinearMeters[meterKey].rollable)
+              .map((meterKey) => (
+                <StatComponent
+                  key={meterKey}
+                  label={nonLinearMeters[meterKey].label}
+                  value={getNonLinearMeterValue(meterKey)}
                   sx={{ my: 0.5, mr: 0.5 }}
                 />
               ))}

@@ -5,10 +5,11 @@ import { CollapsibleSectionHeader } from "../CollapsibleSectionHeader";
 import { Collapse, List } from "@mui/material";
 import { OracleSelectableRollableCollectionListItem } from "./OracleSelectableRollableCollectionListItem";
 import { OracleListItem } from "./OracleListItem";
+import { CombinedCollectionType } from "./useFilterOracles";
 
 export interface OracleCollectionProps {
   collectionId: string;
-  collections: Record<string, Datasworn.OracleCollection>;
+  collections: Record<string, CombinedCollectionType>;
   oracles: Record<string, Datasworn.OracleRollable>;
   forceOpen?: boolean;
   visibleCollections: Record<string, CATEGORY_VISIBILITY>;
