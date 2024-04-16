@@ -120,7 +120,6 @@ export function NonLinearMeters(props: NonLinearMetersProps) {
                 <Box display={"flex"}>
                   <IconButton
                     onClick={() => {
-                      console.debug("EDITING " + meterKey);
                       setEditingNonLinearMeterKey(meterKey);
                       setNonLinearMeterDialogOpen(true);
                     }}

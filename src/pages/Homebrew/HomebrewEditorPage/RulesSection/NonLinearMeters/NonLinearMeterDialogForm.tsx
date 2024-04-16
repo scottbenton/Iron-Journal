@@ -48,27 +48,16 @@ export function NonLinearMeterDialogForm(props: NonLinearMeterDialogFormProps) {
     editingNonLinearMeterKey,
   } = props;
 
-  useEffect(() => {
-    console.debug("Static props changed");
-  }, [homebrewId, nonLinearMeters, editingNonLinearMeterKey]);
-
   const existingMeter = editingNonLinearMeterKey
     ? nonLinearMeters[editingNonLinearMeterKey] ?? undefined
     : undefined;
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    console.debug("Loading Changed");
-  }, [loading]);
 
   const { register, handleSubmit, formState, control } = useForm<Form>({
     disabled: loading,
     values: existingMeter,
   });
   const { errors, touchedFields, disabled } = formState;
-  useEffect(() => {
-    console.debug("FormState Changed", formState);
-  }, [formState]);
 
   const onSubmit: SubmitHandler<Form> = (values) => {
     setLoading(true);

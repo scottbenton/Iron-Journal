@@ -67,8 +67,6 @@ export function StatsSection() {
         ? meter.options[index]
         : undefined;
 
-    console.debug(option);
-
     if (option) {
       const optionValueInt =
         typeof option.value === "string"

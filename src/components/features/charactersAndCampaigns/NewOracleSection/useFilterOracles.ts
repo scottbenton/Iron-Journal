@@ -1,6 +1,7 @@
 import { Datasworn } from "@datasworn/core";
 import { useMemo, useState } from "react";
 import { useStore } from "stores/store";
+import { License } from "types/Datasworn";
 
 export enum CATEGORY_VISIBILITY {
   HIDDEN,
@@ -10,11 +11,58 @@ export enum CATEGORY_VISIBILITY {
 
 export function useFilterOracles() {
   const [search, setSearch] = useState("");
-  const oracleCollections = useStore(
+  const oracleCollectionsWithoutPinnedOracles = useStore(
     (store) => store.rules.oracleMaps.oracleCollectionMap
   );
   const oracles = useStore((store) => store.rules.oracleMaps.oracleRollableMap);
-  const rootOracles = useStore((store) => store.rules.rootOracleCollectionIds);
+  const rootOraclesWithoutPinnedOracles = useStore(
+    (store) => store.rules.rootOracleCollectionIds
+  );
+
+  const pinnedOracles = useStore((store) => store.settings.pinnedOraclesIds);
+
+  const { oracleCollections, rootOracles } = useMemo(() => {
+    const pinnedOracleRollables: Record<string, Datasworn.OracleRollable> = {};
+
+    Object.keys(pinnedOracles).forEach((id) => {
+      if (pinnedOracles[id] && oracles[id]) {
+        pinnedOracleRollables[id] = oracles[id];
+      }
+    });
+
+    if (Object.keys(pinnedOracleRollables).length > 0) {
+      const pinnedOracleId = "app/collections/oracles/pinned";
+      return {
+        oracleCollections: {
+          [pinnedOracleId]: {
+            _id: pinnedOracleId,
+            name: "Pinned Oracles",
+            _source: {
+              title: "Pinned Oracles",
+              authors: [],
+              date: "2000-01-01",
+              url: "",
+              license: License.None,
+            },
+            contents: pinnedOracleRollables,
+            oracle_type: "tables",
+          },
+
+          ...oracleCollectionsWithoutPinnedOracles,
+        },
+        rootOracles: [pinnedOracleId, ...rootOraclesWithoutPinnedOracles],
+      };
+    }
+    return {
+      oracleCollections: oracleCollectionsWithoutPinnedOracles,
+      rootOracles: rootOraclesWithoutPinnedOracles,
+    };
+  }, [
+    oracles,
+    pinnedOracles,
+    oracleCollectionsWithoutPinnedOracles,
+    rootOraclesWithoutPinnedOracles,
+  ]);
 
   const {
     visibleOracleCollectionIds,
