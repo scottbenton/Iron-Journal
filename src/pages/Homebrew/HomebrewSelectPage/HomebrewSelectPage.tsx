@@ -70,6 +70,12 @@ export function HomebrewSelectPage() {
           !homebrewCollections || Object.keys(homebrewCollections).length === 0
         }
       >
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          <AlertTitle>Beta Warning</AlertTitle>
+          This feature is still being tested. I <i>think</i> most of the major
+          changes are done, but there <b>will</b> be bugs while I continue to
+          work on these features. Thank you for your patience! -Scott
+        </Alert>
         <CreateExpansionDialog
           open={createExpansionDialogOpen}
           onClose={() => setCreateExpansionDialogOpen(false)}

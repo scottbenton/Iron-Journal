@@ -92,7 +92,6 @@ export function HomebrewEditorPage() {
     <>
       <PageHeader
         label={homebrewName}
-        subLabel="Coming Soon"
         actions={
           <Button
             variant={"outlined"}
