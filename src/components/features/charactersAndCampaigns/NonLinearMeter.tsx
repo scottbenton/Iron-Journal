@@ -42,7 +42,7 @@ export function NonLinearMeter(props: NonLinearMeterProps) {
       !hasUnsavedChangesRef.current
     ) {
       setLocalIndex(value);
-      announce(`${meter.label} was updated to ${meter.options[value].value}`);
+      announce(`${meter.label} was updated to ${meter.options[value]?.value}`);
     }
   }, [localIndex, setLocalIndex, value, meter, announce]);
   const labelId = useId();

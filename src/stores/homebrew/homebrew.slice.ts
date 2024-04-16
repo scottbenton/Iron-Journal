@@ -279,6 +279,7 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
       getState().rules.rebuildConditionMeters();
       getState().rules.rebuildSpecialTracks();
       getState().rules.rebuildImpacts();
+      getState().rules.rebuildNonLinearMeters();
     };
   },
 
