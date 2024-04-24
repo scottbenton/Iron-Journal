@@ -101,6 +101,7 @@ export function OracleEditorPane(props: OracleEditorPaneProps) {
           closeCurrentOracleCollection={() =>
             setOpenCollectionId(breadcrumbs[breadcrumbs.length - 1].id)
           }
+          oracleCollections={oracleCollections}
         />
       )}
       <OracleCollectionsSection
@@ -116,6 +117,7 @@ export function OracleEditorPane(props: OracleEditorPaneProps) {
           homebrewId={homebrewId}
           tables={oracleTables}
           parentCollectionKey={openCollectionId}
+          collections={oracleCollections}
         />
       )}
       <OracleTablesCollectionDialog
