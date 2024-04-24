@@ -1,9 +1,11 @@
-import { DialogContent, Stack } from "@mui/material";
+import { DialogContent, Divider, Stack } from "@mui/material";
 import { LinkedDialogContentTitle } from "../LinkedDialogContentTitle";
 import { useStore } from "stores/store";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import { OracleButton } from "components/features/charactersAndCampaigns/NewOracleSection/OracleButton";
 import { MoveRollers } from "./MoveRollers";
+import { MoveTrigger } from "./MoveTrigger";
+import { MoveOutcomes } from "./MoveOutcomes";
 
 export interface NewMoveDialogContentProps {
   id: string;
@@ -45,6 +47,15 @@ export function NewMoveDialogContent(props: NewMoveDialogContentProps) {
         {move.name}
       </LinkedDialogContentTitle>
       <DialogContent>
+        {move.trigger && move.outcomes ? (
+          <>
+            <MoveTrigger move={move} />
+            <MoveOutcomes move={move} />
+          </>
+        ) : (
+          <MarkdownRenderer markdown={move.text} />
+        )}
+        <Divider sx={{ my: 4 }}>Old</Divider>
         <MoveRollers move={move} />
         <MarkdownRenderer markdown={move.text} />
         {move.oracles && (
