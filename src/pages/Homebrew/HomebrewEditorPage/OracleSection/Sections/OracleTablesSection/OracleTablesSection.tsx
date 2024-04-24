@@ -2,18 +2,22 @@ import { Button, List } from "@mui/material";
 import { EmptyState } from "components/shared/EmptyState";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { useState } from "react";
-import { StoredOracleTable } from "types/homebrew/HomebrewOracles.type";
+import {
+  StoredOracleCollection,
+  StoredOracleTable,
+} from "types/homebrew/HomebrewOracles.type";
 import { OracleTableDialog } from "./OracleTableDialog";
 import { OracleTableCard } from "./OracleTableCard";
 
 export interface OracleTablesSectionProps {
   homebrewId: string;
   tables: Record<string, StoredOracleTable>;
+  collections: Record<string, StoredOracleCollection>;
   parentCollectionKey: string;
 }
 
 export function OracleTablesSection(props: OracleTablesSectionProps) {
-  const { homebrewId, tables, parentCollectionKey } = props;
+  const { homebrewId, tables, collections, parentCollectionKey } = props;
 
   const [oracleTableDialogState, setOracleTableDialogState] = useState<{
     open: boolean;
@@ -52,6 +56,7 @@ export function OracleTablesSection(props: OracleTablesSectionProps) {
                   editingOracleTableId: key,
                 })
               }
+              collections={collections}
             />
           ))}
         </List>

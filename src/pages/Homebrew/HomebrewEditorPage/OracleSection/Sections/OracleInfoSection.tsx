@@ -6,11 +6,13 @@ import { useConfirm } from "material-ui-confirm";
 import { useState } from "react";
 import { useStore } from "stores/store";
 import { StoredOracleCollection } from "types/homebrew/HomebrewOracles.type";
+import { MoveOracleCollectionDialog } from "./OracleCollectionsSection/MoveOracleCollectionDialog";
 
 export interface OracleInfoSectionProps {
   homebrewId: string;
   oracleCollectionId: string;
   oracleCollection: StoredOracleCollection;
+  oracleCollections: Record<string, StoredOracleCollection>;
   openCollectionDialog: () => void;
   closeCurrentOracleCollection: () => void;
 }
@@ -20,6 +22,7 @@ export function OracleInfoSection(props: OracleInfoSectionProps) {
     homebrewId,
     oracleCollectionId,
     oracleCollection,
+    oracleCollections,
     openCollectionDialog,
     closeCurrentOracleCollection,
   } = props;
@@ -56,6 +59,9 @@ export function OracleInfoSection(props: OracleInfoSectionProps) {
       .catch(() => {});
   };
 
+  const [moveCollectionDialogOpen, setMoveCollectionDialogOpen] =
+    useState(false);
+
   return (
     <>
       <SectionHeading
@@ -69,6 +75,12 @@ export function OracleInfoSection(props: OracleInfoSectionProps) {
             >
               Delete Collection
             </LoadingButton>
+            <Button
+              color={"inherit"}
+              onClick={() => setMoveCollectionDialogOpen(true)}
+            >
+              Move Collection
+            </Button>
             <Button
               color={"inherit"}
               variant={"outlined"}
@@ -85,6 +97,13 @@ export function OracleInfoSection(props: OracleInfoSectionProps) {
           <MarkdownRenderer markdown={oracleCollection.description} />
         </Box>
       ) : null}
+      <MoveOracleCollectionDialog
+        open={moveCollectionDialogOpen}
+        onClose={() => setMoveCollectionDialogOpen(false)}
+        oracleCollectionId={oracleCollectionId}
+        oracleCollections={oracleCollections}
+        parentOracleCollectionId={oracleCollection.parentOracleCollectionId}
+      />
     </>
   );
 }

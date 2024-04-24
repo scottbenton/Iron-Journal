@@ -23,6 +23,7 @@ import { useStore } from "stores/store";
 import { useConfirm } from "material-ui-confirm";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { MoveCard } from "./MoveCard";
 
 export interface MovesEditorPaneProps {
   homebrewId: string;
@@ -171,35 +172,18 @@ export function MovesEditorPane(props: MovesEditorPaneProps) {
             {sortedMoveIds.length > 0 ? (
               <>
                 {sortedMoveIds.map((moveId) => (
-                  <Card
-                    variant={"outlined"}
+                  <MoveCard
                     key={moveId}
-                    sx={{
-                      px: 2,
-                      py: 1,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography>{moves[moveId].label}</Typography>
-                    <Box>
-                      <IconButton
-                        onClick={() =>
-                          setMoveDialogState({ open: true, openMoveId: moveId })
-                        }
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        onClick={() =>
-                          handleDeleteMove(moves[moveId].label, moveId)
-                        }
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </Box>
-                  </Card>
+                    moveId={moveId}
+                    move={moves[moveId]}
+                    moveCategories={categories}
+                    handleEdit={() =>
+                      setMoveDialogState({ open: true, openMoveId: moveId })
+                    }
+                    handleDelete={() =>
+                      handleDeleteMove(moves[moveId].label, moveId)
+                    }
+                  />
                 ))}
               </>
             ) : (

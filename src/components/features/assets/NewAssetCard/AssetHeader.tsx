@@ -7,10 +7,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 export interface AssetHeaderProps {
   asset: Datasworn.Asset;
   onAssetRemove?: () => void;
+  actions?: React.ReactNode;
 }
 
 export function AssetHeader(props: AssetHeaderProps) {
-  const { asset, onAssetRemove } = props;
+  const { asset, onAssetRemove, actions } = props;
 
   const isLocal = getIsLocalEnvironment();
 
@@ -36,10 +37,13 @@ export function AssetHeader(props: AssetHeaderProps) {
             <LinkIcon color={"inherit"} />
           </Tooltip>
         )}
+        {actions}
         {onAssetRemove && (
-          <IconButton color={"inherit"} onClick={onAssetRemove}>
-            <DeleteIcon />
-          </IconButton>
+          <Tooltip title={"Remove Asset"}>
+            <IconButton color={"inherit"} onClick={onAssetRemove}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         )}
       </Box>
     </Box>

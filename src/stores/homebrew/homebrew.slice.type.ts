@@ -1,5 +1,5 @@
 import { Datasworn } from "@datasworn/core";
-import { Unsubscribe } from "firebase/firestore";
+import { PartialWithFieldValue, Unsubscribe } from "firebase/firestore";
 import {
   StoredHomebrewAsset,
   StoredHomebrewAssetCollection,
@@ -112,7 +112,7 @@ export interface HomebrewSliceActions {
   ) => Promise<void>;
   updateOracleCollection: (
     oracleCollectionId: string,
-    oracleCollection: StoredOracleCollection
+    oracleCollection: PartialWithFieldValue<StoredOracleCollection>
   ) => Promise<void>;
   deleteOracleCollection: (
     homebrewId: string,
@@ -122,7 +122,7 @@ export interface HomebrewSliceActions {
   createOracleTable: (oracleTable: StoredOracleTable) => Promise<void>;
   updateOracleTable: (
     oracleTableId: string,
-    oracleTable: StoredOracleTable
+    oracleTable: PartialWithFieldValue<StoredOracleTable>
   ) => Promise<void>;
   deleteOracleTable: (oracleTableId: string) => Promise<void>;
 
@@ -139,7 +139,10 @@ export interface HomebrewSliceActions {
   ) => Promise<void>;
 
   createMove: (move: StoredMove) => Promise<void>;
-  updateMove: (moveId: string, move: StoredMove) => Promise<void>;
+  updateMove: (
+    moveId: string,
+    move: PartialWithFieldValue<StoredMove>
+  ) => Promise<void>;
   deleteMove: (moveId: string) => Promise<void>;
 
   updateDataswornMoves: (homebrewId: string) => void;
@@ -157,7 +160,10 @@ export interface HomebrewSliceActions {
   ) => Promise<void>;
 
   createAsset: (asset: StoredHomebrewAsset) => Promise<void>;
-  updateAsset: (assetId: string, asset: StoredHomebrewAsset) => Promise<void>;
+  updateAsset: (
+    assetId: string,
+    asset: PartialWithFieldValue<StoredHomebrewAsset>
+  ) => Promise<void>;
   deleteAsset: (assetId: string) => Promise<void>;
 
   updateDataswornAssets: (homebrewId: string) => void;

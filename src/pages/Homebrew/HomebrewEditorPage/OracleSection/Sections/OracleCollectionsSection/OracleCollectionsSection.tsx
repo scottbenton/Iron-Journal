@@ -42,10 +42,10 @@ export function OracleCollectionsSection(props: OracleCollectionsSectionProps) {
       />
       {sortedCollectionIds.length === 0 && (
         <EmptyState
-          message='Add an oracle collection to group your tables together'
+          message="Add an oracle collection to group your tables together"
           callToAction={
             <Button
-              variant='outlined'
+              variant="outlined"
               color={"inherit"}
               onClick={openCreateCollectionDialog}
             >
