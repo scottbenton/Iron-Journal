@@ -51,14 +51,14 @@ export const getHomebrewEditorInviteKey = onCall<
 
   const linkDocuments = (
     await getFirestore()
-      .collection(`/homebrew/homebrew/editorInviteKeys`)
+      .collection("/homebrew/homebrew/editorInviteKeys")
       .where("collectionId", "==", homebrewCollectionId)
       .get()
   ).docs;
 
   if (linkDocuments.length === 0) {
     logger.info("No link documents found, creating one.");
-    getFirestore().collection(`/homebrew/homebrew/editorInviteKeys`).add({
+    getFirestore().collection("/homebrew/homebrew/editorInviteKeys").add({
       collectionId: homebrewCollectionId,
     });
   }
