@@ -8,11 +8,11 @@
  */
 
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
-import { initializeApp } from "firebase-admin";
+import * as admin from "firebase-admin";
 import { onCall } from "firebase-functions/v2/https";
 import * as logger from "firebase-functions/logger";
 
-initializeApp();
+admin.initializeApp();
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
