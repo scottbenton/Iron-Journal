@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useStore } from "stores/store";
 import { dataswornVersion } from "config/datasworn.config";
 import { PackageTypes } from "types/homebrew/HomebrewCollection.type";
+import { getEditorInviteUrl } from "api-calls/homebrew/editorFunction/getEditorInviteUrl";
 
 export interface AboutSectionProps {
   id: string;
@@ -67,15 +68,7 @@ export function AboutSection(props: AboutSectionProps) {
           <Typography>{dataswornVersion}</Typography>
         </Grid>
         <Grid item xs={12}>
-          <SectionHeading
-            label={"Content Sharing"}
-            action={
-              <Button color={"inherit"} variant={"outlined"}>
-                Add Viewers
-              </Button>
-            }
-            breakContainer
-          />
+          <SectionHeading label={"Content Sharing"} breakContainer />
         </Grid>
         <Grid item xs={12}>
           <Alert severity={"info"}>
@@ -92,7 +85,16 @@ export function AboutSection(props: AboutSectionProps) {
               Editors can create, update, or delete any content within this
               collection.
             </Typography>
-            <Button variant={"outlined"} color={"inherit"} sx={{ mt: 2 }}>
+            <Button
+              variant={"outlined"}
+              color={"inherit"}
+              sx={{ mt: 2 }}
+              onClick={() =>
+                getEditorInviteUrl(id)
+                  .then((url) => console.debug(url))
+                  .catch((e) => console.error(e))
+              }
+            >
               Invite Editor Link
             </Button>
           </Card>
