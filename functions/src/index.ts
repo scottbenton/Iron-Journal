@@ -46,7 +46,7 @@ export const getHomebrewEditorInviteKey = onCall<
     logger.warn("Homebrew Collection could not be found.");
     return null;
   }
-  if (homebrewCollection.editors.includes(uid)) {
+  if (!homebrewCollection.editors.includes(uid)) {
     logger.warn(
       "User was not an editor of the collection.",
       homebrewCollection.editors,
