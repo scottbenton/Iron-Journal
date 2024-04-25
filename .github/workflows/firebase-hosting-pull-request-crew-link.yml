@@ -52,3 +52,16 @@ jobs:
         env:
           GCP_SA_KEY: ${{ secrets.CREW_LINK_FIREBASE_SERVICE_ACCOUNT }}
           PROJECT_ID: "${{secrets.CREW_LINK_FIREBASE_PROJECTID}}"
+  deploy_functions_crew_link:
+    name: Deploy Firebase Functions to Crew Link
+    runs-on: ubuntu-latest
+    environment: Dev
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd functions && npm ci && npm run build
+      - uses: w9jds/firebase-action@v13.5.2
+        with:
+          args: deploy --only functions
+        env:
+          GCP_SA_KEY: ${{ secrets.CREW_LINK_FIREBASE_SERVICE_ACCOUNT }}
+          PROJECT_ID: "${{secrets.CREW_LINK_FIREBASE_PROJECTID}}"

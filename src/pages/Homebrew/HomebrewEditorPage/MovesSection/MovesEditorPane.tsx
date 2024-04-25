@@ -1,13 +1,4 @@
-import {
-  Box,
-  Breadcrumbs,
-  Button,
-  Card,
-  IconButton,
-  Link,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Breadcrumbs, Button, Link, Stack, Typography } from "@mui/material";
 import { EmptyState } from "components/shared/EmptyState";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { useState } from "react";
@@ -21,8 +12,6 @@ import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import { MoveDialog } from "./MoveDialog";
 import { useStore } from "stores/store";
 import { useConfirm } from "material-ui-confirm";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { MoveCard } from "./MoveCard";
 
 export interface MovesEditorPaneProps {
