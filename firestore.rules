@@ -111,7 +111,8 @@ service cloud.firestore {
       match /collections/{homebrewId} {
         allow read: if request.auth.uid != null;
         allow create: if request.auth.uid != null;
-        allow write: if request.auth.uid in resource.data.editors;
+        allow write: if request.auth.uid in resource.data.editors && !request.resource.data.diff(resource.data).affectedKeys().hasAny(["creator", "editors"]);
+
       }
 
       match /stats/{statId} {
@@ -178,6 +179,9 @@ service cloud.firestore {
         allow read: if request.auth.uid != null;
         allow create: if request.auth.uid != null;
         allow write: if checkIsHomebrewOwner(resource.data.collectionId);
+      }
+      match /editorInviteKeys/{inviteKeyId} {
+        allow read, write: if false;
       }
     }
     match /users/{userId} {
