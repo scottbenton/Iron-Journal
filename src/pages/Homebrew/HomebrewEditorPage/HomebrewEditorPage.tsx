@@ -191,11 +191,13 @@ export function HomebrewEditorPage() {
               <RulesSection id={homebrewId} isEditor={isEditor} />
             )}
             {selectedTab === TABS.MOVES && (
-              <MovesSection homebrewId={homebrewId} />
+              <MovesSection homebrewId={homebrewId} isEditor={isEditor} />
             )}
-            {selectedTab === TABS.ORACLES && <OracleSection id={homebrewId} />}
+            {selectedTab === TABS.ORACLES && (
+              <OracleSection id={homebrewId} isEditor={isEditor} />
+            )}
             {selectedTab === TABS.ASSETS && (
-              <AssetsSection homebrewId={homebrewId} />
+              <AssetsSection homebrewId={homebrewId} isEditor={isEditor} />
             )}
           </Box>
         </Box>

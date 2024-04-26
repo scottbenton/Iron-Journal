@@ -16,6 +16,7 @@ export interface AssetPreviewCardProps {
   handleDeleteAsset: () => void;
   handleEditAsset: () => void;
   handleMoveAsset: () => void;
+  isEditor: boolean;
 }
 
 export function AssetPreviewCard(props: AssetPreviewCardProps) {
@@ -25,6 +26,7 @@ export function AssetPreviewCard(props: AssetPreviewCardProps) {
     handleDeleteAsset,
     handleEditAsset,
     handleMoveAsset,
+    isEditor,
   } = props;
 
   const { label, requirement, abilities, options, controls } = storedAsset;
@@ -146,20 +148,22 @@ export function AssetPreviewCard(props: AssetPreviewCardProps) {
     >
       <AssetHeader
         asset={asset}
-        onAssetRemove={handleDeleteAsset}
+        onAssetRemove={isEditor ? handleDeleteAsset : undefined}
         actions={
-          <>
-            <Tooltip title={"Move asset to another collection"}>
-              <IconButton onClick={handleMoveAsset} color={"inherit"}>
-                <MoveIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={"Edit Asset"}>
-              <IconButton onClick={handleEditAsset} color={"inherit"}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
-          </>
+          isEditor && (
+            <>
+              <Tooltip title={"Move asset to another collection"}>
+                <IconButton onClick={handleMoveAsset} color={"inherit"}>
+                  <MoveIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={"Edit Asset"}>
+                <IconButton onClick={handleEditAsset} color={"inherit"}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            </>
+          )
         }
       />
       <Box

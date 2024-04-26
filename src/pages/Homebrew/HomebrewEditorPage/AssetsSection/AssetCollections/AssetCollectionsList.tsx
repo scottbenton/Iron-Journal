@@ -7,11 +7,16 @@ export interface AssetCollectionsListProps {
   homebrewId: string;
   openCreateAssetCollectionDialog: () => void;
   setOpenCollection: (collectionKey: string) => void;
+  isEditor: boolean;
 }
 
 export function AssetCollectionsList(props: AssetCollectionsListProps) {
-  const { homebrewId, openCreateAssetCollectionDialog, setOpenCollection } =
-    props;
+  const {
+    homebrewId,
+    openCreateAssetCollectionDialog,
+    setOpenCollection,
+    isEditor,
+  } = props;
 
   const collections = useStore(
     (store) =>
@@ -30,13 +35,15 @@ export function AssetCollectionsList(props: AssetCollectionsListProps) {
         sx={{ mt: 2 }}
         message={"No asset collections found"}
         callToAction={
-          <Button
-            variant={"outlined"}
-            color={"inherit"}
-            onClick={openCreateAssetCollectionDialog}
-          >
-            Add Asset Collection
-          </Button>
+          isEditor && (
+            <Button
+              variant={"outlined"}
+              color={"inherit"}
+              onClick={openCreateAssetCollectionDialog}
+            >
+              Add Asset Collection
+            </Button>
+          )
         }
       />
     );
@@ -83,15 +90,5 @@ export function AssetCollectionsList(props: AssetCollectionsListProps) {
           </ListItem>
         ))}
     </List>
-    // <Grid container spacing={2} sx={{ mt: 0 }}>
-    //   {Object.keys(collections).map((collectionKey) => (
-    //     <Grid item xs={12} sm={6} md={4} key={collectionKey}>
-    //       <AssetCollectionCard
-    //         collection={collections[collectionKey]}
-    //         onClick={() => setOpenCollection(collectionKey)}
-    //       />
-    //     </Grid>
-    //   ))}
-    // </Grid>
   );
 }
