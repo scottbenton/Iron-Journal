@@ -5,13 +5,8 @@ import {
   PageHeaderProps,
 } from "components/shared/Layout";
 import { StyledTab, StyledTabs } from "components/shared/StyledTabs";
-import { useEffect, useMemo, useState } from "react";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { AboutSection } from "./AboutSection";
 import { useStore } from "stores/store";
 import { EmptyState } from "components/shared/EmptyState";
@@ -22,6 +17,8 @@ import { useUpdateQueryStringValueWithoutNavigation } from "hooks/useUpdateQuery
 import { OracleSection } from "./OracleSection";
 import { MovesSection } from "./MovesSection";
 import { AssetsSection } from "./AssetsSection/AssetsSection";
+import { arrayUnion } from "firebase/firestore";
+import { useSnackbar } from "providers/SnackbarProvider";
 
 enum TABS {
   ABOUT = "about",
@@ -40,8 +37,6 @@ export function HomebrewEditorPage() {
 
   useListenToHomebrewContent(homebrewIds);
 
-  const navigate = useNavigate();
-
   const loading = useStore((store) => store.homebrew.loading);
   const homebrewDetails = useStore(
     (store) => {
@@ -50,8 +45,6 @@ export function HomebrewEditorPage() {
     (a, b) => JSON.stringify(a) === JSON.stringify(b)
   );
   const homebrewName = homebrewDetails?.title || "Unnamed Collection";
-
-  const deleteCollection = useStore((store) => store.homebrew.deleteExpansion);
 
   const [searchParams] = useSearchParams();
   const [selectedTab, setSelectedTab] = useState(
@@ -79,26 +72,46 @@ export function HomebrewEditorPage() {
     (a, b) => a === b
   );
 
+  const { success } = useSnackbar();
+
+  const updateHomebrewCollection = useStore(
+    (store) => store.homebrew.updateExpansion
+  );
+  const addSelfAsViewer = useCallback(() => {
+    if (homebrewId && uid) {
+      updateHomebrewCollection(homebrewId, { viewers: arrayUnion(uid) })
+        .catch(() => {})
+        .then(() => {
+          success("Added collection to your homebrew");
+        });
+    }
+  }, [uid, updateHomebrewCollection, homebrewId, success]);
+
   if (loading || (!homebrewDetails && syncLoading)) {
     return <LinearProgress />;
   }
   if (!homebrewId || !homebrewDetails) {
     return (
-      <EmptyState
-        title={"Homebrew Collection not Found"}
-        message={"Please try again from the homebrew selection page"}
-        showImage
-        callToAction={
-          <Button
-            component={Link}
-            to={basePaths[BASE_ROUTES.HOMEBREW]}
-            variant={"contained"}
-            size={"large"}
-          >
-            Your Homebrew
-          </Button>
-        }
-      />
+      <>
+        <PageHeader />
+        <PageContent isPaper>
+          <EmptyState
+            title={"Homebrew Collection not Found"}
+            message={"Please try again from the homebrew selection page"}
+            showImage
+            callToAction={
+              <Button
+                component={Link}
+                to={basePaths[BASE_ROUTES.HOMEBREW]}
+                variant={"contained"}
+                size={"large"}
+              >
+                Your Homebrew
+              </Button>
+            }
+          />
+        </PageContent>
+      </>
     );
   }
 
@@ -109,34 +122,27 @@ export function HomebrewEditorPage() {
   const isViewer = uid
     ? homebrewDetails?.viewers?.includes(uid) ?? false
     : false;
+  const isOwner = uid ? homebrewDetails?.creator === uid ?? false : false;
 
   const getPageHeaderProps = (): Partial<PageHeaderProps> => {
     if (isEditor) {
-      return {
-        actions: (
-          <Button
-            variant={"outlined"}
-            color={"inherit"}
-            onClick={() =>
-              deleteCollection(homebrewId)
-                .then(() => {
-                  navigate(basePaths[BASE_ROUTES.HOMEBREW]);
-                })
-                .catch(() => {})
-            }
-          >
-            Delete Collection
-          </Button>
-        ),
-      };
+      return {};
     } else if (isViewer) {
       return {};
     } else if (isLoggedIn) {
       return {
-        subLabel:
-          "You can use this homebrew in your characters and campaigns by adding it to your collection",
+        subLabel: (
+          <Typography variant={"body2"}>
+            You can use this homebrew in your characters and campaigns by adding
+            it to your collection
+          </Typography>
+        ),
         actions: (
-          <Button variant={"outlined"} color={"inherit"}>
+          <Button
+            variant={"outlined"}
+            color={"inherit"}
+            onClick={addSelfAsViewer}
+          >
             Add to your Collection
           </Button>
         ),
@@ -185,7 +191,12 @@ export function HomebrewEditorPage() {
           </StyledTabs>
           <Box role={"tabpanel"} sx={{ px: { xs: 2, sm: 3 } }}>
             {selectedTab === TABS.ABOUT && (
-              <AboutSection id={homebrewId} isEditor={isEditor} />
+              <AboutSection
+                id={homebrewId}
+                isEditor={isEditor}
+                isViewer={isViewer}
+                isOwner={isOwner}
+              />
             )}
             {selectedTab === TABS.RULES && (
               <RulesSection id={homebrewId} isEditor={isEditor} />

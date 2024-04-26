@@ -23,7 +23,7 @@ export function UserListItem(props: UserListItemProps) {
   }, [uid, loadPlayer]);
 
   return (
-    <ListItem disablePadding>
+    <ListItem>
       <ListItemAvatar>
         <UserAvatar uid={uid} />
       </ListItemAvatar>

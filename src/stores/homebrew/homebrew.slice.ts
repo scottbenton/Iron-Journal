@@ -92,6 +92,22 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
             ...(store.homebrew.collections[collectionId] ?? {}),
             base: collection,
           };
+
+          store.homebrew.sortedHomebrewCollectionIds = Object.keys(
+            store.homebrew.collections
+          )
+            .filter((key) => {
+              return (
+                store.homebrew.collections[key]?.base?.editors.includes(uid) ||
+                store.homebrew.collections[key]?.base.viewers?.includes(uid)
+              );
+            })
+            .sort((k1, k2) =>
+              (store.homebrew.collections[k1]?.base?.title ?? "").localeCompare(
+                store.homebrew.collections[k2]?.base?.title ?? ""
+              )
+            );
+
           store.homebrew.loading = false;
           store.homebrew.error = undefined;
         });
@@ -101,6 +117,24 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
           delete store.homebrew.collections[collectionId];
           store.homebrew.loading = false;
           store.homebrew.error = undefined;
+          store.homebrew.sortedHomebrewCollectionIds = Object.keys(
+            store.homebrew.collections
+          )
+            .filter((key) => {
+              const shouldKeep =
+                store.homebrew.collections[key]?.base?.editors.includes(
+                  store.auth.uid
+                ) ||
+                store.homebrew.collections[key]?.base.viewers?.includes(
+                  store.auth.uid
+                );
+              return shouldKeep;
+            })
+            .sort((k1, k2) =>
+              (store.homebrew.collections[k1]?.base?.title ?? "").localeCompare(
+                store.homebrew.collections[k2]?.base?.title ?? ""
+              )
+            );
         });
       },
       (error) => {
@@ -222,6 +256,26 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
                 ...store.homebrew.collections[homebrewId],
                 base: data,
               };
+              store.homebrew.sortedHomebrewCollectionIds = Object.keys(
+                store.homebrew.collections
+              )
+                .filter((key) => {
+                  const shouldKeep =
+                    store.homebrew.collections[key]?.base?.editors.includes(
+                      store.auth.uid
+                    ) ||
+                    store.homebrew.collections[key]?.base.viewers?.includes(
+                      store.auth.uid
+                    );
+                  return shouldKeep;
+                })
+                .sort((k1, k2) =>
+                  (
+                    store.homebrew.collections[k1]?.base?.title ?? ""
+                  ).localeCompare(
+                    store.homebrew.collections[k2]?.base?.title ?? ""
+                  )
+                );
             });
           },
           (error) => {
@@ -241,7 +295,6 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
           }
         )
       );
-      console.debug("STARTING LISTENERS");
       listenerConfigs.forEach((config) => {
         unsubscribes.push(
           config.listenerFunction(
@@ -264,7 +317,6 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
                   getState().homebrew.updateDataswornMoves(homebrewId);
                   break;
                 case ListenerRefreshes.Stats:
-                  console.debug("GOT STATS");
                   getState().rules.rebuildStats();
                   break;
                 case ListenerRefreshes.ConditionMeters:

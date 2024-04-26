@@ -23,6 +23,9 @@ import { FooterFab } from "components/shared/Layout/FooterFab";
 export function HomebrewSelectPage() {
   const showPage = useNewCustomContentPage();
 
+  const sortedHomebrewIds = useStore(
+    (store) => store.homebrew.sortedHomebrewCollectionIds
+  );
   const homebrewCollections = useStore((store) => store.homebrew.collections);
   const homebrewLoading = useStore((store) => store.homebrew.loading);
   const errorMessage = useStore((store) => store.homebrew.error);
@@ -33,14 +36,6 @@ export function HomebrewSelectPage() {
   if (!showPage) {
     return null;
   }
-
-  const collectionKeys = Object.keys(homebrewCollections).sort((k1, k2) =>
-    (
-      homebrewCollections[k1]?.base?.title || "Unnamed Collection"
-    )?.localeCompare(
-      homebrewCollections[k2]?.base?.title || "Unnamed Collection"
-    )
-  );
 
   const collectionIds = Object.values(homebrewCollections).map(
     (collection) => collection.base?.id
@@ -115,7 +110,7 @@ export function HomebrewSelectPage() {
             my={0}
             sx={{ listStyle: "none" }}
           >
-            {collectionKeys.map((collectionKey) => (
+            {sortedHomebrewIds.map((collectionKey) => (
               <Box
                 component={"li"}
                 gridColumn={{

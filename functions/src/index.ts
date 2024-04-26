@@ -139,3 +139,22 @@ export const addCurrentUserAsHomebrewCampaignEditor = onCall<
 
   return true;
 });
+
+export const removeCurrentUserAsHomebrewCampaignEditor = onCall<
+  { homebrewCollectionId: string },
+  Promise<boolean>
+>(async (request) => {
+  const homebrewCollectionId = request.data.homebrewCollectionId;
+  const uid = request.auth?.uid;
+
+  if (!uid) {
+    logger.warn("User was not authenticated");
+    return false;
+  }
+
+  await getFirestore()
+    .doc(`/homebrew/homebrew/collections/${homebrewCollectionId}`)
+    .update({ editors: FieldValue.arrayRemove(uid) });
+
+  return true;
+});

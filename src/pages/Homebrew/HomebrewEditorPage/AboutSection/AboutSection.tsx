@@ -18,14 +18,21 @@ import { InviteEditorDialog } from "./InviteEditorDialog";
 import { useSnackbar } from "providers/SnackbarProvider";
 import { constructHomebrewEditorPath } from "pages/Homebrew/routes";
 import { UserList } from "./UserList";
+import { useConfirm } from "material-ui-confirm";
+import { arrayRemove } from "firebase/firestore";
+import { removeSelfAsEditor } from "api-calls/homebrew/editorFunction/removeSelfAsEditor";
+import { useNavigate } from "react-router-dom";
+import { BASE_ROUTES, basePaths } from "routes";
 
 export interface AboutSectionProps {
   id: string;
   isEditor: boolean;
+  isViewer: boolean;
+  isOwner: boolean;
 }
 
 export function AboutSection(props: AboutSectionProps) {
-  const { id, isEditor } = props;
+  const { id, isEditor, isViewer, isOwner } = props;
 
   const { success } = useSnackbar();
 
@@ -50,6 +57,53 @@ export function AboutSection(props: AboutSectionProps) {
       .then(() => {
         success("Copied URL to clipboard");
       });
+  };
+
+  const deleteCollection = useStore((store) => store.homebrew.deleteExpansion);
+  const updateExpansion = useStore((store) => store.homebrew.updateExpansion);
+
+  const uid = useStore((store) => store.auth.uid);
+
+  const navigate = useNavigate();
+
+  const confirm = useConfirm();
+
+  const removeSelf = () => {
+    const promises: Promise<unknown>[] = [];
+    if (isViewer) {
+      promises.push(updateExpansion(id, { viewers: arrayRemove(uid) }));
+    }
+    if (isEditor) {
+      promises.push(removeSelfAsEditor(id));
+    }
+    Promise.all(promises)
+      .then(() => {
+        location.reload();
+      })
+      .catch(() => {
+        location.reload();
+      });
+  };
+
+  const handleDeleteCollection = () => {
+    confirm({
+      title: "Delete Homebrew Collection",
+      description:
+        "Are you sure you want to delete this homebrew expansion? Characters and campaigns that use this expansion will no longer be able to use it.",
+      confirmationText: "Delete",
+      confirmationButtonProps: {
+        variant: "contained",
+        color: "error",
+      },
+    })
+      .then(() => {
+        deleteCollection(id)
+          .then(() => {
+            navigate(basePaths[BASE_ROUTES.HOMEBREW]);
+          })
+          .catch(() => {});
+      })
+      .catch(() => {});
   };
 
   return (
@@ -98,8 +152,8 @@ export function AboutSection(props: AboutSectionProps) {
             <Alert severity={"info"}>
               Players and GMs in the campaigns you run will automatically be
               able to view enabled homebrew content within their character
-              sheets and GM screens, but will not be allowed to edit it unless
-              you add them as an editor below.
+              sheets and GM screens, but will not be able to edit content unless
+              you invite them as an editor.
             </Alert>
           </Grid>
         )}
@@ -137,8 +191,9 @@ export function AboutSection(props: AboutSectionProps) {
             <Card variant={"outlined"} sx={{ p: 2 }}>
               <Typography variant={"h6"}>Viewers</Typography>
               <Typography color={"textSecondary"} variant={"body2"}>
-                Viewers will be able to use this content on their own characters
-                and campaigns, but will not be allowed to make any changes.
+                Viewers will be able to add this content to their own homebrew
+                page to use for characters and campaigns, but will not be
+                allowed to edit anything.
               </Typography>
               <Button
                 variant={"outlined"}
@@ -151,11 +206,40 @@ export function AboutSection(props: AboutSectionProps) {
 
               <Box mt={2}>
                 <Typography color={"textSecondary"}>
-                  {details.viewers?.length ?? 0} Viewers
+                  {details.viewers?.length ?? 0} viewer
+                  {details.viewers?.length === 1 ? " " : "s "}
+                  added this to their collection
                 </Typography>
               </Box>
             </Card>
           </Grid>
+        )}
+        {(isOwner || isEditor || isViewer) && (
+          <>
+            <Grid item xs={12}>
+              <SectionHeading label={"Danger Zone"} breakContainer />
+            </Grid>
+            <Grid item xs={12}>
+              {isOwner && (
+                <Button
+                  variant={"outlined"}
+                  color={"error"}
+                  onClick={handleDeleteCollection}
+                >
+                  Delete Homebrew Collection
+                </Button>
+              )}
+              {((!isOwner && isEditor) || isViewer) && (
+                <Button
+                  variant={"outlined"}
+                  color={"error"}
+                  onClick={() => removeSelf()}
+                >
+                  Remove from your Homebrew Collections
+                </Button>
+              )}
+            </Grid>
+          </>
         )}
       </Grid>
       {isEditor && (

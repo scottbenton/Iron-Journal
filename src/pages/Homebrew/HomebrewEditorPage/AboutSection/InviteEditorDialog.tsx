@@ -64,7 +64,11 @@ export function InviteEditorDialog(props: InviteEditorDialogProps) {
             my: 2,
           })}
         >
-          {inviteLink ?? <Skeleton />}
+          {inviteLink ? (
+            inviteLink
+          ) : (
+            <Skeleton sx={{ bgcolor: "grey.100" }} width={250} />
+          )}
         </Typography>
         <Button onClick={() => handleCopy()} variant={"contained"}>
           Copy Invite Link
