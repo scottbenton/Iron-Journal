@@ -5,9 +5,11 @@ import {
   List,
   ListItem,
   ListItemText,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { StoredConditionMeter } from "types/homebrew/HomebrewRules.type";
+import ViewIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
@@ -15,13 +17,15 @@ import { useStore } from "stores/store";
 import { useConfirm } from "material-ui-confirm";
 import { ConditionMeterDialog } from "./ConditionMeterDialog";
 import { ClampedMarkdownRenderer } from "components/shared/ClampedMarkdownRenderer";
+import { ConditionMeterPreviewDialog } from "./ConditionMeterPreviewDialog";
 
 export interface ConditionMetersProps {
   homebrewId: string;
+  isEditor: boolean;
 }
 
 export function ConditionMeters(props: ConditionMetersProps) {
-  const { homebrewId } = props;
+  const { homebrewId, isEditor } = props;
 
   const confirm = useConfirm();
   const conditionMeters = useStore(
@@ -37,6 +41,8 @@ export function ConditionMeters(props: ConditionMetersProps) {
   const [editingConditionMeterKey, setEditingConditionMeterKey] = useState<
     string | undefined
   >(undefined);
+  const [previewingConditionMeterKey, setPreviewingConditionMeterKey] =
+    useState<string | undefined>(undefined);
 
   const createConditionMeter = useStore(
     (store) => store.homebrew.createConditionMeter
@@ -120,32 +126,54 @@ export function ConditionMeters(props: ConditionMetersProps) {
                   }
                 />
                 <Box display={"flex"}>
-                  <IconButton
-                    onClick={() => {
-                      setConditionMeterDialogOpen(true);
-                      setEditingConditionMeterKey(conditionMeterKey);
-                    }}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton onClick={() => handleDelete(conditionMeterKey)}>
-                    <DeleteIcon />
-                  </IconButton>
+                  {isEditor ? (
+                    <>
+                      <Tooltip title={"Edit"}>
+                        <IconButton
+                          onClick={() => {
+                            setConditionMeterDialogOpen(true);
+                            setEditingConditionMeterKey(conditionMeterKey);
+                          }}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title={"Delete"}>
+                        <IconButton
+                          onClick={() => handleDelete(conditionMeterKey)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </>
+                  ) : (
+                    <Tooltip title={"Preview"}>
+                      <IconButton
+                        onClick={() => {
+                          setPreviewingConditionMeterKey(conditionMeterKey);
+                        }}
+                      >
+                        <ViewIcon />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                 </Box>
               </ListItem>
             ))}
         </List>
       )}
-      <Button
-        variant={"outlined"}
-        color={"inherit"}
-        onClick={() => {
-          setConditionMeterDialogOpen(true);
-          setEditingConditionMeterKey(undefined);
-        }}
-      >
-        Add Condition Meter
-      </Button>
+      {isEditor && (
+        <Button
+          variant={"outlined"}
+          color={"inherit"}
+          onClick={() => {
+            setConditionMeterDialogOpen(true);
+            setEditingConditionMeterKey(undefined);
+          }}
+        >
+          Add Condition Meter
+        </Button>
+      )}
       <ConditionMeterDialog
         homebrewId={homebrewId}
         conditionMeters={conditionMeters}
@@ -154,6 +182,13 @@ export function ConditionMeters(props: ConditionMetersProps) {
         onSave={handleDialogOutput}
         editingConditionMeterKey={editingConditionMeterKey}
       />
+      {previewingConditionMeterKey && (
+        <ConditionMeterPreviewDialog
+          open={!!previewingConditionMeterKey}
+          onClose={() => setPreviewingConditionMeterKey(undefined)}
+          conditionMeter={conditionMeters[previewingConditionMeterKey]}
+        />
+      )}
     </>
   );
 }

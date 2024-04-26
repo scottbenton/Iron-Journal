@@ -8,7 +8,7 @@ import { GAME_SYSTEMS } from "types/GameSystems.type";
 
 export interface PageHeaderProps extends PropsWithChildren {
   label?: string | React.ReactNode;
-  subLabel?: string;
+  subLabel?: string | React.ReactNode;
   actions?: React.ReactNode;
 }
 
@@ -75,15 +75,18 @@ export function PageHeader(props: PageHeaderProps) {
                   ) : (
                     label
                   ))}
-                {subLabel && (
-                  <Typography
-                    variant={"h6"}
-                    component={"h2"}
-                    fontFamily={(theme) => theme.fontFamilyTitle}
-                  >
-                    {subLabel}
-                  </Typography>
-                )}
+                {subLabel &&
+                  (typeof subLabel === "string" ? (
+                    <Typography
+                      variant={"h6"}
+                      component={"h2"}
+                      fontFamily={(theme) => theme.fontFamilyTitle}
+                    >
+                      {subLabel}
+                    </Typography>
+                  ) : (
+                    subLabel
+                  ))}
               </Box>
               {actions && (
                 <Stack direction={"row"} spacing={1} flexWrap={"wrap"}>

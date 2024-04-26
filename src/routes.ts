@@ -1,3 +1,5 @@
+import { HOMEBREW_ROUTES, homebrewPaths } from "pages/Homebrew/routes";
+
 export enum BASE_ROUTES {
   CHARACTER,
   CAMPAIGN,
@@ -27,6 +29,7 @@ export const openPaths = [
   basePaths[BASE_ROUTES.LOGIN],
   basePaths[BASE_ROUTES.SIGNUP],
   basePaths[BASE_ROUTES.HOME],
+  basePaths[BASE_ROUTES.HOMEBREW] + "/" + homebrewPaths[HOMEBREW_ROUTES.EDITOR],
 ];
 
 export const onlyUnauthenticatedPaths = [

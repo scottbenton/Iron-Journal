@@ -5,9 +5,11 @@ import {
   List,
   ListItem,
   ListItemText,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { StoredNonLinearMeter } from "types/homebrew/HomebrewRules.type";
+import ViewIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
@@ -15,13 +17,15 @@ import { useStore } from "stores/store";
 import { useConfirm } from "material-ui-confirm";
 import { NonLinearMeterDialog } from "./NonLinearMeterDialog";
 import { ClampedMarkdownRenderer } from "components/shared/ClampedMarkdownRenderer";
+import { NonLinearMeterPreviewDialog } from "./NonLinearMeterPreviewDialog";
 
 export interface NonLinearMetersProps {
   homebrewId: string;
+  isEditor: boolean;
 }
 
 export function NonLinearMeters(props: NonLinearMetersProps) {
-  const { homebrewId } = props;
+  const { homebrewId, isEditor } = props;
 
   const confirm = useConfirm();
   const nonLinearMeters = useStore(
@@ -35,6 +39,9 @@ export function NonLinearMeters(props: NonLinearMetersProps) {
   const [nonLinearMeterDialogOpen, setNonLinearMeterDialogOpen] =
     useState(false);
   const [editingNonLinearMeterKey, setEditingNonLinearMeterKey] = useState<
+    string | undefined
+  >(undefined);
+  const [viewingNonLinearMeterKey, setViewingNonLinearMeterKey] = useState<
     string | undefined
   >(undefined);
 
@@ -118,32 +125,59 @@ export function NonLinearMeters(props: NonLinearMetersProps) {
                   }
                 />
                 <Box display={"flex"}>
-                  <IconButton
-                    onClick={() => {
-                      setEditingNonLinearMeterKey(meterKey);
-                      setNonLinearMeterDialogOpen(true);
-                    }}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton onClick={() => handleDelete(meterKey)}>
-                    <DeleteIcon />
-                  </IconButton>
+                  {isEditor ? (
+                    <>
+                      <Tooltip title={"Edit"}>
+                        <IconButton
+                          onClick={() => {
+                            setEditingNonLinearMeterKey(meterKey);
+                            setNonLinearMeterDialogOpen(true);
+                          }}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title={"Delete"}>
+                        <IconButton onClick={() => handleDelete(meterKey)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </>
+                  ) : (
+                    <Tooltip title={"Preview"}>
+                      <IconButton
+                        onClick={() => {
+                          setViewingNonLinearMeterKey(meterKey);
+                        }}
+                      >
+                        <ViewIcon />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                 </Box>
               </ListItem>
             ))}
         </List>
       )}
-      <Button
-        variant={"outlined"}
-        color={"inherit"}
-        onClick={() => {
-          setNonLinearMeterDialogOpen(true);
-          setEditingNonLinearMeterKey(undefined);
-        }}
-      >
-        Add Non Linear Meter
-      </Button>
+      {isEditor && (
+        <Button
+          variant={"outlined"}
+          color={"inherit"}
+          onClick={() => {
+            setNonLinearMeterDialogOpen(true);
+            setEditingNonLinearMeterKey(undefined);
+          }}
+        >
+          Add Non Linear Meter
+        </Button>
+      )}
+      {viewingNonLinearMeterKey && (
+        <NonLinearMeterPreviewDialog
+          open={!!viewingNonLinearMeterKey}
+          onClose={() => setViewingNonLinearMeterKey(undefined)}
+          meter={nonLinearMeters[viewingNonLinearMeterKey]}
+        />
+      )}
       <NonLinearMeterDialog
         homebrewId={homebrewId}
         nonLinearMeters={nonLinearMeters}

@@ -58,6 +58,7 @@ import { listenToHomebrewNonLinearMeters } from "api-calls/homebrew/rules/nonLin
 import { createHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/createHomebrewNonLinearMeter";
 import { updateHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/updateHomebrewNonLinearMeter";
 import { deleteHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/deleteHomebrewNonLinearMeter";
+import { listenToHomebrewCollection } from "api-calls/homebrew/listenToHomebrewCollection";
 
 enum ListenerRefreshes {
   Oracles,
@@ -211,6 +212,36 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
 
     const unsubscribes: Unsubscribe[] = [];
     filteredHomebrewIds.forEach((homebrewId) => {
+      unsubscribes.push(
+        listenToHomebrewCollection(
+          homebrewId,
+          (data) => {
+            set((store) => {
+              store.homebrew.loading = false;
+              store.homebrew.collections[homebrewId] = {
+                ...store.homebrew.collections[homebrewId],
+                base: data,
+              };
+            });
+          },
+          (error) => {
+            set((store) => {
+              store.homebrew.loading = false;
+              store.homebrew.error = getErrorMessage(
+                error,
+                "Failed to load homebrew information"
+              );
+            });
+            console.error(error);
+          },
+          () => {
+            set((store) => {
+              store.homebrew.loading = false;
+            });
+          }
+        )
+      );
+      console.debug("STARTING LISTENERS");
       listenerConfigs.forEach((config) => {
         unsubscribes.push(
           config.listenerFunction(
@@ -233,6 +264,7 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
                   getState().homebrew.updateDataswornMoves(homebrewId);
                   break;
                 case ListenerRefreshes.Stats:
+                  console.debug("GOT STATS");
                   getState().rules.rebuildStats();
                   break;
                 case ListenerRefreshes.ConditionMeters:

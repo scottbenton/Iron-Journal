@@ -5,6 +5,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { ClampedMarkdownRenderer } from "components/shared/ClampedMarkdownRenderer";
@@ -12,16 +13,19 @@ import { useConfirm } from "material-ui-confirm";
 import { useState } from "react";
 import { useStore } from "stores/store";
 import { StoredLegacyTrack } from "types/homebrew/HomebrewRules.type";
+import ViewIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { LegacyTrackDialog } from "./LegacyTrackDialog";
+import { LegacyTrackPreviewDialog } from "./LegacyTrackPreviewDialog";
 
 export interface LegacyTracksProps {
   homebrewId: string;
+  isEditor: boolean;
 }
 
 export function LegacyTracks(props: LegacyTracksProps) {
-  const { homebrewId } = props;
+  const { homebrewId, isEditor } = props;
 
   const legacyTracks = useStore(
     (store) => store.homebrew.collections[homebrewId]?.legacyTracks?.data ?? {}
@@ -34,6 +38,9 @@ export function LegacyTracks(props: LegacyTracksProps) {
 
   const [legacyTracksDialogOpen, setLegacyTracksDialogOpen] = useState(false);
   const [editingLegacyTrackKey, setEditingLegacyTrackKey] = useState<
+    string | undefined
+  >(undefined);
+  const [viewingLegacyTrackKey, setViewingLegacyTrackKey] = useState<
     string | undefined
   >(undefined);
 
@@ -113,32 +120,54 @@ export function LegacyTracks(props: LegacyTracksProps) {
                   }
                 />
                 <Box display={"flex"}>
-                  <IconButton
-                    onClick={() => {
-                      setLegacyTracksDialogOpen(true);
-                      setEditingLegacyTrackKey(legacyTrackKey);
-                    }}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton onClick={() => handleDelete(legacyTrackKey)}>
-                    <DeleteIcon />
-                  </IconButton>
+                  {isEditor ? (
+                    <>
+                      <Tooltip title={"Edit"}>
+                        <IconButton
+                          onClick={() => {
+                            setLegacyTracksDialogOpen(true);
+                            setEditingLegacyTrackKey(legacyTrackKey);
+                          }}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title={"Delete"}>
+                        <IconButton
+                          onClick={() => handleDelete(legacyTrackKey)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </>
+                  ) : (
+                    <Tooltip title={"Preview"}>
+                      <IconButton
+                        onClick={() => {
+                          setViewingLegacyTrackKey(legacyTrackKey);
+                        }}
+                      >
+                        <ViewIcon />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                 </Box>
               </ListItem>
             ))}
         </List>
       )}
-      <Button
-        variant={"outlined"}
-        color={"inherit"}
-        onClick={() => {
-          setLegacyTracksDialogOpen(true);
-          setEditingLegacyTrackKey(undefined);
-        }}
-      >
-        Add Legacy Track
-      </Button>
+      {isEditor && (
+        <Button
+          variant={"outlined"}
+          color={"inherit"}
+          onClick={() => {
+            setLegacyTracksDialogOpen(true);
+            setEditingLegacyTrackKey(undefined);
+          }}
+        >
+          Add Legacy Track
+        </Button>
+      )}
       <LegacyTrackDialog
         homebrewId={homebrewId}
         open={legacyTracksDialogOpen}
@@ -147,6 +176,13 @@ export function LegacyTracks(props: LegacyTracksProps) {
         legacyTracks={legacyTracks}
         editingLegacyTrackKey={editingLegacyTrackKey}
       />
+      {viewingLegacyTrackKey && (
+        <LegacyTrackPreviewDialog
+          open={!!viewingLegacyTrackKey}
+          onClose={() => setViewingLegacyTrackKey(undefined)}
+          legacyTrack={legacyTracks[viewingLegacyTrackKey]}
+        />
+      )}
     </>
   );
 }

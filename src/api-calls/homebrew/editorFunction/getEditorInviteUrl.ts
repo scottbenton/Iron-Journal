@@ -1,5 +1,6 @@
 import { functions } from "config/firebase.config";
 import { httpsCallable } from "firebase/functions";
+import { constructHomebrewEditorInvitePath } from "pages/Homebrew/routes";
 
 export function getEditorInviteUrl(
   homebrewCollectionId: string
@@ -10,7 +11,7 @@ export function getEditorInviteUrl(
     getInviteKey({ homebrewCollectionId })
       .then((inviteKey) => {
         if (inviteKey.data) {
-          resolve(new URL(`/homebrew/invite/${inviteKey.data}`).toString());
+          resolve(constructHomebrewEditorInvitePath(inviteKey.data as string));
         } else {
           console.error("NO INVITE KEY RETURNED");
           reject(new Error("No invite key was returned"));
