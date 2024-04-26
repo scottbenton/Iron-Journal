@@ -2,18 +2,34 @@ import { Button, List } from "@mui/material";
 import { EmptyState } from "components/shared/EmptyState";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { useState } from "react";
-import { StoredOracleTable } from "types/homebrew/HomebrewOracles.type";
+import {
+  StoredOracleCollection,
+  StoredOracleTable,
+} from "types/homebrew/HomebrewOracles.type";
 import { OracleTableDialog } from "./OracleTableDialog";
 import { OracleTableCard } from "./OracleTableCard";
+import { useStore } from "stores/store";
 
 export interface OracleTablesSectionProps {
   homebrewId: string;
   tables: Record<string, StoredOracleTable>;
+  collections: Record<string, StoredOracleCollection>;
   parentCollectionKey: string;
+  ancestorIds: string[];
+  isEditor: boolean;
 }
 
 export function OracleTablesSection(props: OracleTablesSectionProps) {
-  const { homebrewId, tables, parentCollectionKey } = props;
+  const {
+    homebrewId,
+    tables,
+    collections,
+    parentCollectionKey,
+    isEditor,
+    ancestorIds,
+  } = props;
+
+  const openLinkedDialog = useStore((store) => store.appState.openDialog);
 
   const [oracleTableDialogState, setOracleTableDialogState] = useState<{
     open: boolean;
@@ -29,12 +45,14 @@ export function OracleTablesSection(props: OracleTablesSectionProps) {
       <SectionHeading
         label="Tables"
         action={
-          <Button
-            color={"inherit"}
-            onClick={() => setOracleTableDialogState({ open: true })}
-          >
-            Create Table
-          </Button>
+          isEditor && (
+            <Button
+              color={"inherit"}
+              onClick={() => setOracleTableDialogState({ open: true })}
+            >
+              Create Table
+            </Button>
+          )
         }
         floating
       />
@@ -46,26 +64,43 @@ export function OracleTablesSection(props: OracleTablesSectionProps) {
               key={key}
               oracleId={key}
               oracle={tables[key]}
-              onClick={() =>
-                setOracleTableDialogState({
-                  open: true,
-                  editingOracleTableId: key,
-                })
-              }
+              onClick={() => {
+                if (isEditor) {
+                  setOracleTableDialogState({
+                    open: true,
+                    editingOracleTableId: key,
+                  });
+                } else {
+                  openLinkedDialog(
+                    `${homebrewId}/collections/oracles/${ancestorIds.join(
+                      "/"
+                    )}/${parentCollectionKey}/${key}`,
+                    true
+                  );
+                }
+              }}
+              collections={collections}
+              isEditor={isEditor}
             />
           ))}
         </List>
       ) : (
         <EmptyState
-          message="Add an oracle table to get started"
+          message={
+            isEditor
+              ? "Add an oracle table to get started"
+              : "No oracle tables found"
+          }
           callToAction={
-            <Button
-              color={"inherit"}
-              variant={"outlined"}
-              onClick={() => setOracleTableDialogState({ open: true })}
-            >
-              Create Table
-            </Button>
+            isEditor && (
+              <Button
+                color={"inherit"}
+                variant={"outlined"}
+                onClick={() => setOracleTableDialogState({ open: true })}
+              >
+                Create Table
+              </Button>
+            )
           }
         />
       )}

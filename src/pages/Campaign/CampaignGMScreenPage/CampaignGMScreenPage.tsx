@@ -65,21 +65,26 @@ export function CampaignGMScreenPage() {
 
   if (!campaign || !campaignId) {
     return (
-      <EmptyState
-        title={"Campaign not Found"}
-        message={"Please try again from the campaign selection page"}
-        showImage
-        callToAction={
-          <Button
-            LinkComponent={LinkComponent}
-            href={constructCampaignPath(CAMPAIGN_ROUTES.SELECT)}
-            variant={"contained"}
-            size={"large"}
-          >
-            Select a Campaign
-          </Button>
-        }
-      />
+      <>
+        <PageHeader />
+        <PageContent isPaper>
+          <EmptyState
+            title={"Campaign not Found"}
+            message={"Please try again from the campaign selection page"}
+            showImage
+            callToAction={
+              <Button
+                LinkComponent={LinkComponent}
+                href={constructCampaignPath(CAMPAIGN_ROUTES.SELECT)}
+                variant={"contained"}
+                size={"large"}
+              >
+                Select a Campaign
+              </Button>
+            }
+          />
+        </PageContent>
+      </>
     );
   }
   if (!uid || !campaign.gmIds?.includes(uid)) {

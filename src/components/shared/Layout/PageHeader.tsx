@@ -1,6 +1,5 @@
 import { Box, Container, Stack, Typography, useTheme } from "@mui/material";
 import { getPublicAssetPath } from "functions/getPublicAssetPath";
-import { useNewCrewLinkTheme } from "hooks/featureFlags/useNewCrewLinkTheme";
 import { useNewSunderedIslesTheme } from "hooks/featureFlags/useNewSunderedIslesTheme";
 import { useGameSystemValue } from "hooks/useGameSystemValue";
 import React, { PropsWithChildren } from "react";
@@ -8,7 +7,7 @@ import { GAME_SYSTEMS } from "types/GameSystems.type";
 
 export interface PageHeaderProps extends PropsWithChildren {
   label?: string | React.ReactNode;
-  subLabel?: string;
+  subLabel?: string | React.ReactNode;
   actions?: React.ReactNode;
 }
 
@@ -20,7 +19,6 @@ export function PageHeader(props: PageHeaderProps) {
   const isEmpty = !label && !subLabel && !actions && !children;
 
   const isLightTheme = useTheme().palette.mode === "light";
-  const showNewStarforgedTheme = useNewCrewLinkTheme();
   const showNewSunderedIslesTheme = useNewSunderedIslesTheme();
 
   const isIronsworn = useGameSystemValue({
@@ -43,7 +41,7 @@ export function PageHeader(props: PageHeaderProps) {
           mb: isEmpty ? -8 : -4,
           // width: "100vw",
           backgroundColor:
-            isLightTheme && !showNewStarforgedTheme
+            isLightTheme && (isIronsworn || showNewSunderedIslesTheme)
               ? theme.palette.darkGrey.main
               : undefined,
           position: "relative",
@@ -75,15 +73,18 @@ export function PageHeader(props: PageHeaderProps) {
                   ) : (
                     label
                   ))}
-                {subLabel && (
-                  <Typography
-                    variant={"h6"}
-                    component={"h2"}
-                    fontFamily={(theme) => theme.fontFamilyTitle}
-                  >
-                    {subLabel}
-                  </Typography>
-                )}
+                {subLabel &&
+                  (typeof subLabel === "string" ? (
+                    <Typography
+                      variant={"h6"}
+                      component={"h2"}
+                      fontFamily={(theme) => theme.fontFamilyTitle}
+                    >
+                      {subLabel}
+                    </Typography>
+                  ) : (
+                    subLabel
+                  ))}
               </Box>
               {actions && (
                 <Stack direction={"row"} spacing={1} flexWrap={"wrap"}>
@@ -106,12 +107,13 @@ export function PageHeader(props: PageHeaderProps) {
           <Box
             sx={(theme) => ({
               backgroundImage:
-                isLightTheme && !showNewStarforgedTheme
+                isLightTheme && (isIronsworn || showNewSunderedIslesTheme)
                   ? `url("${borderUrl}")`
                   : undefined,
-              backgroundColor: showNewSunderedIslesTheme
-                ? "darkGrey.main"
-                : undefined,
+              backgroundColor:
+                showNewSunderedIslesTheme && theme.palette.mode === "light"
+                  ? "darkGrey.main"
+                  : undefined,
               height: theme.spacing(showNewSunderedIslesTheme ? 2 : 8),
               backgroundRepeat: "repeat-x",
               backgroundSize: "contain",

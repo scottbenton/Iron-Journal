@@ -69,11 +69,11 @@ export function AssetOptions(props: AssetOptionsProps) {
                   fullWidth
                   required
                   error={
-                    touchedFields.options?.[index].label &&
+                    touchedFields.options?.[index]?.label &&
                     !!errors.options?.[index]?.label
                   }
                   helperText={
-                    touchedFields.options?.[index].label &&
+                    touchedFields.options?.[index]?.label &&
                     errors.options?.[index]?.label
                       ? errors.options?.[index]?.label?.message ?? ""
                       : "Each option must have a unique label"

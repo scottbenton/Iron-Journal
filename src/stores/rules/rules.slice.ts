@@ -209,9 +209,8 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
             {};
           nonLinearMeters = { ...nonLinearMeters, ...expansionNonLinearMeters };
         }
-
-        store.rules.nonLinearMeters = nonLinearMeters;
       });
+      store.rules.nonLinearMeters = nonLinearMeters;
     });
   },
   rebuildSpecialTracks: () => {

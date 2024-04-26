@@ -6,10 +6,13 @@ import { FlyoutMenuList } from "./FlyoutMenuList";
 
 export function HomebrewMenu() {
   const homebrewCollections = useStore((store) => store.homebrew.collections);
+  const sortedHomebrewCollections = useStore(
+    (store) => store.homebrew.sortedHomebrewCollectionIds
+  );
   return (
     <FlyoutMenuList
       label={"Homebrew"}
-      itemIds={Object.keys(homebrewCollections)}
+      itemIds={sortedHomebrewCollections}
       renderListItem={(collectionId) => (
         <ListItem key={collectionId} disablePadding>
           <ListItemButton

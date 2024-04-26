@@ -1,13 +1,4 @@
-import {
-  Box,
-  Breadcrumbs,
-  Button,
-  Card,
-  IconButton,
-  Link,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Breadcrumbs, Button, Link, Stack, Typography } from "@mui/material";
 import { EmptyState } from "components/shared/EmptyState";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { useState } from "react";
@@ -21,17 +12,17 @@ import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import { MoveDialog } from "./MoveDialog";
 import { useStore } from "stores/store";
 import { useConfirm } from "material-ui-confirm";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { MoveCard } from "./MoveCard";
 
 export interface MovesEditorPaneProps {
   homebrewId: string;
   categories: Record<string, StoredMoveCategory>;
   moves: Record<string, StoredMove>;
+  isEditor: boolean;
 }
 
 export function MovesEditorPane(props: MovesEditorPaneProps) {
-  const { homebrewId, categories, moves } = props;
+  const { homebrewId, categories, moves, isEditor } = props;
 
   const [categoryDialogState, setCategoryDialogState] = useState<{
     open: boolean;
@@ -122,31 +113,33 @@ export function MovesEditorPane(props: MovesEditorPaneProps) {
               label={"Category Info"}
               floating
               action={
-                <>
-                  <Button
-                    color={"error"}
-                    onClick={() =>
-                      handleDeleteMoveCategory(
-                        openMoveCategory.label,
-                        openMoveCategoryId
-                      )
-                    }
-                  >
-                    Delete Category
-                  </Button>
-                  <Button
-                    color={"inherit"}
-                    variant={"outlined"}
-                    onClick={() =>
-                      setCategoryDialogState({
-                        open: true,
-                        openCategoryId: openMoveCategoryId,
-                      })
-                    }
-                  >
-                    Edit Category
-                  </Button>
-                </>
+                isEditor && (
+                  <>
+                    <Button
+                      color={"error"}
+                      onClick={() =>
+                        handleDeleteMoveCategory(
+                          openMoveCategory.label,
+                          openMoveCategoryId
+                        )
+                      }
+                    >
+                      Delete Category
+                    </Button>
+                    <Button
+                      color={"inherit"}
+                      variant={"outlined"}
+                      onClick={() =>
+                        setCategoryDialogState({
+                          open: true,
+                          openCategoryId: openMoveCategoryId,
+                        })
+                      }
+                    >
+                      Edit Category
+                    </Button>
+                  </>
+                )
               }
             />
             {openMoveCategory.description && (
@@ -156,59 +149,9 @@ export function MovesEditorPane(props: MovesEditorPaneProps) {
               label={"Category Moves"}
               floating
               action={
-                <Button
-                  color={"inherit"}
-                  onClick={() =>
-                    setMoveDialogState({
-                      open: true,
-                    })
-                  }
-                >
-                  Create Move
-                </Button>
-              }
-            />
-            {sortedMoveIds.length > 0 ? (
-              <>
-                {sortedMoveIds.map((moveId) => (
-                  <Card
-                    variant={"outlined"}
-                    key={moveId}
-                    sx={{
-                      px: 2,
-                      py: 1,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography>{moves[moveId].label}</Typography>
-                    <Box>
-                      <IconButton
-                        onClick={() =>
-                          setMoveDialogState({ open: true, openMoveId: moveId })
-                        }
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        onClick={() =>
-                          handleDeleteMove(moves[moveId].label, moveId)
-                        }
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </Box>
-                  </Card>
-                ))}
-              </>
-            ) : (
-              <EmptyState
-                message="Add a move to get started"
-                callToAction={
+                isEditor && (
                   <Button
                     color={"inherit"}
-                    variant={"outlined"}
                     onClick={() =>
                       setMoveDialogState({
                         open: true,
@@ -217,6 +160,49 @@ export function MovesEditorPane(props: MovesEditorPaneProps) {
                   >
                     Create Move
                   </Button>
+                )
+              }
+            />
+            {sortedMoveIds.length > 0 ? (
+              <>
+                {sortedMoveIds.map((moveId) => (
+                  <MoveCard
+                    dataswornId={`${homebrewId}/moves/${openMoveCategoryId}/${moveId}`}
+                    isEditor={isEditor}
+                    key={moveId}
+                    moveId={moveId}
+                    move={moves[moveId]}
+                    moveCategories={categories}
+                    handleEdit={() =>
+                      setMoveDialogState({ open: true, openMoveId: moveId })
+                    }
+                    handleDelete={() =>
+                      handleDeleteMove(moves[moveId].label, moveId)
+                    }
+                  />
+                ))}
+              </>
+            ) : (
+              <EmptyState
+                message={
+                  isEditor
+                    ? "Add a move to get started"
+                    : "There are no moves in this category"
+                }
+                callToAction={
+                  isEditor && (
+                    <Button
+                      color={"inherit"}
+                      variant={"outlined"}
+                      onClick={() =>
+                        setMoveDialogState({
+                          open: true,
+                        })
+                      }
+                    >
+                      Create Move
+                    </Button>
+                  )
                 }
               />
             )}
@@ -227,25 +213,29 @@ export function MovesEditorPane(props: MovesEditorPaneProps) {
               label={"Move Categories"}
               floating
               action={
-                <Button
-                  color={"inherit"}
-                  onClick={() => setCategoryDialogState({ open: true })}
-                >
-                  Create Category
-                </Button>
+                isEditor && (
+                  <Button
+                    color={"inherit"}
+                    onClick={() => setCategoryDialogState({ open: true })}
+                  >
+                    Create Category
+                  </Button>
+                )
               }
             />
             {sortedCategoryIds.length === 0 && (
               <EmptyState
                 message="Add a move category to group your moves together"
                 callToAction={
-                  <Button
-                    variant="outlined"
-                    color={"inherit"}
-                    onClick={() => setCategoryDialogState({ open: true })}
-                  >
-                    Create Category
-                  </Button>
+                  isEditor && (
+                    <Button
+                      variant="outlined"
+                      color={"inherit"}
+                      onClick={() => setCategoryDialogState({ open: true })}
+                    >
+                      Create Category
+                    </Button>
+                  )
                 }
               />
             )}

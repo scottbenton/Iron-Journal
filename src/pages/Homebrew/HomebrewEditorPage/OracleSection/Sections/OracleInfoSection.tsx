@@ -6,13 +6,16 @@ import { useConfirm } from "material-ui-confirm";
 import { useState } from "react";
 import { useStore } from "stores/store";
 import { StoredOracleCollection } from "types/homebrew/HomebrewOracles.type";
+import { MoveOracleCollectionDialog } from "./OracleCollectionsSection/MoveOracleCollectionDialog";
 
 export interface OracleInfoSectionProps {
   homebrewId: string;
   oracleCollectionId: string;
   oracleCollection: StoredOracleCollection;
+  oracleCollections: Record<string, StoredOracleCollection>;
   openCollectionDialog: () => void;
   closeCurrentOracleCollection: () => void;
+  isEditor: boolean;
 }
 
 export function OracleInfoSection(props: OracleInfoSectionProps) {
@@ -20,8 +23,10 @@ export function OracleInfoSection(props: OracleInfoSectionProps) {
     homebrewId,
     oracleCollectionId,
     oracleCollection,
+    oracleCollections,
     openCollectionDialog,
     closeCurrentOracleCollection,
+    isEditor,
   } = props;
 
   const deleteOracleCollection = useStore(
@@ -56,27 +61,38 @@ export function OracleInfoSection(props: OracleInfoSectionProps) {
       .catch(() => {});
   };
 
+  const [moveCollectionDialogOpen, setMoveCollectionDialogOpen] =
+    useState(false);
+
   return (
     <>
       <SectionHeading
         label={oracleCollection.label}
         action={
-          <>
-            <LoadingButton
-              color={"error"}
-              onClick={handleDelete}
-              loading={isDeleteLoading}
-            >
-              Delete Collection
-            </LoadingButton>
-            <Button
-              color={"inherit"}
-              variant={"outlined"}
-              onClick={openCollectionDialog}
-            >
-              Edit Collection
-            </Button>
-          </>
+          isEditor && (
+            <>
+              <LoadingButton
+                color={"error"}
+                onClick={handleDelete}
+                loading={isDeleteLoading}
+              >
+                Delete Collection
+              </LoadingButton>
+              <Button
+                color={"inherit"}
+                onClick={() => setMoveCollectionDialogOpen(true)}
+              >
+                Move Collection
+              </Button>
+              <Button
+                color={"inherit"}
+                variant={"outlined"}
+                onClick={openCollectionDialog}
+              >
+                Edit Collection
+              </Button>
+            </>
+          )
         }
         floating
       />
@@ -85,6 +101,13 @@ export function OracleInfoSection(props: OracleInfoSectionProps) {
           <MarkdownRenderer markdown={oracleCollection.description} />
         </Box>
       ) : null}
+      <MoveOracleCollectionDialog
+        open={moveCollectionDialogOpen}
+        onClose={() => setMoveCollectionDialogOpen(false)}
+        oracleCollectionId={oracleCollectionId}
+        oracleCollections={oracleCollections}
+        parentOracleCollectionId={oracleCollection.parentOracleCollectionId}
+      />
     </>
   );
 }

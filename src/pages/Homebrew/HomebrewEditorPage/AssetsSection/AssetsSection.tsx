@@ -2,8 +2,6 @@ import {
   Box,
   Breadcrumbs,
   Button,
-  Card,
-  IconButton,
   Link,
   Stack,
   Typography,
@@ -16,15 +14,16 @@ import { useStore } from "stores/store";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import { AssetDialog } from "./Assets/AssetDialog";
 import { useConfirm } from "material-ui-confirm";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { AssetPreviewCard } from "./AssetPreviewCard";
+import { MoveAssetDialog } from "./Assets/MoveAssetDialog";
 
 export interface AssetsSectionProps {
   homebrewId: string;
+  isEditor: boolean;
 }
 
 export function AssetsSection(props: AssetsSectionProps) {
-  const { homebrewId } = props;
+  const { homebrewId, isEditor } = props;
 
   const [assetCollectionDialogState, setAssetCollectionDialogState] = useState<{
     open: boolean;
@@ -34,6 +33,10 @@ export function AssetsSection(props: AssetsSectionProps) {
     open: boolean;
     assetId?: string;
   }>({ open: false });
+  const [moveAssetDialogState, setMoveAssetDialogState] = useState<{
+    assetId: string;
+    assetCollectionId: string;
+  }>();
 
   const assetCollections = useStore(
     (store) =>
@@ -116,31 +119,33 @@ export function AssetsSection(props: AssetsSectionProps) {
             label={"Collection Info"}
             floating
             action={
-              <>
-                <Button
-                  color={"error"}
-                  onClick={() =>
-                    handleDeleteAssetCollection(
-                      assetCollections[openCollectionKey].label,
-                      openCollectionKey
-                    )
-                  }
-                >
-                  Delete Collection
-                </Button>
-                <Button
-                  color={"inherit"}
-                  onClick={() =>
-                    setAssetCollectionDialogState({
-                      open: true,
-                      collectionId: openCollectionKey,
-                    })
-                  }
-                  variant={"outlined"}
-                >
-                  Edit Collection
-                </Button>
-              </>
+              isEditor && (
+                <>
+                  <Button
+                    color={"error"}
+                    onClick={() =>
+                      handleDeleteAssetCollection(
+                        assetCollections[openCollectionKey].label,
+                        openCollectionKey
+                      )
+                    }
+                  >
+                    Delete Collection
+                  </Button>
+                  <Button
+                    color={"inherit"}
+                    onClick={() =>
+                      setAssetCollectionDialogState({
+                        open: true,
+                        collectionId: openCollectionKey,
+                      })
+                    }
+                    variant={"outlined"}
+                  >
+                    Edit Collection
+                  </Button>
+                </>
+              )
             }
           />
           {openCollection.description && (
@@ -150,49 +155,51 @@ export function AssetsSection(props: AssetsSectionProps) {
             label={"Collection Assets"}
             floating
             action={
-              <Button
-                color={"inherit"}
-                onClick={() =>
-                  setAssetDialogState({
-                    open: true,
-                  })
-                }
-              >
-                Create Asset
-              </Button>
+              isEditor && (
+                <Button
+                  color={"inherit"}
+                  onClick={() =>
+                    setAssetDialogState({
+                      open: true,
+                    })
+                  }
+                >
+                  Create Asset
+                </Button>
+              )
             }
           />
-          {filteredAssetIds.map((assetKey) => (
-            <Card
-              variant={"outlined"}
-              key={assetKey}
-              sx={{
-                px: 2,
-                py: 1,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography>{assets[assetKey].label}</Typography>
-              <Box>
-                <IconButton
-                  onClick={() =>
-                    setAssetDialogState({ open: true, assetId: assetKey })
-                  }
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton
-                  onClick={() =>
-                    handleDeleteAsset(assets[assetKey].label, assetKey)
-                  }
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Box>
-            </Card>
-          ))}
+          <Box
+            display={"grid"}
+            gridTemplateColumns={{
+              xs: "repeat(1, 1fr)",
+              sm: "repeat(2, 1fr)",
+              lg: "repeat(3, 1fr)",
+              xl: "repeat(4, 1fr)",
+            }}
+            gap={2}
+          >
+            {filteredAssetIds.map((assetKey) => (
+              <AssetPreviewCard
+                key={assetKey}
+                storedAsset={assets[assetKey]}
+                collectionName={assetCollections[openCollectionKey].label}
+                handleDeleteAsset={() =>
+                  handleDeleteAsset(assets[assetKey].label, assetKey)
+                }
+                handleEditAsset={() =>
+                  setAssetDialogState({ open: true, assetId: assetKey })
+                }
+                handleMoveAsset={() =>
+                  setMoveAssetDialogState({
+                    assetId: assetKey,
+                    assetCollectionId: assets[assetKey].categoryKey,
+                  })
+                }
+                isEditor={isEditor}
+              />
+            ))}
+          </Box>
         </>
       ) : (
         <>
@@ -200,13 +207,15 @@ export function AssetsSection(props: AssetsSectionProps) {
             label={"Homebrew Asset Collections"}
             floating
             action={
-              <Button
-                variant={"outlined"}
-                color={"inherit"}
-                onClick={() => setAssetCollectionDialogState({ open: true })}
-              >
-                Add Asset Collection
-              </Button>
+              isEditor && (
+                <Button
+                  variant={"outlined"}
+                  color={"inherit"}
+                  onClick={() => setAssetCollectionDialogState({ open: true })}
+                >
+                  Add Asset Collection
+                </Button>
+              )
             }
           />
           <AssetCollectionsList
@@ -215,6 +224,7 @@ export function AssetsSection(props: AssetsSectionProps) {
               setAssetCollectionDialogState({ open: true })
             }
             setOpenCollection={setOpenCollectionKey}
+            isEditor={isEditor}
           />
         </>
       )}
@@ -233,6 +243,11 @@ export function AssetsSection(props: AssetsSectionProps) {
           existingAssetId={assetDialogState.assetId}
         />
       )}
+      <MoveAssetDialog
+        state={moveAssetDialogState}
+        onClose={() => setMoveAssetDialogState(undefined)}
+        collections={assetCollections}
+      />
     </Stack>
   );
 }

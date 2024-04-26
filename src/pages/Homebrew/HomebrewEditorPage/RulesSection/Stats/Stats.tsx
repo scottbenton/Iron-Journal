@@ -5,6 +5,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
@@ -14,14 +15,17 @@ import { useStore } from "stores/store";
 import { useConfirm } from "material-ui-confirm";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ViewIcon from "@mui/icons-material/Visibility";
 import { ClampedMarkdownRenderer } from "components/shared/ClampedMarkdownRenderer";
+import { StatViewerPreviewDialog } from "./StatViewerPreviewDialog";
 
 export interface StatsProps {
   homebrewId: string;
+  isEditor: boolean;
 }
 
 export function Stats(props: StatsProps) {
-  const { homebrewId } = props;
+  const { homebrewId, isEditor } = props;
 
   const confirm = useConfirm();
 
@@ -34,6 +38,9 @@ export function Stats(props: StatsProps) {
 
   const [statDialogOpen, setStatDialogOpen] = useState(false);
   const [editingStatKey, setEditingStatKey] = useState<string | undefined>(
+    undefined
+  );
+  const [viewingStatKey, setViewingStatKey] = useState<string | undefined>(
     undefined
   );
 
@@ -109,32 +116,52 @@ export function Stats(props: StatsProps) {
                   }
                 />
                 <Box display={"flex"}>
-                  <IconButton
-                    onClick={() => {
-                      setStatDialogOpen(true);
-                      setEditingStatKey(statKey);
-                    }}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton onClick={() => handleDelete(statKey)}>
-                    <DeleteIcon />
-                  </IconButton>
+                  {isEditor ? (
+                    <>
+                      <Tooltip title={"Edit"}>
+                        <IconButton
+                          onClick={() => {
+                            setStatDialogOpen(true);
+                            setEditingStatKey(statKey);
+                          }}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title={"Delete"}>
+                        <IconButton onClick={() => handleDelete(statKey)}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </>
+                  ) : (
+                    <Tooltip title={"Preview"}>
+                      <IconButton
+                        onClick={() => {
+                          setViewingStatKey(statKey);
+                        }}
+                      >
+                        <ViewIcon />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                 </Box>
               </ListItem>
             ))}
         </List>
       )}
-      <Button
-        variant={"outlined"}
-        color={"inherit"}
-        onClick={() => {
-          setStatDialogOpen(true);
-          setEditingStatKey(undefined);
-        }}
-      >
-        Add Stat
-      </Button>
+      {isEditor && (
+        <Button
+          variant={"outlined"}
+          color={"inherit"}
+          onClick={() => {
+            setStatDialogOpen(true);
+            setEditingStatKey(undefined);
+          }}
+        >
+          Add Stat
+        </Button>
+      )}
       <StatDialog
         homebrewId={homebrewId}
         open={statDialogOpen}
@@ -143,6 +170,13 @@ export function Stats(props: StatsProps) {
         stats={stats}
         editingStatKey={editingStatKey}
       />
+      {viewingStatKey && (
+        <StatViewerPreviewDialog
+          open={!!viewingStatKey}
+          stat={stats[viewingStatKey]}
+          onClose={() => setViewingStatKey(undefined)}
+        />
+      )}
     </>
   );
 }

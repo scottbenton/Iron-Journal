@@ -58,6 +58,7 @@ import { listenToHomebrewNonLinearMeters } from "api-calls/homebrew/rules/nonLin
 import { createHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/createHomebrewNonLinearMeter";
 import { updateHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/updateHomebrewNonLinearMeter";
 import { deleteHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/deleteHomebrewNonLinearMeter";
+import { listenToHomebrewCollection } from "api-calls/homebrew/listenToHomebrewCollection";
 
 enum ListenerRefreshes {
   Oracles,
@@ -91,6 +92,22 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
             ...(store.homebrew.collections[collectionId] ?? {}),
             base: collection,
           };
+
+          store.homebrew.sortedHomebrewCollectionIds = Object.keys(
+            store.homebrew.collections
+          )
+            .filter((key) => {
+              return (
+                store.homebrew.collections[key]?.base?.editors.includes(uid) ||
+                store.homebrew.collections[key]?.base.viewers?.includes(uid)
+              );
+            })
+            .sort((k1, k2) =>
+              (store.homebrew.collections[k1]?.base?.title ?? "").localeCompare(
+                store.homebrew.collections[k2]?.base?.title ?? ""
+              )
+            );
+
           store.homebrew.loading = false;
           store.homebrew.error = undefined;
         });
@@ -100,6 +117,24 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
           delete store.homebrew.collections[collectionId];
           store.homebrew.loading = false;
           store.homebrew.error = undefined;
+          store.homebrew.sortedHomebrewCollectionIds = Object.keys(
+            store.homebrew.collections
+          )
+            .filter((key) => {
+              const shouldKeep =
+                store.homebrew.collections[key]?.base?.editors.includes(
+                  store.auth.uid
+                ) ||
+                store.homebrew.collections[key]?.base.viewers?.includes(
+                  store.auth.uid
+                );
+              return shouldKeep;
+            })
+            .sort((k1, k2) =>
+              (store.homebrew.collections[k1]?.base?.title ?? "").localeCompare(
+                store.homebrew.collections[k2]?.base?.title ?? ""
+              )
+            );
         });
       },
       (error) => {
@@ -211,6 +246,55 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
 
     const unsubscribes: Unsubscribe[] = [];
     filteredHomebrewIds.forEach((homebrewId) => {
+      unsubscribes.push(
+        listenToHomebrewCollection(
+          homebrewId,
+          (data) => {
+            set((store) => {
+              store.homebrew.loading = false;
+              store.homebrew.collections[homebrewId] = {
+                ...store.homebrew.collections[homebrewId],
+                base: data,
+              };
+              store.homebrew.sortedHomebrewCollectionIds = Object.keys(
+                store.homebrew.collections
+              )
+                .filter((key) => {
+                  const shouldKeep =
+                    store.homebrew.collections[key]?.base?.editors.includes(
+                      store.auth.uid
+                    ) ||
+                    store.homebrew.collections[key]?.base.viewers?.includes(
+                      store.auth.uid
+                    );
+                  return shouldKeep;
+                })
+                .sort((k1, k2) =>
+                  (
+                    store.homebrew.collections[k1]?.base?.title ?? ""
+                  ).localeCompare(
+                    store.homebrew.collections[k2]?.base?.title ?? ""
+                  )
+                );
+            });
+          },
+          (error) => {
+            set((store) => {
+              store.homebrew.loading = false;
+              store.homebrew.error = getErrorMessage(
+                error,
+                "Failed to load homebrew information"
+              );
+            });
+            console.error(error);
+          },
+          () => {
+            set((store) => {
+              store.homebrew.loading = false;
+            });
+          }
+        )
+      );
       listenerConfigs.forEach((config) => {
         unsubscribes.push(
           config.listenerFunction(
