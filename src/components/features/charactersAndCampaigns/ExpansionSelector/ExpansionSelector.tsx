@@ -33,17 +33,18 @@ export function ExpansionSelector(props: ExpansionSelectorProps) {
   const officialExpansions = useGameSystemValue(defaultExpansions);
 
   const homebrewExpansionMap = useStore((store) => store.homebrew.collections);
+  const sortedExpansionIds = useStore(
+    (store) => store.homebrew.sortedHomebrewCollectionIds
+  );
 
-  const expansionIds = Object.keys(homebrewExpansionMap)
-    .filter(
-      (expansionId) =>
-        homebrewExpansionMap[expansionId]?.base?.rulesetId === baseRuleset
-    )
-    .sort((k1, k2) =>
-      homebrewExpansionMap[k1]?.base?.title?.localeCompare(
-        homebrewExpansionMap[k2]?.base?.title
-      )
-    );
+  const expansionIds = sortedExpansionIds.filter(
+    (expansionId) =>
+      homebrewExpansionMap[expansionId]?.base?.rulesetId === baseRuleset
+  );
+
+  const notFoundExpansionIds = Object.keys(enabledExpansionMap).filter(
+    (key) => !expansionIds.includes(key)
+  );
 
   return (
     <Box>
@@ -85,6 +86,23 @@ export function ExpansionSelector(props: ExpansionSelectorProps) {
                 }
                 label={
                   homebrewExpansionMap[expansionId].base?.title ?? "Loading"
+                }
+              />
+            ))}
+            {notFoundExpansionIds.map((expansionId) => (
+              <FormControlLabel
+                key={expansionId}
+                control={
+                  <Switch
+                    checked={enabledExpansionMap[expansionId] ?? false}
+                    onChange={(evt, checked) =>
+                      toggleEnableExpansion(expansionId, checked)
+                    }
+                  />
+                }
+                label={
+                  homebrewExpansionMap[expansionId].base?.title ??
+                  "Deleted Homebrew Expansion"
                 }
               />
             ))}

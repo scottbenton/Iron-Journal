@@ -5,24 +5,28 @@ import {
   List,
   ListItem,
   ListItemText,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { StoredImpactCategory } from "types/homebrew/HomebrewRules.type";
 import { ImpactCategoryDialog } from "./ImpactCategoryDialog";
 import { useStore } from "stores/store";
+import ViewIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useConfirm } from "material-ui-confirm";
 import { ImpactDialog } from "./ImpactDialog";
 import { ClampedMarkdownRenderer } from "components/shared/ClampedMarkdownRenderer";
+import { ImpactPreviewDialog } from "./ImpactCategoryPreviewDialog";
 
 export interface ImpactsProps {
   homebrewId: string;
+  isEditor: boolean;
 }
 
 export function Impacts(props: ImpactsProps) {
-  const { homebrewId } = props;
+  const { homebrewId, isEditor } = props;
   const confirm = useConfirm();
 
   const impactCategories = useStore(
@@ -42,6 +46,9 @@ export function Impacts(props: ImpactsProps) {
   const [editingImpactKey, setEditingImpactKey] = useState<string | undefined>(
     undefined
   );
+  const [viewingImpactCategoryKey, setViewingImpactCategoryKey] = useState<
+    string | undefined
+  >(undefined);
 
   const createImpactCategory = useStore(
     (store) => store.homebrew.createImpactCategory
@@ -166,106 +173,135 @@ export function Impacts(props: ImpactsProps) {
                     }
                   />
                   <Box display={"flex"}>
-                    <IconButton
-                      onClick={() => {
-                        setImpactCategoryDialogOpen(true);
-                        setEditingImpactCategoryKey(categoryKey);
-                      }}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => handleCategoryDelete(categoryKey)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                    {isEditor ? (
+                      <>
+                        <Tooltip title={"Edit"}>
+                          <IconButton
+                            onClick={() => {
+                              setImpactCategoryDialogOpen(true);
+                              setEditingImpactCategoryKey(categoryKey);
+                            }}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title={"Delete"}>
+                          <IconButton
+                            onClick={() => handleCategoryDelete(categoryKey)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Tooltip>
+                      </>
+                    ) : (
+                      <Tooltip title={"Preview"}>
+                        <IconButton
+                          onClick={() => {
+                            setViewingImpactCategoryKey(categoryKey);
+                          }}
+                        >
+                          <ViewIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
                   </Box>
                 </Box>
-                {Object.keys(impactCategories[categoryKey].contents).length >
-                0 ? (
-                  <List>
+                {isEditor && (
+                  <>
+                    {" "}
                     {Object.keys(impactCategories[categoryKey].contents)
-                      .sort((i1, i2) =>
-                        impactCategories[categoryKey].contents[
-                          i1
-                        ].label.localeCompare(
-                          impactCategories[categoryKey].contents[i2].label
-                        )
-                      )
-                      .map((categoryContentKey) => (
-                        <ListItem key={categoryContentKey}>
-                          <ListItemText
-                            secondaryTypographyProps={{ component: "span" }}
-                            primary={
-                              impactCategories[categoryKey].contents[
-                                categoryContentKey
-                              ].label
-                            }
-                            secondary={
-                              <ClampedMarkdownRenderer
-                                markdown={
+                      .length > 0 ? (
+                      <List>
+                        {Object.keys(impactCategories[categoryKey].contents)
+                          .sort((i1, i2) =>
+                            impactCategories[categoryKey].contents[
+                              i1
+                            ].label.localeCompare(
+                              impactCategories[categoryKey].contents[i2].label
+                            )
+                          )
+                          .map((categoryContentKey) => (
+                            <ListItem key={categoryContentKey}>
+                              <ListItemText
+                                secondaryTypographyProps={{ component: "span" }}
+                                primary={
                                   impactCategories[categoryKey].contents[
                                     categoryContentKey
-                                  ].description ?? ""
+                                  ].label
                                 }
-                                inheritColor
+                                secondary={
+                                  <ClampedMarkdownRenderer
+                                    markdown={
+                                      impactCategories[categoryKey].contents[
+                                        categoryContentKey
+                                      ].description ?? ""
+                                    }
+                                    inheritColor
+                                  />
+                                }
                               />
-                            }
-                          />
-                          <Box display={"flex"}>
-                            <IconButton
-                              onClick={() => {
-                                setImpactDialogOpen(true);
-                                setEditingImpactCategoryKey(categoryKey);
-                                setEditingImpactKey(categoryContentKey);
-                              }}
-                            >
-                              <EditIcon />
-                            </IconButton>
-                            <IconButton
-                              onClick={() =>
-                                handleImpactDelete(
-                                  categoryKey,
-                                  categoryContentKey
-                                )
-                              }
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </Box>
-                        </ListItem>
-                      ))}
-                  </List>
-                ) : (
-                  <Typography mt={2} px={2} textAlign={"center"}>
-                    No Impacts in this Category
-                  </Typography>
+                              <Box display={"flex"}>
+                                <Tooltip title={"Edit"}>
+                                  <IconButton
+                                    onClick={() => {
+                                      setImpactDialogOpen(true);
+                                      setEditingImpactCategoryKey(categoryKey);
+                                      setEditingImpactKey(categoryContentKey);
+                                    }}
+                                  >
+                                    <EditIcon />
+                                  </IconButton>
+                                </Tooltip>
+                                <Tooltip title={"Delete"}>
+                                  <IconButton
+                                    onClick={() =>
+                                      handleImpactDelete(
+                                        categoryKey,
+                                        categoryContentKey
+                                      )
+                                    }
+                                  >
+                                    <DeleteIcon />
+                                  </IconButton>
+                                </Tooltip>
+                              </Box>
+                            </ListItem>
+                          ))}
+                      </List>
+                    ) : (
+                      <Typography mt={2} px={2} textAlign={"center"}>
+                        No Impacts in this Category
+                      </Typography>
+                    )}
+                    <Button
+                      color={"inherit"}
+                      onClick={() => {
+                        setImpactDialogOpen(true);
+                        setEditingImpactCategoryKey(categoryKey);
+                        setEditingImpactKey(undefined);
+                      }}
+                      sx={{ alignSelf: "center", my: 1 }}
+                    >
+                      Add Impact
+                    </Button>
+                  </>
                 )}
-                <Button
-                  color={"inherit"}
-                  onClick={() => {
-                    setImpactDialogOpen(true);
-                    setEditingImpactCategoryKey(categoryKey);
-                    setEditingImpactKey(undefined);
-                  }}
-                  sx={{ alignSelf: "center", my: 1 }}
-                >
-                  Add Impact
-                </Button>
               </ListItem>
             ))}
         </Box>
       )}
-      <Button
-        variant={"outlined"}
-        color={"inherit"}
-        onClick={() => {
-          setImpactCategoryDialogOpen(true);
-          setEditingImpactCategoryKey(undefined);
-        }}
-      >
-        Add Impact Category
-      </Button>
+      {isEditor && (
+        <Button
+          variant={"outlined"}
+          color={"inherit"}
+          onClick={() => {
+            setImpactCategoryDialogOpen(true);
+            setEditingImpactCategoryKey(undefined);
+          }}
+        >
+          Add Impact Category
+        </Button>
+      )}
       <ImpactCategoryDialog
         homebrewId={homebrewId}
         open={impactCategoryDialogOpen}
@@ -282,6 +318,13 @@ export function Impacts(props: ImpactsProps) {
           onSave={updateImpact}
           editingCategoryKey={editingImpactCategoryKey}
           editingImpactKey={editingImpactKey}
+        />
+      )}
+      {viewingImpactCategoryKey && (
+        <ImpactPreviewDialog
+          open={!!viewingImpactCategoryKey}
+          onClose={() => setViewingImpactCategoryKey(undefined)}
+          impactCategory={impactCategories[viewingImpactCategoryKey]}
         />
       )}
     </>

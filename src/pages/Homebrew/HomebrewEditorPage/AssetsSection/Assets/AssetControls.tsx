@@ -72,11 +72,11 @@ export function AssetControls(props: AssetControlsProps) {
                   fullWidth
                   required
                   error={
-                    touchedFields.controls?.[index].label &&
+                    touchedFields.controls?.[index]?.label &&
                     !!errors.controls?.[index]?.label
                   }
                   helperText={
-                    touchedFields.controls?.[index].label &&
+                    touchedFields.controls?.[index]?.label &&
                     errors.controls?.[index]?.label
                       ? errors.controls?.[index]?.label?.message ?? ""
                       : "Each control must have a unique label"

@@ -3,7 +3,7 @@ import { sendPageViewEvent } from "lib/analytics.lib";
 import { completeMagicLinkSignupIfPresent } from "lib/auth.lib";
 import { useSnackbar } from "providers/SnackbarProvider";
 import { useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { matchPath, useLocation } from "react-router-dom";
 import {
   BASE_ROUTES,
   basePaths,
@@ -22,7 +22,10 @@ export function LayoutPathListener() {
   const { redirectWithContinueUrl, navigateToContinueURL } = useContinueUrl();
 
   useEffect(() => {
-    if (!openPaths.includes(pathname) && state === AUTH_STATE.UNAUTHENTICATED) {
+    const doesOpenPathMatch = openPaths.some((path) => {
+      return !!matchPath(path, pathname);
+    });
+    if (!doesOpenPathMatch && state === AUTH_STATE.UNAUTHENTICATED) {
       redirectWithContinueUrl(basePaths[BASE_ROUTES.LOGIN], pathname);
     } else if (
       onlyUnauthenticatedPaths.includes(pathname) &&

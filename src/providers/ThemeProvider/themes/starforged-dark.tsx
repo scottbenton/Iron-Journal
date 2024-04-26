@@ -11,8 +11,8 @@ export const starforgedDarkTheme = createTheme({
     primary: starforgedGold,
     secondary: green,
     darkGrey: {
-      light: starforgedGrey[800],
-      main: starforgedGrey[900],
+      light: starforgedGrey[900],
+      main: starforgedGrey[950],
       dark: "#030712",
       contrastText: "#fff",
     },

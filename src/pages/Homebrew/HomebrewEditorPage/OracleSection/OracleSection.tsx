@@ -6,10 +6,11 @@ import { OracleEditorPane } from "./OracleEditorPane";
 
 export interface OracleSectionProps {
   id: string;
+  isEditor: boolean;
 }
 
 export function OracleSection(props: OracleSectionProps) {
-  const { id } = props;
+  const { id, isEditor } = props;
 
   const oracleCollections = useStore(
     (store) => store.homebrew.collections[id].oracleCollections?.data ?? {}
@@ -38,6 +39,7 @@ export function OracleSection(props: OracleSectionProps) {
           homebrewId={id}
           oracleCollections={oracleCollections}
           oracleTables={oracleTables}
+          isEditor={isEditor}
         />
       }
     />

@@ -9,6 +9,7 @@ export interface OracleCollectionsSectionProps {
   oracleCollections: Record<string, StoredOracleCollection>;
   openCollection: (collectionId: string) => void;
   openCreateCollectionDialog: () => void;
+  isEditor: boolean;
 }
 
 export function OracleCollectionsSection(props: OracleCollectionsSectionProps) {
@@ -17,6 +18,7 @@ export function OracleCollectionsSection(props: OracleCollectionsSectionProps) {
     oracleCollections,
     openCollection,
     openCreateCollectionDialog,
+    isEditor,
   } = props;
 
   const filteredCollectionIds = Object.keys(oracleCollections).filter(
@@ -34,23 +36,31 @@ export function OracleCollectionsSection(props: OracleCollectionsSectionProps) {
       <SectionHeading
         label={"Collections"}
         action={
-          <Button color={"inherit"} onClick={openCreateCollectionDialog}>
-            Create Collection
-          </Button>
+          isEditor && (
+            <Button color={"inherit"} onClick={openCreateCollectionDialog}>
+              Create Collection
+            </Button>
+          )
         }
         floating
       />
       {sortedCollectionIds.length === 0 && (
         <EmptyState
-          message="Add an oracle collection to group your tables together"
+          message={
+            isEditor
+              ? "No oracle collections found"
+              : "Add an oracle collection to group your tables together"
+          }
           callToAction={
-            <Button
-              variant="outlined"
-              color={"inherit"}
-              onClick={openCreateCollectionDialog}
-            >
-              Create Collection
-            </Button>
+            isEditor && (
+              <Button
+                variant="outlined"
+                color={"inherit"}
+                onClick={openCreateCollectionDialog}
+              >
+                Create Collection
+              </Button>
+            )
           }
         />
       )}

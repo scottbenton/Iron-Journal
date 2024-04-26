@@ -54,6 +54,7 @@ export interface HomebrewEntry {
 }
 
 export interface HomebrewSliceData {
+  sortedHomebrewCollectionIds: string[];
   collections: Record<string, HomebrewEntry>;
   loading: boolean;
   error?: string;
@@ -66,7 +67,7 @@ export interface HomebrewSliceActions {
   createExpansion: (expansion: ExpansionDocument) => Promise<string>;
   updateExpansion: (
     expansionId: string,
-    expansion: Partial<HomebrewCollectionDocument>
+    expansion: PartialWithFieldValue<HomebrewCollectionDocument>
   ) => Promise<void>;
   deleteExpansion: (expansionId: string) => Promise<void>;
 

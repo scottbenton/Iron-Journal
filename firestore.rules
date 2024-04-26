@@ -109,75 +109,79 @@ service cloud.firestore {
       }
 
       match /collections/{homebrewId} {
-        allow read: if request.auth.uid != null;
+        allow read: if true;
         allow create: if request.auth.uid != null;
-        allow write: if request.auth.uid in resource.data.editors;
+        allow update: if (request.auth.uid in resource.data.editors && !request.resource.data.diff(resource.data).affectedKeys().hasAny(["creator", "editors"])) || (request.auth.uid != null && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["viewers"]));
+				allow delete: if (request.auth.uid == resource.data.creator);
       }
 
       match /stats/{statId} {
-        allow read: if request.auth.uid != null;
+        allow read: if true;
         allow create: if request.auth.uid != null;
         allow write: if checkIsHomebrewOwner(resource.data.collectionId);
       }
 
       match /condition_meters/{conditionMeterId} {
-        allow read: if request.auth.uid != null;
+        allow read: if true;
         allow create: if request.auth.uid != null;
         allow write: if checkIsHomebrewOwner(resource.data.collectionId);
       }
 
       match /non_linear_meters/{meterId} {
-        allow read: if request.auth.uid != null;
+        allow read: if true;
         allow create: if request.auth.uid != null;
         allow write: if checkIsHomebrewOwner(resource.data.collectionId);
       }
 
       match /impacts/{impactCategoryId} {
-        allow read: if request.auth.uid != null;
+        allow read: if true;
         allow create: if request.auth.uid != null;
         allow write: if checkIsHomebrewOwner(resource.data.collectionId);
       }
 
       match /legacy_tracks/{legacyTrackId} {
-        allow read: if request.auth.uid != null;
+        allow read: if true;
         allow create: if request.auth.uid != null;
         allow write: if checkIsHomebrewOwner(resource.data.collectionId);
       }
 
       match /oracle_tables/{oracleTableId} {
-        allow read: if request.auth.uid != null;
+        allow read: if true;
         allow create: if request.auth.uid != null;
         allow write: if checkIsHomebrewOwner(resource.data.collectionId);
       }
 
       match /oracle_collections/{oracleCollectionId} {
-        allow read: if request.auth.uid != null;
+        allow read: if true;
         allow create: if request.auth.uid != null;
         allow write: if checkIsHomebrewOwner(resource.data.collectionId);
       }
 
       match /move_categories/{moveCategoryId} {
-        allow read: if request.auth.uid != null;
+        allow read: if true;
         allow create: if request.auth.uid != null;
         allow write: if checkIsHomebrewOwner(resource.data.collectionId);
       }
 
       match /moves/{moveId} {
-        allow read: if request.auth.uid != null;
+        allow read: if true;
         allow create: if request.auth.uid != null;
         allow write: if checkIsHomebrewOwner(resource.data.collectionId);
       }
 
       match /asset_collections/{assetCollectionId} {
-        allow read: if request.auth.uid != null;
+        allow read: if true;
         allow create: if request.auth.uid != null;
         allow write: if checkIsHomebrewOwner(resource.data.collectionId);
       }
 
       match /assets/{assetId} {
-        allow read: if request.auth.uid != null;
+        allow read: if true;
         allow create: if request.auth.uid != null;
         allow write: if checkIsHomebrewOwner(resource.data.collectionId);
+      }
+      match /editorInviteKeys/{inviteKeyId} {
+        allow read, write: if false;
       }
     }
     match /users/{userId} {

@@ -9,6 +9,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useConfirm } from "material-ui-confirm";
 import { useState } from "react";
 import MoveIcon from "@mui/icons-material/DriveFileMove";
+import ViewIcon from "@mui/icons-material/Visibility";
 import { MoveOracleTableDialog } from "./MoveOracleTableDialog";
 
 export interface OracleTableCardProps {
@@ -16,10 +17,11 @@ export interface OracleTableCardProps {
   oracle: StoredOracleTable;
   onClick: () => void;
   collections: Record<string, StoredOracleCollection>;
+  isEditor: boolean;
 }
 
 export function OracleTableCard(props: OracleTableCardProps) {
-  const { oracleId, oracle, onClick, collections } = props;
+  const { oracleId, oracle, onClick, collections, isEditor } = props;
   const confirm = useConfirm();
 
   const deleteOracle = useStore((store) => store.homebrew.deleteOracleTable);
@@ -63,21 +65,33 @@ export function OracleTableCard(props: OracleTableCardProps) {
           <Typography variant={"h6"}>{oracle.label}</Typography>
         </Box>
         <Box>
-          <Tooltip title={"Move Oracle"}>
-            <IconButton onClick={() => setMoveOracleDialogOpen(true)}>
-              <MoveIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={"Edit Oracle"}>
-            <IconButton onClick={onClick}>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={"Delete Oracle"}>
-            <IconButton onClick={handleDeleteOracle}>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
+          {isEditor ? (
+            <>
+              <Tooltip title={"Move Oracle"}>
+                <IconButton onClick={() => setMoveOracleDialogOpen(true)}>
+                  <MoveIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={"Edit Oracle"}>
+                <IconButton onClick={onClick}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={"Delete Oracle"}>
+                <IconButton onClick={handleDeleteOracle}>
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            </>
+          ) : (
+            <>
+              <Tooltip title={"Preview Oracle"}>
+                <IconButton onClick={onClick}>
+                  <ViewIcon />
+                </IconButton>
+              </Tooltip>
+            </>
+          )}
         </Box>
       </Card>
       <MoveOracleTableDialog

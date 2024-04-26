@@ -92,6 +92,10 @@ const router = createBrowserRouter(
               path={homebrewPaths[HOMEBREW_ROUTES.EDITOR]}
               lazy={() => import("pages/Homebrew/HomebrewEditorPage")}
             />
+            <Route
+              path={homebrewPaths[HOMEBREW_ROUTES.EDITOR_JOIN]}
+              lazy={() => import("pages/Homebrew/HomebrewEditorInvitationPage")}
+            />
           </Route>
         </Route>
         {/* Unauthenticated Pages */}

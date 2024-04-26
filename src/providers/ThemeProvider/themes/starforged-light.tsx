@@ -10,9 +10,9 @@ export const starforgedLightTheme = createTheme({
     primary: starforgedGold,
     secondary: green,
     darkGrey: {
-      light: starforgedGrey[600],
-      main: starforgedGrey[700],
-      dark: starforgedGrey[800],
+      light: starforgedGrey[800],
+      main: starforgedGrey[900],
+      dark: starforgedGrey[950],
       contrastText: "#fff",
     },
     divider: starforgedGrey[300],

@@ -45,21 +45,26 @@ export function CharacterSheetPage() {
 
   if (!isCharacterLoaded) {
     return (
-      <EmptyState
-        title={"Character not Found"}
-        message={"Please try again from the character selection page"}
-        showImage
-        callToAction={
-          <Button
-            LinkComponent={LinkComponent}
-            href={constructCharacterPath(CHARACTER_ROUTES.SELECT)}
-            variant={"contained"}
-            size={"large"}
-          >
-            Character Select
-          </Button>
-        }
-      />
+      <>
+        <PageHeader />
+        <PageContent isPaper>
+          <EmptyState
+            title={"Character not Found"}
+            message={"Please try again from the character selection page"}
+            showImage
+            callToAction={
+              <Button
+                LinkComponent={LinkComponent}
+                href={constructCharacterPath(CHARACTER_ROUTES.SELECT)}
+                variant={"contained"}
+                size={"large"}
+              >
+                Character Select
+              </Button>
+            }
+          />
+        </PageContent>
+      </>
     );
   }
 

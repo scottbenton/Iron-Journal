@@ -76,21 +76,28 @@ export function WorldSheetPage() {
 
   if (!world || !worldId) {
     return (
-      <EmptyState
-        showImage
-        title={"World not Found"}
-        message={"Please return to the world selection page to choose a world"}
-        callToAction={
-          <Button
-            LinkComponent={LinkComponent}
-            href={constructWorldPath(WORLD_ROUTES.SELECT)}
-            variant={"contained"}
-            size={"large"}
-          >
-            Select a World
-          </Button>
-        }
-      />
+      <>
+        <PageHeader />
+        <PageContent isPaper>
+          <EmptyState
+            showImage
+            title={"World not Found"}
+            message={
+              "Please return to the world selection page to choose a world"
+            }
+            callToAction={
+              <Button
+                LinkComponent={LinkComponent}
+                href={constructWorldPath(WORLD_ROUTES.SELECT)}
+                variant={"contained"}
+                size={"large"}
+              >
+                Select a World
+              </Button>
+            }
+          />
+        </PageContent>
+      </>
     );
   }
 

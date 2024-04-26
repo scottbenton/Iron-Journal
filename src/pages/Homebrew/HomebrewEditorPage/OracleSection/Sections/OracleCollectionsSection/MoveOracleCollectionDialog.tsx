@@ -41,8 +41,6 @@ export function MoveOracleCollectionDialog(
     setCollectionId(parentOracleCollectionId);
   }, [parentOracleCollectionId]);
 
-  console.debug(parentOracleCollectionId, collectionId, oracleCollections);
-
   const updateOracleCollection = useStore(
     (store) => store.homebrew.updateOracleCollection
   );

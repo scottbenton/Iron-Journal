@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { CampaignSheetHeader } from "./components/CampaignSheetHeader";
 import { CharacterSection } from "./components/CharacterSection";
 import { WorldSection } from "./components/WorldSection";
-import { PageContent } from "components/shared/Layout";
+import { PageContent, PageHeader } from "components/shared/Layout";
 import { BreakContainer } from "components/shared/BreakContainer";
 import { TracksSection } from "./components/TracksSection";
 import { StyledTabs, StyledTab } from "components/shared/StyledTabs";
@@ -68,21 +68,26 @@ export function CampaignSheetPage() {
 
   if (!campaignId || !campaign) {
     return (
-      <EmptyState
-        title={"Campaign not Found"}
-        message={"Please try again from the campaign selection page"}
-        showImage
-        callToAction={
-          <Button
-            LinkComponent={LinkComponent}
-            href={constructCampaignPath(CAMPAIGN_ROUTES.SELECT)}
-            variant={"contained"}
-            size={"large"}
-          >
-            Select a Campaign
-          </Button>
-        }
-      />
+      <>
+        <PageHeader />
+        <PageContent isPaper>
+          <EmptyState
+            title={"Campaign not Found"}
+            message={"Please try again from the campaign selection page"}
+            showImage
+            callToAction={
+              <Button
+                LinkComponent={LinkComponent}
+                href={constructCampaignPath(CAMPAIGN_ROUTES.SELECT)}
+                variant={"contained"}
+                size={"large"}
+              >
+                Select a Campaign
+              </Button>
+            }
+          />
+        </PageContent>
+      </>
     );
   }
 
@@ -98,7 +103,7 @@ export function CampaignSheetPage() {
           <StyledTabs
             value={selectedTab}
             onChange={(evt, value) => handleTabChange(value)}
-            indicatorColor='primary'
+            indicatorColor="primary"
             centered
             variant={"standard"}
             sx={(theme) => ({

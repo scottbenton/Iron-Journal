@@ -8,10 +8,11 @@ import { NonLinearMeters } from "./NonLinearMeters";
 
 export interface RulesSectionProps {
   id: string;
+  isEditor: boolean;
 }
 
 export function RulesSection(props: RulesSectionProps) {
-  const { id } = props;
+  const { id, isEditor } = props;
 
   return (
     <Box
@@ -22,15 +23,15 @@ export function RulesSection(props: RulesSectionProps) {
       }}
     >
       <SectionHeading breakContainer label={"Stats"} />
-      <Stats homebrewId={id} />
+      <Stats homebrewId={id} isEditor={isEditor} />
       <SectionHeading breakContainer label={"Condition Meters"} />
-      <ConditionMeters homebrewId={id} />
+      <ConditionMeters homebrewId={id} isEditor={isEditor} />
       <SectionHeading breakContainer label={"Non-Linear Meters"} />
-      <NonLinearMeters homebrewId={id} />
+      <NonLinearMeters homebrewId={id} isEditor={isEditor} />
       <SectionHeading breakContainer label={"Impacts / Debilities"} />
-      <Impacts homebrewId={id} />
+      <Impacts homebrewId={id} isEditor={isEditor} />
       <SectionHeading breakContainer label={"Legacy Tracks"} />
-      <LegacyTracks homebrewId={id} />
+      <LegacyTracks homebrewId={id} isEditor={isEditor} />
     </Box>
   );
 }

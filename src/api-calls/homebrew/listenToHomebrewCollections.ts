@@ -1,4 +1,4 @@
-import { onSnapshot, query, where } from "firebase/firestore";
+import { onSnapshot, or, query, where } from "firebase/firestore";
 import { HomebrewCollectionDocument } from "types/homebrew/HomebrewCollection.type";
 import { getHomebrewCollection } from "./_getRef";
 
@@ -14,7 +14,10 @@ export function listenToHomebrewCollections(
 ) {
   const homebrewQuery = query(
     getHomebrewCollection(),
-    where("editors", "array-contains", uid)
+    or(
+      where("editors", "array-contains", uid),
+      where("viewers", "array-contains", uid)
+    )
   );
   return onSnapshot(
     homebrewQuery,

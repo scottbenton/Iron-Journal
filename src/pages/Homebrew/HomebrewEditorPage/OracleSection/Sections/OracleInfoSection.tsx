@@ -15,6 +15,7 @@ export interface OracleInfoSectionProps {
   oracleCollections: Record<string, StoredOracleCollection>;
   openCollectionDialog: () => void;
   closeCurrentOracleCollection: () => void;
+  isEditor: boolean;
 }
 
 export function OracleInfoSection(props: OracleInfoSectionProps) {
@@ -25,6 +26,7 @@ export function OracleInfoSection(props: OracleInfoSectionProps) {
     oracleCollections,
     openCollectionDialog,
     closeCurrentOracleCollection,
+    isEditor,
   } = props;
 
   const deleteOracleCollection = useStore(
@@ -67,28 +69,30 @@ export function OracleInfoSection(props: OracleInfoSectionProps) {
       <SectionHeading
         label={oracleCollection.label}
         action={
-          <>
-            <LoadingButton
-              color={"error"}
-              onClick={handleDelete}
-              loading={isDeleteLoading}
-            >
-              Delete Collection
-            </LoadingButton>
-            <Button
-              color={"inherit"}
-              onClick={() => setMoveCollectionDialogOpen(true)}
-            >
-              Move Collection
-            </Button>
-            <Button
-              color={"inherit"}
-              variant={"outlined"}
-              onClick={openCollectionDialog}
-            >
-              Edit Collection
-            </Button>
-          </>
+          isEditor && (
+            <>
+              <LoadingButton
+                color={"error"}
+                onClick={handleDelete}
+                loading={isDeleteLoading}
+              >
+                Delete Collection
+              </LoadingButton>
+              <Button
+                color={"inherit"}
+                onClick={() => setMoveCollectionDialogOpen(true)}
+              >
+                Move Collection
+              </Button>
+              <Button
+                color={"inherit"}
+                variant={"outlined"}
+                onClick={openCollectionDialog}
+              >
+                Edit Collection
+              </Button>
+            </>
+          )
         }
         floating
       />

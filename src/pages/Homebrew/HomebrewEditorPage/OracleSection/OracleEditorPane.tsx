@@ -13,6 +13,7 @@ export interface OracleEditorPaneProps {
   homebrewId: string;
   oracleCollections: Record<string, StoredOracleCollection>;
   oracleTables: Record<string, StoredOracleTable>;
+  isEditor: boolean;
 }
 
 function getBreadcrumbs(
@@ -53,7 +54,7 @@ function getBreadcrumbs(
 }
 
 export function OracleEditorPane(props: OracleEditorPaneProps) {
-  const { homebrewId, oracleCollections, oracleTables } = props;
+  const { homebrewId, oracleCollections, oracleTables, isEditor } = props;
 
   const [openCollectionId, setOpenCollectionId] = useState<string>();
   const [collectionDialogState, setCollectionDialogState] = useState<{
@@ -89,6 +90,7 @@ export function OracleEditorPane(props: OracleEditorPaneProps) {
       )}
       {openCollectionId && oracleCollections[openCollectionId] && (
         <OracleInfoSection
+          isEditor={isEditor}
           homebrewId={homebrewId}
           oracleCollectionId={openCollectionId}
           oracleCollection={oracleCollections[openCollectionId]}
@@ -105,6 +107,7 @@ export function OracleEditorPane(props: OracleEditorPaneProps) {
         />
       )}
       <OracleCollectionsSection
+        isEditor={isEditor}
         oracleCollections={oracleCollections}
         openCollectionId={openCollectionId}
         openCollection={setOpenCollectionId}
@@ -118,6 +121,10 @@ export function OracleEditorPane(props: OracleEditorPaneProps) {
           tables={oracleTables}
           parentCollectionKey={openCollectionId}
           collections={oracleCollections}
+          isEditor={isEditor}
+          ancestorIds={breadcrumbs
+            .filter((crumb) => crumb.id)
+            .map((crumb) => crumb.id ?? "")}
         />
       )}
       <OracleTablesCollectionDialog

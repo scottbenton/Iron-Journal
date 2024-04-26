@@ -6,10 +6,11 @@ import { LinearProgress } from "@mui/material";
 
 export interface MovesSectionProps {
   homebrewId: string;
+  isEditor: boolean;
 }
 
 export function MovesSection(props: MovesSectionProps) {
-  const { homebrewId } = props;
+  const { homebrewId, isEditor } = props;
 
   const moveCategories = useStore(
     (store) => store.homebrew.collections[homebrewId]?.moveCategories?.data
@@ -31,6 +32,7 @@ export function MovesSection(props: MovesSectionProps) {
           homebrewId={homebrewId}
           moves={moves}
           categories={moveCategories}
+          isEditor={isEditor}
         />
       }
     />
