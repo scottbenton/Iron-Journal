@@ -95,21 +95,28 @@ export function AssetControls(props: AssetControlsProps) {
                     }),
                   }}
                 />
-                <TextField
-                  disabled={disabled}
-                  label={`Control Type`}
-                  select
-                  fullWidth
-                  required
-                  inputProps={{
-                    defaultValue: field.type,
-                    ...register(`controls.${index}.type`),
-                  }}
-                >
-                  <MenuItem value={"conditionMeter"}>Condition Meter</MenuItem>
-                  <MenuItem value={"select"}>Select</MenuItem>
-                  <MenuItem value={"checkbox"}>Checkbox</MenuItem>
-                </TextField>
+                <Controller
+                  name={`options.${index}.type`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      disabled={disabled}
+                      label={`Control Type`}
+                      select
+                      fullWidth
+                      required
+                      value={field.value ?? ""}
+                      onChange={(evt) => field.onChange(evt.target.value)}
+                      onBlur={() => field.onBlur()}
+                    >
+                      <MenuItem value={"conditionMeter"}>
+                        Condition Meter
+                      </MenuItem>
+                      <MenuItem value={"select"}>Select</MenuItem>
+                      <MenuItem value={"checkbox"}>Checkbox</MenuItem>
+                    </TextField>
+                  )}
+                />
                 <OptionalFieldWrapper
                   control={control}
                   when={{

@@ -1,11 +1,17 @@
-import { DialogContent, Divider, Stack } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  DialogContent,
+} from "@mui/material";
 import { LinkedDialogContentTitle } from "../LinkedDialogContentTitle";
 import { useStore } from "stores/store";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
-import { OracleButton } from "components/features/charactersAndCampaigns/NewOracleSection/OracleButton";
-import { MoveRollers } from "./MoveRollers";
 import { MoveTrigger } from "./MoveTrigger";
 import { MoveOutcomes } from "./MoveOutcomes";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { MoveOracles } from "./MoveOracles";
 
 export interface NewMoveDialogContentProps {
   id: string;
@@ -36,6 +42,25 @@ export function NewMoveDialogContent(props: NewMoveDialogContentProps) {
     );
   }
 
+  const shouldShowNewView = () => {
+    if (move.trigger && move.outcomes) {
+      let hasCustomRollOptions = false;
+      move.trigger.conditions.forEach((condition) => {
+        condition.roll_options.forEach((option) => {
+          if (option.using === "custom") {
+            hasCustomRollOptions = true;
+          }
+        });
+      });
+      if (!hasCustomRollOptions) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  console.debug(move);
+
   return (
     <>
       <LinkedDialogContentTitle
@@ -47,28 +72,32 @@ export function NewMoveDialogContent(props: NewMoveDialogContentProps) {
         {move.name}
       </LinkedDialogContentTitle>
       <DialogContent>
-        {move.trigger && move.outcomes ? (
+        {shouldShowNewView() ? (
           <>
             <MoveTrigger move={move} />
             <MoveOutcomes move={move} />
+            <MoveOracles oracles={move.oracles} />
+
+            <Box>
+              <Accordion variant="outlined" sx={{ mt: 2 }}>
+                <AccordionSummary
+                  id={"move-text-header"}
+                  aria-controls={"panel-content"}
+                  expandIcon={<ExpandMoreIcon />}
+                >
+                  Original Move Text
+                </AccordionSummary>
+                <AccordionDetails>
+                  <MarkdownRenderer markdown={move.text} />
+                </AccordionDetails>
+              </Accordion>
+            </Box>
           </>
         ) : (
-          <MarkdownRenderer markdown={move.text} />
-        )}
-        <Divider sx={{ my: 4 }}>Old</Divider>
-        <MoveRollers move={move} />
-        <MarkdownRenderer markdown={move.text} />
-        {move.oracles && (
-          <Stack direction={"row"} flexWrap={"wrap"} spacing={2} mt={2}>
-            {move.oracles.map((oracleId) => (
-              <OracleButton
-                color={"inherit"}
-                variant={"outlined"}
-                key={oracleId}
-                oracleId={oracleId}
-              />
-            ))}
-          </Stack>
+          <>
+            <MarkdownRenderer markdown={move.text} />
+            <MoveOracles oracles={move.oracles} />
+          </>
         )}
       </DialogContent>
     </>

@@ -1,13 +1,13 @@
-import { Box, ButtonBase, SxProps, Typography } from "@mui/material";
+import { Box, ButtonBase, SxProps, Theme, Typography } from "@mui/material";
 import { useStore } from "stores/store";
 import { useRoller } from "stores/appState/useRoller";
 // import RollIcon from "@mui/icons-material/Casino";
 
 export interface HorizontalStatRollerProps {
   label: string;
-  value: number;
+  value?: number;
   disableRoll?: boolean;
-  sx?: SxProps;
+  sx?: SxProps<Theme>;
   moveName?: string;
 }
 
@@ -28,7 +28,8 @@ export function HorizontalStatRoller(props: HorizontalStatRollerProps) {
       sx={[
         (theme) => ({
           borderRadius: 1,
-          px: 1,
+          px: 2,
+          flexShrink: 0,
           py: 0.5,
           display: "flex",
           alignItems: "center",
@@ -37,7 +38,7 @@ export function HorizontalStatRoller(props: HorizontalStatRollerProps) {
           outlineWidth: 0,
           outlineStyle: "solid",
           bgcolor: theme.palette.mode === "light" ? "grey.200" : "grey.600",
-          minWidth: 150,
+          minWidth: value !== undefined ? 150 : undefined,
 
           transition: theme.transitions.create(
             ["background-color", "border-color", "outline-width"],
@@ -53,10 +54,12 @@ export function HorizontalStatRoller(props: HorizontalStatRollerProps) {
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
       component={ButtonBase}
-      disabled={disableRoll}
+      disabled={disableRoll || value === undefined}
       onClick={() => {
-        rollStat(label, value, moveName, adds);
-        resetAdds({ adds: 0 }).catch(() => {});
+        if (value !== undefined) {
+          rollStat(label, value, moveName, adds);
+          resetAdds({ adds: 0 }).catch(() => {});
+        }
       }}
     >
       <Box display={"flex"} alignItems={"center"}>
@@ -70,7 +73,6 @@ export function HorizontalStatRoller(props: HorizontalStatRollerProps) {
           fontFamily={(theme) => theme.fontFamilyTitle}
           id={`${label}-label`}
           sx={(theme) => ({
-            ml: 0.5,
             color: theme.palette.mode === "light" ? "grey.600" : "grey.100",
           })}
         >
@@ -80,30 +82,33 @@ export function HorizontalStatRoller(props: HorizontalStatRollerProps) {
         </Typography>
       </Box>
 
-      <Box
-        display={"flex"}
-        alignItems={"center"}
-        justifyContent={"center"}
-        minWidth={(theme) => theme.spacing(5)}
-        height={(theme) => theme.spacing(5)}
-        bgcolor={(theme) =>
-          theme.palette.mode === "light" ? "grey.600" : "grey.200"
-        }
-        color={(theme) =>
-          theme.palette.mode === "light" ? "common.white" : "grey.700"
-        }
-        borderRadius={1}
-        ml={2}
-        my={-2}
-        zIndex={1}
-      >
-        <Typography
-          variant={"h6"}
-          fontFamily={(theme) => theme.fontFamilyTitle}
+      {value !== undefined && (
+        <Box
+          display={"flex"}
+          alignItems={"center"}
+          justifyContent={"center"}
+          minWidth={(theme) => theme.spacing(5)}
+          height={(theme) => theme.spacing(5)}
+          bgcolor={(theme) =>
+            theme.palette.mode === "light" ? "grey.600" : "grey.200"
+          }
+          color={(theme) =>
+            theme.palette.mode === "light" ? "common.white" : "grey.700"
+          }
+          borderRadius={1}
+          ml={2}
+          my={-2}
+          zIndex={1}
+          mr={-1}
         >
-          {value >= 0 ? "+" : ""} {value}
-        </Typography>
-      </Box>
+          <Typography
+            variant={"h6"}
+            fontFamily={(theme) => theme.fontFamilyTitle}
+          >
+            {value >= 0 ? "+" : ""} {value}
+          </Typography>
+        </Box>
+      )}
     </ButtonBase>
   );
 }

@@ -1,14 +1,16 @@
 import { Datasworn } from "@datasworn/core";
+import { SxProps, Theme } from "@mui/material";
 import { HorizontalStatRoller } from "components/features/characters/HorizontalStatRoller";
 import { useStore } from "stores/store";
 
 export interface ActionRollTriggerProps {
   conditionRollOption: Datasworn.RollableValue;
   moveName: string;
+  sx?: SxProps<Theme>;
 }
 
 export function ActionRollTrigger(props: ActionRollTriggerProps) {
-  const { conditionRollOption, moveName } = props;
+  const { conditionRollOption, moveName, sx } = props;
   const isInCampaign = useStore(
     (store) => !!store.characters.currentCharacter.currentCharacter?.campaignId
   );
@@ -26,7 +28,9 @@ export function ActionRollTrigger(props: ActionRollTriggerProps) {
     (store) => store.campaigns.currentCampaign.currentCampaign?.conditionMeters
   );
 
-  const getConditionMeterValue = (conditionMeterKey: string): number => {
+  const getConditionMeterValue = (
+    conditionMeterKey: string
+  ): number | undefined => {
     const conditionMeter = conditionMeterRules[conditionMeterKey];
 
     if (conditionMeter.shared && isInCampaign && campaignConditionMeters) {
@@ -40,7 +44,7 @@ export function ActionRollTrigger(props: ActionRollTriggerProps) {
       );
     }
 
-    return conditionMeter.value;
+    return undefined;
   };
 
   if (conditionRollOption.using === "stat") {
@@ -48,7 +52,12 @@ export function ActionRollTrigger(props: ActionRollTriggerProps) {
       <HorizontalStatRoller
         label={conditionRollOption.stat}
         moveName={moveName}
-        value={characterStats?.[conditionRollOption.stat] ?? 0}
+        value={
+          characterStats
+            ? characterStats[conditionRollOption.stat] ?? 0
+            : undefined
+        }
+        sx={sx}
       />
     );
   } else if (conditionRollOption.using === "condition_meter") {
@@ -57,6 +66,7 @@ export function ActionRollTrigger(props: ActionRollTriggerProps) {
         label={conditionRollOption.condition_meter}
         moveName={moveName}
         value={getConditionMeterValue(conditionRollOption.condition_meter)}
+        sx={sx}
       />
     );
   }

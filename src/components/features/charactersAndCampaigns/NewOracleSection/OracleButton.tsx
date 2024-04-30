@@ -1,6 +1,7 @@
 import { Button, ButtonProps } from "@mui/material";
 import { useRoller } from "stores/appState/useRoller";
 import { useStore } from "stores/store";
+import DiceIcon from "@mui/icons-material/Casino";
 
 export interface OracleButtonProps extends ButtonProps {
   oracleId: string;
@@ -28,8 +29,9 @@ export function OracleButton(props: OracleButtonProps) {
       onClick={() =>
         rollOracleTableNew(oracleId, true, shouldOracleRollBeGMSOnly)
       }
+      endIcon={<DiceIcon />}
     >
-      {oracle.name}
+      Roll {oracle.name}
     </Button>
   );
 }

@@ -134,7 +134,7 @@ export function HomebrewEditorPage() {
         subLabel: (
           <Typography variant={"body2"}>
             You can use this homebrew in your characters and campaigns by adding
-            it to your collection
+            it to your homebrew library
           </Typography>
         ),
         actions: (
@@ -143,7 +143,7 @@ export function HomebrewEditorPage() {
             color={"inherit"}
             onClick={addSelfAsViewer}
           >
-            Add to your Collection
+            Add to your Library
           </Button>
         ),
       };
