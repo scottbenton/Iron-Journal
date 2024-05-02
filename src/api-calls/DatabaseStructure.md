@@ -20,9 +20,9 @@ D - Deprecated or soon to be deprecated
     ├── settings (HD) <"settings", SettingsDocument>
     ├── tracks <trackId, TrackDocument> // Gets converted to Track
 ├── worlds <worldId, WorldDocument> // Gets converted to World
-    ├── locations
-        ├── public
-        ├── private
+    ├── locations <locationId, LocationDocument> // Ironsworn only, gets converted to Location
+        ├── public <"notes", LocationNotesDocument>
+        ├── private <"details", GMLocationDocument>
     ├── lore
         ├── public
         ├── private

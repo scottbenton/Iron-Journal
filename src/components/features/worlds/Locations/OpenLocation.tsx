@@ -13,7 +13,7 @@ import { useConfirm } from "material-ui-confirm";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import { RtcRichTextEditor } from "components/shared/RichTextEditor/RtcRichTextEditor";
-import { LocationDocumentWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
+import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
 import { useStore } from "stores/store";
 import { useListenToCurrentLocation } from "stores/world/currentWorld/locations/useListenToCurrentLocation";
 import { BondsSection } from "components/features/worlds/BondsSection";
@@ -28,7 +28,7 @@ import { useSnackbar } from "providers/SnackbarProvider";
 export interface OpenLocationProps {
   worldId: string;
   locationId: string;
-  location: LocationDocumentWithGMProperties;
+  location: LocationWithGMProperties;
   closeLocation: () => void;
   showHiddenTag?: boolean;
   openNPCTab: () => void;

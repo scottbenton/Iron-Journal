@@ -6,12 +6,12 @@ import {
   DocumentReference,
   Timestamp,
 } from "firebase/firestore";
+import { Location } from "types/Locations.type";
 import {
-  LocationDocument,
   LocationNotesDocument,
-  StoredGMLocationDocument,
-  StoredLocation,
-} from "types/Locations.type";
+  GMLocationDocument,
+  LocationDocument,
+} from "./_locations.type";
 
 export function constructLocationsPath(worldId: string) {
   return `/worlds/${worldId}/locations`;
@@ -54,14 +54,14 @@ export function getLocationCollection(worldId: string) {
   return collection(
     firestore,
     constructLocationsPath(worldId)
-  ) as CollectionReference<StoredLocation>;
+  ) as CollectionReference<LocationDocument>;
 }
 
 export function getLocationDoc(worldId: string, locationId: string) {
   return doc(
     firestore,
     constructLocationDocPath(worldId, locationId)
-  ) as DocumentReference<StoredLocation>;
+  ) as DocumentReference<LocationDocument>;
 }
 
 export function getPrivateDetailsLocationDoc(
@@ -71,7 +71,7 @@ export function getPrivateDetailsLocationDoc(
   return doc(
     firestore,
     constructPrivateDetailsLocationDocPath(worldId, locationId)
-  ) as DocumentReference<StoredGMLocationDocument>;
+  ) as DocumentReference<GMLocationDocument>;
 }
 
 export function getPublicNotesLocationDoc(worldId: string, locationId: string) {
@@ -82,11 +82,11 @@ export function getPublicNotesLocationDoc(worldId: string, locationId: string) {
 }
 
 export function convertToDatabase(
-  location: Partial<LocationDocument>
-): Partial<StoredLocation> {
+  location: Partial<Location>
+): Partial<LocationDocument> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { updatedDate, createdDate, ...restLocation } = location;
-  const newLocation: Partial<StoredLocation> = {
+  const newLocation: Partial<LocationDocument> = {
     updatedTimestamp: Timestamp.now(),
     ...restLocation,
   };
@@ -98,9 +98,7 @@ export function convertToDatabase(
   return newLocation;
 }
 
-export function convertFromDatabase(
-  location: StoredLocation
-): LocationDocument {
+export function convertFromDatabase(location: LocationDocument): Location {
   const { updatedTimestamp, createdTimestamp, ...restLocation } = location;
   return {
     updatedDate: updatedTimestamp.toDate(),

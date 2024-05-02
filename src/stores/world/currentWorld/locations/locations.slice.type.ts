@@ -1,18 +1,14 @@
 import { Unsubscribe } from "firebase/firestore";
-import {
-  GMLocationDocument,
-  LocationDocument,
-  StoredLocation,
-} from "types/Locations.type";
+import { GMLocation, Location } from "types/Locations.type";
 
-export type LocationDocumentWithGMProperties = LocationDocument & {
-  gmProperties?: GMLocationDocument | null;
+export type LocationWithGMProperties = Location & {
+  gmProperties?: GMLocation | null;
   notes?: Uint8Array | null;
   imageUrl?: string;
 };
 
 export interface LocationsSliceData {
-  locationMap: { [key: string]: LocationDocumentWithGMProperties };
+  locationMap: { [key: string]: LocationWithGMProperties };
   loading: boolean;
   error?: string;
   openLocationId?: string;
@@ -28,7 +24,7 @@ export interface LocationsSliceActions {
   deleteLocation: (locationId: string) => Promise<void>;
   updateLocation: (
     locationId: string,
-    location: Partial<StoredLocation>
+    location: Partial<Location>
   ) => Promise<void>;
   updateLocationGMNotes: (
     locationId: string,
@@ -37,7 +33,7 @@ export interface LocationsSliceActions {
   ) => Promise<void>;
   updateLocationGMProperties: (
     locationId: string,
-    gmProperties: Partial<GMLocationDocument>
+    gmProperties: Partial<GMLocation>
   ) => Promise<void>;
   updateLocationNotes: (
     locationId: string,

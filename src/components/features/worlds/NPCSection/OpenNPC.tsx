@@ -21,7 +21,7 @@ import { useConfirm } from "material-ui-confirm";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { RtcRichTextEditor } from "components/shared/RichTextEditor/RtcRichTextEditor";
 import { NPCDocumentWithGMProperties } from "stores/world/currentWorld/npcs/npcs.slice.type";
-import { LocationDocumentWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
+import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
 import { useListenToCurrentNPC } from "stores/world/currentWorld/npcs/useListenToCurrentNPC";
 import { useStore } from "stores/store";
 import { BondsSection } from "components/features/worlds/BondsSection";
@@ -37,7 +37,7 @@ import { Difficulty } from "types/Track.type";
 export interface OpenNPCProps {
   worldId: string;
   npcId: string;
-  locations: { [key: string]: LocationDocumentWithGMProperties };
+  locations: { [key: string]: LocationWithGMProperties };
   sectors: Record<string, Sector>;
   npc: NPCDocumentWithGMProperties;
   closeNPC: () => void;

@@ -1,13 +1,13 @@
 import { Grid } from "@mui/material";
 import { NPCItem } from "./NPCItem";
 import { NPCDocumentWithGMProperties } from "stores/world/currentWorld/npcs/npcs.slice.type";
-import { LocationDocumentWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
+import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
 import { Sector } from "types/Sector.type";
 
 export interface NPCListProps {
   filteredNPCIds: string[];
   npcs: { [key: string]: NPCDocumentWithGMProperties };
-  locations: { [key: string]: LocationDocumentWithGMProperties };
+  locations: { [key: string]: LocationWithGMProperties };
   sectors: { [key: string]: Sector };
   openNPC: (npcId: string) => void;
   showHiddenTag?: boolean;

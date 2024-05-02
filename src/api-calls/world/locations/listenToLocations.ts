@@ -1,6 +1,6 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot, query, where } from "firebase/firestore";
-import { LocationDocument } from "types/Locations.type";
+import { Location } from "types/Locations.type";
 import {
   constructLocationImagePath,
   convertFromDatabase,
@@ -11,7 +11,7 @@ import { getImageUrl } from "lib/storage.lib";
 export function listenToLocations(
   worldId: string,
   isWorldOwner: boolean,
-  updateLocation: (locationId: string, location: LocationDocument) => void,
+  updateLocation: (locationId: string, location: Location) => void,
   updateLocationImage: (locationId: string, imageUrl: string) => void,
   removeLocation: (locationId: string) => void,
   onError: (error: string) => void
