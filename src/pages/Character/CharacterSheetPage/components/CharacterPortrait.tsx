@@ -19,7 +19,7 @@ export function CharacterPortrait() {
       uid={uid}
       characterId={characterId}
       name={characterName}
-      portraitSettings={characterPortraitSettings}
+      portraitSettings={characterPortraitSettings ?? undefined}
     />
   );
 }

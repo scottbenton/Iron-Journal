@@ -1,26 +1,26 @@
 import { ChipProps, Chip, Box, Menu, MenuItem } from "@mui/material";
-import { INITIATIVE_STATUS } from "types/Character.type";
 import DropdownIcon from "@mui/icons-material/ExpandMore";
 import { useState } from "react";
 import { useInitiativeStatusText } from "./useInitiativeStatusText";
+import { InitiativeStatus } from "api-calls/character/_character.type";
 
 export interface InitiativeStatusChipProps {
-  status: INITIATIVE_STATUS;
-  handleStatusChange?: (newStatus: INITIATIVE_STATUS) => void;
+  status: InitiativeStatus;
+  handleStatusChange?: (newStatus: InitiativeStatus) => void;
   variant?: "filled" | "outlined";
 }
 
-const getStatusProps = (status: INITIATIVE_STATUS): Partial<ChipProps> => {
+const getStatusProps = (status: InitiativeStatus): Partial<ChipProps> => {
   switch (status) {
-    case INITIATIVE_STATUS.HAS_INITIATIVE:
+    case InitiativeStatus.HasInitiative:
       return {
         color: "success",
       };
-    case INITIATIVE_STATUS.DOES_NOT_HAVE_INITIATIVE:
+    case InitiativeStatus.DoesNotHaveInitiative:
       return {
         color: "error",
       };
-    case INITIATIVE_STATUS.OUT_OF_COMBAT:
+    case InitiativeStatus.OutOfCombat:
       return {
         color: "primary",
       };
@@ -32,7 +32,7 @@ export function InitiativeStatusChip(props: InitiativeStatusChipProps) {
 
   const [menuParent, setMenuParent] = useState<HTMLElement>();
 
-  const onStatusChangeClick = (status: INITIATIVE_STATUS) => {
+  const onStatusChangeClick = (status: InitiativeStatus) => {
     handleStatusChange && handleStatusChange(status);
     setMenuParent(undefined);
   };
@@ -63,21 +63,21 @@ export function InitiativeStatusChip(props: InitiativeStatusChipProps) {
         onClose={() => setMenuParent(undefined)}
       >
         <MenuItem
-          onClick={() => onStatusChangeClick(INITIATIVE_STATUS.HAS_INITIATIVE)}
+          onClick={() => onStatusChangeClick(InitiativeStatus.HasInitiative)}
         >
-          {statusLabels[INITIATIVE_STATUS.HAS_INITIATIVE]}
+          {statusLabels[InitiativeStatus.HasInitiative]}
         </MenuItem>
         <MenuItem
           onClick={() =>
-            onStatusChangeClick(INITIATIVE_STATUS.DOES_NOT_HAVE_INITIATIVE)
+            onStatusChangeClick(InitiativeStatus.DoesNotHaveInitiative)
           }
         >
-          {statusLabels[INITIATIVE_STATUS.DOES_NOT_HAVE_INITIATIVE]}
+          {statusLabels[InitiativeStatus.DoesNotHaveInitiative]}
         </MenuItem>
         <MenuItem
-          onClick={() => onStatusChangeClick(INITIATIVE_STATUS.OUT_OF_COMBAT)}
+          onClick={() => onStatusChangeClick(InitiativeStatus.OutOfCombat)}
         >
-          {statusLabels[INITIATIVE_STATUS.OUT_OF_COMBAT]}
+          {statusLabels[InitiativeStatus.OutOfCombat]}
         </MenuItem>
       </Menu>
     </span>

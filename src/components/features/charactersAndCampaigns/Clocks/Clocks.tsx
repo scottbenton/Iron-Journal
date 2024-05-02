@@ -1,6 +1,6 @@
 import { Divider, Stack } from "@mui/material";
 import { useStore } from "stores/store";
-import { Clock as IClock, TRACK_STATUS, TRACK_TYPES } from "types/Track.type";
+import { Clock as IClock, TrackStatus, TrackTypes } from "types/Track.type";
 import { Clock } from "./Clock";
 import { useState } from "react";
 import { EmptyState } from "components/shared/EmptyState";
@@ -18,11 +18,11 @@ export function Clocks(props: ClocksProps) {
   const clocks = useStore((store) =>
     isCampaignSection
       ? store.campaigns.currentCampaign.tracks.trackMap[
-          isCompleted ? TRACK_STATUS.COMPLETED : TRACK_STATUS.ACTIVE
-        ][TRACK_TYPES.CLOCK]
+          isCompleted ? TrackStatus.Completed : TrackStatus.Active
+        ][TrackTypes.Clock]
       : store.characters.currentCharacter.tracks.trackMap[
-          isCompleted ? TRACK_STATUS.COMPLETED : TRACK_STATUS.ACTIVE
-        ][TRACK_TYPES.CLOCK]
+          isCompleted ? TrackStatus.Completed : TrackStatus.Active
+        ][TrackTypes.Clock]
   );
   const sortedClockIds = getSortedClockIds(clocks);
 
@@ -93,7 +93,7 @@ export function Clocks(props: ClocksProps) {
                   ? undefined
                   : () =>
                       updateClock(clockId, {
-                        status: TRACK_STATUS.COMPLETED,
+                        status: TrackStatus.Completed,
                       }).catch(() => {})
               }
               onValueChange={

@@ -4,8 +4,8 @@ import {
   getCampaignTracksCollection,
   getCharacterTracksCollection,
 } from "./_getRef";
-import { Track } from "types/Track.type";
 import { createApiFunction } from "api-calls/createApiFunction";
+import { Track } from "types/Track.type";
 
 export const addProgressTrack = createApiFunction<
   {

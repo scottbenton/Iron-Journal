@@ -1,4 +1,4 @@
-import { arrayRemove, deleteField, updateDoc } from "firebase/firestore";
+import { arrayRemove, updateDoc } from "firebase/firestore";
 import { getCharacterDoc } from "../character/_getRef";
 import { getCampaignDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
@@ -13,7 +13,7 @@ export const removeCharacterFromCampaign = createApiFunction<
       characters: arrayRemove({ characterId, uid }),
     });
     const characterPromise = updateDoc(getCharacterDoc(characterId), {
-      campaignId: deleteField(),
+      campaignId: null,
     });
 
     Promise.all([campaignPromise, characterPromise])

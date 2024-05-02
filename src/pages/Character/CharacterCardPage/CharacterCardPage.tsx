@@ -8,9 +8,9 @@ import { Roll } from "types/DieRolls.type";
 import { Unsubscribe } from "firebase/firestore";
 import { listenToMostRecentCharacterLog } from "api-calls/game-log/listenToMostRecentCharacterLog";
 import { RollCard } from "./components/RollCard";
-import { INITIATIVE_STATUS } from "types/Character.type";
 import { useSearchParams } from "react-router-dom";
 import { useInitiativeStatusText } from "components/features/characters/InitiativeStatusChip/useInitiativeStatusText";
+import { InitiativeStatus } from "api-calls/character/_character.type";
 
 export function CharacterCardPage() {
   const [params] = useSearchParams();
@@ -29,7 +29,7 @@ export function CharacterCardPage() {
     if (characterId) {
       unsubscribe = listenToMostRecentCharacterLog({
         isGM: false,
-        campaignId,
+        campaignId: campaignId ?? undefined,
         characterId,
         onRoll: (rollId, roll) => {
           setLatestRoll(roll);
@@ -103,7 +103,7 @@ export function CharacterCardPage() {
               uid={userId ?? ""}
               characterId={characterId ?? ""}
               name={character?.name}
-              portraitSettings={character?.profileImage}
+              portraitSettings={character?.profileImage ?? undefined}
               size={"huge"}
               rounded
               darkBorder
@@ -183,8 +183,7 @@ export function CharacterCardPage() {
               </Box>
 
               {character.initiativeStatus &&
-                character.initiativeStatus !==
-                  INITIATIVE_STATUS.OUT_OF_COMBAT && (
+                character.initiativeStatus !== InitiativeStatus.OutOfCombat && (
                   <Box
                     position={"absolute"}
                     display={"flex"}
@@ -194,13 +193,13 @@ export function CharacterCardPage() {
                     mt={1}
                     color={(theme) =>
                       character.initiativeStatus ===
-                      INITIATIVE_STATUS.HAS_INITIATIVE
+                      InitiativeStatus.HasInitiative
                         ? theme.palette.success.contrastText
                         : theme.palette.error.contrastText
                     }
                     bgcolor={(theme) =>
                       character.initiativeStatus ===
-                      INITIATIVE_STATUS.HAS_INITIATIVE
+                      InitiativeStatus.HasInitiative
                         ? theme.palette.success.main
                         : theme.palette.error.main
                     }

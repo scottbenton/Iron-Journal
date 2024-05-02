@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 import { ProgressTrackSection } from "../ProgressTrackSection";
-import { TRACK_TYPES } from "types/Track.type";
+import { TrackTypes } from "types/Track.type";
 import { GAME_SYSTEMS, GameSystemChooser } from "types/GameSystems.type";
 import { IronswornTracks } from "./IronswornTracks";
 import { LegacyTracks } from "./LegacyTracks";
@@ -24,17 +24,14 @@ export function TracksSection() {
   return (
     <Stack spacing={2} sx={{ pb: 2 }}>
       {showNewSpecialTracks ? <SpecialTracks /> : <Tracks />}
+      <ProgressTrackSection type={TrackTypes.Fray} typeLabel={"Combat Track"} />
       <ProgressTrackSection
-        type={TRACK_TYPES.FRAY}
-        typeLabel={"Combat Track"}
-      />
-      <ProgressTrackSection
-        type={TRACK_TYPES.VOW}
+        type={TrackTypes.Vow}
         typeLabel={"Vow"}
         showPersonalIfInCampaign
       />
       <ProgressTrackSection
-        type={TRACK_TYPES.JOURNEY}
+        type={TrackTypes.Journey}
         typeLabel={isStarforged ? "Expedition" : "Journey"}
       />
       {isStarforged && <ClockSection />}

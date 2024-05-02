@@ -1,13 +1,13 @@
 import { Button, Chip } from "@mui/material";
 import { StatComponent } from "components/features/characters/StatComponent";
 import { useRoller } from "stores/appState/useRoller";
-import { LEGACY_TRACK_TYPES } from "types/LegacyTrack.type";
+import { LEGACY_TrackTypes } from "types/LegacyTrack.type";
 
 export interface MoveStatRollerProps {
   stats: { [key: string]: number };
   companions: { health: number; name: string }[];
   vehicles: { integrity: number; name: string }[];
-  legacies: { [key in LEGACY_TRACK_TYPES]?: number };
+  legacies: { [key in LEGACY_TrackTypes]?: number };
   statName: string;
   moveName: string;
 }
@@ -69,16 +69,16 @@ export function MoveStatRoller(props: MoveStatRollerProps) {
 
   if (
     statName.toLowerCase() === "quests legacy" &&
-    legacies[LEGACY_TRACK_TYPES.QUESTS] !== undefined
+    legacies[LEGACY_TrackTypes.QUESTS] !== undefined
   ) {
     return (
       <div>
         <Button
           onClick={() =>
             rollTrackProgress(
-              LEGACY_TRACK_TYPES.QUESTS,
+              LEGACY_TrackTypes.QUESTS,
               "Quests Legacy",
-              legacies[LEGACY_TRACK_TYPES.QUESTS] ?? 0
+              legacies[LEGACY_TrackTypes.QUESTS] ?? 0
             )
           }
           color={"inherit"}
@@ -93,16 +93,16 @@ export function MoveStatRoller(props: MoveStatRollerProps) {
 
   if (
     statName.toLowerCase() === "bonds legacy" &&
-    legacies[LEGACY_TRACK_TYPES.BONDS] !== undefined
+    legacies[LEGACY_TrackTypes.BONDS] !== undefined
   ) {
     return (
       <div>
         <Button
           onClick={() =>
             rollTrackProgress(
-              LEGACY_TRACK_TYPES.BONDS,
+              LEGACY_TrackTypes.BONDS,
               "Bonds Legacy",
-              legacies[LEGACY_TRACK_TYPES.BONDS] ?? 0
+              legacies[LEGACY_TrackTypes.BONDS] ?? 0
             )
           }
           color={"inherit"}
@@ -117,16 +117,16 @@ export function MoveStatRoller(props: MoveStatRollerProps) {
 
   if (
     statName === "discoveries legacy" &&
-    legacies[LEGACY_TRACK_TYPES.DISCOVERIES] !== undefined
+    legacies[LEGACY_TrackTypes.DISCOVERIES] !== undefined
   ) {
     return (
       <div>
         <Button
           onClick={() =>
             rollTrackProgress(
-              LEGACY_TRACK_TYPES.DISCOVERIES,
+              LEGACY_TrackTypes.DISCOVERIES,
               "Discoveries Legacy",
-              legacies[LEGACY_TRACK_TYPES.DISCOVERIES] ?? 0
+              legacies[LEGACY_TrackTypes.DISCOVERIES] ?? 0
             )
           }
           color={"inherit"}

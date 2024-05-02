@@ -1,21 +1,21 @@
+import { CharacterDocument } from "api-calls/character/_character.type";
 import { Unsubscribe } from "firebase/firestore";
 import { StoredAsset } from "types/Asset.type";
-import { CharacterDocument } from "types/Character.type";
-import { ProgressTrack, TRACK_TYPES } from "types/Track.type";
+import { ProgressTrack, TrackTypes } from "types/Track.type";
 
 export interface CampaignCharactersSliceData {
-  characterMap: { [characterId: string]: CharacterDocument };
+  characterMap: Record<string, CharacterDocument>;
   characterAssets: { [characterId: string]: StoredAsset[] };
 
   characterTracks: {
     [characterId: string]: {
-      [TRACK_TYPES.FRAY]: {
+      [TrackTypes.Fray]: {
         [key: string]: ProgressTrack;
       };
-      [TRACK_TYPES.JOURNEY]: {
+      [TrackTypes.Journey]: {
         [key: string]: ProgressTrack;
       };
-      [TRACK_TYPES.VOW]: {
+      [TrackTypes.Vow]: {
         [key: string]: ProgressTrack;
       };
     };

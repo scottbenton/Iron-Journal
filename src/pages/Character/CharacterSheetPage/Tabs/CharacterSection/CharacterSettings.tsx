@@ -95,7 +95,7 @@ export function CharacterSettings() {
               position
             ).catch(() => {})
           }
-          existingPortraitSettings={portraitSettings}
+          existingPortraitSettings={portraitSettings ?? undefined}
         />
         <Button
           sx={{ mt: 2 }}

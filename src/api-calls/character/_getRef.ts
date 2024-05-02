@@ -5,7 +5,7 @@ import {
   doc,
   DocumentReference,
 } from "firebase/firestore";
-import { CharacterDocument } from "types/Character.type";
+import { CharacterDocument } from "./_character.type";
 
 export function constructCharacterCollectionPath() {
   return `/characters`;

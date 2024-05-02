@@ -1,6 +1,4 @@
 import { Box, Divider } from "@mui/material";
-import { StatsMap } from "types/Character.type";
-
 import { Stat } from "types/stats.enum";
 import { StatComponent } from "components/features/characters/StatComponent";
 import { useStore } from "stores/store";
@@ -13,7 +11,7 @@ export function StatsSection() {
   // We know character is defined at this point, hence the typecasting
   const stats = useStore(
     (store) => store.characters.currentCharacter.currentCharacter?.stats ?? {}
-  ) as StatsMap;
+  );
   const customStats = useStore((store) => store.settings.customStats);
 
   const isInCampaign = useStore(

@@ -4,7 +4,7 @@ import {
   getCampaignTracksCollection,
   getCharacterTracksCollection,
 } from "./_getRef";
-import { Track, TRACK_TYPES } from "types/Track.type";
+import { Track, TrackTypes } from "types/Track.type";
 
 export function listenToProgressTracks(
   campaignId: string | undefined,
@@ -13,7 +13,7 @@ export function listenToProgressTracks(
   addOrUpdateTracks: (tracks: { [trackId: string]: Track }) => void,
   removeTrack: (
     trackId: string,
-    trackType: TRACK_TYPES.FRAY | TRACK_TYPES.JOURNEY | TRACK_TYPES.VOW
+    trackType: TrackTypes.Fray | TrackTypes.Journey | TrackTypes.Vow
   ) => void,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onError: (error: any) => void
@@ -39,9 +39,9 @@ export function listenToProgressTracks(
           removeTrack(
             change.doc.id,
             change.doc.data().type as
-              | TRACK_TYPES.FRAY
-              | TRACK_TYPES.JOURNEY
-              | TRACK_TYPES.VOW
+              | TrackTypes.Fray
+              | TrackTypes.Journey
+              | TrackTypes.Vow
           );
         } else {
           addOrUpdateChanges[change.doc.id] = convertFromDatabase(

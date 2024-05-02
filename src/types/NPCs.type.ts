@@ -1,5 +1,5 @@
 import { Bytes, Timestamp } from "firebase/firestore";
-import { DIFFICULTY } from "./Track.type";
+import { Difficulty } from "./Track.type";
 
 export enum NPC_SPECIES {
   IRONLANDER = "ironlander",
@@ -22,7 +22,7 @@ export interface NPCDocument {
   characterBonds?: { [characterId: string]: boolean };
   characterBondProgress?: { [characterId: string]: number }; // Starforged only
 
-  rank?: DIFFICULTY; // Starforged only
+  rank?: Difficulty; // Starforged only
   callsign?: string; // Starforged only
 
   updatedDate: Date;

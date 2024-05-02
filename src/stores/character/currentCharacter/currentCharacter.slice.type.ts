@@ -1,4 +1,4 @@
-import { CharacterDocument } from "types/Character.type";
+import { CharacterDocument } from "api-calls/character/_character.type";
 import { AssetSlice } from "./assets/assets.slice.type";
 import { CharacterTracksSlice } from "./tracks/characterTracks.slice.type";
 import { UpdateData } from "firebase/firestore";

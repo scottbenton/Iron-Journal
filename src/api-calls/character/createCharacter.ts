@@ -6,7 +6,10 @@ import {
   supplyTrack,
 } from "data/defaultTracks";
 import { StoredAsset } from "types/Asset.type";
-import { CharacterDocument, StatsMap } from "types/Character.type";
+import {
+  CharacterDocument,
+  StatsMap,
+} from "api-calls/character/_character.type";
 import { getCharacterAssetCollection } from "../assets/_getRef";
 import { getCharacterCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";

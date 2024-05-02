@@ -2,7 +2,7 @@ import { Grid, Stack } from "@mui/material";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { supplyTrack } from "data/defaultTracks";
 import { Track } from "components/features/Track";
-import { TRACK_STATUS, TRACK_TYPES } from "types/Track.type";
+import { TrackStatus, TrackTypes } from "types/Track.type";
 import {
   ProgressTrack,
   ProgressTrackList,
@@ -92,24 +92,24 @@ export function TracksSection(props: TracksSectionProps) {
       )}
       <div>
         <ProgressTrackList
-          trackType={TRACK_TYPES.FRAY}
+          trackType={TrackTypes.Fray}
           typeLabel={"Shared Combat Track"}
           isCampaign
         />
         <ProgressTrackList
-          trackType={TRACK_TYPES.VOW}
+          trackType={TrackTypes.Vow}
           typeLabel={"Shared Vow"}
           isCampaign
         />
         <ProgressTrackList
-          trackType={TRACK_TYPES.JOURNEY}
+          trackType={TrackTypes.Journey}
           typeLabel={isStarforged ? "Shared Expedition" : "Shared Journey"}
           isCampaign
         />
         {Object.keys(characterTracks).map((characterId) => (
           <div key={characterId}>
             {characters[characterId] &&
-              Object.keys(characterTracks[characterId]?.[TRACK_TYPES.VOW] ?? {})
+              Object.keys(characterTracks[characterId]?.[TrackTypes.Vow] ?? {})
                 .length > 0 && (
                 <>
                   <SectionHeading
@@ -117,15 +117,15 @@ export function TracksSection(props: TracksSectionProps) {
                   />
                   <Stack mt={2} spacing={4} mb={4} px={{ xs: 2, sm: 3 }}>
                     {Object.keys(
-                      characterTracks[characterId]?.[TRACK_TYPES.VOW] ?? {}
+                      characterTracks[characterId]?.[TrackTypes.Vow] ?? {}
                     ).map((trackId, index) => {
                       const track =
-                        characterTracks[characterId][TRACK_TYPES.VOW][trackId];
+                        characterTracks[characterId][TrackTypes.Vow][trackId];
                       return (
                         <ProgressTrack
                           key={index}
                           status={track.status}
-                          trackType={TRACK_TYPES.VOW}
+                          trackType={TrackTypes.Vow}
                           label={track.label}
                           description={track.description}
                           difficulty={track.difficulty}
@@ -138,7 +138,7 @@ export function TracksSection(props: TracksSectionProps) {
                           }
                           onDelete={() =>
                             updateCharacterProgressTrack(characterId, trackId, {
-                              status: TRACK_STATUS.COMPLETED,
+                              status: TrackStatus.Completed,
                             })
                           }
                         />

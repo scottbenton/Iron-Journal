@@ -32,7 +32,7 @@ import { useWorldPermissions } from "../useWorldPermissions";
 import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { Sector } from "types/Sector.type";
-import { DIFFICULTY } from "types/Track.type";
+import { Difficulty } from "types/Track.type";
 
 export interface OpenNPCProps {
   worldId: string;
@@ -327,7 +327,7 @@ export function OpenNPC(props: OpenNPCProps) {
                   label={"Difficulty"}
                   value={npc.rank ?? "-1"}
                   onChange={(evt) =>
-                    handleUpdateNPC({ rank: evt.target.value as DIFFICULTY })
+                    handleUpdateNPC({ rank: evt.target.value as Difficulty })
                   }
                   multiline
                   required
@@ -336,13 +336,13 @@ export function OpenNPC(props: OpenNPCProps) {
                 >
                   <MenuItem value={"-1"} disabled></MenuItem>
 
-                  <MenuItem value={DIFFICULTY.TROUBLESOME}>
+                  <MenuItem value={Difficulty.Troublesome}>
                     Troublesome
                   </MenuItem>
-                  <MenuItem value={DIFFICULTY.DANGEROUS}>Dangerous</MenuItem>
-                  <MenuItem value={DIFFICULTY.FORMIDABLE}>Formidable</MenuItem>
-                  <MenuItem value={DIFFICULTY.EXTREME}>Extreme</MenuItem>
-                  <MenuItem value={DIFFICULTY.EPIC}>Epic</MenuItem>
+                  <MenuItem value={Difficulty.Dangerous}>Dangerous</MenuItem>
+                  <MenuItem value={Difficulty.Formidable}>Formidable</MenuItem>
+                  <MenuItem value={Difficulty.Extreme}>Extreme</MenuItem>
+                  <MenuItem value={Difficulty.Epic}>Epic</MenuItem>
                 </TextField>
               </Grid>
             )}

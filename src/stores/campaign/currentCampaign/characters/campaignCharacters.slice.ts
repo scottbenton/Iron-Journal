@@ -5,7 +5,7 @@ import { listenToCampaignCharacters } from "api-calls/campaign/listenToCampaignC
 import { listenToAssets } from "api-calls/assets/listenToAssets";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { listenToProgressTracks } from "api-calls/tracks/listenToProgressTracks";
-import { ProgressTrack, TRACK_STATUS, TRACK_TYPES } from "types/Track.type";
+import { ProgressTrack, TrackStatus, TrackTypes } from "types/Track.type";
 
 export const createCampaignCharactersSlice: CreateSliceType<
   CampaignCharactersSlice
@@ -69,7 +69,7 @@ export const createCampaignCharactersSlice: CreateSliceType<
       return listenToProgressTracks(
         undefined,
         characterId,
-        TRACK_STATUS.ACTIVE,
+        TrackStatus.Active,
         (tracks) => {
           set((store) => {
             if (
@@ -80,28 +80,28 @@ export const createCampaignCharactersSlice: CreateSliceType<
               store.campaigns.currentCampaign.characters.characterTracks[
                 characterId
               ] = {
-                [TRACK_TYPES.FRAY]: {},
-                [TRACK_TYPES.JOURNEY]: {},
-                [TRACK_TYPES.VOW]: {},
+                [TrackTypes.Fray]: {},
+                [TrackTypes.Journey]: {},
+                [TrackTypes.Vow]: {},
               };
             }
             Object.keys(tracks).forEach((trackId) => {
               const track = tracks[trackId];
               switch (track.type) {
-                case TRACK_TYPES.FRAY:
+                case TrackTypes.Fray:
                   store.campaigns.currentCampaign.characters.characterTracks[
                     characterId
-                  ][TRACK_TYPES.FRAY][trackId] = track as ProgressTrack;
+                  ][TrackTypes.Fray][trackId] = track as ProgressTrack;
                   break;
-                case TRACK_TYPES.JOURNEY:
+                case TrackTypes.Journey:
                   store.campaigns.currentCampaign.characters.characterTracks[
                     characterId
-                  ][TRACK_TYPES.JOURNEY][trackId] = track as ProgressTrack;
+                  ][TrackTypes.Journey][trackId] = track as ProgressTrack;
                   break;
-                case TRACK_TYPES.VOW:
+                case TrackTypes.Vow:
                   store.campaigns.currentCampaign.characters.characterTracks[
                     characterId
-                  ][TRACK_TYPES.VOW][trackId] = track as ProgressTrack;
+                  ][TrackTypes.Vow][trackId] = track as ProgressTrack;
                   break;
                 default:
                   break;

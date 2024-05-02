@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-import { StatsMap } from "types/Character.type";
 
 import { STATS } from "types/stats.enum";
 import { StatComponent } from "components/features/characters/StatComponent";
@@ -21,7 +20,7 @@ export function StatsSectionMobile() {
   // We know character is defined at this point, hence the typecasting
   const stats = useStore(
     (store) => store.characters.currentCharacter.currentCharacter?.stats
-  ) as StatsMap;
+  );
   const customStats = useStore((store) => store.settings.customStats);
 
   const adds = useStore(
@@ -49,7 +48,7 @@ export function StatsSectionMobile() {
               <StatComponent
                 key={statKey}
                 label={ruleStats[statKey].label}
-                value={stats[statKey] ?? 0}
+                value={stats?.[statKey] ?? 0}
                 sx={{ width: 54 }}
               />
             ))}
@@ -60,7 +59,7 @@ export function StatsSectionMobile() {
               <StatComponent
                 key={stat}
                 label={stat}
-                value={stats[stat]}
+                value={stats?.[stat] ?? 0}
                 sx={{ width: 54 }}
               />
             ))}
