@@ -1,6 +1,6 @@
 import { Button, Menu, MenuItem } from "@mui/material";
 import { useState } from "react";
-import { StoredCampaign } from "types/Campaign.type";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import MoreIcon from "@mui/icons-material/MoreHoriz";
 import { useConfirm } from "material-ui-confirm";
 import { useNavigate } from "react-router-dom";
@@ -8,7 +8,7 @@ import { CAMPAIGN_ROUTES, constructCampaignPath } from "pages/Campaign/routes";
 import { useStore } from "stores/store";
 
 export interface CampaignActionsMenuProps {
-  campaign: StoredCampaign;
+  campaign: CampaignDocument;
 }
 
 export function CampaignActionsMenu(props: CampaignActionsMenuProps) {

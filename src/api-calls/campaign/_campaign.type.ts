@@ -1,6 +1,6 @@
-import { LegacyTrack } from "./LegacyTrack.type";
+import { LegacyTrack } from "types/LegacyTrack.type";
 
-export interface StoredCampaign {
+export interface CampaignDocument {
   name: string;
   users: string[];
   characters: { uid: string; characterId: string }[];

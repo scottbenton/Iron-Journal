@@ -10,14 +10,14 @@ import {
 import { PageContent, PageHeader } from "components/shared/Layout";
 import { Head } from "providers/HeadProvider/Head";
 import { useStore } from "stores/store";
-import { StoredCampaign } from "types/Campaign.type";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { useAppName } from "hooks/useAppName";
 
 export function CampaignJoinPage() {
   const { campaignId } = useParams();
   const uid = useStore((store) => store.auth.uid);
 
-  const [campaign, setCampaign] = useState<StoredCampaign>();
+  const [campaign, setCampaign] = useState<CampaignDocument>();
   const getCampaign = useStore((store) => store.campaigns.getCampaign);
   const [getCampaignLoading, setGetCampaignLoading] = useState(true);
   const [getCampaignError, setGetCampaignError] = useState<string>();

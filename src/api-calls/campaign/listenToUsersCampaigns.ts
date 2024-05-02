@@ -1,11 +1,11 @@
 import { onSnapshot, query, where } from "firebase/firestore";
-import { StoredCampaign } from "types/Campaign.type";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { getCampaignCollection } from "./_getRef";
 
 export function listenToUsersCampaigns(
   uid: string,
   dataHandler: {
-    onDocChange: (id: string, data: StoredCampaign) => void;
+    onDocChange: (id: string, data: CampaignDocument) => void;
     onDocRemove: (id: string) => void;
     onLoaded: () => void;
   },

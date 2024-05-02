@@ -1,6 +1,6 @@
 import { addDoc } from "firebase/firestore";
 import { supplyTrack } from "../../data/defaultTracks";
-import { StoredCampaign } from "../../types/Campaign.type";
+import { CampaignDocument } from "../../api-calls/campaign/_campaign.type";
 import { getCampaignCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
@@ -10,7 +10,7 @@ export const createCampaign = createApiFunction<
 >((params) => {
   const { uid, campaignName } = params;
   return new Promise((resolve, reject) => {
-    const storedCampaign: StoredCampaign = {
+    const storedCampaign: CampaignDocument = {
       name: campaignName,
       users: [uid],
       characters: [],

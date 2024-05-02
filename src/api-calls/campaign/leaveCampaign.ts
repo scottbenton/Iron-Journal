@@ -1,12 +1,12 @@
 import { arrayRemove, updateDoc } from "firebase/firestore";
-import { StoredCampaign } from "types/Campaign.type";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { getCampaignDoc } from "./_getRef";
 import { updateCampaignGM } from "./updateCampaignGM";
 import { removeCharacterFromCampaign } from "./removeCharacterFromCampaign";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const leaveCampaign = createApiFunction<
-  { uid: string; campaignId: string; campaign: StoredCampaign },
+  { uid: string; campaignId: string; campaign: CampaignDocument },
   void
 >(async (params) => {
   const { uid, campaignId, campaign } = params;

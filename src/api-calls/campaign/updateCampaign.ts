@@ -1,12 +1,12 @@
 import { UpdateData, updateDoc } from "firebase/firestore";
 import { getCampaignDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { StoredCampaign } from "types/Campaign.type";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 
 export const updateCampaign = createApiFunction<
   {
     campaignId: string;
-    campaign: UpdateData<StoredCampaign>;
+    campaign: UpdateData<CampaignDocument>;
   },
   void
 >((params) => {

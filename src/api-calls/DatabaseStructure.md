@@ -10,16 +10,16 @@ D - Deprecated or soon to be deprecated
     ├── game-log <logId, GameLogDocument> // Gets converted to Roll
     ├── notes <noteId, NoteDocument>
         ├── content (H) <"content", NoteContentDocument>
-    ├── settings (HD) <"settings", Settings>
+    ├── settings (HD) <"settings", SettingsDocument>
     ├── tracks <trackId, TrackDocument> // Gets converted to Track
-├── campaigns <campaignId, Campaign>
+├── campaigns <campaignId, CampaignDocument>
     ├── assets <assetId, AssetDocument>
     ├── game-log <logId, GameLogDocument> // Gets converted to Roll
     ├── notes <noteId, NoteDocument>
         ├── content (H) <"content", NoteContentDocument>
-    ├── settings (HD) <"settings", Settings>
+    ├── settings (HD) <"settings", SettingsDocument>
     ├── tracks <trackId, TrackDocument> // Gets converted to Track
-├── worlds
+├── worlds <worldId, WorldDocument> // Gets converted to World
     ├── locations
         ├── public
         ├── private
@@ -54,14 +54,17 @@ D - Deprecated or soon to be deprecated
 
 ## Type Links
 
-| Type                | File                                               |
-| ------------------- | -------------------------------------------------- |
-| CharacterDocument   | [\_character.type](./character/_character.type.ts) |
-| TrackDocument       | [\_track.type](./tracks/_track.type.ts)            |
-| AssetDocument       | [\_asset.type](./assets/_asset.type.ts)            |
-| GameLogDocument     | [\_game-log.type](./game-log/_game-log.type.ts)    |
-| NoteDocument        | [\_notes.type](./notes/_notes.type.ts)             |
-| NoteContentDocument | [\_notes.type](./notes/_notes.type.ts)             |
+| Type                | File                                                                                  |
+| ------------------- | ------------------------------------------------------------------------------------- |
+| CharacterDocument   | [\_character.type](./character/_character.type.ts)                                    |
+| CampaignDocument    | [\_campaign.type](./campaign/_campaign.type.ts)                                       |
+| TrackDocument       | [\_track.type](./tracks/_track.type.ts)                                               |
+| AssetDocument       | [\_asset.type](./assets/_asset.type.ts)                                               |
+| GameLogDocument     | [\_game-log.type](./game-log/_game-log.type.ts)                                       |
+| NoteDocument        | [\_notes.type](./notes/_notes.type.ts)                                                |
+| NoteContentDocument | [\_notes.type](./notes/_notes.type.ts)                                                |
+| SettingsDocument    | [\_settings.type](./character-campaign-settings/_character-campaign-settings.type.ts) |
+| WorldDocument       | [\_world.type](./world/_world.type.ts)                                                |
 
 ---
 
