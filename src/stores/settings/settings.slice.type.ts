@@ -2,7 +2,7 @@ import { Unsubscribe } from "firebase/firestore";
 import { CustomTrack } from "types/CustomTrackSettings.type";
 import { StoredMove } from "types/Moves.type";
 import { StoredOracle } from "types/Oracles.type";
-import { SettingsDoc } from "types/Settings.type";
+import { SettingsDocument } from "api-calls/character-campaign-settings/_character-campaign-settings.type";
 
 export interface SettingsSliceData {
   customStats: string[];
@@ -53,7 +53,7 @@ export interface SettingsSliceActions {
   togglePinnedOracle: (oracleId: string, pinned: boolean) => Promise<void>;
 
   updateSettings: (
-    settings: Partial<SettingsDoc>,
+    settings: Partial<SettingsDocument>,
     useUpdate?: boolean
   ) => Promise<void>;
 

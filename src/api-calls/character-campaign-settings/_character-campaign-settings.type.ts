@@ -1,5 +1,6 @@
-import { CustomTrack } from "./CustomTrackSettings.type";
+import { CustomTrack } from "types/CustomTrackSettings.type";
 
+// Will be deprecated in favor of the new Homebrew Content Management
 export interface OracleAndMoveVisibilitySettings {
   hiddenCustomOraclesIds: string[];
   hiddenCustomMoveIds: string[];
@@ -7,7 +8,7 @@ export interface OracleAndMoveVisibilitySettings {
   hideDelveOracles?: boolean;
 }
 
-export interface SettingsDoc extends OracleAndMoveVisibilitySettings {
+export interface SettingsDocument extends OracleAndMoveVisibilitySettings {
   customStats: string[];
   customTracks: { [key: string]: CustomTrack };
 }

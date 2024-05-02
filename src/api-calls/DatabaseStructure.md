@@ -1,20 +1,24 @@
 # Database Structure
 
 ```
+// Comment note meaning
+H - Hardcoded document name (not auto-id'd)
+D - Deprecated or soon to be deprecated
+
 ├── characters <characterId, CharacterDocument>
     ├── assets <assetId, AssetDocument>
-    ├── game-log <logId, GameLogDocument (gets converted to Roll)>
+    ├── game-log <logId, GameLogDocument> // Gets converted to Roll
     ├── notes <noteId, NoteDocument>
-        ├── content <"content", NoteContentDocument> // <-- Hardcoded subcollection name
-    ├── settings
-    ├── tracks <trackId, TrackDocument (gets converted to Track)>
+        ├── content (H) <"content", NoteContentDocument>
+    ├── settings (HD) <"settings", Settings>
+    ├── tracks <trackId, TrackDocument> // Gets converted to Track
 ├── campaigns <campaignId, Campaign>
     ├── assets <assetId, AssetDocument>
-    ├── game-log <logId, GameLogDocument (gets converted to Roll)>
+    ├── game-log <logId, GameLogDocument> // Gets converted to Roll
     ├── notes <noteId, NoteDocument>
-        ├── content <"content", NoteContentDocument> // <-- Hardcoded subcollection name
-    ├── settings
-    ├── tracks <trackId, TrackDocument (gets converted to Track)>
+        ├── content (H) <"content", NoteContentDocument>
+    ├── settings (HD) <"settings", Settings>
+    ├── tracks <trackId, TrackDocument> // Gets converted to Track
 ├── worlds
     ├── locations
         ├── public

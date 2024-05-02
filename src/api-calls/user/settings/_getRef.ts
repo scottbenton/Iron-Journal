@@ -1,26 +1,10 @@
 import { firestore } from "config/firebase.config";
-import {
-  CollectionReference,
-  DocumentReference,
-  collection,
-  doc,
-} from "firebase/firestore";
+import { DocumentReference, doc } from "firebase/firestore";
 import { IAccessibilitySettings } from "types/UserAccessibilitySettings.type";
-
-export function constructUserSettingsCollectionPath(userId: string) {
-  return `/users/${userId}/settings`;
-}
+import { OracleSettings } from "types/UserOracleSettings.type";
 
 export function constructUserAccessibilitySettingsDocPath(userId: string) {
   return `/users/${userId}/settings/accessibility`;
-}
-
-export function getUserSettingsCollectionRef(userId: string) {
-  return collection(
-    firestore,
-    constructUserSettingsCollectionPath(userId)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ) as CollectionReference<any>;
 }
 
 export function getUserAccessibilitySettingsDoc(userId: string) {
@@ -28,4 +12,15 @@ export function getUserAccessibilitySettingsDoc(userId: string) {
     firestore,
     constructUserAccessibilitySettingsDocPath(userId)
   ) as DocumentReference<IAccessibilitySettings>;
+}
+
+export function constructUserOracleSettingsDocPath(userId: string) {
+  return `/users/${userId}/settings/oracle`;
+}
+
+export function getUserOracleSettingsDoc(userId: string) {
+  return doc(
+    firestore,
+    constructUserOracleSettingsDocPath(userId)
+  ) as DocumentReference<OracleSettings>;
 }

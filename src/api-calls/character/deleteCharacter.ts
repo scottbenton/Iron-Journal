@@ -3,7 +3,7 @@ import { removeCharacterFromCampaign } from "api-calls/campaign/removeCharacterF
 import { firebaseAuth } from "config/firebase.config";
 import { deleteDoc } from "firebase/firestore";
 import { deleteNotes } from "api-calls/notes/deleteNotes";
-import { getCharacterSettingsDoc } from "api-calls/custom-move-oracle-settings/_getRef";
+import { getCharacterSettingsDoc } from "api-calls/character-campaign-settings/_getRef";
 import {
   constructCharacterPortraitFolderPath,
   getCharacterDoc,
