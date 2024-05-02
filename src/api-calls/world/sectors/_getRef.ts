@@ -6,7 +6,7 @@ import {
   DocumentReference,
   Timestamp,
 } from "firebase/firestore";
-import { NoteContentDocument } from "types/Notes.type";
+import { NoteContentDocument } from "api-calls/notes/_notes.type";
 import { Sector, StoredSector } from "types/Sector.type";
 
 export function constructSectorsPath(worldId: string) {

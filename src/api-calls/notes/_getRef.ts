@@ -5,7 +5,7 @@ import {
   doc,
   DocumentReference,
 } from "firebase/firestore";
-import { NoteContentDocument, NoteDocument } from "types/Notes.type";
+import { NoteContentDocument, NoteDocument } from "./_notes.type";
 
 export function constructCampaignNoteCollectionPath(campaignId: string) {
   return `/campaigns/${campaignId}/notes`;

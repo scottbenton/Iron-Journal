@@ -8,7 +8,6 @@ import {
   where,
 } from "firebase/firestore";
 import {
-  DatabaseLog,
   convertFromDatabase,
   getCampaignGameLogCollection,
   getCharacterGameLogCollection,
@@ -56,9 +55,7 @@ export function listenToLogs(params: {
     (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added" || change.type === "modified") {
-          const doc = convertFromDatabase(
-            change.doc.data() as unknown as DatabaseLog
-          );
+          const doc = convertFromDatabase(change.doc.data());
           updateLog(change.doc.id, doc);
         } else if (change.type === "removed") {
           removeLog(change.doc.id);

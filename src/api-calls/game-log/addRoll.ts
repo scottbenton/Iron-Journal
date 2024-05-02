@@ -2,6 +2,7 @@ import { createApiFunction } from "api-calls/createApiFunction";
 import { addDoc } from "firebase/firestore";
 import { Roll } from "types/DieRolls.type";
 import {
+  convertRollToGameLogDocument,
   getCampaignGameLogCollection,
   getCharacterGameLogCollection,
 } from "./_getRef";
@@ -21,7 +22,7 @@ export const addRoll = createApiFunction<
       campaignId
         ? getCampaignGameLogCollection(campaignId)
         : getCharacterGameLogCollection(characterId as string),
-      roll
+      convertRollToGameLogDocument(roll)
     )
       .then((doc) => {
         resolve(doc.id);

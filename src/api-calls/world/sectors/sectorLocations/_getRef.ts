@@ -6,7 +6,7 @@ import {
   DocumentReference,
 } from "firebase/firestore";
 import { StarforgedLocation } from "types/LocationStarforged.type";
-import { NoteContentDocument } from "types/Notes.type";
+import { NoteContentDocument } from "api-calls/notes/_notes.type";
 
 export function constructSectorLocationsPath(
   worldId: string,
