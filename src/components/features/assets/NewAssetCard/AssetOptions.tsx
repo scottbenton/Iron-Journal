@@ -1,11 +1,11 @@
 import { Datasworn } from "@datasworn/core";
 import { AssetOption } from "./AssetOption";
 import { Stack } from "@mui/material";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 
 export interface AssetOptionsProps {
   asset: Datasworn.Asset;
-  storedAsset?: StoredAsset;
+  storedAsset?: AssetDocument;
 
   onAssetOptionChange?: (assetOptionKey: string, value: string) => void;
 }

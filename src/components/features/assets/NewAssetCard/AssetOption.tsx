@@ -1,10 +1,10 @@
 import { Datasworn } from "@datasworn/core";
 import { ListSubheader, MenuItem, TextField, capitalize } from "@mui/material";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 
 export interface AssetOptionProps {
   assetOptionKey: string;
-  storedAsset?: StoredAsset;
+  storedAsset?: AssetDocument;
   assetOption: Datasworn.AssetOptionField;
   onAssetOptionChange?: (assetOptionKey: string, value: string) => void;
 }

@@ -5,7 +5,7 @@ import { useGameSystem } from "hooks/useGameSystem";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { useConfirm } from "material-ui-confirm";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import { useState } from "react";
 import { AssetCardDialog as OldAssetCardDialog } from "components/features/assets/AssetCardDialog";
 import { AssetCardDialog } from "components/features/assets/NewAssetCardDialog";
@@ -72,7 +72,7 @@ export function CharacterSection() {
 
   const [isAssetDialogOpen, setIsAssetDialogOpen] = useState(false);
 
-  const handleAssetAdd = (asset: StoredAsset) => {
+  const handleAssetAdd = (asset: AssetDocument) => {
     setAddAssetLoading(true);
     addSharedAsset(asset)
       .catch(() => {})

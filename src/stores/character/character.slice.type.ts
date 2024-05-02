@@ -1,5 +1,5 @@
 import { Unsubscribe } from "firebase/firestore";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import { CurrentCharacterSlice } from "./currentCharacter/currentCharacter.slice.type";
 import {
   CharacterDocument,
@@ -21,7 +21,7 @@ export interface CharacterSliceActions {
   createCharacter: (
     name: string,
     stats: StatsMap,
-    assets: StoredAsset[],
+    assets: AssetDocument[],
     portrait?: {
       image: File | string;
       scale: number;

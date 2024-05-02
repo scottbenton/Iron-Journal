@@ -4,7 +4,7 @@ import { AssetCard as OldAssetCard } from "components/features/assets/AssetCard"
 import { AssetCard } from "components/features/assets/NewAssetCard";
 import { AssetCardDialog as OldAssetCardDialog } from "components/features/assets/AssetCardDialog";
 import { AssetCardDialog } from "components/features/assets/NewAssetCardDialog";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import { useConfirm } from "material-ui-confirm";
 import { useStore } from "stores/store";
 import { SectionHeading } from "components/shared/SectionHeading";
@@ -100,7 +100,7 @@ export function AssetsSection() {
     addToCampaign?: boolean;
   }>({ open: false });
 
-  const handleAssetAdd = (asset: StoredAsset) => {
+  const handleAssetAdd = (asset: AssetDocument) => {
     const shouldAddToCampaign = isAssetDialogOpen.addToCampaign;
     setAddAssetLoading(true);
     const promise = shouldAddToCampaign

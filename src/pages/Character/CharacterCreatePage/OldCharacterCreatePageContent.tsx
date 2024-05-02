@@ -2,7 +2,7 @@ import { Alert, Box, Button } from "@mui/material";
 import { Formik } from "formik";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { SectionHeading } from "components/shared/SectionHeading";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import { Stat } from "types/stats.enum";
 import { AssetsSection } from "./old-components/AssetsSection";
 import { StatsField } from "./old-components/StatsField";
@@ -28,7 +28,7 @@ import { StatsMap } from "api-calls/character/_character.type";
 type CharacterCreateFormValues = {
   name: string;
   stats: { [key in Stat]: number | undefined };
-  assets: StoredAsset[];
+  assets: AssetDocument[];
   portrait?: {
     image: File | string;
     scale: number;

@@ -14,7 +14,7 @@ const DEFAULT_SOURCE: Datasworn.SourceInfo = {
   license: License.None,
 };
 
-export function convertStoredAssetsToCollections(
+export function convertHomebrewAssetDocumentsToCollections(
   homebrewId: string,
   storedCollections: Record<string, StoredHomebrewAssetCollection>,
   storedAssets: Record<string, StoredHomebrewAsset>
@@ -36,7 +36,7 @@ export function convertStoredAssetsToCollections(
 
   Object.keys(storedAssets).forEach((assetId) => {
     const asset = storedAssets[assetId];
-    const convertedAsset = convertStoredAsset(
+    const convertedAsset = convertAssetDocument(
       homebrewId,
       assetId,
       asset,
@@ -55,7 +55,7 @@ export function convertStoredAssetsToCollections(
   return collections;
 }
 
-function convertStoredAsset(
+function convertAssetDocument(
   homebrewId: string,
   assetId: string,
   asset: StoredHomebrewAsset,

@@ -10,12 +10,12 @@ import {
 } from "@mui/material";
 import { Track } from "components/features/Track";
 import { AssetControls } from "./AssetControls";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 
 export interface AssetControlProps {
   controlId: string;
   control: Datasworn.AssetControlField;
-  storedAsset?: StoredAsset;
+  storedAsset?: AssetDocument;
   onControlChange?: (
     controlKey: string,
     value: boolean | string | number

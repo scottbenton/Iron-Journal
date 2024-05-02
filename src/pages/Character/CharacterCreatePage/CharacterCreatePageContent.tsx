@@ -9,7 +9,7 @@ import { CharacterDetails } from "./components/CharacterDetails";
 import { ExpansionsAndHomebrew } from "./components/ExpansionsAndHomebrew";
 import { Stats } from "./components/Stats";
 import { Assets } from "./components/Assets";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import { Box, Button } from "@mui/material";
 import { useStore } from "stores/store";
 import { addCharacterToCampaign } from "api-calls/campaign/addCharacterToCampaign";
@@ -31,7 +31,7 @@ export interface Form {
   };
   enabledExpansionMap: Record<string, boolean>;
   stats: Record<string, number>;
-  assets: StoredAsset[];
+  assets: AssetDocument[];
 }
 
 export function CharacterCreatePageContent() {

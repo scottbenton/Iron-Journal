@@ -5,7 +5,7 @@ import {
   spiritTrack,
   supplyTrack,
 } from "data/defaultTracks";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import {
   CharacterDocument,
   StatsMap,
@@ -19,7 +19,7 @@ export const createCharacter = createApiFunction<
     uid: string;
     name: string;
     stats: StatsMap;
-    assets: StoredAsset[];
+    assets: AssetDocument[];
     expansionIds?: string[];
   },
   string

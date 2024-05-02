@@ -53,7 +53,7 @@ import { createHomebrewAsset } from "api-calls/homebrew/assets/assets/createHome
 import { updateHomebrewAsset } from "api-calls/homebrew/assets/assets/updateHomebrewAsset";
 import { listenToHomebrewAssetCollections } from "api-calls/homebrew/assets/collections/listenToHomebrewAssetCollections";
 import { listenToHomebrewAssets } from "api-calls/homebrew/assets/assets/listenToHomebrewAssets";
-import { convertStoredAssetsToCollections } from "functions/convertStoredAssetsToCollections";
+import { convertHomebrewAssetDocumentsToCollections } from "functions/convertHomebrewAssetDocumentsToCollections";
 import { listenToHomebrewNonLinearMeters } from "api-calls/homebrew/rules/nonLinearMeters/listenToHomebrewNonLinearMeters";
 import { createHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/createHomebrewNonLinearMeter";
 import { updateHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/updateHomebrewNonLinearMeter";
@@ -633,7 +633,7 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
     const assets = homebrewCollection?.assets?.data;
 
     if (assetCollections && assets) {
-      const collections = convertStoredAssetsToCollections(
+      const collections = convertHomebrewAssetDocumentsToCollections(
         homebrewId,
         assetCollections,
         assets

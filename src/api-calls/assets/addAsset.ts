@@ -3,13 +3,13 @@ import {
   getCampaignAssetCollection,
   getCharacterAssetCollection,
 } from "./_getRef";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 interface AddAssetParams {
   campaignId?: string;
   characterId?: string;
-  asset: StoredAsset;
+  asset: AssetDocument;
 }
 
 export const addAsset = createApiFunction<AddAssetParams, void>((params) => {

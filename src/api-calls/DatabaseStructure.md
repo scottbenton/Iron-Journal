@@ -1,16 +1,16 @@
 ```
 ├── characters <characterId, CharacterDocument>
-    ├── tracks <trackId, TrackDocument>
-    ├── assets
-    ├── notes
+    ├── assets <assetId, AssetDocument>
     ├── game-log
+    ├── notes
     ├── settings
+    ├── tracks <trackId, TrackDocument (gets converted to Track)>
 ├── campaigns <campaignId, Campaign>
-    ├── tracks <trackId, Track>
-    ├── assets
-    ├── notes
+    ├── assets <assetId, AssetDocument>
     ├── game-log
+    ├── notes
     ├── settings
+    ├── tracks <trackId, TrackDocument (gets converted to Track)>
 ├── worlds
     ├── locations
         ├── public
@@ -39,11 +39,13 @@
     ├── oracle_tables
     ├── stats
 ├── users
-    ├── settings
     ├── custom-moves
     ├── custom-oracles
+    ├── settings
 ```
 
 | Type              | File                                               |
 | ----------------- | -------------------------------------------------- |
 | CharacterDocument | [\_character.type](./character/_character.type.ts) |
+| TrackDocument     | [\_track.type](./tracks/_track.type.ts)            |
+| AssetDocument     | [\_asset.type](./assets//_asset.type.ts)           |

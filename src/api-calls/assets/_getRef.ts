@@ -5,7 +5,7 @@ import {
   doc,
   DocumentReference,
 } from "firebase/firestore";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 
 export function constructCharacterAssetCollectionPath(characterId: string) {
   return `/characters/${characterId}/assets`;
@@ -33,26 +33,26 @@ export function getCharacterAssetCollection(characterId: string) {
   return collection(
     firestore,
     constructCharacterAssetCollectionPath(characterId)
-  ) as CollectionReference<StoredAsset>;
+  ) as CollectionReference<AssetDocument>;
 }
 
 export function getCharacterAssetDoc(characterId: string, assetId: string) {
   return doc(
     firestore,
     constructCharacterAssetDocPath(characterId, assetId)
-  ) as DocumentReference<StoredAsset>;
+  ) as DocumentReference<AssetDocument>;
 }
 
 export function getCampaignAssetCollection(campaignId: string) {
   return collection(
     firestore,
     constructCampaignAssetCollectionPath(campaignId)
-  ) as CollectionReference<StoredAsset>;
+  ) as CollectionReference<AssetDocument>;
 }
 
 export function getCampaignAssetDoc(campaignId: string, assetId: string) {
   return doc(
     firestore,
     constructCampaignAssetDocPath(campaignId, assetId)
-  ) as DocumentReference<StoredAsset>;
+  ) as DocumentReference<AssetDocument>;
 }
