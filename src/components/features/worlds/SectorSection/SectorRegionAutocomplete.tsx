@@ -1,6 +1,6 @@
 import { Autocomplete, TextField } from "@mui/material";
 import { useStore } from "stores/store";
-import { REGIONS } from "types/Sector.type";
+import { Regions } from "types/Sector.type";
 
 export interface SectorRegionAutocompleteProps {}
 
@@ -20,10 +20,10 @@ export function SectorRegionAutocomplete() {
 
   const allRegions = useStore((store) => {
     const regions = new Set<string>();
-    regions.add(REGIONS.TERMINUS);
-    regions.add(REGIONS.OUTLANDS);
-    regions.add(REGIONS.EXPANSE);
-    regions.add(REGIONS.VOID);
+    regions.add(Regions.Terminus);
+    regions.add(Regions.Outlands);
+    regions.add(Regions.Expanse);
+    regions.add(Regions.Void);
     Object.values(
       store.worlds.currentWorld.currentWorldSectors.sectors
     ).forEach((sector) => {

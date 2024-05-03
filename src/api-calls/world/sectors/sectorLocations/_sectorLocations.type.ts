@@ -1,18 +1,18 @@
-import { SECTOR_HEX_TYPES } from "./Sector.type";
+import { SectorHexTypes } from "types/Sector.type";
 
 export interface BaseStarforgedLocation {
   name: string;
-  type: SECTOR_HEX_TYPES;
+  type: SectorHexTypes;
   imageFilenames?: string[];
 }
 
 export interface StarforgedLocationStar extends BaseStarforgedLocation {
-  type: SECTOR_HEX_TYPES.STAR;
+  type: SectorHexTypes.Star;
   description?: string;
 }
 
 export interface StarforgedLocationPlanet extends BaseStarforgedLocation {
-  type: SECTOR_HEX_TYPES.PLANET;
+  type: SectorHexTypes.Planet;
   planetClassName?: string;
   subType: string;
   description?: string;
@@ -24,7 +24,7 @@ export interface StarforgedLocationPlanet extends BaseStarforgedLocation {
 }
 
 export interface StarforgedLocationSettlement extends BaseStarforgedLocation {
-  type: SECTOR_HEX_TYPES.SETTLEMENT;
+  type: SectorHexTypes.Settlement;
   location?: string;
   firstLook?: string;
   initialContact?: string;
@@ -35,7 +35,7 @@ export interface StarforgedLocationSettlement extends BaseStarforgedLocation {
 }
 
 export interface StarforgedLocationDerelict extends BaseStarforgedLocation {
-  type: SECTOR_HEX_TYPES.DERELICT;
+  type: SectorHexTypes.Derelict;
   location?: string;
   subType?: string;
   condition?: string;
@@ -44,7 +44,7 @@ export interface StarforgedLocationDerelict extends BaseStarforgedLocation {
 }
 
 export interface StarforgedLocationVault extends BaseStarforgedLocation {
-  type: SECTOR_HEX_TYPES.VAULT;
+  type: SectorHexTypes.Vault;
   location?: string;
   scale?: string;
   form?: string;
@@ -62,10 +62,10 @@ export interface StarforgedLocationVault extends BaseStarforgedLocation {
 }
 
 export interface StarforgedLocationOther extends BaseStarforgedLocation {
-  type: SECTOR_HEX_TYPES.OTHER;
+  type: SectorHexTypes.Other;
 }
 
-export type StarforgedLocation =
+export type SectorLocationDocument =
   | StarforgedLocationStar
   | StarforgedLocationPlanet
   | StarforgedLocationDerelict

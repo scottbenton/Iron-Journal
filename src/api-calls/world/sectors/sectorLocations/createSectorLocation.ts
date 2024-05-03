@@ -1,13 +1,13 @@
 import { addDoc } from "firebase/firestore";
 import { getSectorLocationsCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { StarforgedLocation } from "types/LocationStarforged.type";
+import { SectorLocationDocument } from "api-calls/world/sectors/sectorLocations/_sectorLocations.type";
 
 export const createSectorLocation = createApiFunction<
   {
     worldId: string;
     sectorId: string;
-    location: StarforgedLocation;
+    location: SectorLocationDocument;
   },
   string
 >((params) => {

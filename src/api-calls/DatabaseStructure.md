@@ -1,7 +1,7 @@
 # Database Structure
 
 ```
-// Comment note meaning
+// Note meaning
 H - Hardcoded document name (not auto-id'd)
 D - Deprecated or soon to be deprecated
 
@@ -21,21 +21,22 @@ D - Deprecated or soon to be deprecated
     ├── tracks <trackId, TrackDocument> // Gets converted to Track
 ├── worlds <worldId, WorldDocument> // Gets converted to World
     ├── locations <locationId, LocationDocument> // Ironsworn only, gets converted to Location
-        ├── public <"notes", LocationNotesDocument>
-        ├── private <"details", GMLocationDocument>
-    ├── lore
-        ├── public
-        ├── private
-    ├── npcs
-        ├── public
-        ├── private
-    ├── sectors
-        ├── public
-        ├── private
+        ├── public (H) <"notes", LocationNotesDocument>
+        ├── private (H) <"details", GMLocationDocument>
+    ├── lore <loreId, LoreDocument> // Gets converted to Lore
+        ├── public (H) <"notes", LoreNotesDocument>
+        ├── private (H) <"details", GMLoreDocument>
+    ├── npcs <npcId, NPCDocument> // Gets converted to NPC
+        ├── public (H) <"notes", NPCNotesDocument>
+        ├── private (H) <"details", GMNPCDocument> // Gets converted to GMNPC
+    ├── sectors <sectorId, SectorDocument> // Gets converted to Sector
+        ├── public (H) <"notes", NoteContentDocument>
+        ├── private (H) <"notes", NoteContentDocument>
+        ├── locations <sectorLocationId, SectorLocationDocument>
 ├── homebrew
+    ├── collections (H) <"collections", > // High level - container for everything else
     ├── asset_collections
     ├── assets
-    ├── collections
     ├── condition_meters
     ├── editorInviteKeys
     ├── impacts
@@ -54,17 +55,22 @@ D - Deprecated or soon to be deprecated
 
 ## Type Links
 
-| Type                | File                                                                                  |
-| ------------------- | ------------------------------------------------------------------------------------- |
-| CharacterDocument   | [\_character.type](./character/_character.type.ts)                                    |
-| CampaignDocument    | [\_campaign.type](./campaign/_campaign.type.ts)                                       |
-| TrackDocument       | [\_track.type](./tracks/_track.type.ts)                                               |
-| AssetDocument       | [\_asset.type](./assets/_asset.type.ts)                                               |
-| GameLogDocument     | [\_game-log.type](./game-log/_game-log.type.ts)                                       |
-| NoteDocument        | [\_notes.type](./notes/_notes.type.ts)                                                |
-| NoteContentDocument | [\_notes.type](./notes/_notes.type.ts)                                                |
-| SettingsDocument    | [\_settings.type](./character-campaign-settings/_character-campaign-settings.type.ts) |
-| WorldDocument       | [\_world.type](./world/_world.type.ts)                                                |
+| Type                           | File                                                                                                     |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| CharacterDocument              | [\_character.type](./character/_character.type.ts)                                                       |
+| CampaignDocument               | [\_campaign.type](./campaign/_campaign.type.ts)                                                          |
+| TrackDocument                  | [\_track.type](./tracks/_track.type.ts)                                                                  |
+| AssetDocument                  | [\_asset.type](./assets/_asset.type.ts)                                                                  |
+| GameLogDocument                | [\_game-log.type](./game-log/_game-log.type.ts)                                                          |
+| NoteDocument                   | [\_notes.type](./notes/_notes.type.ts)                                                                   |
+| NoteContentDocument            | [\_notes.type](./notes/_notes.type.ts)                                                                   |
+| SettingsDocument               | [\_character-campaign-settings.type](./character-campaign-settings/_character-campaign-settings.type.ts) |
+| WorldDocument                  | [\_world.type](./world/_world.type.ts)                                                                   |
+| LocationDocument (and related) | [\_location.type](./world/locations/_locations.type.ts)                                                  |
+| LoreDocument (and related)     | [\_lore.type](./world/lore/_lore.type.ts)                                                                |
+| NPCDocument (and related)      | [\_npcs.type](./world/npcs/_npcs.type.ts)                                                                |
+| SectorDocument (and related)   | [\_sectors.type](./world/sectors/_sectors.type.ts)                                                       |
+| SectorLocationDocument         | [\_sectorLocations.type](./world/sectors/sectorLocations/_sectorLocations.type.ts)                       |
 
 ---
 

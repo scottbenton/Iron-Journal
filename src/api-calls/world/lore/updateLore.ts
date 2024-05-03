@@ -1,12 +1,12 @@
 import { updateDoc } from "firebase/firestore";
-import { LoreDocument } from "types/Lore.type";
+import { Lore } from "types/Lore.type";
 import { convertToDatabase, getLoreDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 interface LoreParams {
   worldId: string;
   loreId: string;
-  lore: Partial<LoreDocument>;
+  lore: Partial<Lore>;
 }
 
 export const updateLore = createApiFunction<LoreParams, void>((params) => {

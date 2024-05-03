@@ -1,6 +1,6 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot, query, where } from "firebase/firestore";
-import { NPCDocument } from "types/NPCs.type";
+import { NPC } from "types/NPCs.type";
 import {
   constructNPCImagePath,
   convertFromDatabase,
@@ -11,7 +11,7 @@ import { getImageUrl } from "lib/storage.lib";
 export function listenToNPCs(
   worldId: string,
   isWorldOwner: boolean,
-  updateNPC: (npcId: string, npc: NPCDocument) => void,
+  updateNPC: (npcId: string, npc: NPC) => void,
   updateNPCImage: (npcId: string, imageUrl: string) => void,
   removeNPC: (npcId: string) => void,
   onError: (error: string) => void

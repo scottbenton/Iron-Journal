@@ -1,10 +1,10 @@
 import { addDoc, Timestamp } from "firebase/firestore";
 import { getNPCCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { NPCDocument } from "types/NPCs.type";
+import { NPC } from "types/NPCs.type";
 
 export const createNPC = createApiFunction<
-  { worldId: string; npc?: Partial<NPCDocument> },
+  { worldId: string; npc?: Partial<NPC> },
   string
 >((params) => {
   const { worldId, npc } = params;

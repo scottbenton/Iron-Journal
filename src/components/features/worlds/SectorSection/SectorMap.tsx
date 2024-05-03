@@ -56,12 +56,12 @@ export function SectorMap(props: SectorMapProps) {
   ) => {
     if (
       currentSelectionTool &&
-      (!cellType || cellType === SECTOR_HEX_TYPES.PATH)
+      (!cellType || cellType === SECTOR_HEX_TYPES.Path)
     ) {
       addHex(
         row,
         col,
-        cellType === currentSelectionTool && cellType === SECTOR_HEX_TYPES.PATH
+        cellType === currentSelectionTool && cellType === SECTOR_HEX_TYPES.Path
           ? undefined
           : currentSelectionTool
       );
@@ -129,7 +129,7 @@ export function SectorMap(props: SectorMapProps) {
 
                 let pathConnections: SectorHexagonProps["pathConnections"] =
                   undefined;
-                if (type === SECTOR_HEX_TYPES.PATH) {
+                if (type === SECTOR_HEX_TYPES.Path) {
                   pathConnections = getConnections(map, row, col);
                 }
 

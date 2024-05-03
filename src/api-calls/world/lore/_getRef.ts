@@ -6,12 +6,8 @@ import {
   DocumentReference,
   Timestamp,
 } from "firebase/firestore";
-import {
-  StoredGMLoreDocument,
-  LoreDocument,
-  LoreNotesDocument,
-  LoreDocumentFirestore,
-} from "types/Lore.type";
+import { Lore } from "types/Lore.type";
+import { GMLoreDocument, LoreNotesDocument, LoreDocument } from "./_lore.type";
 
 export function constructLoresPath(worldId: string) {
   return `/worlds/${worldId}/lore`;
@@ -51,21 +47,21 @@ export function getLoreCollection(worldId: string) {
   return collection(
     firestore,
     constructLoresPath(worldId)
-  ) as CollectionReference<LoreDocumentFirestore>;
+  ) as CollectionReference<LoreDocument>;
 }
 
 export function getLoreDoc(worldId: string, loreId: string) {
   return doc(
     firestore,
     constructLoreDocPath(worldId, loreId)
-  ) as DocumentReference<LoreDocumentFirestore>;
+  ) as DocumentReference<LoreDocument>;
 }
 
 export function getPrivateDetailsLoreDoc(worldId: string, loreId: string) {
   return doc(
     firestore,
     constructPrivateDetailsLoreDocPath(worldId, loreId)
-  ) as DocumentReference<StoredGMLoreDocument>;
+  ) as DocumentReference<GMLoreDocument>;
 }
 
 export function getPublicNotesLoreDoc(worldId: string, loreId: string) {
@@ -75,12 +71,10 @@ export function getPublicNotesLoreDoc(worldId: string, loreId: string) {
   ) as DocumentReference<LoreNotesDocument>;
 }
 
-export function convertToDatabase(
-  lore: Partial<LoreDocument>
-): Partial<LoreDocumentFirestore> {
+export function convertToDatabase(lore: Partial<Lore>): Partial<LoreDocument> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { updatedDate, createdDate, ...restLore } = lore;
-  const newLore: Partial<LoreDocumentFirestore> = {
+  const newLore: Partial<LoreDocument> = {
     updatedTimestamp: Timestamp.now(),
     ...restLore,
   };
@@ -92,7 +86,7 @@ export function convertToDatabase(
   return newLore;
 }
 
-export function convertFromDatabase(lore: LoreDocumentFirestore): LoreDocument {
+export function convertFromDatabase(lore: LoreDocument): Lore {
   const { updatedTimestamp, createdTimestamp, ...restLore } = lore;
   return {
     updatedDate: updatedTimestamp.toDate(),

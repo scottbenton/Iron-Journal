@@ -5,7 +5,7 @@ import {
   doc,
   DocumentReference,
 } from "firebase/firestore";
-import { StarforgedLocation } from "types/LocationStarforged.type";
+import { SectorLocationDocument } from "api-calls/world/sectors/sectorLocations/_sectorLocations.type";
 import { NoteContentDocument } from "api-calls/notes/_notes.type";
 
 export function constructSectorLocationsPath(
@@ -52,7 +52,7 @@ export function getSectorLocationsCollection(
   return collection(
     firestore,
     constructSectorLocationsPath(worldId, sectorId)
-  ) as CollectionReference<StarforgedLocation>;
+  ) as CollectionReference<SectorLocationDocument>;
 }
 
 export function getSectorLocationDoc(
@@ -63,7 +63,7 @@ export function getSectorLocationDoc(
   return doc(
     firestore,
     constructSectorLocationDocPath(worldId, sectorId, locationId)
-  ) as DocumentReference<StarforgedLocation>;
+  ) as DocumentReference<SectorLocationDocument>;
 }
 
 export function getPrivateSectorLocationNotesDoc(

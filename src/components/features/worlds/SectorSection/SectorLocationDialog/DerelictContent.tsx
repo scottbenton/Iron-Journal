@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import { useStore } from "stores/store";
-import { StarforgedLocationDerelict } from "types/LocationStarforged.type";
+import { StarforgedLocationDerelict } from "api-calls/world/sectors/sectorLocations/_sectorLocations.type";
 import { GMSectionHeader } from "../../GMSectionHeader";
 
 export interface DerelictContentProps {

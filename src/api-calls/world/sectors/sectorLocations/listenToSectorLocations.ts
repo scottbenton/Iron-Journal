@@ -1,14 +1,14 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot } from "firebase/firestore";
 import { getSectorLocationsCollection } from "./_getRef";
-import { StarforgedLocation } from "types/LocationStarforged.type";
+import { SectorLocationDocument } from "api-calls/world/sectors/sectorLocations/_sectorLocations.type";
 
 export function listenToSectorLocations(
   worldId: string,
   sectorId: string,
   updateSectorLocation: (
     locationId: string,
-    location: StarforgedLocation
+    location: SectorLocationDocument
   ) => void,
   removeSectorLocation: (locationId: string) => void,
   onError: (error: string) => void

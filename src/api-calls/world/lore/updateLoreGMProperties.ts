@@ -1,12 +1,12 @@
 import { setDoc } from "firebase/firestore";
-import { GMLoreDocument } from "types/Lore.type";
+import { GMLore } from "types/Lore.type";
 import { getPrivateDetailsLoreDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 interface Params {
   worldId: string;
   loreId: string;
-  loreGMProperties: Partial<GMLoreDocument>;
+  loreGMProperties: Partial<GMLore>;
 }
 
 export const updateLoreGMProperties = createApiFunction<Params, void>(

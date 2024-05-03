@@ -13,7 +13,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { NPCDocument, NPC_SPECIES } from "types/NPCs.type";
+import { NPC, NPCSpecies } from "types/NPCs.type";
 import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import { useRef } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -43,16 +43,16 @@ export interface OpenNPCProps {
   closeNPC: () => void;
 }
 
-const nameOracles: { [key in NPC_SPECIES]: string | string[] } = {
-  [NPC_SPECIES.IRONLANDER]: [
+const nameOracles: { [key in NPCSpecies]: string | string[] } = {
+  [NPCSpecies.Ironlander]: [
     "ironsworn/oracles/name/ironlander/a",
     "ironsworn/oracles/name/ironlander/b",
   ],
-  [NPC_SPECIES.ELF]: "ironsworn/oracles/name/elf",
-  [NPC_SPECIES.GIANT]: "ironsworn/oracles/name/other/giant",
-  [NPC_SPECIES.VAROU]: "ironsworn/oracles/name/other/varou",
-  [NPC_SPECIES.TROLL]: "ironsworn/oracles/name/other/troll",
-  [NPC_SPECIES.OTHER]: [
+  [NPCSpecies.Elf]: "ironsworn/oracles/name/elf",
+  [NPCSpecies.Giant]: "ironsworn/oracles/name/other/giant",
+  [NPCSpecies.Varou]: "ironsworn/oracles/name/other/varou",
+  [NPCSpecies.Troll]: "ironsworn/oracles/name/other/troll",
+  [NPCSpecies.Other]: [
     "ironsworn/oracles/name/ironlander/a",
     "ironsworn/oracles/name/ironlander/b",
   ],
@@ -90,7 +90,7 @@ export function OpenNPC(props: OpenNPCProps) {
     (store) => store.worlds.currentWorld.currentWorldNPCs.updateNPCNotes
   );
 
-  const handleUpdateNPC = (doc: Partial<NPCDocument>) => {
+  const handleUpdateNPC = (doc: Partial<NPC>) => {
     updateNPC(npcId, doc).catch(() => {});
   };
 
@@ -164,8 +164,7 @@ export function OpenNPC(props: OpenNPCProps) {
   });
 
   const npcNameOracles = useGameSystemValue<string | string[]>({
-    [GAME_SYSTEMS.IRONSWORN]:
-      nameOracles[npc.species ?? NPC_SPECIES.IRONLANDER],
+    [GAME_SYSTEMS.IRONSWORN]: nameOracles[npc.species ?? NPCSpecies.Ironlander],
     [GAME_SYSTEMS.STARFORGED]: [
       "starforged/oracles/characters/names/given",
       "starforged/oracles/characters/names/family_name",
@@ -355,17 +354,17 @@ export function OpenNPC(props: OpenNPCProps) {
                   onChange={(evt) =>
                     handleUpdateNPC({
                       species: (evt.target.value ??
-                        NPC_SPECIES.IRONLANDER) as NPC_SPECIES,
+                        NPCSpecies.Ironlander) as NPCSpecies,
                     })
                   }
                   fullWidth
                 >
-                  <MenuItem value={NPC_SPECIES.IRONLANDER}>Ironlander</MenuItem>
-                  <MenuItem value={NPC_SPECIES.ELF}>Elf</MenuItem>
-                  <MenuItem value={NPC_SPECIES.GIANT}>Giant</MenuItem>
-                  <MenuItem value={NPC_SPECIES.VAROU}>Varou</MenuItem>
-                  <MenuItem value={NPC_SPECIES.TROLL}>Troll</MenuItem>
-                  <MenuItem value={NPC_SPECIES.OTHER}>Other</MenuItem>
+                  <MenuItem value={NPCSpecies.Ironlander}>Ironlander</MenuItem>
+                  <MenuItem value={NPCSpecies.Elf}>Elf</MenuItem>
+                  <MenuItem value={NPCSpecies.Giant}>Giant</MenuItem>
+                  <MenuItem value={NPCSpecies.Varou}>Varou</MenuItem>
+                  <MenuItem value={NPCSpecies.Troll}>Troll</MenuItem>
+                  <MenuItem value={NPCSpecies.Other}>Other</MenuItem>
                 </TextField>
               </Grid>
             )}

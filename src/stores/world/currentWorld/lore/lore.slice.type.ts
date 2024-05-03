@@ -1,12 +1,8 @@
 import { Unsubscribe } from "firebase/firestore";
-import {
-  GMLoreDocument,
-  LoreDocument,
-  LoreDocumentFirestore,
-} from "types/Lore.type";
+import { GMLore, Lore } from "types/Lore.type";
 
-export type LoreDocumentWithGMProperties = LoreDocument & {
-  gmProperties?: GMLoreDocument | null;
+export type LoreDocumentWithGMProperties = Lore & {
+  gmProperties?: GMLore | null;
   notes?: Uint8Array | null;
   imageUrl?: string;
 };
@@ -26,10 +22,7 @@ export interface LoreSliceActions {
 
   createLore: () => Promise<string>;
   deleteLore: (loreId: string) => Promise<void>;
-  updateLore: (
-    loreId: string,
-    lore: Partial<LoreDocumentFirestore>
-  ) => Promise<void>;
+  updateLore: (loreId: string, lore: Partial<Lore>) => Promise<void>;
   updateLoreGMNotes: (
     loreId: string,
     notes: Uint8Array,
@@ -37,7 +30,7 @@ export interface LoreSliceActions {
   ) => Promise<void>;
   updateLoreGMProperties: (
     loreId: string,
-    gmProperties: Partial<GMLoreDocument>
+    gmProperties: Partial<GMLore>
   ) => Promise<void>;
   updateLoreNotes: (
     loreId: string,

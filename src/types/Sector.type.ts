@@ -1,26 +1,24 @@
-import { Timestamp } from "firebase/firestore";
-
-export enum SECTOR_HEX_TYPES {
-  PLANET = "planet",
-  STAR = "star",
-  VAULT = "vault",
-  SETTLEMENT = "settlement",
-  DERELICT = "derelict",
+export enum SectorHexTypes {
+  Planet = "planet",
+  Star = "star",
+  Vault = "vault",
+  Settlement = "settlement",
+  Derelict = "derelict",
   // SHIP = "ship",
   // CREATURE = "creature",
-  OTHER = "other",
-  PATH = "path",
+  Other = "other",
+  Path = "path",
 }
 
-export enum REGIONS {
-  TERMINUS = "Terminus",
-  OUTLANDS = "Outlands",
-  EXPANSE = "Expanse",
-  VOID = "Void",
+export enum Regions {
+  Terminus = "Terminus",
+  Outlands = "Outlands",
+  Expanse = "Expanse",
+  Void = "Void",
 }
 
 export interface SectorMapEntry {
-  type: SECTOR_HEX_TYPES;
+  type: SectorHexTypes;
   locationId?: string;
 }
 
@@ -37,8 +35,4 @@ export interface Sector {
   trouble?: string;
   map: SectorMap;
   createdDate: Date;
-}
-
-export interface StoredSector extends Omit<Sector, "createdDate"> {
-  createdTimestamp: Timestamp;
 }

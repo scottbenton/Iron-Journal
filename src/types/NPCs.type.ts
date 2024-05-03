@@ -1,19 +1,18 @@
-import { Bytes, Timestamp } from "firebase/firestore";
 import { Difficulty } from "./Track.type";
 
-export enum NPC_SPECIES {
-  IRONLANDER = "ironlander",
-  ELF = "elf",
-  GIANT = "giant",
-  VAROU = "varou",
-  TROLL = "troll",
-  OTHER = "other",
+export enum NPCSpecies {
+  Ironlander = "ironlander",
+  Elf = "elf",
+  Giant = "giant",
+  Varou = "varou",
+  Troll = "troll",
+  Other = "other",
 }
 
-export interface NPCDocument {
+export interface NPC {
   name: string;
   pronouns?: string;
-  species?: NPC_SPECIES; // Ironsworn only
+  species?: NPCSpecies; // Ironsworn only
   lastLocationId?: string; // Ironsworn only
   lastSectorId?: string; // Starforged only
   imageFilenames?: string[];
@@ -29,27 +28,14 @@ export interface NPCDocument {
   createdDate: Date;
 }
 
-export interface NPCDocumentFirestore
-  extends Omit<NPCDocument, "updatedDate" | "createdDate"> {
-  updatedTimestamp: Timestamp;
-  createdTimestamp: Timestamp;
-}
-
-export interface StoredGMNPCDocument {
+export interface GMNPC {
   goal?: string;
   role?: string;
   descriptor?: string; // Ironsworn only
   disposition?: string;
   activity?: string; // Ironsworn only
-  gmNotes?: Bytes;
 
   firstLook?: string; // Starforged only
   revealedAspect?: string; // Starforged only
-}
-export interface GMNPCDocument extends Omit<StoredGMNPCDocument, "gmNotes"> {
   gmNotes?: Uint8Array;
-}
-
-export interface NPCNotesDocument {
-  notes: Bytes;
 }
