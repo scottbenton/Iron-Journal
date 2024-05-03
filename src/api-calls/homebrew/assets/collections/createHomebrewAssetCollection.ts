@@ -1,11 +1,11 @@
 import { createApiFunction } from "api-calls/createApiFunction";
 import { addDoc } from "firebase/firestore";
-import { StoredHomebrewAssetCollection } from "types/homebrew/HomebrewAssets.type";
+import { HomebrewAssetCollectionDocument } from "api-calls/homebrew/assets/collections/_homebrewAssetCollection.type";
 
 import { getHomebrewAssetCollectionCollection } from "./_getRef";
 
 export const createHomebrewAssetCollection = createApiFunction<
-  { assetCollection: StoredHomebrewAssetCollection },
+  { assetCollection: HomebrewAssetCollectionDocument },
   void
 >((params) => {
   const { assetCollection } = params;

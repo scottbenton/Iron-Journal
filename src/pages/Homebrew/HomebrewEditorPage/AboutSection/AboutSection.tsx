@@ -13,7 +13,7 @@ import { SectionHeading } from "components/shared/SectionHeading";
 import { useEffect, useState } from "react";
 import { useStore } from "stores/store";
 import { dataswornVersion } from "config/datasworn.config";
-import { PackageTypes } from "types/homebrew/HomebrewCollection.type";
+import { PackageTypes } from "api-calls/homebrew/_homebrewCollection.type";
 import { InviteEditorDialog } from "./InviteEditorDialog";
 import { useSnackbar } from "providers/SnackbarProvider";
 import { constructHomebrewEditorPath } from "pages/Homebrew/routes";

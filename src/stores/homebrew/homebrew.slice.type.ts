@@ -1,13 +1,11 @@
 import { Datasworn } from "@datasworn/core";
 import { PartialWithFieldValue, Unsubscribe } from "firebase/firestore";
-import {
-  StoredHomebrewAsset,
-  StoredHomebrewAssetCollection,
-} from "types/homebrew/HomebrewAssets.type";
+import { HomebrewAssetDocument } from "api-calls/homebrew/assets/assets/_homebrewAssets.type";
+import { HomebrewAssetCollectionDocument } from "api-calls/homebrew/assets/collections/_homebrewAssetCollection.type";
 import {
   ExpansionDocument,
   HomebrewCollectionDocument,
-} from "types/homebrew/HomebrewCollection.type";
+} from "api-calls/homebrew/_homebrewCollection.type";
 import {
   StoredMove,
   StoredMoveCategory,
@@ -48,8 +46,8 @@ export interface HomebrewEntry {
   moves?: HomebrewData<StoredMove>;
   dataswornMoves?: Record<string, Datasworn.MoveCategory>;
 
-  assetCollections?: HomebrewData<StoredHomebrewAssetCollection>;
-  assets?: HomebrewData<StoredHomebrewAsset>;
+  assetCollections?: HomebrewData<HomebrewAssetCollectionDocument>;
+  assets?: HomebrewData<HomebrewAssetDocument>;
   dataswornAssets?: Record<string, Datasworn.AssetCollection>;
 }
 
@@ -149,21 +147,21 @@ export interface HomebrewSliceActions {
   updateDataswornMoves: (homebrewId: string) => void;
 
   createAssetCollection: (
-    assetCollection: StoredHomebrewAssetCollection
+    assetCollection: HomebrewAssetCollectionDocument
   ) => Promise<void>;
   updateAssetCollection: (
     assetCollectionId: string,
-    assetCollection: StoredHomebrewAssetCollection
+    assetCollection: HomebrewAssetCollectionDocument
   ) => Promise<void>;
   deleteAssetCollection: (
     homebrewId: string,
     assetCollectionId: string
   ) => Promise<void>;
 
-  createAsset: (asset: StoredHomebrewAsset) => Promise<void>;
+  createAsset: (asset: HomebrewAssetDocument) => Promise<void>;
   updateAsset: (
     assetId: string,
-    asset: PartialWithFieldValue<StoredHomebrewAsset>
+    asset: PartialWithFieldValue<HomebrewAssetDocument>
   ) => Promise<void>;
   deleteAsset: (assetId: string) => Promise<void>;
 

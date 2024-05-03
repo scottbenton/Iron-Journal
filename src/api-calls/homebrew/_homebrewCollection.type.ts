@@ -2,8 +2,6 @@ export enum PackageTypes {
   Expansion = "expansion",
 }
 
-export enum HomebrewVisibility {}
-
 export interface BaseHomebrewCollectionDocument {
   type: PackageTypes;
   id: string;

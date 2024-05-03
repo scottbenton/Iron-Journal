@@ -34,9 +34,9 @@ D - Deprecated or soon to be deprecated
         ├── private (H) <"notes", NoteContentDocument>
         ├── locations <sectorLocationId, SectorLocationDocument>
 ├── homebrew
-    ├── collections (H) <"collections", > // High level - container for everything else
-    ├── asset_collections
-    ├── assets
+    ├── collections (H) <"collections", HomebrewCollectionDocument> // High level - container for everything else
+    ├── asset_collections (H) <"asset_collections", HomebrewAssetCollectionDocument>
+    ├── assets (H) <"assets", HomebrewAssetDocument>
     ├── condition_meters
     ├── editorInviteKeys
     ├── impacts
@@ -55,22 +55,27 @@ D - Deprecated or soon to be deprecated
 
 ## Type Links
 
-| Type                           | File                                                                                                     |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| CharacterDocument              | [\_character.type](./character/_character.type.ts)                                                       |
-| CampaignDocument               | [\_campaign.type](./campaign/_campaign.type.ts)                                                          |
-| TrackDocument                  | [\_track.type](./tracks/_track.type.ts)                                                                  |
-| AssetDocument                  | [\_asset.type](./assets/_asset.type.ts)                                                                  |
-| GameLogDocument                | [\_game-log.type](./game-log/_game-log.type.ts)                                                          |
-| NoteDocument                   | [\_notes.type](./notes/_notes.type.ts)                                                                   |
-| NoteContentDocument            | [\_notes.type](./notes/_notes.type.ts)                                                                   |
-| SettingsDocument               | [\_character-campaign-settings.type](./character-campaign-settings/_character-campaign-settings.type.ts) |
-| WorldDocument                  | [\_world.type](./world/_world.type.ts)                                                                   |
-| LocationDocument (and related) | [\_location.type](./world/locations/_locations.type.ts)                                                  |
-| LoreDocument (and related)     | [\_lore.type](./world/lore/_lore.type.ts)                                                                |
-| NPCDocument (and related)      | [\_npcs.type](./world/npcs/_npcs.type.ts)                                                                |
-| SectorDocument (and related)   | [\_sectors.type](./world/sectors/_sectors.type.ts)                                                       |
-| SectorLocationDocument         | [\_sectorLocations.type](./world/sectors/sectorLocations/_sectorLocations.type.ts)                       |
+| Type                            | File                                                                                                     |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| **Characters and Campaigns**    |                                                                                                          |
+| CharacterDocument               | [\_character.type](./character/_character.type.ts)                                                       |
+| CampaignDocument                | [\_campaign.type](./campaign/_campaign.type.ts)                                                          |
+| TrackDocument                   | [\_track.type](./tracks/_track.type.ts)                                                                  |
+| AssetDocument                   | [\_asset.type](./assets/_asset.type.ts)                                                                  |
+| GameLogDocument                 | [\_game-log.type](./game-log/_game-log.type.ts)                                                          |
+| NoteDocument                    | [\_notes.type](./notes/_notes.type.ts)                                                                   |
+| NoteContentDocument             | [\_notes.type](./notes/_notes.type.ts)                                                                   |
+| SettingsDocument                | [\_character-campaign-settings.type](./character-campaign-settings/_character-campaign-settings.type.ts) |
+| **Worlds**                      |                                                                                                          |
+| WorldDocument                   | [\_world.type](./world/_world.type.ts)                                                                   |
+| LocationDocument (and related)  | [\_location.type](./world/locations/_locations.type.ts)                                                  |
+| LoreDocument (and related)      | [\_lore.type](./world/lore/_lore.type.ts)                                                                |
+| NPCDocument (and related)       | [\_npcs.type](./world/npcs/_npcs.type.ts)                                                                |
+| SectorDocument (and related)    | [\_sectors.type](./world/sectors/_sectors.type.ts)                                                       |
+| SectorLocationDocument          | [\_sectorLocations.type](./world/sectors/sectorLocations/_sectorLocations.type.ts)                       |
+| **Homebrew Beta**               |                                                                                                          |
+| HomebrewCollectionDocument      | [\_homebrewCollection.type](./homebrew/_homebrewCollection.type.ts)                                      |
+| HomebrewAssetCollectionDocument | [\_homebrewAssetCollection.type](./homebrew/assets/collections/_homebrewAssetCollection.type)            |
 
 ---
 

@@ -1,10 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import ChevronRight from "@mui/icons-material/ChevronRight";
 import { useStore } from "stores/store";
-import { StoredHomebrewAssetCollection } from "types/homebrew/HomebrewAssets.type";
+import { HomebrewAssetCollectionDocument } from "api-calls/homebrew/assets/collections/_homebrewAssetCollection.type";
 
 export interface AssetCollectionCardProps {
-  collection: StoredHomebrewAssetCollection;
+  collection: HomebrewAssetCollectionDocument;
 }
 
 export function AssetCollectionCard(props: AssetCollectionCardProps) {

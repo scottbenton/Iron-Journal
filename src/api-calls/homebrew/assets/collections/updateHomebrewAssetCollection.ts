@@ -1,12 +1,12 @@
 import { createApiFunction } from "api-calls/createApiFunction";
 import { PartialWithFieldValue, updateDoc } from "firebase/firestore";
 import { getHomebrewAssetCollectionDoc } from "./_getRef";
-import { StoredHomebrewAssetCollection } from "types/homebrew/HomebrewAssets.type";
+import { HomebrewAssetCollectionDocument } from "api-calls/homebrew/assets/collections/_homebrewAssetCollection.type";
 
 export const updateHomebrewAssetCollection = createApiFunction<
   {
     assetCollectionId: string;
-    assetCollection: PartialWithFieldValue<StoredHomebrewAssetCollection>;
+    assetCollection: PartialWithFieldValue<HomebrewAssetCollectionDocument>;
   },
   void
 >((params) => {

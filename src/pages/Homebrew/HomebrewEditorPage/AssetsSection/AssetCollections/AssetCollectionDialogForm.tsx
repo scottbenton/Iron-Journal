@@ -11,7 +11,7 @@ import { convertIdPart } from "functions/dataswornIdEncoder";
 import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useStore } from "stores/store";
-import { StoredHomebrewAssetCollection } from "types/homebrew/HomebrewAssets.type";
+import { HomebrewAssetCollectionDocument } from "api-calls/homebrew/assets/collections/_homebrewAssetCollection.type";
 
 import { AssetCollectionAutocomplete } from "./AssetCollectionAutocomplete";
 
@@ -71,7 +71,7 @@ export function AssetCollectionDialogForm(
   const onSubmit: SubmitHandler<Form> = (values) => {
     setLoading(true);
 
-    const assetCollection: StoredHomebrewAssetCollection = {
+    const assetCollection: HomebrewAssetCollectionDocument = {
       collectionId: homebrewId,
       label: values.label,
     };

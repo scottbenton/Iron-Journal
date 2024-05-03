@@ -6,12 +6,12 @@ import { AssetHeader } from "components/features/assets/NewAssetCard/AssetHeader
 import { AssetNameAndDescription } from "components/features/assets/NewAssetCard/AssetNameAndDescription";
 import { AssetOptions } from "components/features/assets/NewAssetCard/AssetOptions";
 import { convertIdPart } from "functions/dataswornIdEncoder";
-import { StoredHomebrewAsset } from "types/homebrew/HomebrewAssets.type";
+import { HomebrewAssetDocument } from "api-calls/homebrew/assets/assets/_homebrewAssets.type";
 import EditIcon from "@mui/icons-material/Edit";
 import MoveIcon from "@mui/icons-material/DriveFileMove";
 
 export interface AssetPreviewCardProps {
-  storedAsset: StoredHomebrewAsset;
+  storedAsset: HomebrewAssetDocument;
   collectionName: string;
   handleDeleteAsset: () => void;
   handleEditAsset: () => void;

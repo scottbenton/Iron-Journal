@@ -11,7 +11,7 @@ import {
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 import { useEffect, useState } from "react";
 import { useStore } from "stores/store";
-import { StoredHomebrewAssetCollection } from "types/homebrew/HomebrewAssets.type";
+import { HomebrewAssetCollectionDocument } from "api-calls/homebrew/assets/collections/_homebrewAssetCollection.type";
 
 export interface MoveAssetDialogProps {
   onClose: () => void;
@@ -19,7 +19,7 @@ export interface MoveAssetDialogProps {
     assetId: string;
     assetCollectionId: string;
   };
-  collections: Record<string, StoredHomebrewAssetCollection>;
+  collections: Record<string, HomebrewAssetCollectionDocument>;
 }
 
 export function MoveAssetDialog(props: MoveAssetDialogProps) {

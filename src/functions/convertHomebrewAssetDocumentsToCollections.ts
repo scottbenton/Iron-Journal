@@ -1,9 +1,7 @@
 import { Datasworn } from "@datasworn/core";
 import { License } from "types/Datasworn";
-import {
-  StoredHomebrewAsset,
-  StoredHomebrewAssetCollection,
-} from "types/homebrew/HomebrewAssets.type";
+import { HomebrewAssetDocument } from "api-calls/homebrew/assets/assets/_homebrewAssets.type";
+import { HomebrewAssetCollectionDocument } from "api-calls/homebrew/assets/collections/_homebrewAssetCollection.type";
 import { convertIdPart } from "./dataswornIdEncoder";
 
 const DEFAULT_SOURCE: Datasworn.SourceInfo = {
@@ -16,8 +14,8 @@ const DEFAULT_SOURCE: Datasworn.SourceInfo = {
 
 export function convertHomebrewAssetDocumentsToCollections(
   homebrewId: string,
-  storedCollections: Record<string, StoredHomebrewAssetCollection>,
-  storedAssets: Record<string, StoredHomebrewAsset>
+  storedCollections: Record<string, HomebrewAssetCollectionDocument>,
+  storedAssets: Record<string, HomebrewAssetDocument>
 ): Record<string, Datasworn.AssetCollection> {
   const collections: Record<string, Datasworn.AssetCollection> = {};
 
@@ -58,7 +56,7 @@ export function convertHomebrewAssetDocumentsToCollections(
 function convertAssetDocument(
   homebrewId: string,
   assetId: string,
-  asset: StoredHomebrewAsset,
+  asset: HomebrewAssetDocument,
   categoryLabel: string
 ): Datasworn.Asset {
   const dataswornAbilities: Datasworn.AssetAbility[] = asset.abilities?.map(
