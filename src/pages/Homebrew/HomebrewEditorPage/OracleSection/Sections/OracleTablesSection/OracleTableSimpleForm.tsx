@@ -13,7 +13,7 @@ import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { OracleTableRollableAutocomplete } from "../../OracleTableRollableAutocomplete";
 import { OracleTable } from "./OracleTable";
-import { StoredOracleTable } from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleTableDocument } from "api-calls/homebrew/oracles/tables/_homebrewOracleTable.type";
 import { useStore } from "stores/store";
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 
@@ -44,7 +44,7 @@ export interface OracleTableSimpleFormProps {
   homebrewId: string;
   parentCollectionId: string;
   onClose: () => void;
-  tables: Record<string, StoredOracleTable>;
+  tables: Record<string, HomebrewOracleTableDocument>;
   editingOracleTableId?: string;
 }
 
@@ -80,7 +80,7 @@ export function OracleTableSimpleForm(props: OracleTableSimpleFormProps) {
   const onSubmit: SubmitHandler<Form> = (values) => {
     setLoading(true);
 
-    const oracleTable: StoredOracleTable = {
+    const oracleTable: HomebrewOracleTableDocument = {
       collectionId: homebrewId,
       oracleCollectionId: parentCollectionId,
       label: values.name,
@@ -229,7 +229,7 @@ export function OracleTableSimpleForm(props: OracleTableSimpleFormProps) {
 }
 
 function getDefaultValues(
-  existingOracle?: StoredOracleTable
+  existingOracle?: HomebrewOracleTableDocument
 ): Form | undefined {
   if (!existingOracle) {
     return undefined;

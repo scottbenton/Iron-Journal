@@ -1,4 +1,4 @@
-import { StoredStat } from "types/homebrew/HomebrewRules.type";
+import { HomebrewStatDocument } from "api-calls/homebrew/rules/stats/_homebrewStat.type";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import {
   Button,
@@ -17,8 +17,8 @@ import { MarkdownEditor } from "components/shared/RichTextEditor/MarkdownEditor"
 
 export interface StatDialogFormProps {
   homebrewId: string;
-  stats: Record<string, StoredStat>;
-  onSave: (stat: StoredStat) => Promise<void>;
+  stats: Record<string, HomebrewStatDocument>;
+  onSave: (stat: HomebrewStatDocument) => Promise<void>;
   onClose: () => void;
   editingStatKey?: string;
 }
@@ -114,7 +114,7 @@ export function StatDialogForm(props: StatDialogFormProps) {
               }}
             />
             <Controller
-              name='description'
+              name="description"
               control={control}
               defaultValue={""}
               render={({ field }) => (

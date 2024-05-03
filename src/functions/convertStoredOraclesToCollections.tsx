@@ -1,9 +1,7 @@
 import { Datasworn } from "@datasworn/core";
 import { License } from "types/Datasworn";
-import {
-  StoredOracleCollection,
-  StoredOracleTable,
-} from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleTableDocument } from "api-calls/homebrew/oracles/tables/_homebrewOracleTable.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 
 const DEFAULT_SOURCE: Datasworn.SourceInfo = {
   title: "Homebrew Content",
@@ -15,8 +13,8 @@ const DEFAULT_SOURCE: Datasworn.SourceInfo = {
 
 export function convertStoredOraclesToCollections(
   homebrewId: string,
-  storedCollections: Record<string, StoredOracleCollection>,
-  storedTables: Record<string, StoredOracleTable>
+  storedCollections: Record<string, HomebrewOracleCollectionDocument>,
+  storedTables: Record<string, HomebrewOracleTableDocument>
 ): Record<string, Datasworn.OracleTablesCollection> {
   const collections: Record<string, Datasworn.OracleTablesCollection> = {};
 
@@ -71,9 +69,9 @@ export function convertStoredOraclesToCollections(
 function populateCollection(
   collectionId: string,
   collection: Datasworn.OracleCollection,
-  collections: Record<string, StoredOracleCollection>,
+  collections: Record<string, HomebrewOracleCollectionDocument>,
   storedCollectionParentMap: Record<string, string[]>,
-  tables: Record<string, StoredOracleTable>,
+  tables: Record<string, HomebrewOracleTableDocument>,
   storedTableParentMap: Record<string, string[]>
 ): Datasworn.OracleCollection {
   const collectionIds = storedCollectionParentMap[collectionId] ?? [];

@@ -12,13 +12,13 @@ import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { OracleCollectionAutocomplete } from "../../OracleCollectionAutocomplete";
 import { useStore } from "stores/store";
-import { StoredOracleCollection } from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 
 export interface OracleTablesCollectionDialogFormProps {
   homebrewId: string;
   onClose: () => void;
 
-  collections: Record<string, StoredOracleCollection>;
+  collections: Record<string, HomebrewOracleCollectionDocument>;
   existingCollectionId?: string;
 
   parentCollectionId?: string;
@@ -77,7 +77,7 @@ export function OracleTablesCollectionDialogForm(
   ) => {
     setLoading(true);
 
-    const oracleCollection: StoredOracleCollection = {
+    const oracleCollection: HomebrewOracleCollectionDocument = {
       collectionId: homebrewId,
       label: values.name,
     };

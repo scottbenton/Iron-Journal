@@ -14,18 +14,16 @@ import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithClo
 import { convertIdPart } from "functions/dataswornIdEncoder";
 import { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import {
-  StoredImpact,
-  StoredImpactCategory,
-} from "types/homebrew/HomebrewRules.type";
+import { HomebrewImpact } from "api-calls/homebrew/rules/impacts/_homebrewImpacts.type";
+import { HomebrewImpactCategoryDocument } from "api-calls/homebrew/rules/impacts/_homebrewImpacts.type";
 import { ConditionMeterAutocomplete } from "../ConditionMeters/ConditionMeterAutocomplete";
 import { MarkdownEditor } from "components/shared/RichTextEditor/MarkdownEditor";
 
 export interface ImpactDialogFormProps {
   open: boolean;
   onClose: () => void;
-  onSave: (impactCategoryId: string, impact: StoredImpact) => Promise<void>;
-  impacts: StoredImpactCategory["contents"];
+  onSave: (impactCategoryId: string, impact: HomebrewImpact) => Promise<void>;
+  impacts: HomebrewImpactCategoryDocument["contents"];
   editingCategoryKey: string;
   editingImpactKey?: string;
 }
@@ -139,7 +137,7 @@ export function ImpactDialogForm(props: ImpactDialogFormProps) {
               }}
             />
             <Controller
-              name='description'
+              name="description"
               control={control}
               defaultValue={""}
               render={({ field }) => (
@@ -156,7 +154,7 @@ export function ImpactDialogForm(props: ImpactDialogFormProps) {
                 disabled={disabled}
                 control={
                   <Controller
-                    name='permanent'
+                    name="permanent"
                     control={control}
                     defaultValue={false}
                     render={({ field }) => (
@@ -192,7 +190,7 @@ export function ImpactDialogForm(props: ImpactDialogFormProps) {
                 disabled={disabled}
                 control={
                   <Controller
-                    name='shared'
+                    name="shared"
                     control={control}
                     defaultValue={false}
                     render={({ field }) => (

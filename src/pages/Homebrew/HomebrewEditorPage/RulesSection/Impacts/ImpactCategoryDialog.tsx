@@ -1,4 +1,4 @@
-import { StoredImpactCategory } from "types/homebrew/HomebrewRules.type";
+import { HomebrewImpactCategoryDocument } from "api-calls/homebrew/rules/impacts/_homebrewImpacts.type";
 import { Dialog } from "@mui/material";
 import { ImpactCategoryDialogForm } from "./ImpactCategoryDialogForm";
 
@@ -6,8 +6,8 @@ export interface ImpactCategoryDialogProps {
   homebrewId: string;
   open: boolean;
   onClose: () => void;
-  onSave: (impactCategory: StoredImpactCategory) => Promise<void>;
-  impactCategories: Record<string, StoredImpactCategory>;
+  onSave: (impactCategory: HomebrewImpactCategoryDocument) => Promise<void>;
+  impactCategories: Record<string, HomebrewImpactCategoryDocument>;
   editingCategoryKey?: string;
 }
 

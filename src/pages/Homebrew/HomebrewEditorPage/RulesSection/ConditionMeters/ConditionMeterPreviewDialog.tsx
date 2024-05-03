@@ -1,12 +1,12 @@
 import { Dialog, DialogContent, Stack } from "@mui/material";
-import { StoredConditionMeter } from "types/homebrew/HomebrewRules.type";
+import { HomebrewConditionMeterDocument } from "api-calls/homebrew/rules/conditionMeters/_homebrewConditionMeters.type";
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import { Track } from "components/features/Track";
 import { StatComponent } from "components/features/characters/StatComponent";
 
 export interface ConditionMeterPreviewDialogProps {
-  conditionMeter: StoredConditionMeter;
+  conditionMeter: HomebrewConditionMeterDocument;
   open: boolean;
   onClose: () => void;
 }

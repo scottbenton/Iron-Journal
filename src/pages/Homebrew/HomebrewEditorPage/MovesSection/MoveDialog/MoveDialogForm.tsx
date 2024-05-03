@@ -12,10 +12,10 @@ import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useStore } from "stores/store";
 import {
-  GenericStoredMove,
+  GenericHomebrewMove,
   MoveType,
-  StoredMove,
-} from "types/homebrew/HomebrewMoves.type";
+  HomebrewMoveDocument,
+} from "api-calls/homebrew/moves/moves/_homebrewMove.type";
 import { MoveAutocomplete } from "../MoveAutocomplete";
 import { MoveTypeInput } from "./MoveTypeInput";
 import { MoveTypeFieldWrapper } from "./MoveTypeFieldWrapper";
@@ -99,8 +99,8 @@ export function MoveDialogForm(props: MoveFormDialogProps) {
   const onSubmit: SubmitHandler<Form> = (values) => {
     setLoading(true);
 
-    let move: StoredMove;
-    const genericMove: GenericStoredMove = {
+    let move: HomebrewMoveDocument;
+    const genericMove: GenericHomebrewMove = {
       collectionId: homebrewId,
       categoryId: categoryId,
       label: values.label,

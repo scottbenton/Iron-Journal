@@ -1,10 +1,10 @@
 import { createApiFunction } from "api-calls/createApiFunction";
 import { addDoc } from "firebase/firestore";
-import { StoredOracleTable } from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleTableDocument } from "api-calls/homebrew/oracles/tables/_homebrewOracleTable.type";
 import { getHomebrewOracleTableCollection } from "./_getRef";
 
 export const createHomebrewOracleTable = createApiFunction<
-  { oracleTable: StoredOracleTable },
+  { oracleTable: HomebrewOracleTableDocument },
   void
 >((params) => {
   const { oracleTable } = params;

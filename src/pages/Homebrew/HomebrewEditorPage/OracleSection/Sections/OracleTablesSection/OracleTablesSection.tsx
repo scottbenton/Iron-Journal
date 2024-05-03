@@ -2,18 +2,16 @@ import { Button, List } from "@mui/material";
 import { EmptyState } from "components/shared/EmptyState";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { useState } from "react";
-import {
-  StoredOracleCollection,
-  StoredOracleTable,
-} from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleTableDocument } from "api-calls/homebrew/oracles/tables/_homebrewOracleTable.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 import { OracleTableDialog } from "./OracleTableDialog";
 import { OracleTableCard } from "./OracleTableCard";
 import { useStore } from "stores/store";
 
 export interface OracleTablesSectionProps {
   homebrewId: string;
-  tables: Record<string, StoredOracleTable>;
-  collections: Record<string, StoredOracleCollection>;
+  tables: Record<string, HomebrewOracleTableDocument>;
+  collections: Record<string, HomebrewOracleCollectionDocument>;
   parentCollectionKey: string;
   ancestorIds: string[];
   isEditor: boolean;

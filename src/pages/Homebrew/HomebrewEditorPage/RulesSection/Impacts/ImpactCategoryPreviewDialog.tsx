@@ -6,14 +6,14 @@ import {
   FormGroup,
   Stack,
 } from "@mui/material";
-import { StoredImpactCategory } from "types/homebrew/HomebrewRules.type";
+import { HomebrewImpactCategoryDocument } from "api-calls/homebrew/rules/impacts/_homebrewImpacts.type";
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 
 export interface ImpactPreviewDialogProps {
   open: boolean;
   onClose: () => void;
-  impactCategory: StoredImpactCategory;
+  impactCategory: HomebrewImpactCategoryDocument;
 }
 
 export function ImpactPreviewDialog(props: ImpactPreviewDialogProps) {

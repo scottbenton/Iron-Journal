@@ -5,7 +5,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { firestore } from "config/firebase.config";
-import { StoredLegacyTrack } from "types/homebrew/HomebrewRules.type";
+import { HomebrewLegacyTrackDocument } from "api-calls/homebrew/rules/legacyTracks/_homebrewLegacyTrack.type";
 
 export function constructHomebrewLegacyTracksCollectionPath() {
   return `homebrew/homebrew/legacy_tracks`;
@@ -19,12 +19,12 @@ export function getHomebrewLegacyTrackCollection() {
   return collection(
     firestore,
     constructHomebrewLegacyTracksCollectionPath()
-  ) as CollectionReference<StoredLegacyTrack>;
+  ) as CollectionReference<HomebrewLegacyTrackDocument>;
 }
 
 export function getHomebrewLegacyTrackDoc(legacyTrackId: string) {
   return doc(
     firestore,
     constructHomebrewLegacyTrackDocPath(legacyTrackId)
-  ) as DocumentReference<StoredLegacyTrack>;
+  ) as DocumentReference<HomebrewLegacyTrackDocument>;
 }

@@ -1,9 +1,7 @@
 import { Breadcrumbs, Link, Stack, Typography } from "@mui/material";
 import { useState } from "react";
-import {
-  StoredOracleCollection,
-  StoredOracleTable,
-} from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleTableDocument } from "api-calls/homebrew/oracles/tables/_homebrewOracleTable.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 import { OracleCollectionsSection } from "./Sections/OracleCollectionsSection";
 import { OracleTablesCollectionDialog } from "./Sections/OracleCollectionsSection/OracleTablesCollectionDialog";
 import { OracleInfoSection } from "./Sections/OracleInfoSection";
@@ -11,14 +9,14 @@ import { OracleTablesSection } from "./Sections/OracleTablesSection";
 
 export interface OracleEditorPaneProps {
   homebrewId: string;
-  oracleCollections: Record<string, StoredOracleCollection>;
-  oracleTables: Record<string, StoredOracleTable>;
+  oracleCollections: Record<string, HomebrewOracleCollectionDocument>;
+  oracleTables: Record<string, HomebrewOracleTableDocument>;
   isEditor: boolean;
 }
 
 function getBreadcrumbs(
   oracleCollectionId: string | undefined,
-  oracleCollections: Record<string, StoredOracleCollection>
+  oracleCollections: Record<string, HomebrewOracleCollectionDocument>
 ) {
   const breadcrumbs: {
     label: string;

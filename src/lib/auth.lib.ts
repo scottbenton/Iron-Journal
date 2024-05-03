@@ -14,7 +14,7 @@ import { firebaseAuth } from "../config/firebase.config";
 import { BASE_ROUTES, basePaths } from "routes";
 import { getErrorMessage } from "functions/getErrorMessage";
 import { updateUserDoc } from "api-calls/user/updateUserDoc";
-import { UserDocument } from "types/User.type";
+import { UserDocument } from "api-calls/user/_user.type";
 
 const googleAuthProvider = new GoogleAuthProvider();
 

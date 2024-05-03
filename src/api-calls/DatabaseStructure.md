@@ -34,48 +34,64 @@ D - Deprecated or soon to be deprecated
         ├── private (H) <"notes", NoteContentDocument>
         ├── locations <sectorLocationId, SectorLocationDocument>
 ├── homebrew
-    ├── collections (H) <"collections", HomebrewCollectionDocument> // High level - container for everything else
-    ├── asset_collections (H) <"asset_collections", HomebrewAssetCollectionDocument>
-    ├── assets (H) <"assets", HomebrewAssetDocument>
-    ├── condition_meters
-    ├── editorInviteKeys
-    ├── impacts
-    ├── legacy_tracks
-    ├── move_categories
-    ├── moves
-    ├── non_linear_meters
-    ├── oracle_collections
-    ├── oracle_tables
-    ├── stats
-├── users
-    ├── custom-moves
-    ├── custom-oracles
-    ├── settings
+    ├── collections (H) <"collections", <collectionId, HomebrewCollectionDocument>> // High level - container for everything else
+    ├── asset_collections (H) <"asset_collections", <assetCollectionId, HomebrewAssetCollectionDocument>>
+    ├── assets (H) <"assets", <assetId, HomebrewAssetDocument>>
+    ├── condition_meters (H) <"condition_meters", <conditionMeterId, HomebrewConditionMeterDocument>>
+    ├── !! editorInviteKeys // Dealt with on the backend
+    ├── impacts (H) <"impacts", <impactCategoryId, HomebrewImpactCategoryDocument>>
+    ├── legacy_tracks <"legacy_tracks", <legacyTrackId, HomebrewLegacyTrackDocument>>
+    ├── move_categories <"move_categories", <moveCategoryId, HomebrewMoveCategoryDocument>>
+    ├── moves <"moves", <moveId, HomebrewMoveDocument>>
+    ├── non_linear_meters <"non_linear_meters", <nonLinearMeterId, HomebrewNonLinearMeterDocument>>
+    ├── oracle_collections <"oracle_collections", <oracleCollectionId, HomebrewOracleCollectionDocument>>
+    ├── oracle_tables <"oracle_tables", <oracleTableId, HomebrewOracleTableDocument>>
+    ├── stats <"stats", <statId, HomebrewStatDocument>>
+├── users <userId, UserDocument>
+    ├── custom-moves (HD) <"custom-moves", CustomMoveDocument>>
+    ├── custom-oracles (HD) <"custom-oracles", CustomOracleDocument>>
+    ├── settings (H) <"accessibility", AccessibilitySettingsDocument> | <"oracle" | OracleSettingsDocument>
 ```
 
 ## Type Links
 
-| Type                            | File                                                                                                     |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| **Characters and Campaigns**    |                                                                                                          |
-| CharacterDocument               | [\_character.type](./character/_character.type.ts)                                                       |
-| CampaignDocument                | [\_campaign.type](./campaign/_campaign.type.ts)                                                          |
-| TrackDocument                   | [\_track.type](./tracks/_track.type.ts)                                                                  |
-| AssetDocument                   | [\_asset.type](./assets/_asset.type.ts)                                                                  |
-| GameLogDocument                 | [\_game-log.type](./game-log/_game-log.type.ts)                                                          |
-| NoteDocument                    | [\_notes.type](./notes/_notes.type.ts)                                                                   |
-| NoteContentDocument             | [\_notes.type](./notes/_notes.type.ts)                                                                   |
-| SettingsDocument                | [\_character-campaign-settings.type](./character-campaign-settings/_character-campaign-settings.type.ts) |
-| **Worlds**                      |                                                                                                          |
-| WorldDocument                   | [\_world.type](./world/_world.type.ts)                                                                   |
-| LocationDocument (and related)  | [\_location.type](./world/locations/_locations.type.ts)                                                  |
-| LoreDocument (and related)      | [\_lore.type](./world/lore/_lore.type.ts)                                                                |
-| NPCDocument (and related)       | [\_npcs.type](./world/npcs/_npcs.type.ts)                                                                |
-| SectorDocument (and related)    | [\_sectors.type](./world/sectors/_sectors.type.ts)                                                       |
-| SectorLocationDocument          | [\_sectorLocations.type](./world/sectors/sectorLocations/_sectorLocations.type.ts)                       |
-| **Homebrew Beta**               |                                                                                                          |
-| HomebrewCollectionDocument      | [\_homebrewCollection.type](./homebrew/_homebrewCollection.type.ts)                                      |
-| HomebrewAssetCollectionDocument | [\_homebrewAssetCollection.type](./homebrew/assets/collections/_homebrewAssetCollection.type)            |
+| Type                             | File                                                                                                     |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| **Characters and Campaigns**     |                                                                                                          |
+| CharacterDocument                | [\_character.type](./character/_character.type.ts)                                                       |
+| CampaignDocument                 | [\_campaign.type](./campaign/_campaign.type.ts)                                                          |
+| TrackDocument                    | [\_track.type](./tracks/_track.type.ts)                                                                  |
+| AssetDocument                    | [\_asset.type](./assets/_asset.type.ts)                                                                  |
+| GameLogDocument                  | [\_game-log.type](./game-log/_game-log.type.ts)                                                          |
+| NoteDocument                     | [\_notes.type](./notes/_notes.type.ts)                                                                   |
+| NoteContentDocument              | [\_notes.type](./notes/_notes.type.ts)                                                                   |
+| SettingsDocument                 | [\_character-campaign-settings.type](./character-campaign-settings/_character-campaign-settings.type.ts) |
+| **Worlds**                       |                                                                                                          |
+| WorldDocument                    | [\_world.type](./world/_world.type.ts)                                                                   |
+| LocationDocument (and related)   | [\_location.type](./world/locations/_locations.type.ts)                                                  |
+| LoreDocument (and related)       | [\_lore.type](./world/lore/_lore.type.ts)                                                                |
+| NPCDocument (and related)        | [\_npcs.type](./world/npcs/_npcs.type.ts)                                                                |
+| SectorDocument (and related)     | [\_sectors.type](./world/sectors/_sectors.type.ts)                                                       |
+| SectorLocationDocument           | [\_sectorLocations.type](./world/sectors/sectorLocations/_sectorLocations.type.ts)                       |
+| **Homebrew Beta**                |                                                                                                          |
+| HomebrewCollectionDocument       | [\_homebrewCollection.type](./homebrew/_homebrewCollection.type.ts)                                      |
+| HomebrewAssetCollectionDocument  | [\_homebrewAssetCollection.type](./homebrew/assets/collections/_homebrewAssetCollection.type)            |
+| HomebrewAssetDocument            | [\_homebrewAssets.type](./homebrew/assets/assets/_homebrewAssets.type.ts)                                |
+| HomebrewConditionMeterDocument   | [\_homebrewConditionMeters.type](./homebrew/rules/conditionMeters/_homebrewConditionMeters.type.ts)      |
+| HomebrewImpactCategoryDocument   | [\_homebrewImpacts.type](./homebrew/rules/impacts/_homebrewImpacts.type.ts)                              |
+| HomebrewLegacyTrackDocument      | [\_homebrewLegacyTrack.type](./homebrew/rules/legacyTracks/_homebrewLegacyTrack.type.ts)                 |
+| HomebrewMoveCategoryDocument     | [\_homebrewMoveCategory.type](./homebrew/moves/categories/_homebrewMoveCategory.type.ts)                 |
+| HomebrewMoveDocument             | [\_homebrewMove.type](./homebrew/moves/moves/_homebrewMove.type.ts)                                      |
+| HomebrewNonLinearMeterDocument   | [\_homebrewNonLinearMeter.type](./homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type.ts)        |
+| HomebrewOracleCollectionDocument | [\_homebrewOracleCollection.type](./homebrew/oracles/collections/_homebrewOracleCollection.type.ts)      |
+| HomebrewOracleTableDocument      | [\_homebrewOracleTable.type](./homebrew/oracles/tables/_homebrewOracleTable.type.ts)                     |
+| HomebrewStatDocument             | [\_homebrewStat.type](./homebrew/rules/stats/_homebrewStat.type.ts)                                      |
+| **Users**                        |                                                                                                          |
+| UserDocument                     | [\_user.type](./user/_user.type.ts)                                                                      |
+| CustomMoveDocument               | [\_custom-moves.type](./user/custom-moves/_custom-moves.type.ts)                                         |
+| CustomOracleDocument             | [\_custom-oracles.type](./user/custom-oracles/_custom-oracles.type.ts)                                   |
+| AccessibilitySettingsDocument    | [\_settings.type](./user/settings/_settings.type.ts)                                                     |
+| OracleSettingsDocument           | [\_settings.type](./user/settings/_settings.type.ts)                                                     |
 
 ---
 

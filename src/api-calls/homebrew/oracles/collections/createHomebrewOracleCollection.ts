@@ -1,10 +1,10 @@
 import { createApiFunction } from "api-calls/createApiFunction";
 import { addDoc } from "firebase/firestore";
-import { StoredOracleCollection } from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 import { getHomebrewOracleCollectionCollection } from "./_getRef";
 
 export const createHomebrewOracleCollection = createApiFunction<
-  { oracleCollection: StoredOracleCollection },
+  { oracleCollection: HomebrewOracleCollectionDocument },
   void
 >((params) => {
   const { oracleCollection } = params;

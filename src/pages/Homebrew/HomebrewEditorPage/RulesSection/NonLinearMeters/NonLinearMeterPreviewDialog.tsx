@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, Stack } from "@mui/material";
-import { StoredNonLinearMeter } from "types/homebrew/HomebrewRules.type";
+import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type";
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import { StatComponent } from "components/features/characters/StatComponent";
@@ -7,7 +7,7 @@ import { NonLinearMeter } from "components/features/charactersAndCampaigns/NonLi
 import { useState } from "react";
 
 export interface NonLinearMeterPreviewDialogProps {
-  meter: StoredNonLinearMeter;
+  meter: HomebrewNonLinearMeterDocument;
   open: boolean;
   onClose: () => void;
 }

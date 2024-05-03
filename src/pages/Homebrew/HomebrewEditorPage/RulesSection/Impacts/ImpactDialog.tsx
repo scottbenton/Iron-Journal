@@ -1,15 +1,13 @@
 import { Dialog } from "@mui/material";
-import {
-  StoredImpact,
-  StoredImpactCategory,
-} from "types/homebrew/HomebrewRules.type";
+import { HomebrewImpact } from "api-calls/homebrew/rules/impacts/_homebrewImpacts.type";
+import { HomebrewImpactCategoryDocument } from "api-calls/homebrew/rules/impacts/_homebrewImpacts.type";
 import { ImpactDialogForm } from "./ImpactDialogForm";
 
 export interface ImpactDialogProps {
   open: boolean;
   onClose: () => void;
-  onSave: (impactCategoryId: string, impact: StoredImpact) => Promise<void>;
-  impacts: StoredImpactCategory["contents"];
+  onSave: (impactCategoryId: string, impact: HomebrewImpact) => Promise<void>;
+  impacts: HomebrewImpactCategoryDocument["contents"];
   editingCategoryKey: string;
   editingImpactKey?: string;
 }

@@ -1,4 +1,4 @@
-import { StoredLegacyTrack } from "types/homebrew/HomebrewRules.type";
+import { HomebrewLegacyTrackDocument } from "api-calls/homebrew/rules/legacyTracks/_homebrewLegacyTrack.type";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import {
   Button,
@@ -19,8 +19,8 @@ import { MarkdownEditor } from "components/shared/RichTextEditor/MarkdownEditor"
 
 export interface LegacyTrackDialogFormProps {
   homebrewId: string;
-  legacyTracks: Record<string, StoredLegacyTrack>;
-  onSave: (legacyTrack: StoredLegacyTrack) => Promise<void>;
+  legacyTracks: Record<string, HomebrewLegacyTrackDocument>;
+  onSave: (legacyTrack: HomebrewLegacyTrackDocument) => Promise<void>;
   onClose: () => void;
   editingLegacyTrackKey?: string;
 }
@@ -123,7 +123,7 @@ export function LegacyTrackDialogForm(props: LegacyTrackDialogFormProps) {
               }}
             />
             <Controller
-              name='description'
+              name="description"
               control={control}
               defaultValue={""}
               render={({ field }) => (
@@ -140,7 +140,7 @@ export function LegacyTrackDialogForm(props: LegacyTrackDialogFormProps) {
                 disabled={disabled}
                 control={
                   <Controller
-                    name='shared'
+                    name="shared"
                     control={control}
                     defaultValue={false}
                     render={({ field }) => (
@@ -159,7 +159,7 @@ export function LegacyTrackDialogForm(props: LegacyTrackDialogFormProps) {
                 disabled={disabled}
                 control={
                   <Controller
-                    name='optional'
+                    name="optional"
                     control={control}
                     defaultValue={false}
                     render={({ field }) => (

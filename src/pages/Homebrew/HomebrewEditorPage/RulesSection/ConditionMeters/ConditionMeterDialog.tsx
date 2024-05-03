@@ -1,12 +1,12 @@
 import { Dialog } from "@mui/material";
-import { StoredConditionMeter } from "types/homebrew/HomebrewRules.type";
+import { HomebrewConditionMeterDocument } from "api-calls/homebrew/rules/conditionMeters/_homebrewConditionMeters.type";
 import { ConditionMeterDialogForm } from "./ConditionMeterDialogForm";
 
 export interface ConditionMeterDialogProps {
   homebrewId: string;
-  conditionMeters: Record<string, StoredConditionMeter>;
+  conditionMeters: Record<string, HomebrewConditionMeterDocument>;
   open: boolean;
-  onSave: (conditionMeter: StoredConditionMeter) => Promise<void>;
+  onSave: (conditionMeter: HomebrewConditionMeterDocument) => Promise<void>;
   onClose: () => void;
   editingConditionMeterKey?: string;
 }

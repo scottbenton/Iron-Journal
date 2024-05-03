@@ -5,7 +5,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { firestore } from "config/firebase.config";
-import { StoredConditionMeter } from "types/homebrew/HomebrewRules.type";
+import { HomebrewConditionMeterDocument } from "api-calls/homebrew/rules/conditionMeters/_homebrewConditionMeters.type";
 
 export function constructHomebrewConditionMeterCollectionPath() {
   return `homebrew/homebrew/condition_meters`;
@@ -21,12 +21,12 @@ export function getHomebrewConditionMeterCollection() {
   return collection(
     firestore,
     constructHomebrewConditionMeterCollectionPath()
-  ) as CollectionReference<StoredConditionMeter>;
+  ) as CollectionReference<HomebrewConditionMeterDocument>;
 }
 
 export function getHomebrewConditionMeterDoc(conditionMeterId: string) {
   return doc(
     firestore,
     constructHomebrewConditionMeterDocPath(conditionMeterId)
-  ) as DocumentReference<StoredConditionMeter>;
+  ) as DocumentReference<HomebrewConditionMeterDocument>;
 }

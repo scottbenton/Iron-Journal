@@ -1,5 +1,5 @@
 import { Datasworn } from "@datasworn/core";
-import { StoredNonLinearMeter } from "types/homebrew/HomebrewRules.type";
+import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type";
 
 export interface RulesSliceData {
   expansionIds: string[];
@@ -8,7 +8,7 @@ export interface RulesSliceData {
   rootOracleCollectionIds: string[];
   stats: Datasworn.Rules["stats"];
   conditionMeters: Datasworn.Rules["condition_meters"];
-  nonLinearMeters: Record<string, StoredNonLinearMeter>;
+  nonLinearMeters: Record<string, HomebrewNonLinearMeterDocument>;
   specialTracks: Datasworn.Rules["special_tracks"];
   impacts: Datasworn.Rules["impacts"];
   assetMaps: {

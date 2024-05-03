@@ -1,6 +1,6 @@
 import { firebaseAuth } from "config/firebase.config";
 import { onSnapshot, setDoc } from "firebase/firestore";
-import { StoredOracle } from "types/Oracles.type";
+import { StoredOracle } from "api-calls/user/custom-oracles/_custom-oracles.type";
 import { getUsersCustomOracleDoc } from "./_getRef";
 
 export function listenToCustomOracles(

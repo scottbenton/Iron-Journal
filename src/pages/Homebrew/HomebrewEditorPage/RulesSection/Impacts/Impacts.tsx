@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { StoredImpactCategory } from "types/homebrew/HomebrewRules.type";
+import { HomebrewImpactCategoryDocument } from "api-calls/homebrew/rules/impacts/_homebrewImpacts.type";
 import { ImpactCategoryDialog } from "./ImpactCategoryDialog";
 import { useStore } from "stores/store";
 import ViewIcon from "@mui/icons-material/Visibility";
@@ -63,7 +63,7 @@ export function Impacts(props: ImpactsProps) {
   const deleteImpact = useStore((store) => store.homebrew.deleteImpact);
 
   const createOrUpdateImpactCategory = (
-    impactCategory: StoredImpactCategory
+    impactCategory: HomebrewImpactCategoryDocument
   ) => {
     if (editingImpactCategoryKey) {
       return updateImpactCategory(editingImpactCategoryKey, impactCategory);

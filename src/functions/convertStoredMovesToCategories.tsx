@@ -2,9 +2,9 @@ import { Datasworn } from "@datasworn/core";
 import { License } from "types/Datasworn";
 import {
   MoveType,
-  StoredMove,
-  StoredMoveCategory,
-} from "types/homebrew/HomebrewMoves.type";
+  HomebrewMoveDocument,
+} from "api-calls/homebrew/moves/moves/_homebrewMove.type";
+import { HomebrewMoveCategoryDocument } from "api-calls/homebrew/moves/categories/_homebrewMoveCategory.type";
 
 const DEFAULT_SOURCE: Datasworn.SourceInfo = {
   title: "Homebrew Content",
@@ -16,8 +16,8 @@ const DEFAULT_SOURCE: Datasworn.SourceInfo = {
 
 export function convertStoredMovesToCategories(
   homebrewId: string,
-  storedCategories: Record<string, StoredMoveCategory>,
-  storedMoves: Record<string, StoredMove>
+  storedCategories: Record<string, HomebrewMoveCategoryDocument>,
+  storedMoves: Record<string, HomebrewMoveDocument>
 ): Record<string, Datasworn.MoveCategory> {
   const categories: Record<string, Datasworn.MoveCategory> = {};
 
@@ -54,7 +54,7 @@ export function convertStoredMovesToCategories(
 function convertStoredMove(
   homebrewId: string,
   moveId: string,
-  move: StoredMove
+  move: HomebrewMoveDocument
 ): Datasworn.Move {
   if (move.type === MoveType.NoRoll) {
     const m: Datasworn.MoveNoRoll = {

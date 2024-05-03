@@ -1,5 +1,5 @@
 import { Dialog } from "@mui/material";
-import { StoredOracleCollection } from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 import { OracleTablesCollectionDialogForm } from "./OracleTablesCollectionDialogForm";
 
 export interface OracleTablesCollectionDialogProps {
@@ -7,7 +7,7 @@ export interface OracleTablesCollectionDialogProps {
   open: boolean;
   onClose: () => void;
 
-  collections: Record<string, StoredOracleCollection>;
+  collections: Record<string, HomebrewOracleCollectionDocument>;
   existingCollectionId?: string;
 
   parentCollectionId?: string;

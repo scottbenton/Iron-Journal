@@ -1,9 +1,7 @@
 import { Box, Card, IconButton, Tooltip, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import {
-  StoredOracleCollection,
-  StoredOracleTable,
-} from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleTableDocument } from "api-calls/homebrew/oracles/tables/_homebrewOracleTable.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 import { useStore } from "stores/store";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useConfirm } from "material-ui-confirm";
@@ -14,9 +12,9 @@ import { MoveOracleTableDialog } from "./MoveOracleTableDialog";
 
 export interface OracleTableCardProps {
   oracleId: string;
-  oracle: StoredOracleTable;
+  oracle: HomebrewOracleTableDocument;
   onClick: () => void;
-  collections: Record<string, StoredOracleCollection>;
+  collections: Record<string, HomebrewOracleCollectionDocument>;
   isEditor: boolean;
 }
 

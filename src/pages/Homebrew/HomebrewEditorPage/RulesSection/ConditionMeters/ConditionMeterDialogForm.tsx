@@ -12,7 +12,7 @@ import {
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 import { useRules } from "data/hooks/useRules";
 import { useState } from "react";
-import { StoredConditionMeter } from "types/homebrew/HomebrewRules.type";
+import { HomebrewConditionMeterDocument } from "api-calls/homebrew/rules/conditionMeters/_homebrewConditionMeters.type";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { convertIdPart } from "functions/dataswornIdEncoder";
 import { Preview } from "../../Preview";
@@ -21,8 +21,8 @@ import { MarkdownEditor } from "components/shared/RichTextEditor/MarkdownEditor"
 
 export interface ConditionMeterDialogFormProps {
   homebrewId: string;
-  conditionMeters: Record<string, StoredConditionMeter>;
-  onSave: (conditionMeter: StoredConditionMeter) => Promise<void>;
+  conditionMeters: Record<string, HomebrewConditionMeterDocument>;
+  onSave: (conditionMeter: HomebrewConditionMeterDocument) => Promise<void>;
   onClose: () => void;
   editingConditionMeterKey?: string;
 }
@@ -138,7 +138,7 @@ export function ConditionMeterDialogForm(props: ConditionMeterDialogFormProps) {
               }}
             />
             <Controller
-              name='description'
+              name="description"
               control={control}
               defaultValue={""}
               render={({ field }) => (
@@ -234,7 +234,7 @@ export function ConditionMeterDialogForm(props: ConditionMeterDialogFormProps) {
                 disabled={disabled}
                 control={
                   <Controller
-                    name='shared'
+                    name="shared"
                     control={control}
                     defaultValue={false}
                     render={({ field }) => (
@@ -256,7 +256,7 @@ export function ConditionMeterDialogForm(props: ConditionMeterDialogFormProps) {
                 disabled={disabled}
                 control={
                   <Controller
-                    name='rollable'
+                    name="rollable"
                     control={control}
                     defaultValue={false}
                     render={({ field }) => (

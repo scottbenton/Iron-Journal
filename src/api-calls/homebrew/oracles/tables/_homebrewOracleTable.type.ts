@@ -1,13 +1,4 @@
-export interface StoredOracleCollection {
-  collectionId: string; // Homebrew collection id
-  label: string;
-  parentOracleCollectionId?: string;
-  description?: string;
-  enhancesId?: string;
-  replacesId?: string;
-}
-
-export interface StoredOracleTable {
+export interface HomebrewOracleTableDocument {
   collectionId: string; // Homebrew Collection ID
   oracleCollectionId: string; // Parent collection ID
   label: string;

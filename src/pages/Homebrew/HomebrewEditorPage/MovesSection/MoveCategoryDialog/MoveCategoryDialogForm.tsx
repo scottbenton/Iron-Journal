@@ -11,7 +11,7 @@ import { convertIdPart } from "functions/dataswornIdEncoder";
 import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useStore } from "stores/store";
-import { StoredMoveCategory } from "types/homebrew/HomebrewMoves.type";
+import { HomebrewMoveCategoryDocument } from "api-calls/homebrew/moves/categories/_homebrewMoveCategory.type";
 import { MoveCategoryAutocomplete } from "../MoveCategoryAutocomplete";
 
 export interface MoveCategoryFormDialogProps {
@@ -68,7 +68,7 @@ export function MoveCategoryDialogForm(props: MoveCategoryFormDialogProps) {
   const onSubmit: SubmitHandler<Form> = (values) => {
     setLoading(true);
 
-    const moveCategory: StoredMoveCategory = {
+    const moveCategory: HomebrewMoveCategoryDocument = {
       collectionId: homebrewId,
       label: values.label,
     };

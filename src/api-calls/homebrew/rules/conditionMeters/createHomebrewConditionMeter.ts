@@ -1,11 +1,11 @@
 import { createApiFunction } from "api-calls/createApiFunction";
 import { addDoc } from "firebase/firestore";
 import { getHomebrewConditionMeterCollection } from "./_getRef";
-import { StoredConditionMeter } from "types/homebrew/HomebrewRules.type";
+import { HomebrewConditionMeterDocument } from "api-calls/homebrew/rules/conditionMeters/_homebrewConditionMeters.type";
 
 export const createHomebrewConditionMeter = createApiFunction<
   {
-    conditionMeter: StoredConditionMeter;
+    conditionMeter: HomebrewConditionMeterDocument;
   },
   void
 >((params) => {

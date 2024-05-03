@@ -5,7 +5,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { firestore } from "config/firebase.config";
-import { StoredMoveCategory } from "types/homebrew/HomebrewMoves.type";
+import { HomebrewMoveCategoryDocument } from "api-calls/homebrew/moves/categories/_homebrewMoveCategory.type";
 
 export function constructHomebrewMoveCategoryCollectionPath() {
   return `homebrew/homebrew/move_categories`;
@@ -19,12 +19,12 @@ export function getHomebrewMoveCategoryCollection() {
   return collection(
     firestore,
     constructHomebrewMoveCategoryCollectionPath()
-  ) as CollectionReference<StoredMoveCategory>;
+  ) as CollectionReference<HomebrewMoveCategoryDocument>;
 }
 
 export function getHomebrewMoveCategoryDoc(categoryId: string) {
   return doc(
     firestore,
     constructHomebrewMoveCategoryDocPath(categoryId)
-  ) as DocumentReference<StoredMoveCategory>;
+  ) as DocumentReference<HomebrewMoveCategoryDocument>;
 }

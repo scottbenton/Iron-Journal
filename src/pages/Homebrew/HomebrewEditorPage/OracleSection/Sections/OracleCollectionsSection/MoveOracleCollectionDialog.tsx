@@ -12,13 +12,13 @@ import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithClo
 import { deleteField } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useStore } from "stores/store";
-import { StoredOracleCollection } from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 
 export interface MoveOracleCollectionDialogProps {
   open: boolean;
   parentOracleCollectionId?: string;
   oracleCollectionId: string;
-  oracleCollections: Record<string, StoredOracleCollection>;
+  oracleCollections: Record<string, HomebrewOracleCollectionDocument>;
   onClose: () => void;
 }
 
@@ -108,7 +108,7 @@ export function MoveOracleCollectionDialog(
 function isDescendantOf(
   currentCollectionId: string,
   collectionToCheckId: string,
-  collections: Record<string, StoredOracleCollection>
+  collections: Record<string, HomebrewOracleCollectionDocument>
 ) {
   if (currentCollectionId === collectionToCheckId) {
     return true;

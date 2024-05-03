@@ -2,11 +2,11 @@ import { Button } from "@mui/material";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { OracleTablesCollectionCard } from "./OracleTablesCollectionCard";
 import { EmptyState } from "components/shared/EmptyState";
-import { StoredOracleCollection } from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 
 export interface OracleCollectionsSectionProps {
   openCollectionId?: string;
-  oracleCollections: Record<string, StoredOracleCollection>;
+  oracleCollections: Record<string, HomebrewOracleCollectionDocument>;
   openCollection: (collectionId: string) => void;
   openCreateCollectionDialog: () => void;
   isEditor: boolean;

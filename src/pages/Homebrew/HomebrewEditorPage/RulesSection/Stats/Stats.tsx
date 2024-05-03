@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { StoredStat } from "types/homebrew/HomebrewRules.type";
+import { HomebrewStatDocument } from "api-calls/homebrew/rules/stats/_homebrewStat.type";
 import { StatDialog } from "./StatDialog";
 import { useStore } from "stores/store";
 import { useConfirm } from "material-ui-confirm";
@@ -48,7 +48,7 @@ export function Stats(props: StatsProps) {
   const updateStat = useStore((store) => store.homebrew.updateStat);
   const deleteStat = useStore((store) => store.homebrew.deleteStat);
 
-  const handleStatDialogSave = (stat: StoredStat) => {
+  const handleStatDialogSave = (stat: HomebrewStatDocument) => {
     if (editingStatKey) {
       return updateStat(editingStatKey, stat);
     } else {

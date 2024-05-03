@@ -12,7 +12,7 @@ import { ClampedMarkdownRenderer } from "components/shared/ClampedMarkdownRender
 import { useConfirm } from "material-ui-confirm";
 import { useState } from "react";
 import { useStore } from "stores/store";
-import { StoredLegacyTrack } from "types/homebrew/HomebrewRules.type";
+import { HomebrewLegacyTrackDocument } from "api-calls/homebrew/rules/legacyTracks/_homebrewLegacyTrack.type";
 import ViewIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -53,7 +53,9 @@ export function LegacyTracks(props: LegacyTracksProps) {
   const deleteLegacyTrack = useStore(
     (store) => store.homebrew.deleteLegacyTrack
   );
-  const createOrUpdateLegacyTrack = (legacyTrack: StoredLegacyTrack) => {
+  const createOrUpdateLegacyTrack = (
+    legacyTrack: HomebrewLegacyTrackDocument
+  ) => {
     if (editingLegacyTrackKey) {
       return updateLegacyTrack(editingLegacyTrackKey, legacyTrack);
     } else {

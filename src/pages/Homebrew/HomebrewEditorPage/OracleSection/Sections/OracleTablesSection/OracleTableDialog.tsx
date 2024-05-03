@@ -1,4 +1,4 @@
-import { StoredOracleTable } from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleTableDocument } from "api-calls/homebrew/oracles/tables/_homebrewOracleTable.type";
 import { Dialog } from "@mui/material";
 import { OracleTableSimpleForm } from "./OracleTableSimpleForm";
 
@@ -7,7 +7,7 @@ export interface OracleTableDialogProps {
   parentCollectionId: string;
   open: boolean;
   onClose: () => void;
-  tables: Record<string, StoredOracleTable>;
+  tables: Record<string, HomebrewOracleTableDocument>;
   editingOracleTableId?: string;
 }
 

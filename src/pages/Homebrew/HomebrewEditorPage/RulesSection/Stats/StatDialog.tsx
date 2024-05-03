@@ -1,12 +1,12 @@
-import { StoredStat } from "types/homebrew/HomebrewRules.type";
+import { HomebrewStatDocument } from "api-calls/homebrew/rules/stats/_homebrewStat.type";
 import { Dialog } from "@mui/material";
 import { StatDialogForm } from "./StatDialogForm";
 
 export interface StatDialogProps {
   homebrewId: string;
-  stats: Record<string, StoredStat>;
+  stats: Record<string, HomebrewStatDocument>;
   open: boolean;
-  onSave: (stat: StoredStat) => Promise<void>;
+  onSave: (stat: HomebrewStatDocument) => Promise<void>;
   onClose: () => void;
   editingStatKey?: string;
 }
