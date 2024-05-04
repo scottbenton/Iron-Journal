@@ -2,10 +2,8 @@ import { Breadcrumbs, Button, Link, Stack, Typography } from "@mui/material";
 import { EmptyState } from "components/shared/EmptyState";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { useState } from "react";
-import {
-  StoredMove,
-  StoredMoveCategory,
-} from "types/homebrew/HomebrewMoves.type";
+import { HomebrewMoveDocument } from "api-calls/homebrew/moves/moves/_homebrewMove.type";
+import { HomebrewMoveCategoryDocument } from "api-calls/homebrew/moves/categories/_homebrewMoveCategory.type";
 import { MoveCategoryCard } from "./MoveCategoryCard";
 import { MoveCategoryDialog } from "./MoveCategoryDialog";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
@@ -16,8 +14,8 @@ import { MoveCard } from "./MoveCard";
 
 export interface MovesEditorPaneProps {
   homebrewId: string;
-  categories: Record<string, StoredMoveCategory>;
-  moves: Record<string, StoredMove>;
+  categories: Record<string, HomebrewMoveCategoryDocument>;
+  moves: Record<string, HomebrewMoveDocument>;
   isEditor: boolean;
 }
 

@@ -5,7 +5,7 @@ import {
   collection,
   doc,
 } from "firebase/firestore";
-import { HomebrewCollectionDocument } from "types/homebrew/HomebrewCollection.type";
+import { HomebrewCollectionDocument } from "api-calls/homebrew/_homebrewCollection.type";
 
 export function constructHomebrewCollectionPath() {
   return "/homebrew/homebrew/collections";

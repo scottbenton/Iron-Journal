@@ -1,12 +1,12 @@
 import { createApiFunction } from "api-calls/createApiFunction";
 import { PartialWithFieldValue, updateDoc } from "firebase/firestore";
 import { getHomebrewNonLinearMeterDoc } from "./_getRef";
-import { StoredNonLinearMeter } from "types/homebrew/HomebrewRules.type";
+import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type";
 
 export const updateHomebrewNonLinearMeter = createApiFunction<
   {
     meterId: string;
-    meter: PartialWithFieldValue<StoredNonLinearMeter>;
+    meter: PartialWithFieldValue<HomebrewNonLinearMeterDocument>;
   },
   void
 >((params) => {

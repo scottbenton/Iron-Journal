@@ -8,15 +8,26 @@ export interface AssetCollectionAutocompleteProps {
   disabled?: boolean;
   onBlur: () => void;
   helperText?: string;
+  showOriginalNames?: boolean;
 }
 
 export function AssetCollectionAutocomplete(
   props: AssetCollectionAutocompleteProps
 ) {
-  const { label, value, onChange, disabled, onBlur, helperText } = props;
+  const {
+    label,
+    value,
+    onChange,
+    disabled,
+    onBlur,
+    helperText,
+    showOriginalNames,
+  } = props;
 
-  const assetCollectionMap = useStore(
-    (store) => store.rules.assetMaps.assetCollectionMap
+  const assetCollectionMap = useStore((store) =>
+    showOriginalNames
+      ? store.rules.assetMaps.nonReplacedAssetCollectionMap
+      : store.rules.assetMaps.assetCollectionMap
   );
 
   return (

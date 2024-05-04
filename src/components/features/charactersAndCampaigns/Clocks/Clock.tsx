@@ -8,23 +8,23 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Clock as IClock, TRACK_STATUS } from "types/Track.type";
+import { Clock as IClock, TrackStatus } from "types/Track.type";
 import { ClockCircle } from "./ClockCircle";
 import CheckIcon from "@mui/icons-material/Check";
 import { useConfirm } from "material-ui-confirm";
-import { CLOCK_ORACLES_KEYS } from "types/Track.type";
+import { ClockOracleKeys } from "types/Track.type";
 import DieIcon from "@mui/icons-material/Casino";
 import { useRoller } from "stores/appState/useRoller";
 
 const clockOracleMap = {
-  [CLOCK_ORACLES_KEYS.ALMOST_CERTAIN]:
+  [ClockOracleKeys.AlmostCertain]:
     "starforged/oracles/moves/ask_the_oracle/almost_certain",
-  [CLOCK_ORACLES_KEYS.LIKELY]: "starforged/oracles/moves/ask_the_oracle/likely",
-  [CLOCK_ORACLES_KEYS.FIFTY_FIFTY]:
+  [ClockOracleKeys.Likely]: "starforged/oracles/moves/ask_the_oracle/likely",
+  [ClockOracleKeys.FiftyFifty]:
     "starforged/oracles/moves/ask_the_oracle/fifty-fifty",
-  [CLOCK_ORACLES_KEYS.UNLIKELY]:
+  [ClockOracleKeys.Unlikely]:
     "starforged/oracles/moves/ask_the_oracle/unlikely",
-  [CLOCK_ORACLES_KEYS.SMALL_CHANCE]:
+  [ClockOracleKeys.SmallChance]:
     "starforged/oracles/moves/ask_the_oracle/small_chance",
 };
 
@@ -32,7 +32,7 @@ export interface ClockProps {
   clock: IClock;
   onEdit?: () => void;
   onValueChange?: (value: number) => void;
-  onSelectedOracleChange?: (oracleKey: CLOCK_ORACLES_KEYS) => void;
+  onSelectedOracleChange?: (oracleKey: ClockOracleKeys) => void;
   onComplete?: () => void;
 }
 
@@ -66,7 +66,7 @@ export function Clock(props: ClockProps) {
     if (onValueChange) {
       const result = rollClockProgression(
         clock.label,
-        clockOracleMap[clock.oracleKey ?? CLOCK_ORACLES_KEYS.FIFTY_FIFTY]
+        clockOracleMap[clock.oracleKey ?? ClockOracleKeys.FiftyFifty]
       );
 
       if (result && clock.value < clock.segments) {
@@ -94,7 +94,7 @@ export function Clock(props: ClockProps) {
             </Link>
           )}
         </Typography>
-        {clock.status === TRACK_STATUS.COMPLETED && (
+        {clock.status === TrackStatus.Completed && (
           <Chip
             label={"Completed"}
             color={"success"}
@@ -132,23 +132,21 @@ export function Clock(props: ClockProps) {
           <TextField
             label={"Roll Progress"}
             select
-            value={clock.oracleKey ?? CLOCK_ORACLES_KEYS.FIFTY_FIFTY}
+            value={clock.oracleKey ?? ClockOracleKeys.FiftyFifty}
             onChange={(evt) =>
               onSelectedOracleChange &&
-              onSelectedOracleChange(evt.target.value as CLOCK_ORACLES_KEYS)
+              onSelectedOracleChange(evt.target.value as ClockOracleKeys)
             }
             disabled={!onSelectedOracleChange}
             fullWidth
           >
-            <MenuItem value={CLOCK_ORACLES_KEYS.ALMOST_CERTAIN}>
+            <MenuItem value={ClockOracleKeys.AlmostCertain}>
               Almost Certain
             </MenuItem>
-            <MenuItem value={CLOCK_ORACLES_KEYS.LIKELY}>Likely</MenuItem>
-            <MenuItem value={CLOCK_ORACLES_KEYS.FIFTY_FIFTY}>
-              Fifty Fifty
-            </MenuItem>
-            <MenuItem value={CLOCK_ORACLES_KEYS.UNLIKELY}>Unlikely</MenuItem>
-            <MenuItem value={CLOCK_ORACLES_KEYS.SMALL_CHANCE}>
+            <MenuItem value={ClockOracleKeys.Likely}>Likely</MenuItem>
+            <MenuItem value={ClockOracleKeys.FiftyFifty}>Fifty Fifty</MenuItem>
+            <MenuItem value={ClockOracleKeys.Unlikely}>Unlikely</MenuItem>
+            <MenuItem value={ClockOracleKeys.SmallChance}>
               Small Chance
             </MenuItem>
           </TextField>

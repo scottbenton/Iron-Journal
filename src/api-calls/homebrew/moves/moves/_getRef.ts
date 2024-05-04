@@ -5,7 +5,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { firestore } from "config/firebase.config";
-import { StoredMove } from "types/homebrew/HomebrewMoves.type";
+import { HomebrewMoveDocument } from "api-calls/homebrew/moves/moves/_homebrewMove.type";
 
 export function constructHomebrewMoveCollectionPath() {
   return `homebrew/homebrew/moves`;
@@ -19,12 +19,12 @@ export function getHomebrewMoveCollection() {
   return collection(
     firestore,
     constructHomebrewMoveCollectionPath()
-  ) as CollectionReference<StoredMove>;
+  ) as CollectionReference<HomebrewMoveDocument>;
 }
 
 export function getHomebrewMoveDoc(moveId: string) {
   return doc(
     firestore,
     constructHomebrewMoveDocPath(moveId)
-  ) as DocumentReference<StoredMove>;
+  ) as DocumentReference<HomebrewMoveDocument>;
 }

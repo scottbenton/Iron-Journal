@@ -1,9 +1,7 @@
 import { Box, Card, IconButton, Tooltip, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import {
-  StoredOracleCollection,
-  StoredOracleTable,
-} from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleTableDocument } from "api-calls/homebrew/oracles/tables/_homebrewOracleTable.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 import { useStore } from "stores/store";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useConfirm } from "material-ui-confirm";
@@ -14,9 +12,9 @@ import { MoveOracleTableDialog } from "./MoveOracleTableDialog";
 
 export interface OracleTableCardProps {
   oracleId: string;
-  oracle: StoredOracleTable;
+  oracle: HomebrewOracleTableDocument;
   onClick: () => void;
-  collections: Record<string, StoredOracleCollection>;
+  collections: Record<string, HomebrewOracleCollectionDocument>;
   isEditor: boolean;
 }
 
@@ -42,6 +40,10 @@ export function OracleTableCard(props: OracleTableCardProps) {
       .catch(() => {});
   };
 
+  const oracleMap = useStore(
+    (store) => store.rules.oracleMaps.nonReplacedOracleRollableMap
+  );
+
   const [moveOracleDialogOpen, setMoveOracleDialogOpen] = useState(false);
 
   return (
@@ -63,6 +65,11 @@ export function OracleTableCard(props: OracleTableCardProps) {
             Table
           </Typography>
           <Typography variant={"h6"}>{oracle.label}</Typography>
+          {oracle.replaces && (
+            <Typography color={"textSecondary"}>
+              Replaces &quot;{oracleMap[oracle.replaces]?.name}&quot;
+            </Typography>
+          )}
         </Box>
         <Box>
           {isEditor ? (

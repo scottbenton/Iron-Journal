@@ -1,53 +1,51 @@
 import { Timestamp } from "firebase/firestore";
 
-export enum TRACK_TYPES {
-  VOW = "vow",
-  JOURNEY = "journey",
-  FRAY = "fray",
-  BOND_PROGRESS = "bondProgress",
-  CLOCK = "clock",
+export enum TrackTypes {
+  Vow = "vow",
+  Journey = "journey",
+  Fray = "fray",
+  BondProgress = "bondProgress",
+  Clock = "clock",
 }
 
-export type PROGRESS_TRACKS =
-  | TRACK_TYPES.BOND_PROGRESS
-  | TRACK_TYPES.FRAY
-  | TRACK_TYPES.JOURNEY
-  | TRACK_TYPES.VOW;
-export type TRACK_SECTION_PROGRESS_TRACKS =
-  | TRACK_TYPES.FRAY
-  | TRACK_TYPES.JOURNEY
-  | TRACK_TYPES.VOW;
-export type TRACK_SECTION_TRACKS =
-  | TRACK_SECTION_PROGRESS_TRACKS
-  | TRACK_TYPES.CLOCK;
+export type ProgressTracks =
+  | TrackTypes.BondProgress
+  | TrackTypes.Fray
+  | TrackTypes.Journey
+  | TrackTypes.Vow;
+export type TrackSectionProgressTracks =
+  | TrackTypes.Fray
+  | TrackTypes.Journey
+  | TrackTypes.Vow;
+export type TrackSectionTracks = TrackSectionProgressTracks | TrackTypes.Clock;
 
-export enum TRACK_STATUS {
-  ACTIVE = "active",
-  COMPLETED = "completed",
+export enum TrackStatus {
+  Active = "active",
+  Completed = "completed",
 }
 
-export enum DIFFICULTY {
-  TROUBLESOME = "troublesome",
-  DANGEROUS = "dangerous",
-  FORMIDABLE = "formidable",
-  EXTREME = "extreme",
-  EPIC = "epic",
+export enum Difficulty {
+  Troublesome = "troublesome",
+  Dangerous = "dangerous",
+  Formidable = "formidable",
+  Extreme = "extreme",
+  Epic = "epic",
 }
 
-export enum CLOCK_ORACLES_KEYS {
-  ALMOST_CERTAIN = "almost_certain",
-  LIKELY = "likely",
-  FIFTY_FIFTY = "fifty_fifty",
-  UNLIKELY = "unlikely",
-  SMALL_CHANCE = "small_chance",
+export enum ClockOracleKeys {
+  AlmostCertain = "almost_certain",
+  Likely = "likely",
+  FiftyFifty = "fifty_fifty",
+  Unlikely = "unlikely",
+  SmallChance = "small_chance",
 }
 
 export interface BaseTrack {
   label: string;
-  type: TRACK_SECTION_TRACKS;
+  type: TrackSectionTracks;
   description?: string;
   value: number;
-  status: TRACK_STATUS;
+  status: TrackStatus;
   createdDate: Date;
 }
 
@@ -56,20 +54,12 @@ export interface BaseTrackDocument extends Omit<BaseTrack, "createdDate"> {
 }
 
 export interface ProgressTrack extends BaseTrack {
-  difficulty: DIFFICULTY;
-}
-export interface ProgressTrackDocument
-  extends Omit<ProgressTrack, "createdDate"> {
-  createdTimestamp: Timestamp;
+  difficulty: Difficulty;
 }
 
 export interface Clock extends BaseTrack {
   segments: number;
-  oracleKey?: CLOCK_ORACLES_KEYS;
-}
-export interface ClockDocument extends Omit<Clock, "createdDate"> {
-  createdTimestamp: Timestamp;
+  oracleKey?: ClockOracleKeys;
 }
 
-export type TrackDocument = ProgressTrackDocument | ClockDocument;
 export type Track = ProgressTrack | Clock;

@@ -1,12 +1,8 @@
 import { Unsubscribe } from "firebase/firestore";
-import {
-  GMNPCDocument,
-  NPCDocument,
-  NPCDocumentFirestore,
-} from "types/NPCs.type";
+import { GMNPC, NPC } from "types/NPCs.type";
 
-export type NPCDocumentWithGMProperties = NPCDocument & {
-  gmProperties?: GMNPCDocument | null;
+export type NPCDocumentWithGMProperties = NPC & {
+  gmProperties?: GMNPC | null;
   notes?: Uint8Array | null;
   imageUrl?: string;
 };
@@ -24,12 +20,9 @@ export interface NPCsSliceActions {
   setOpenNPCId: (npcId?: string) => void;
   setNPCSearch: (search: string) => void;
 
-  createNPC: (npc?: Partial<NPCDocument>) => Promise<string>;
+  createNPC: (npc?: Partial<NPC>) => Promise<string>;
   deleteNPC: (npcId: string) => Promise<void>;
-  updateNPC: (
-    npcId: string,
-    npc: Partial<NPCDocumentFirestore>
-  ) => Promise<void>;
+  updateNPC: (npcId: string, npc: Partial<NPC>) => Promise<void>;
   updateNPCGMNotes: (
     npcId: string,
     notes: Uint8Array,
@@ -37,7 +30,7 @@ export interface NPCsSliceActions {
   ) => Promise<void>;
   updateNPCGMProperties: (
     npcId: string,
-    gmProperties: Partial<GMNPCDocument>
+    gmProperties: Partial<GMNPC>
   ) => Promise<void>;
   updateNPCNotes: (
     npcId: string,

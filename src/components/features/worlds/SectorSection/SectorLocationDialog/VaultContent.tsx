@@ -1,7 +1,7 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import { useStore } from "stores/store";
-import { StarforgedLocationVault } from "types/LocationStarforged.type";
+import { StarforgedLocationVault } from "api-calls/world/sectors/sectorLocations/_sectorLocations.type";
 import { GMSectionHeader } from "../../GMSectionHeader";
 
 export interface VaultContentProps {

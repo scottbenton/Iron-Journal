@@ -5,8 +5,11 @@ import {
   spiritTrack,
   supplyTrack,
 } from "data/defaultTracks";
-import { StoredAsset } from "types/Asset.type";
-import { CharacterDocument, StatsMap } from "types/Character.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
+import {
+  CharacterDocument,
+  StatsMap,
+} from "api-calls/character/_character.type";
 import { getCharacterAssetCollection } from "../assets/_getRef";
 import { getCharacterCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
@@ -16,7 +19,7 @@ export const createCharacter = createApiFunction<
     uid: string;
     name: string;
     stats: StatsMap;
-    assets: StoredAsset[];
+    assets: AssetDocument[];
     expansionIds?: string[];
   },
   string

@@ -11,7 +11,7 @@ import { convertIdPart } from "functions/dataswornIdEncoder";
 import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useStore } from "stores/store";
-import { StoredHomebrewAssetCollection } from "types/homebrew/HomebrewAssets.type";
+import { HomebrewAssetCollectionDocument } from "api-calls/homebrew/assets/collections/_homebrewAssetCollection.type";
 
 import { AssetCollectionAutocomplete } from "./AssetCollectionAutocomplete";
 
@@ -55,8 +55,8 @@ export function AssetCollectionDialogForm(
       ? {
           label: existingAssetCollection.label,
           description: existingAssetCollection.description,
-          replacesId: existingAssetCollection.replacesId,
-          enhancesId: existingAssetCollection.enhancesId,
+          replacesId: existingAssetCollection.replacesId ?? undefined,
+          enhancesId: existingAssetCollection.enhancesId ?? undefined,
         }
       : {},
   });
@@ -71,7 +71,7 @@ export function AssetCollectionDialogForm(
   const onSubmit: SubmitHandler<Form> = (values) => {
     setLoading(true);
 
-    const assetCollection: StoredHomebrewAssetCollection = {
+    const assetCollection: HomebrewAssetCollectionDocument = {
       collectionId: homebrewId,
       label: values.label,
     };
@@ -79,12 +79,8 @@ export function AssetCollectionDialogForm(
     if (values.description) {
       assetCollection.description = values.description;
     }
-    if (values.enhancesId) {
-      assetCollection.enhancesId = values.enhancesId;
-    }
-    if (values.replacesId) {
-      assetCollection.replacesId = values.replacesId;
-    }
+    assetCollection.enhancesId = values.enhancesId ?? null;
+    assetCollection.replacesId = values.replacesId ?? null;
 
     if (existingAssetCollectionId) {
       updateAssetCollection(existingAssetCollectionId, assetCollection)
@@ -170,6 +166,7 @@ export function AssetCollectionDialogForm(
                   helperText={
                     "Replaces the collection (and all assets within) with this collection"
                   }
+                  showOriginalNames
                 />
               )}
             />
@@ -185,6 +182,7 @@ export function AssetCollectionDialogForm(
                   helperText={
                     "Adds assets in this collection to the entered collection"
                   }
+                  showOriginalNames
                 />
               )}
             />

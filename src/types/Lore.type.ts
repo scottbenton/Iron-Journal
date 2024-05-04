@@ -1,6 +1,4 @@
-import { Bytes, Timestamp } from "firebase/firestore";
-
-export interface LoreDocument {
+export interface Lore {
   name: string;
   imageFilenames?: string[];
   sharedWithPlayers?: boolean;
@@ -9,19 +7,6 @@ export interface LoreDocument {
   createdDate: Date;
 }
 
-export interface LoreDocumentFirestore
-  extends Omit<LoreDocument, "updatedDate" | "createdDate"> {
-  updatedTimestamp: Timestamp;
-  createdTimestamp: Timestamp;
-}
-
-export interface StoredGMLoreDocument {
-  gmNotes?: Bytes;
-}
-export interface GMLoreDocument {
+export interface GMLore {
   gmNotes?: Uint8Array;
-}
-
-export interface LoreNotesDocument {
-  notes: Bytes;
 }

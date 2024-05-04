@@ -1,10 +1,10 @@
 import { Box, Card, CardActionArea, Typography } from "@mui/material";
 import ChevronRight from "@mui/icons-material/ChevronRight";
-import { StoredOracleCollection } from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 import { useStore } from "stores/store";
 
 export interface OracleTablesCollectionCardProps {
-  oracle: StoredOracleCollection;
+  oracle: HomebrewOracleCollectionDocument;
   onClick: () => void;
 }
 
@@ -14,7 +14,7 @@ export function OracleTablesCollectionCard(
   const { oracle, onClick } = props;
 
   const oracleCollectionMap = useStore(
-    (store) => store.rules.oracleMaps.oracleCollectionMap
+    (store) => store.rules.oracleMaps.nonReplacedOracleCollectionMap
   );
 
   return (

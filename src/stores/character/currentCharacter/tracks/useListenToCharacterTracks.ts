@@ -1,7 +1,7 @@
 import { Unsubscribe } from "firebase/firestore";
 import { useEffect } from "react";
 import { useStore } from "stores/store";
-import { TRACK_STATUS } from "types/Track.type";
+import { TrackStatus } from "types/Track.type";
 
 export function useListenToCharacterTracks() {
   const characterId = useStore(
@@ -27,7 +27,7 @@ export function useListenToCharacterTracks() {
   useEffect(() => {
     let unsubscribe: Unsubscribe;
     if (characterId && loadCompletedTracks) {
-      unsubscribe = subscribe(characterId, TRACK_STATUS.COMPLETED);
+      unsubscribe = subscribe(characterId, TrackStatus.Completed);
     }
     return () => {
       unsubscribe && unsubscribe();

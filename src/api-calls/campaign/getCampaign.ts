@@ -1,9 +1,9 @@
 import { getDoc } from "firebase/firestore";
-import { StoredCampaign } from "types/Campaign.type";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { getCampaignDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
-export const getCampaign = createApiFunction<string, StoredCampaign>(
+export const getCampaign = createApiFunction<string, CampaignDocument>(
   (campaignId) => {
     return new Promise((resolve, reject) => {
       getDoc(getCampaignDoc(campaignId))

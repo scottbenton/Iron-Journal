@@ -1,11 +1,11 @@
 import { Datasworn } from "@datasworn/core";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import { AssetControl } from "./AssetControl";
 import { Stack } from "@mui/material";
 
 export interface AssetControlsProps {
   controls: Record<string, Datasworn.AssetControlField> | undefined;
-  storedAsset?: StoredAsset;
+  storedAsset?: AssetDocument;
   row?: boolean;
   onControlChange?: (
     controlKey: string,

@@ -4,10 +4,10 @@ import { ProgressTrackTick } from "./ProgressTrackTick";
 import MinusIcon from "@mui/icons-material/Remove";
 import PlusIcon from "@mui/icons-material/Add";
 import {
-  DIFFICULTY,
-  PROGRESS_TRACKS,
-  TRACK_STATUS,
-  TRACK_TYPES,
+  Difficulty,
+  ProgressTracks,
+  TrackStatus,
+  TrackTypes,
 } from "types/Track.type";
 import CompleteIcon from "@mui/icons-material/Check";
 import DieIcon from "@mui/icons-material/Casino";
@@ -19,27 +19,27 @@ import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { useStore } from "stores/store";
 
 const trackMoveIdSystemValues: GameSystemChooser<{
-  [key in PROGRESS_TRACKS]: string;
+  [key in ProgressTracks]: string;
 }> = {
   [GAME_SYSTEMS.IRONSWORN]: {
-    [TRACK_TYPES.VOW]: "ironsworn/moves/quest/fulfill_your_vow",
-    [TRACK_TYPES.JOURNEY]: "ironsworn/moves/adventure/reach_your_destination",
-    [TRACK_TYPES.FRAY]: "ironsworn/moves/combat/end_the_fight",
-    [TRACK_TYPES.BOND_PROGRESS]: "",
+    [TrackTypes.Vow]: "ironsworn/moves/quest/fulfill_your_vow",
+    [TrackTypes.Journey]: "ironsworn/moves/adventure/reach_your_destination",
+    [TrackTypes.Fray]: "ironsworn/moves/combat/end_the_fight",
+    [TrackTypes.BondProgress]: "",
   },
   [GAME_SYSTEMS.STARFORGED]: {
-    [TRACK_TYPES.VOW]: "starforged/moves/quest/fulfill_your_vow",
-    [TRACK_TYPES.JOURNEY]: "starforged/moves/exploration/finish_an_expedition",
-    [TRACK_TYPES.FRAY]: "starforged/moves/combat/take_decisive_action",
-    [TRACK_TYPES.BOND_PROGRESS]: "starforged/moves/connection/forge_a_bond",
+    [TrackTypes.Vow]: "starforged/moves/quest/fulfill_your_vow",
+    [TrackTypes.Journey]: "starforged/moves/exploration/finish_an_expedition",
+    [TrackTypes.Fray]: "starforged/moves/combat/take_decisive_action",
+    [TrackTypes.BondProgress]: "starforged/moves/connection/forge_a_bond",
   },
 };
 
 export interface ProgressTracksProps {
-  trackType?: PROGRESS_TRACKS;
-  status?: TRACK_STATUS;
+  trackType?: ProgressTracks;
+  status?: TrackStatus;
   label?: string;
-  difficulty?: DIFFICULTY;
+  difficulty?: Difficulty;
   description?: string;
   max: number;
   value: number;
@@ -50,32 +50,32 @@ export interface ProgressTracksProps {
   hideRollButton?: boolean;
 }
 
-const getDifficultyLabel = (difficulty: DIFFICULTY): string => {
+const getDifficultyLabel = (difficulty: Difficulty): string => {
   switch (difficulty) {
-    case DIFFICULTY.DANGEROUS:
+    case Difficulty.Dangerous:
       return "Dangerous";
-    case DIFFICULTY.EPIC:
+    case Difficulty.Epic:
       return "Epic";
-    case DIFFICULTY.EXTREME:
+    case Difficulty.Extreme:
       return "Extreme";
-    case DIFFICULTY.FORMIDABLE:
+    case Difficulty.Formidable:
       return "Formidable";
-    case DIFFICULTY.TROUBLESOME:
+    case Difficulty.Troublesome:
       return "Troublesome";
   }
 };
 
-const getDifficultyStep = (difficulty?: DIFFICULTY): number => {
+const getDifficultyStep = (difficulty?: Difficulty): number => {
   switch (difficulty) {
-    case DIFFICULTY.EPIC:
+    case Difficulty.Epic:
       return 1;
-    case DIFFICULTY.EXTREME:
+    case Difficulty.Extreme:
       return 2;
-    case DIFFICULTY.FORMIDABLE:
+    case Difficulty.Formidable:
       return 4;
-    case DIFFICULTY.DANGEROUS:
+    case Difficulty.Dangerous:
       return 8;
-    case DIFFICULTY.TROUBLESOME:
+    case Difficulty.Troublesome:
       return 12;
     default:
       return 1;
@@ -205,7 +205,7 @@ export function ProgressTrack(props: ProgressTracksProps) {
                 </Link>
               )}
             </Typography>
-            {status === TRACK_STATUS.COMPLETED && (
+            {status === TrackStatus.Completed && (
               <Chip
                 label={"Completed"}
                 color={"success"}

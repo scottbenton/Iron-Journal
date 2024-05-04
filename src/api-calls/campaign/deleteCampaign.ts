@@ -3,7 +3,7 @@ import { getCharacterDoc } from "../character/_getRef";
 import { getCampaignDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 import { deleteNotes } from "api-calls/notes/deleteNotes";
-import { getCampaignSettingsDoc } from "api-calls/custom-move-oracle-settings/_getRef";
+import { getCampaignSettingsDoc } from "api-calls/character-campaign-settings/_getRef";
 import { deleteAllProgressTracks } from "api-calls/tracks/deleteAllProgressTracks";
 import { deleteAllLogs } from "api-calls/game-log/deleteAllLogs";
 import { deleteAllAssets } from "api-calls/assets/deleteAllAssets";

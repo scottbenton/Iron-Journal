@@ -35,12 +35,12 @@ import { deleteHomebrewOracleCollection } from "api-calls/homebrew/oracles/colle
 import { createHomebrewOracleTable } from "api-calls/homebrew/oracles/tables/createHomebrewOracleTable";
 import { updateHomebrewOracleTable } from "api-calls/homebrew/oracles/tables/updateHomebrewOracleTable";
 import { convertStoredOraclesToCollections } from "functions/convertStoredOraclesToCollections";
-import { listenToHomebrewMoveCategories } from "api-calls/homebrew/moves/collections/listenToHomebrewMoveCategories";
+import { listenToHomebrewMoveCategories } from "api-calls/homebrew/moves/categories/listenToHomebrewMoveCategories";
 import { listenToHomebrewMoves } from "api-calls/homebrew/moves/moves/listenToHomebrewMoves";
-import { createHomebrewMoveCategory } from "api-calls/homebrew/moves/collections/createHomebrewMoveCategory";
-import { updateHomebrewMoveCategory } from "api-calls/homebrew/moves/collections/updateHomebrewMoveCategory";
+import { createHomebrewMoveCategory } from "api-calls/homebrew/moves/categories/createHomebrewMoveCategory";
+import { updateHomebrewMoveCategory } from "api-calls/homebrew/moves/categories/updateHomebrewMoveCategory";
 import { deleteHomebrewMove } from "api-calls/homebrew/moves/moves/deleteHomebrewMove";
-import { deleteHomebrewMoveCategory } from "api-calls/homebrew/moves/collections/deleteHomebrewMoveCategory";
+import { deleteHomebrewMoveCategory } from "api-calls/homebrew/moves/categories/deleteHomebrewMoveCategory";
 import { createHomebrewMove } from "api-calls/homebrew/moves/moves/createHomebrewMove";
 import { updateHomebrewMove } from "api-calls/homebrew/moves/moves/updateHomebrewMove";
 import { convertStoredMovesToCategories } from "functions/convertStoredMovesToCategories";
@@ -53,7 +53,7 @@ import { createHomebrewAsset } from "api-calls/homebrew/assets/assets/createHome
 import { updateHomebrewAsset } from "api-calls/homebrew/assets/assets/updateHomebrewAsset";
 import { listenToHomebrewAssetCollections } from "api-calls/homebrew/assets/collections/listenToHomebrewAssetCollections";
 import { listenToHomebrewAssets } from "api-calls/homebrew/assets/assets/listenToHomebrewAssets";
-import { convertStoredAssetsToCollections } from "functions/convertStoredAssetsToCollections";
+import { convertHomebrewAssetDocumentsToCollections } from "functions/convertHomebrewAssetDocumentsToCollections";
 import { listenToHomebrewNonLinearMeters } from "api-calls/homebrew/rules/nonLinearMeters/listenToHomebrewNonLinearMeters";
 import { createHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/createHomebrewNonLinearMeter";
 import { updateHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/updateHomebrewNonLinearMeter";
@@ -633,7 +633,7 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
     const assets = homebrewCollection?.assets?.data;
 
     if (assetCollections && assets) {
-      const collections = convertStoredAssetsToCollections(
+      const collections = convertHomebrewAssetDocumentsToCollections(
         homebrewId,
         assetCollections,
         assets

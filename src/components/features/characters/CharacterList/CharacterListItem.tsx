@@ -2,7 +2,7 @@ import { Box, Card, CardActionArea, Typography } from "@mui/material";
 import { PortraitAvatar } from "components/features/characters/PortraitAvatar/PortraitAvatar";
 import { PropsWithChildren, ReactNode } from "react";
 import { useStore } from "stores/store";
-import { CharacterDocument } from "types/Character.type";
+import { CharacterDocument } from "api-calls/character/_character.type";
 import OpenIcon from "@mui/icons-material/ChevronRight";
 import { LinkComponent } from "components/shared/LinkComponent";
 
@@ -72,7 +72,7 @@ export function CharacterListItem(props: CharacterListItemProps) {
           uid={uid}
           characterId={characterId}
           name={name}
-          portraitSettings={profileImage}
+          portraitSettings={profileImage ?? undefined}
           size={"medium"}
           colorful
         />

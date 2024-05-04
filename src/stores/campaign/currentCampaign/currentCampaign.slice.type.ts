@@ -1,16 +1,16 @@
-import { StoredCampaign } from "types/Campaign.type";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { CampaignTracksSlice } from "./tracks/campaignTracks.slice.type";
 import { CampaignCharactersSlice } from "./characters/campaignCharacters.slice.type";
 import { SharedAssetSlice } from "./sharedAssets/sharedAssets.slice.type";
 
 export interface CurrentCampaignSliceData {
   currentCampaignId?: string;
-  currentCampaign?: StoredCampaign;
+  currentCampaign?: CampaignDocument;
 }
 
 export interface CurrentCampaignSliceActions {
   setCurrentCampaignId: (campaignId?: string) => void;
-  setCurrentCampaign: (campaign?: StoredCampaign) => void;
+  setCurrentCampaign: (campaign?: CampaignDocument) => void;
 
   updateCampaignWorld: (worldId?: string) => Promise<void>;
   updateCampaignGM: (gmId: string, shouldRemove?: boolean) => Promise<void>;
@@ -24,7 +24,7 @@ export interface CurrentCampaignSliceActions {
     conditionMeterKey: string,
     value: number
   ) => Promise<void>;
-  updateCampaign: (campaign: Partial<StoredCampaign>) => Promise<void>;
+  updateCampaign: (campaign: Partial<CampaignDocument>) => Promise<void>;
 
   resetStore: () => void;
 }

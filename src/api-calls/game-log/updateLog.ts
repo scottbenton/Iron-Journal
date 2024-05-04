@@ -2,6 +2,7 @@ import { createApiFunction } from "api-calls/createApiFunction";
 import { updateDoc } from "firebase/firestore";
 import { Roll } from "types/DieRolls.type";
 import {
+  convertRollToGameLogDocument,
   getCampaignGameLogDocument,
   getCharacterGameLogDocument,
 } from "./_getRef";
@@ -21,8 +22,7 @@ export const updateLog = createApiFunction<
       ? getCampaignGameLogDocument(campaignId, logId)
       : getCharacterGameLogDocument(characterId as string, logId);
 
-    // @ts-expect-error not sure why log is incorrect here
-    updateDoc(docRef, log)
+    updateDoc(docRef, convertRollToGameLogDocument(log))
       .then(() => {
         resolve();
       })

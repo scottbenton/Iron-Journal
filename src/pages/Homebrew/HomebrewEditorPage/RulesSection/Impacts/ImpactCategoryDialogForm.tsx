@@ -1,6 +1,6 @@
 import { useRules } from "data/hooks/useRules";
 import { useState } from "react";
-import { StoredImpactCategory } from "types/homebrew/HomebrewRules.type";
+import { HomebrewImpactCategoryDocument } from "api-calls/homebrew/rules/impacts/_homebrewImpacts.type";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import {
   Button,
@@ -16,8 +16,8 @@ import { MarkdownEditor } from "components/shared/RichTextEditor/MarkdownEditor"
 export interface ImpactCategoryDialogFormProps {
   homebrewId: string;
   onClose: () => void;
-  onSave: (impactCategory: StoredImpactCategory) => Promise<void>;
-  impactCategories: Record<string, StoredImpactCategory>;
+  onSave: (impactCategory: HomebrewImpactCategoryDocument) => Promise<void>;
+  impactCategories: Record<string, HomebrewImpactCategoryDocument>;
   editingCategoryKey?: string;
 }
 
@@ -110,7 +110,7 @@ export function ImpactCategoryDialogForm(props: ImpactCategoryDialogFormProps) {
               }}
             />
             <Controller
-              name='description'
+              name="description"
               control={control}
               defaultValue={""}
               render={({ field }) => (

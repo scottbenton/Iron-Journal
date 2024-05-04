@@ -1,7 +1,7 @@
 import { Grid, MenuItem, TextField } from "@mui/material";
 import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import { useStore } from "stores/store";
-import { StarforgedLocationPlanet } from "types/LocationStarforged.type";
+import { StarforgedLocationPlanet } from "api-calls/world/sectors/sectorLocations/_sectorLocations.type";
 import { GMSectionHeader } from "../../GMSectionHeader";
 
 export interface PlanetContentProps {

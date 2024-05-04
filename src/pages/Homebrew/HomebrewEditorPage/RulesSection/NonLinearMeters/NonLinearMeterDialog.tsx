@@ -1,12 +1,12 @@
 import { Dialog } from "@mui/material";
-import { StoredNonLinearMeter } from "types/homebrew/HomebrewRules.type";
+import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type";
 import { NonLinearMeterDialogForm } from "./NonLinearMeterDialogForm";
 
 export interface NonLinearMeterDialogProps {
   homebrewId: string;
-  nonLinearMeters: Record<string, StoredNonLinearMeter>;
+  nonLinearMeters: Record<string, HomebrewNonLinearMeterDocument>;
   open: boolean;
-  onSave: (meter: StoredNonLinearMeter) => Promise<void>;
+  onSave: (meter: HomebrewNonLinearMeterDocument) => Promise<void>;
   onClose: () => void;
   editingNonLinearMeterKey?: string;
 }

@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useCallback, useState } from "react";
 import { assetGroupMap, assetGroups } from "data/assets";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import { Asset } from "dataforged";
 import { CreateCustomAsset } from "./CreateCustomAsset";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
@@ -25,7 +25,7 @@ export interface AssetCardDialogProps {
   open: boolean;
   loading?: boolean;
   handleClose: () => void;
-  handleAssetSelection: (asset: Omit<StoredAsset, "order">) => void;
+  handleAssetSelection: (asset: Omit<AssetDocument, "order">) => void;
   showSharedAssetWarning?: boolean;
 }
 
@@ -63,7 +63,7 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
       enabledAbilities[index] = ability.Enabled;
     });
 
-    const storedAsset: Omit<StoredAsset, "order"> = {
+    const storedAsset: Omit<AssetDocument, "order"> = {
       id: asset.$id,
       enabledAbilities,
       inputs: Object.keys(inputs).length > 0 ? inputs : null,

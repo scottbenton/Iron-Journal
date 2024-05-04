@@ -5,14 +5,14 @@ import { SectionHeading } from "components/shared/SectionHeading";
 import { useConfirm } from "material-ui-confirm";
 import { useState } from "react";
 import { useStore } from "stores/store";
-import { StoredOracleCollection } from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 import { MoveOracleCollectionDialog } from "./OracleCollectionsSection/MoveOracleCollectionDialog";
 
 export interface OracleInfoSectionProps {
   homebrewId: string;
   oracleCollectionId: string;
-  oracleCollection: StoredOracleCollection;
-  oracleCollections: Record<string, StoredOracleCollection>;
+  oracleCollection: HomebrewOracleCollectionDocument;
+  oracleCollections: Record<string, HomebrewOracleCollectionDocument>;
   openCollectionDialog: () => void;
   closeCurrentOracleCollection: () => void;
   isEditor: boolean;

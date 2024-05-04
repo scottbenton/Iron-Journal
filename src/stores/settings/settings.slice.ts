@@ -4,18 +4,18 @@ import { defaultSettings } from "./settings.slice.default";
 import { Unsubscribe } from "firebase/firestore";
 import { listenToCustomMoves } from "api-calls/user/custom-moves/listenToCustomMoves";
 import { listenToCustomOracles } from "api-calls/user/custom-oracles/listenToCustomOracles";
-import { listenToSettings } from "api-calls/custom-move-oracle-settings/listenToSettings";
-import { listenToOracleSettings } from "api-calls/custom-move-oracle-settings/settings/listenToOracleSettings";
-import { showOrHideCustomMove } from "api-calls/custom-move-oracle-settings/showOrHideCustomMove";
-import { showOrHideCustomOracle } from "api-calls/custom-move-oracle-settings/showOrHideCustomOracle";
+import { listenToSettings } from "api-calls/character-campaign-settings/listenToSettings";
+import { listenToOracleSettings } from "api-calls/user/settings/listenToOracleSettings";
+import { showOrHideCustomMove } from "api-calls/character-campaign-settings/showOrHideCustomMove";
+import { showOrHideCustomOracle } from "api-calls/character-campaign-settings/showOrHideCustomOracle";
 import { addCustomMove } from "api-calls/user/custom-moves/addCustomMove";
 import { updateCustomMove } from "api-calls/user/custom-moves/updateCustomMove";
 import { removeCustomMove } from "api-calls/user/custom-moves/removeCustomMove";
 import { addCustomOracle } from "api-calls/user/custom-oracles/addCustomOracle";
 import { updateCustomOracle } from "api-calls/user/custom-oracles/updateCustomOracle";
 import { removeCustomOracle } from "api-calls/user/custom-oracles/removeCustomOracle";
-import { updatePinnedOracle } from "api-calls/custom-move-oracle-settings/settings/updatePinnedOracle";
-import { updateSettings } from "api-calls/custom-move-oracle-settings/updateSettings";
+import { updatePinnedOracle } from "api-calls/user/settings/updatePinnedOracle";
+import { updateSettings } from "api-calls/character-campaign-settings/updateSettings";
 
 export const createSettingsSlice: CreateSliceType<SettingsSlice> = (
   set,

@@ -1,5 +1,5 @@
 import { Box, Card, Stack, SxProps, Theme } from "@mui/material";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import { useStore } from "stores/store";
 import { AssetOptions } from "./AssetOptions";
 import { AssetAbilities } from "./AssetAbilities";
@@ -10,7 +10,7 @@ import { ForwardedRef, ReactNode, forwardRef } from "react";
 
 export interface AssetCardProps {
   assetId: string;
-  storedAsset?: StoredAsset;
+  storedAsset?: AssetDocument;
   actions?: ReactNode;
 
   onAssetRemove?: () => void;

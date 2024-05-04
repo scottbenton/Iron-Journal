@@ -1,4 +1,4 @@
-import { StarforgedLocation } from "types/LocationStarforged.type";
+import { SectorLocationDocument } from "api-calls/world/sectors/sectorLocations/_sectorLocations.type";
 import { SECTOR_HEX_TYPES } from "../hexTypes";
 import { PlanetContent } from "./PlanetContent";
 import { StarContent } from "./StarContent";
@@ -9,7 +9,7 @@ import { OtherContent } from "./OtherContent";
 
 export interface ContentProps {
   locationId: string;
-  location: StarforgedLocation;
+  location: SectorLocationDocument;
   showGMFields?: boolean;
   showGMTips?: boolean;
 }
@@ -19,7 +19,7 @@ export function Content(props: ContentProps) {
   const { type } = location;
 
   switch (type) {
-    case SECTOR_HEX_TYPES.PLANET:
+    case SECTOR_HEX_TYPES.Planet:
       return (
         <PlanetContent
           locationId={locationId}
@@ -28,9 +28,9 @@ export function Content(props: ContentProps) {
           showGMTips={showGMTips}
         />
       );
-    case SECTOR_HEX_TYPES.STAR:
+    case SECTOR_HEX_TYPES.Star:
       return <StarContent locationId={locationId} location={location} />;
-    case SECTOR_HEX_TYPES.SETTLEMENT:
+    case SECTOR_HEX_TYPES.Settlement:
       return (
         <SettlementContent
           locationId={locationId}
@@ -39,7 +39,7 @@ export function Content(props: ContentProps) {
           showGMTips={showGMTips}
         />
       );
-    case SECTOR_HEX_TYPES.DERELICT:
+    case SECTOR_HEX_TYPES.Derelict:
       return (
         <DerelictContent
           locationId={locationId}
@@ -48,7 +48,7 @@ export function Content(props: ContentProps) {
           showGMTips={showGMTips}
         />
       );
-    case SECTOR_HEX_TYPES.VAULT:
+    case SECTOR_HEX_TYPES.Vault:
       return (
         <VaultContent
           locationId={locationId}
@@ -57,7 +57,7 @@ export function Content(props: ContentProps) {
           showGMTips={showGMTips}
         />
       );
-    case SECTOR_HEX_TYPES.OTHER:
+    case SECTOR_HEX_TYPES.Other:
       return <OtherContent locationId={locationId} location={location} />;
     default:
       return null;

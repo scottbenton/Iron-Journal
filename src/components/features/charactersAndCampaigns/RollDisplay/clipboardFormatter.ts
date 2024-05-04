@@ -7,8 +7,8 @@ import {
   TrackProgressRoll,
 } from "types/DieRolls.type";
 import { getRollResultLabel } from "./getRollResultLabel";
-import { TRACK_TYPES } from "types/Track.type";
-import { LEGACY_TRACK_TYPES } from "types/LegacyTrack.type";
+import { TrackTypes } from "types/Track.type";
+import { LEGACY_TrackTypes } from "types/LegacyTrack.type";
 
 export function formatQuote(contents: string) {
   return `<blockquote>${contents}</blockquote>`;
@@ -172,23 +172,23 @@ interface TrackProgressRollContents {
   result: string;
 }
 
-function getTrackTypeLabel(type: TRACK_TYPES | LEGACY_TRACK_TYPES) {
+function getTrackTypeLabel(type: TrackTypes | LEGACY_TrackTypes) {
   switch (type) {
-    case TRACK_TYPES.VOW:
+    case TrackTypes.Vow:
       return "Vow";
-    case TRACK_TYPES.BOND_PROGRESS:
+    case TrackTypes.BondProgress:
       return "Bond Progress";
-    case TRACK_TYPES.CLOCK:
+    case TrackTypes.Clock:
       return "Clock Progress";
-    case TRACK_TYPES.FRAY:
+    case TrackTypes.Fray:
       return "Fray";
-    case TRACK_TYPES.JOURNEY:
+    case TrackTypes.Journey:
       return "Journey";
-    case LEGACY_TRACK_TYPES.BONDS:
+    case LEGACY_TrackTypes.BONDS:
       return "Bonds";
-    case LEGACY_TRACK_TYPES.DISCOVERIES:
+    case LEGACY_TrackTypes.DISCOVERIES:
       return "Discoveries";
-    case LEGACY_TRACK_TYPES.QUESTS:
+    case LEGACY_TrackTypes.QUESTS:
       return "Quests";
     default:
       return "";

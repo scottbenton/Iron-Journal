@@ -1,7 +1,7 @@
 import { Box, Card, CardActionArea, Typography } from "@mui/material";
 import PhotoIcon from "@mui/icons-material/Photo";
 import HiddenIcon from "@mui/icons-material/VisibilityOff";
-import { LocationDocumentWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
+import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
 import { NPCDocumentWithGMProperties } from "stores/world/currentWorld/npcs/npcs.slice.type";
 import { Sector } from "types/Sector.type";
 import { useGameSystem } from "hooks/useGameSystem";
@@ -9,7 +9,7 @@ import { GAME_SYSTEMS } from "types/GameSystems.type";
 
 export interface NPCItemProps {
   npc: NPCDocumentWithGMProperties;
-  locations: { [key: string]: LocationDocumentWithGMProperties };
+  locations: { [key: string]: LocationWithGMProperties };
   sectors: { [key: string]: Sector };
   openNPC: () => void;
   showHiddenTag?: boolean;

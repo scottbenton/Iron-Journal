@@ -1,11 +1,11 @@
 import { createApiFunction } from "api-calls/createApiFunction";
 import { addDoc } from "firebase/firestore";
 import { getHomebrewLegacyTrackCollection } from "./_getRef";
-import { StoredLegacyTrack } from "types/homebrew/HomebrewRules.type";
+import { HomebrewLegacyTrackDocument } from "api-calls/homebrew/rules/legacyTracks/_homebrewLegacyTrack.type";
 
 export const createHomebrewLegacyTrack = createApiFunction<
   {
-    legacyTrack: StoredLegacyTrack;
+    legacyTrack: HomebrewLegacyTrackDocument;
   },
   void
 >((params) => {

@@ -1,17 +1,17 @@
 import { Box, Typography } from "@mui/material";
 import ChevronRight from "@mui/icons-material/ChevronRight";
 import { useStore } from "stores/store";
-import { StoredHomebrewAssetCollection } from "types/homebrew/HomebrewAssets.type";
+import { HomebrewAssetCollectionDocument } from "api-calls/homebrew/assets/collections/_homebrewAssetCollection.type";
 
 export interface AssetCollectionCardProps {
-  collection: StoredHomebrewAssetCollection;
+  collection: HomebrewAssetCollectionDocument;
 }
 
 export function AssetCollectionCard(props: AssetCollectionCardProps) {
   const { collection } = props;
 
   const assetCollectionMap = useStore(
-    (store) => store.rules.assetMaps.assetCollectionMap
+    (store) => store.rules.assetMaps.nonReplacedAssetCollectionMap
   );
 
   return (

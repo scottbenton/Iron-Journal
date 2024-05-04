@@ -12,10 +12,10 @@ import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useStore } from "stores/store";
 import {
-  GenericStoredMove,
+  GenericHomebrewMove,
   MoveType,
-  StoredMove,
-} from "types/homebrew/HomebrewMoves.type";
+  HomebrewMoveDocument,
+} from "api-calls/homebrew/moves/moves/_homebrewMove.type";
 import { MoveAutocomplete } from "../MoveAutocomplete";
 import { MoveTypeInput } from "./MoveTypeInput";
 import { MoveTypeFieldWrapper } from "./MoveTypeFieldWrapper";
@@ -66,7 +66,7 @@ export function MoveDialogForm(props: MoveFormDialogProps) {
       ? {
           label: existingMove.label,
           text: existingMove.text,
-          replacesId: existingMove.replacesId,
+          replacesId: existingMove.replacesId ?? undefined,
           oracles: existingMove.oracles,
           type: existingMove.type,
           stats:
@@ -99,8 +99,8 @@ export function MoveDialogForm(props: MoveFormDialogProps) {
   const onSubmit: SubmitHandler<Form> = (values) => {
     setLoading(true);
 
-    let move: StoredMove;
-    const genericMove: GenericStoredMove = {
+    let move: HomebrewMoveDocument;
+    const genericMove: GenericHomebrewMove = {
       collectionId: homebrewId,
       categoryId: categoryId,
       label: values.label,
@@ -108,9 +108,7 @@ export function MoveDialogForm(props: MoveFormDialogProps) {
       type: values.type,
     };
 
-    if (values.replacesId) {
-      genericMove.replacesId = values.replacesId;
-    }
+    genericMove.replacesId = values.replacesId ?? null;
     if (values.oracles) {
       genericMove.oracles = values.oracles;
     }
@@ -228,6 +226,7 @@ export function MoveDialogForm(props: MoveFormDialogProps) {
                   onBlur={field.onBlur}
                   disabled={disabled}
                   helperText={"Replaces an existing move with this one."}
+                  showOriginalMoveName
                 />
               )}
             />

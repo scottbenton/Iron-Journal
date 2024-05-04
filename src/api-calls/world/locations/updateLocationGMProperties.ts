@@ -1,12 +1,12 @@
 import { setDoc } from "firebase/firestore";
-import { GMLocationDocument } from "types/Locations.type";
+import { GMLocation } from "types/Locations.type";
 import { getPrivateDetailsLocationDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 interface Params {
   worldId: string;
   locationId: string;
-  locationGMProperties: Partial<GMLocationDocument>;
+  locationGMProperties: Partial<GMLocation>;
 }
 
 export const updateLocationGMProperties = createApiFunction<Params, void>(

@@ -2,20 +2,20 @@ import { Unsubscribe } from "firebase/firestore";
 import {
   Clock,
   ProgressTrack,
-  TRACK_STATUS,
-  TRACK_TYPES,
+  TrackStatus,
+  TrackTypes,
   Track,
 } from "types/Track.type";
 
 export interface CampaignTracksSliceData {
   loadCompletedTracks: boolean;
   trackMap: Record<
-    TRACK_STATUS,
+    TrackStatus,
     {
-      [TRACK_TYPES.FRAY]: { [trackId: string]: ProgressTrack };
-      [TRACK_TYPES.JOURNEY]: { [trackId: string]: ProgressTrack };
-      [TRACK_TYPES.VOW]: { [trackId: string]: ProgressTrack };
-      [TRACK_TYPES.CLOCK]: { [clockId: string]: Clock };
+      [TrackTypes.Fray]: { [trackId: string]: ProgressTrack };
+      [TrackTypes.Journey]: { [trackId: string]: ProgressTrack };
+      [TrackTypes.Vow]: { [trackId: string]: ProgressTrack };
+      [TrackTypes.Clock]: { [clockId: string]: Clock };
     }
   >;
   error?: string;
@@ -23,7 +23,7 @@ export interface CampaignTracksSliceData {
 }
 
 export interface CampaignTracksSliceActions {
-  subscribe: (campaignId: string, status?: TRACK_STATUS) => Unsubscribe;
+  subscribe: (campaignId: string, status?: TrackStatus) => Unsubscribe;
 
   addTrack: (track: Track) => Promise<void>;
   updateTrack: (trackId: string, track: Partial<Track>) => Promise<void>;

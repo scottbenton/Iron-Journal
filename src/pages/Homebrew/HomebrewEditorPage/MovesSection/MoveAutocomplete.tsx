@@ -8,12 +8,25 @@ export interface MoveAutocompleteProps {
   disabled?: boolean;
   onBlur: () => void;
   helperText?: string;
+  showOriginalMoveName?: boolean;
 }
 
 export function MoveAutocomplete(props: MoveAutocompleteProps) {
-  const { label, value, onChange, disabled, onBlur, helperText } = props;
+  const {
+    label,
+    value,
+    onChange,
+    disabled,
+    onBlur,
+    helperText,
+    showOriginalMoveName,
+  } = props;
 
-  const moveMap = useStore((store) => store.rules.moveMaps.moveMap);
+  const moveMap = useStore((store) =>
+    showOriginalMoveName
+      ? store.rules.moveMaps.nonReplacedMoveMap
+      : store.rules.moveMaps.moveMap
+  );
 
   return (
     <Autocomplete

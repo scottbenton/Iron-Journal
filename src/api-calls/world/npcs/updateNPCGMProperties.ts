@@ -1,12 +1,12 @@
 import { setDoc } from "firebase/firestore";
-import { GMNPCDocument } from "types/NPCs.type";
+import { GMNPC } from "types/NPCs.type";
 import { getPrivateDetailsNPCDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 interface Params {
   worldId: string;
   npcId: string;
-  npcGMProperties: Partial<GMNPCDocument>;
+  npcGMProperties: Partial<GMNPC>;
 }
 
 export const updateNPCGMProperties = createApiFunction<Params, void>(

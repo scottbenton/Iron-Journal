@@ -52,9 +52,9 @@ export function AssetsSection(props: AssetsSectionProps) {
       ? assetCollections[openCollectionKey]
       : undefined;
 
-  const filteredAssetIds = Object.keys(assets).filter(
-    (assetKey) => assets[assetKey].categoryKey === openCollectionKey
-  );
+  const filteredAssetIds = Object.keys(assets)
+    .filter((assetKey) => assets[assetKey].categoryKey === openCollectionKey)
+    .sort((a1, a2) => assets[a1].label.localeCompare(assets[a2].label));
 
   const confirm = useConfirm();
 

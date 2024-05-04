@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useStore } from "stores/store";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { constructHomebrewEditorPath } from "../routes";
-import { PackageTypes } from "types/homebrew/HomebrewCollection.type";
+import { PackageTypes } from "api-calls/homebrew/_homebrewCollection.type";
 
 export interface CreateExpansionDialogProps {
   open: boolean;
@@ -74,7 +74,7 @@ export function CreateExpansionDialog(props: CreateExpansionDialogProps) {
         Create Expansion Collection
       </DialogTitleWithCloseButton>
       <DialogContent>
-        {error && <Alert severity='error'>{error}</Alert>}
+        {error && <Alert severity="error">{error}</Alert>}
         <TextField
           sx={{ mt: 1 }}
           label={"Collection Name"}

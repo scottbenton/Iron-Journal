@@ -17,7 +17,7 @@ import { useStore } from "stores/store";
 import { useState } from "react";
 import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
-import { NPCDocument, NPC_SPECIES } from "types/NPCs.type";
+import { NPC, NPCSpecies } from "types/NPCs.type";
 
 export interface NPCSectionProps {
   isSinglePlayer?: boolean;
@@ -27,8 +27,8 @@ export interface NPCSectionProps {
 export function NPCSection(props: NPCSectionProps) {
   const { isSinglePlayer, showHiddenTag } = props;
 
-  const defaultNPC = useGameSystemValue<Partial<NPCDocument>>({
-    [GAME_SYSTEMS.IRONSWORN]: { species: NPC_SPECIES.IRONLANDER },
+  const defaultNPC = useGameSystemValue<Partial<NPC>>({
+    [GAME_SYSTEMS.IRONSWORN]: { species: NPCSpecies.Ironlander },
     [GAME_SYSTEMS.STARFORGED]: {},
   });
   const searchPlaceholder = useGameSystemValue({

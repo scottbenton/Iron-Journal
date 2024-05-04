@@ -1,6 +1,6 @@
 import { arrayUnion, updateDoc } from "firebase/firestore";
 import { encodeDataswornId } from "functions/dataswornIdEncoder";
-import { StoredOracle } from "types/Oracles.type";
+import { StoredOracle } from "api-calls/user/custom-oracles/_custom-oracles.type";
 import { getUsersCustomOracleDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 

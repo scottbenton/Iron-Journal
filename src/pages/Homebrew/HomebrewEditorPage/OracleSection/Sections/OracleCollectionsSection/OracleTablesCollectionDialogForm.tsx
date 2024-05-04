@@ -12,13 +12,13 @@ import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { OracleCollectionAutocomplete } from "../../OracleCollectionAutocomplete";
 import { useStore } from "stores/store";
-import { StoredOracleCollection } from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 
 export interface OracleTablesCollectionDialogFormProps {
   homebrewId: string;
   onClose: () => void;
 
-  collections: Record<string, StoredOracleCollection>;
+  collections: Record<string, HomebrewOracleCollectionDocument>;
   existingCollectionId?: string;
 
   parentCollectionId?: string;
@@ -59,8 +59,8 @@ export function OracleTablesCollectionDialogForm(
       ? {
           name: existingCollection.label,
           description: existingCollection.description,
-          enhancesId: existingCollection.enhancesId,
-          replacesId: existingCollection.replacesId,
+          enhancesId: existingCollection.enhancesId ?? undefined,
+          replacesId: existingCollection.replacesId ?? undefined,
         }
       : {},
   });
@@ -77,7 +77,7 @@ export function OracleTablesCollectionDialogForm(
   ) => {
     setLoading(true);
 
-    const oracleCollection: StoredOracleCollection = {
+    const oracleCollection: HomebrewOracleCollectionDocument = {
       collectionId: homebrewId,
       label: values.name,
     };
@@ -93,12 +93,9 @@ export function OracleTablesCollectionDialogForm(
     if (values.description) {
       oracleCollection.description = values.description;
     }
-    if (values.enhancesId) {
-      oracleCollection.enhancesId = values.enhancesId;
-    }
-    if (values.replacesId) {
-      oracleCollection.replacesId = values.replacesId;
-    }
+
+    oracleCollection.enhancesId = values.enhancesId ?? null;
+    oracleCollection.replacesId = values.replacesId ?? null;
 
     if (existingCollectionId) {
       updateOracleCollection(existingCollectionId, oracleCollection)
@@ -184,6 +181,7 @@ export function OracleTablesCollectionDialogForm(
                   helperText={
                     "Replaces all oracles within the given collection"
                   }
+                  showOriginalNames
                 />
               )}
             />

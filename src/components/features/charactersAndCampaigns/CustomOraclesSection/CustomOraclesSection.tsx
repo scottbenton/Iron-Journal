@@ -1,7 +1,7 @@
 import { Box, Button, Card, LinearProgress, List, Stack } from "@mui/material";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { useState } from "react";
-import { StoredOracle } from "types/Oracles.type";
+import { StoredOracle } from "api-calls/user/custom-oracles/_custom-oracles.type";
 import { CustomOracleDialog } from "./CustomOracleDialog";
 import { useConfirm } from "material-ui-confirm";
 import { CustomOraclesListItem } from "./CustomOraclesListItem";

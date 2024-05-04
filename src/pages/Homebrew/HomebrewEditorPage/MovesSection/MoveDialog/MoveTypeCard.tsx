@@ -3,7 +3,7 @@ import { ActionIcon } from "assets/ActionIcon";
 import { NoRollIcon } from "assets/NoRollIcon";
 import { ProgressRollIcon } from "assets/ProgressRollIcon";
 import { SpecialTrackIcon } from "assets/SpecialTrackIcon";
-import { MoveType } from "types/homebrew/HomebrewMoves.type";
+import { MoveType } from "api-calls/homebrew/moves/moves/_homebrewMove.type";
 import SelectedIcon from "@mui/icons-material/CheckCircle";
 
 export interface MoveTypeCardProps {

@@ -1,11 +1,11 @@
 import { useSearchNoState } from "hooks/useSearch";
 import { useMemo } from "react";
-import { LocationDocumentWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
+import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
 import { NPCDocumentWithGMProperties } from "stores/world/currentWorld/npcs/npcs.slice.type";
 import { Sector } from "types/Sector.type";
 
 export function useFilterNPCs(
-  locations: { [key: string]: LocationDocumentWithGMProperties },
+  locations: { [key: string]: LocationWithGMProperties },
   sectors: { [key: string]: Sector },
   npcs: { [key: string]: NPCDocumentWithGMProperties },
   search: string

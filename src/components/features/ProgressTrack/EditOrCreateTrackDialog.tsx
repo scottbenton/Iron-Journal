@@ -15,16 +15,16 @@ import {
 import { useState } from "react";
 import {
   ProgressTrack,
-  DIFFICULTY,
-  TRACK_STATUS,
-  TRACK_SECTION_PROGRESS_TRACKS,
+  Difficulty,
+  TrackStatus,
+  TrackSectionProgressTracks,
 } from "types/Track.type";
 
 export interface EditOrCreateTrackDialogProps {
   open: boolean;
   handleClose: () => void;
   initialTrack?: ProgressTrack;
-  trackType: TRACK_SECTION_PROGRESS_TRACKS;
+  trackType: TrackSectionProgressTracks;
   trackTypeName: string;
   handleTrack: (track: ProgressTrack) => Promise<boolean | void>;
 }
@@ -46,7 +46,7 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
   const [description, setDescription] = useState(
     initialTrack?.description ?? ""
   );
-  const [difficulty, setDifficulty] = useState<DIFFICULTY | undefined>(
+  const [difficulty, setDifficulty] = useState<Difficulty | undefined>(
     initialTrack?.difficulty
   );
   const [resetProgress, setResetProgress] = useState(false);
@@ -71,7 +71,7 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
 
     const track: ProgressTrack = {
       createdDate: new Date(),
-      status: TRACK_STATUS.ACTIVE,
+      status: TrackStatus.Active,
       type: trackType,
       ...(initialTrack ?? {}),
       label: title,
@@ -122,18 +122,18 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
             <TextField
               label={"Difficulty"}
               value={difficulty ?? "-1"}
-              onChange={(evt) => setDifficulty(evt.target.value as DIFFICULTY)}
+              onChange={(evt) => setDifficulty(evt.target.value as Difficulty)}
               multiline
               required
               select
             >
               <MenuItem value={"-1"} disabled></MenuItem>
 
-              <MenuItem value={DIFFICULTY.TROUBLESOME}>Troublesome</MenuItem>
-              <MenuItem value={DIFFICULTY.DANGEROUS}>Dangerous</MenuItem>
-              <MenuItem value={DIFFICULTY.FORMIDABLE}>Formidable</MenuItem>
-              <MenuItem value={DIFFICULTY.EXTREME}>Extreme</MenuItem>
-              <MenuItem value={DIFFICULTY.EPIC}>Epic</MenuItem>
+              <MenuItem value={Difficulty.Troublesome}>Troublesome</MenuItem>
+              <MenuItem value={Difficulty.Dangerous}>Dangerous</MenuItem>
+              <MenuItem value={Difficulty.Formidable}>Formidable</MenuItem>
+              <MenuItem value={Difficulty.Extreme}>Extreme</MenuItem>
+              <MenuItem value={Difficulty.Epic}>Epic</MenuItem>
             </TextField>
             {initialTrack && initialTrack.difficulty !== difficulty && (
               <FormControlLabel

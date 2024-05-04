@@ -11,13 +11,13 @@ import {
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 import { useState } from "react";
 import { useStore } from "stores/store";
-import { StoredOracleCollection } from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 
 export interface MoveOracleTableDialogProps {
   open: boolean;
   oracleId: string;
   oracleCollectionId: string;
-  oracleCollections: Record<string, StoredOracleCollection>;
+  oracleCollections: Record<string, HomebrewOracleCollectionDocument>;
   onClose: () => void;
 }
 

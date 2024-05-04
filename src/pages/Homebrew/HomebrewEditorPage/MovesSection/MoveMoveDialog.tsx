@@ -11,13 +11,13 @@ import {
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 import { useState } from "react";
 import { useStore } from "stores/store";
-import { StoredMoveCategory } from "types/homebrew/HomebrewMoves.type";
+import { HomebrewMoveCategoryDocument } from "api-calls/homebrew/moves/categories/_homebrewMoveCategory.type";
 
 export interface MoveMoveDialogProps {
   open: boolean;
   moveId: string;
   moveCategoryId: string;
-  categories: Record<string, StoredMoveCategory>;
+  categories: Record<string, HomebrewMoveCategoryDocument>;
   onClose: () => void;
 }
 

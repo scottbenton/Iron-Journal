@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 import { useState } from "react";
-import { StoredNonLinearMeter } from "types/homebrew/HomebrewRules.type";
+import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { convertIdPart } from "functions/dataswornIdEncoder";
 import { Preview } from "../../Preview";
@@ -22,8 +22,8 @@ import { NonLinearRollableToggle, isNumeric } from "./NonLinearRollableToggle";
 
 export interface NonLinearMeterDialogFormProps {
   homebrewId: string;
-  nonLinearMeters: Record<string, StoredNonLinearMeter>;
-  onSave: (meter: StoredNonLinearMeter) => Promise<void>;
+  nonLinearMeters: Record<string, HomebrewNonLinearMeterDocument>;
+  onSave: (meter: HomebrewNonLinearMeterDocument) => Promise<void>;
   onClose: () => void;
   editingNonLinearMeterKey?: string;
 }

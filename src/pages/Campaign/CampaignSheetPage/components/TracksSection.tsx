@@ -1,12 +1,12 @@
 import { SectionHeading } from "components/shared/SectionHeading";
 import { Track } from "components/features/Track";
 import { supplyTrack } from "data/defaultTracks";
-import { StoredCampaign } from "types/Campaign.type";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { CampaignProgressTracks } from "./CampaignProgressTracks";
 import { useStore } from "stores/store";
 
 export interface TracksSectionProps {
-  campaign: StoredCampaign;
+  campaign: CampaignDocument;
   addTopMargin: boolean;
 }
 

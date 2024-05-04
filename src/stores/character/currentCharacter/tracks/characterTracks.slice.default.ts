@@ -1,20 +1,20 @@
-import { TRACK_STATUS, TRACK_TYPES } from "types/Track.type";
+import { TrackStatus, TrackTypes } from "types/Track.type";
 import { CharacterTracksSliceData } from "./characterTracks.slice.type";
 
 export const defaultCharacterTracksSlice: CharacterTracksSliceData = {
   loadCompletedTracks: false,
   trackMap: {
-    [TRACK_STATUS.ACTIVE]: {
-      [TRACK_TYPES.FRAY]: {},
-      [TRACK_TYPES.JOURNEY]: {},
-      [TRACK_TYPES.VOW]: {},
-      [TRACK_TYPES.CLOCK]: {},
+    [TrackStatus.Active]: {
+      [TrackTypes.Fray]: {},
+      [TrackTypes.Journey]: {},
+      [TrackTypes.Vow]: {},
+      [TrackTypes.Clock]: {},
     },
-    [TRACK_STATUS.COMPLETED]: {
-      [TRACK_TYPES.FRAY]: {},
-      [TRACK_TYPES.JOURNEY]: {},
-      [TRACK_TYPES.VOW]: {},
-      [TRACK_TYPES.CLOCK]: {},
+    [TrackStatus.Completed]: {
+      [TrackTypes.Fray]: {},
+      [TrackTypes.Journey]: {},
+      [TrackTypes.Vow]: {},
+      [TrackTypes.Clock]: {},
     },
   },
   error: "",

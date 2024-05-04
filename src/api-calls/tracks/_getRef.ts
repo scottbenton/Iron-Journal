@@ -6,7 +6,8 @@ import {
   DocumentReference,
   Timestamp,
 } from "firebase/firestore";
-import { TrackDocument, Track } from "types/Track.type";
+import { TrackDocument } from "./_track.type";
+import { Track } from "types/Track.type";
 
 export function constructCampaignTracksCollection(campaignId: string) {
   return `/campaigns/${campaignId}/tracks`;

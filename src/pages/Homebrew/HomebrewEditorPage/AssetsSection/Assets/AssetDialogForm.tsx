@@ -14,11 +14,11 @@ import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useStore } from "stores/store";
 import {
-  StoredHomebrewAsset,
-  StoredHomebrewAssetAbility,
-  StoredHomebrewAssetControl,
-  StoredHomebrewAssetOption,
-} from "types/homebrew/HomebrewAssets.type";
+  HomebrewAssetDocument,
+  HomebrewAssetAbility,
+  HomebrewAssetControl,
+  HomebrewAssetOption,
+} from "api-calls/homebrew/assets/assets/_homebrewAssets.type";
 // import { AssetAutocomplete } from "./AssetAutocomplete";
 import { Preview } from "../../Preview";
 import { AssetCardPreview } from "./AssetCardPreview";
@@ -38,9 +38,9 @@ export interface Form {
   label: string;
   requirement?: string;
   // replacesId?: string;
-  abilities: StoredHomebrewAssetAbility[];
-  options: StoredHomebrewAssetOption[];
-  controls: StoredHomebrewAssetControl[];
+  abilities: HomebrewAssetAbility[];
+  options: HomebrewAssetOption[];
+  controls: HomebrewAssetControl[];
 }
 
 export function AssetDialogForm(props: AssetDialogFormProps) {
@@ -76,7 +76,7 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
   const onSubmit: SubmitHandler<Form> = (values) => {
     setLoading(true);
 
-    const asset: StoredHomebrewAsset = {
+    const asset: HomebrewAssetDocument = {
       collectionId: homebrewId,
       categoryKey: categoryId,
       label: values.label,
@@ -90,7 +90,7 @@ export function AssetDialogForm(props: AssetDialogFormProps) {
       asset.options = values.options;
     }
     if (values.controls) {
-      const controls: StoredHomebrewAssetControl[] = [];
+      const controls: HomebrewAssetControl[] = [];
 
       values.controls.forEach((control) => {
         if (control.type === "checkbox") {

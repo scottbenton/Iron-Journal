@@ -1,29 +1,21 @@
 import { Datasworn } from "@datasworn/core";
 import { PartialWithFieldValue, Unsubscribe } from "firebase/firestore";
-import {
-  StoredHomebrewAsset,
-  StoredHomebrewAssetCollection,
-} from "types/homebrew/HomebrewAssets.type";
+import { HomebrewAssetDocument } from "api-calls/homebrew/assets/assets/_homebrewAssets.type";
+import { HomebrewAssetCollectionDocument } from "api-calls/homebrew/assets/collections/_homebrewAssetCollection.type";
 import {
   ExpansionDocument,
   HomebrewCollectionDocument,
-} from "types/homebrew/HomebrewCollection.type";
-import {
-  StoredMove,
-  StoredMoveCategory,
-} from "types/homebrew/HomebrewMoves.type";
-import {
-  StoredOracleCollection,
-  StoredOracleTable,
-} from "types/homebrew/HomebrewOracles.type";
-import {
-  StoredConditionMeter,
-  StoredImpact,
-  StoredImpactCategory,
-  StoredLegacyTrack,
-  StoredNonLinearMeter,
-  StoredStat,
-} from "types/homebrew/HomebrewRules.type";
+} from "api-calls/homebrew/_homebrewCollection.type";
+import { HomebrewMoveDocument } from "api-calls/homebrew/moves/moves/_homebrewMove.type";
+import { HomebrewMoveCategoryDocument } from "api-calls/homebrew/moves/categories/_homebrewMoveCategory.type";
+import { HomebrewOracleTableDocument } from "api-calls/homebrew/oracles/tables/_homebrewOracleTable.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
+import { HomebrewStatDocument } from "api-calls/homebrew/rules/stats/_homebrewStat.type";
+import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type";
+import { HomebrewImpact } from "api-calls/homebrew/rules/impacts/_homebrewImpacts.type";
+import { HomebrewLegacyTrackDocument } from "api-calls/homebrew/rules/legacyTracks/_homebrewLegacyTrack.type";
+import { HomebrewImpactCategoryDocument } from "api-calls/homebrew/rules/impacts/_homebrewImpacts.type";
+import { HomebrewConditionMeterDocument } from "api-calls/homebrew/rules/conditionMeters/_homebrewConditionMeters.type";
 
 export interface HomebrewData<T> {
   data?: Record<string, T>;
@@ -34,22 +26,22 @@ export interface HomebrewData<T> {
 export interface HomebrewEntry {
   base: HomebrewCollectionDocument;
 
-  stats?: HomebrewData<StoredStat>;
-  conditionMeters?: HomebrewData<StoredConditionMeter>;
-  nonLinearMeters?: HomebrewData<StoredNonLinearMeter>;
-  impactCategories?: HomebrewData<StoredImpactCategory>;
-  legacyTracks?: HomebrewData<StoredLegacyTrack>;
+  stats?: HomebrewData<HomebrewStatDocument>;
+  conditionMeters?: HomebrewData<HomebrewConditionMeterDocument>;
+  nonLinearMeters?: HomebrewData<HomebrewNonLinearMeterDocument>;
+  impactCategories?: HomebrewData<HomebrewImpactCategoryDocument>;
+  legacyTracks?: HomebrewData<HomebrewLegacyTrackDocument>;
 
-  oracleCollections?: HomebrewData<StoredOracleCollection>;
-  oracleTables?: HomebrewData<StoredOracleTable>;
+  oracleCollections?: HomebrewData<HomebrewOracleCollectionDocument>;
+  oracleTables?: HomebrewData<HomebrewOracleTableDocument>;
   dataswornOracles?: Record<string, Datasworn.OracleTablesCollection>;
 
-  moveCategories?: HomebrewData<StoredMoveCategory>;
-  moves?: HomebrewData<StoredMove>;
+  moveCategories?: HomebrewData<HomebrewMoveCategoryDocument>;
+  moves?: HomebrewData<HomebrewMoveDocument>;
   dataswornMoves?: Record<string, Datasworn.MoveCategory>;
 
-  assetCollections?: HomebrewData<StoredHomebrewAssetCollection>;
-  assets?: HomebrewData<StoredHomebrewAsset>;
+  assetCollections?: HomebrewData<HomebrewAssetCollectionDocument>;
+  assets?: HomebrewData<HomebrewAssetDocument>;
   dataswornAssets?: Record<string, Datasworn.AssetCollection>;
 }
 
@@ -71,99 +63,111 @@ export interface HomebrewSliceActions {
   ) => Promise<void>;
   deleteExpansion: (expansionId: string) => Promise<void>;
 
-  createStat: (stat: StoredStat) => Promise<void>;
-  updateStat: (statId: string, stat: StoredStat) => Promise<void>;
+  createStat: (stat: HomebrewStatDocument) => Promise<void>;
+  updateStat: (statId: string, stat: HomebrewStatDocument) => Promise<void>;
   deleteStat: (statId: string) => Promise<void>;
 
-  createConditionMeter: (conditionMeter: StoredConditionMeter) => Promise<void>;
+  createConditionMeter: (
+    conditionMeter: HomebrewConditionMeterDocument
+  ) => Promise<void>;
   updateConditionMeter: (
     conditionMeterId: string,
-    conditionMeter: StoredConditionMeter
+    conditionMeter: HomebrewConditionMeterDocument
   ) => Promise<void>;
   deleteConditionMeter: (conditionMeterId: string) => Promise<void>;
 
-  createNonLinearMeter: (meter: StoredNonLinearMeter) => Promise<void>;
+  createNonLinearMeter: (
+    meter: HomebrewNonLinearMeterDocument
+  ) => Promise<void>;
   updateNonLinearMeter: (
     meterId: string,
-    meter: StoredNonLinearMeter
+    meter: HomebrewNonLinearMeterDocument
   ) => Promise<void>;
   deleteNonLinearMeter: (meterId: string) => Promise<void>;
 
-  createImpactCategory: (category: StoredImpactCategory) => Promise<void>;
+  createImpactCategory: (
+    category: HomebrewImpactCategoryDocument
+  ) => Promise<void>;
   updateImpactCategory: (
     impactCategoryId: string,
-    impactCategory: StoredImpactCategory
+    impactCategory: HomebrewImpactCategoryDocument
   ) => Promise<void>;
   deleteImpactCategory: (impactCategoryId: string) => Promise<void>;
   updateImpact: (
     impactCategoryId: string,
-    impact: StoredImpact
+    impact: HomebrewImpact
   ) => Promise<void>;
   deleteImpact: (impactCategoryId: string, impactId: string) => Promise<void>;
 
-  createLegacyTrack: (legacyTrack: StoredLegacyTrack) => Promise<void>;
+  createLegacyTrack: (
+    legacyTrack: HomebrewLegacyTrackDocument
+  ) => Promise<void>;
   updateLegacyTrack: (
     legacyTrackId: string,
-    legacyTrack: StoredLegacyTrack
+    legacyTrack: HomebrewLegacyTrackDocument
   ) => Promise<void>;
   deleteLegacyTrack: (legacyTrackId: string) => Promise<void>;
 
   createOracleCollection: (
-    oracleCollection: StoredOracleCollection
+    oracleCollection: HomebrewOracleCollectionDocument
   ) => Promise<void>;
   updateOracleCollection: (
     oracleCollectionId: string,
-    oracleCollection: PartialWithFieldValue<StoredOracleCollection>
+    oracleCollection: PartialWithFieldValue<HomebrewOracleCollectionDocument>
   ) => Promise<void>;
   deleteOracleCollection: (
     homebrewId: string,
     oracleCollectionId: string
   ) => Promise<void>;
 
-  createOracleTable: (oracleTable: StoredOracleTable) => Promise<void>;
+  createOracleTable: (
+    oracleTable: HomebrewOracleTableDocument
+  ) => Promise<void>;
   updateOracleTable: (
     oracleTableId: string,
-    oracleTable: PartialWithFieldValue<StoredOracleTable>
+    oracleTable: PartialWithFieldValue<HomebrewOracleTableDocument>
   ) => Promise<void>;
   deleteOracleTable: (oracleTableId: string) => Promise<void>;
 
   updateDataswornOracles: (homebrewId: string) => void;
 
-  createMoveCategory: (moveCategory: StoredMoveCategory) => Promise<void>;
+  createMoveCategory: (
+    moveCategory: HomebrewMoveCategoryDocument
+  ) => Promise<void>;
   updateMoveCategory: (
     moveCategoryId: string,
-    moveCategory: StoredMoveCategory
+    moveCategory: HomebrewMoveCategoryDocument
   ) => Promise<void>;
   deleteMoveCategory: (
     homebrewId: string,
     moveCategoryId: string
   ) => Promise<void>;
 
-  createMove: (move: StoredMove) => Promise<void>;
+  createMove: (move: HomebrewMoveDocument) => Promise<void>;
   updateMove: (
     moveId: string,
-    move: PartialWithFieldValue<StoredMove>
+    move: PartialWithFieldValue<HomebrewMoveDocument>
   ) => Promise<void>;
   deleteMove: (moveId: string) => Promise<void>;
 
   updateDataswornMoves: (homebrewId: string) => void;
 
   createAssetCollection: (
-    assetCollection: StoredHomebrewAssetCollection
+    assetCollection: HomebrewAssetCollectionDocument
   ) => Promise<void>;
   updateAssetCollection: (
     assetCollectionId: string,
-    assetCollection: StoredHomebrewAssetCollection
+    assetCollection: HomebrewAssetCollectionDocument
   ) => Promise<void>;
   deleteAssetCollection: (
     homebrewId: string,
     assetCollectionId: string
   ) => Promise<void>;
 
-  createAsset: (asset: StoredHomebrewAsset) => Promise<void>;
+  createAsset: (asset: HomebrewAssetDocument) => Promise<void>;
   updateAsset: (
     assetId: string,
-    asset: PartialWithFieldValue<StoredHomebrewAsset>
+    asset: PartialWithFieldValue<HomebrewAssetDocument>
   ) => Promise<void>;
   deleteAsset: (assetId: string) => Promise<void>;
 

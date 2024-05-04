@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { ReactNode } from "react";
-import { CharacterDocument } from "types/Character.type";
+import { CharacterDocument } from "api-calls/character/_character.type";
 import { CharacterListItem } from "./CharacterListItem";
 import { constructCharacterSheetPath } from "pages/Character/routes";
 

@@ -63,7 +63,7 @@ export function SectorHexagon(props: SectorHexagonProps) {
         strokeWidth="1"
         onClick={onClick}
       />
-      {type === SECTOR_HEX_TYPES.PATH &&
+      {type === SECTOR_HEX_TYPES.Path &&
         (!pathConnections ||
           Object.keys(pathConnections).filter(
             (connection) =>
@@ -112,7 +112,7 @@ export function SectorHexagon(props: SectorHexagonProps) {
               />
             );
           })}
-      {type && type !== SECTOR_HEX_TYPES.PATH && Icon && (
+      {type && type !== SECTOR_HEX_TYPES.Path && Icon && (
         <Icon
           sx={{
             color: color ?? "#fff",

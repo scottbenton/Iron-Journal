@@ -6,8 +6,9 @@ import {
   DocumentReference,
   Timestamp,
 } from "firebase/firestore";
-import { NoteContentDocument } from "types/Notes.type";
-import { Sector, StoredSector } from "types/Sector.type";
+import { NoteContentDocument } from "api-calls/notes/_notes.type";
+import { Sector } from "types/Sector.type";
+import { SectorDocument } from "./_sectors.type";
 
 export function constructSectorsPath(worldId: string) {
   return `/worlds/${worldId}/sectors`;
@@ -35,14 +36,14 @@ export function getSectorCollection(worldId: string) {
   return collection(
     firestore,
     constructSectorsPath(worldId)
-  ) as CollectionReference<StoredSector>;
+  ) as CollectionReference<SectorDocument>;
 }
 
 export function getSectorDoc(worldId: string, sectorId: string) {
   return doc(
     firestore,
     constructSectorDocPath(worldId, sectorId)
-  ) as DocumentReference<StoredSector>;
+  ) as DocumentReference<SectorDocument>;
 }
 
 export function getPrivateSectorNotesDoc(worldId: string, sectorId: string) {
@@ -61,9 +62,9 @@ export function getPublicSectorNotesDoc(worldId: string, sectorId: string) {
 
 export function convertToDatabase(
   sector: Partial<Sector>
-): Partial<StoredSector> {
+): Partial<SectorDocument> {
   const { createdDate, ...rest } = sector;
-  const newSector: Partial<StoredSector> = {
+  const newSector: Partial<SectorDocument> = {
     ...rest,
   };
 
@@ -74,7 +75,7 @@ export function convertToDatabase(
   return newSector;
 }
 
-export function convertFromDatabase(sector: StoredSector): Sector {
+export function convertFromDatabase(sector: SectorDocument): Sector {
   const { createdTimestamp, ...rest } = sector;
   return {
     createdDate: createdTimestamp.toDate(),

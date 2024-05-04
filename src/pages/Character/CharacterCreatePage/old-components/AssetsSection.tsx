@@ -1,7 +1,7 @@
 import { Alert, Box, Button, Grid, Typography } from "@mui/material";
 import { AssetCard } from "components/features/assets/AssetCard";
 import { useState } from "react";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import { AssetCardDialog } from "components/features/assets/AssetCardDialog";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { useField } from "formik";
@@ -11,11 +11,11 @@ import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 
 export function AssetsSection() {
-  const [field, meta, handlers] = useField<StoredAsset[]>("assets");
+  const [field, meta, handlers] = useField<AssetDocument[]>("assets");
 
   const [isAddAssetDialogOpen, setIsAddAssetDialogOpen] = useState(false);
 
-  const selectAsset = (asset: StoredAsset) => {
+  const selectAsset = (asset: AssetDocument) => {
     const newAssets = [...field.value];
     newAssets.push(asset);
     handlers.setValue(newAssets);

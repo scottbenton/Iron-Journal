@@ -1,12 +1,12 @@
 import { createApiFunction } from "api-calls/createApiFunction";
 import { PartialWithFieldValue, updateDoc } from "firebase/firestore";
 import { getHomebrewLegacyTrackDoc } from "./_getRef";
-import { StoredLegacyTrack } from "types/homebrew/HomebrewRules.type";
+import { HomebrewLegacyTrackDocument } from "api-calls/homebrew/rules/legacyTracks/_homebrewLegacyTrack.type";
 
 export const updateHomebrewLegacyTrack = createApiFunction<
   {
     legacyTrackId: string;
-    legacyTrack: PartialWithFieldValue<StoredLegacyTrack>;
+    legacyTrack: PartialWithFieldValue<HomebrewLegacyTrackDocument>;
   },
   void
 >((params) => {

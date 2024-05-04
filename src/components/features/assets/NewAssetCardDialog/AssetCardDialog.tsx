@@ -11,7 +11,7 @@ import {
   Tabs,
 } from "@mui/material";
 import { useCallback, useState } from "react";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 import { AssetCardSearch } from "./AssetCardSearch";
@@ -23,7 +23,7 @@ export interface AssetCardDialogProps {
   open: boolean;
   loading?: boolean;
   handleClose: () => void;
-  handleAssetSelection: (asset: Omit<StoredAsset, "order">) => void;
+  handleAssetSelection: (asset: Omit<AssetDocument, "order">) => void;
   showSharedAssetWarning?: boolean;
 }
 
@@ -55,7 +55,7 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
     asset.abilities.map((ability, index) => {
       enabledAbilities[index] = ability.enabled;
     });
-    const storedAsset: Omit<StoredAsset, "order"> = {
+    const storedAsset: Omit<AssetDocument, "order"> = {
       id: asset._id,
       enabledAbilities,
     };

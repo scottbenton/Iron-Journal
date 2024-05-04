@@ -9,7 +9,6 @@ import {
 } from "firebase/firestore";
 import { Roll } from "types/DieRolls.type";
 import {
-  DatabaseLog,
   convertFromDatabase,
   getCampaignGameLogCollection,
   getCharacterGameLogCollection,
@@ -43,9 +42,7 @@ export function listenToMostRecentCharacterLog(params: {
     (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
-          const doc = convertFromDatabase(
-            change.doc.data() as unknown as DatabaseLog
-          );
+          const doc = convertFromDatabase(change.doc.data());
           onRoll(change.doc.id, doc);
         }
       });

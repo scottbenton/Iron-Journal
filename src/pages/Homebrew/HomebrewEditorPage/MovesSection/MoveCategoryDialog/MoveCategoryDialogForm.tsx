@@ -11,7 +11,7 @@ import { convertIdPart } from "functions/dataswornIdEncoder";
 import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useStore } from "stores/store";
-import { StoredMoveCategory } from "types/homebrew/HomebrewMoves.type";
+import { HomebrewMoveCategoryDocument } from "api-calls/homebrew/moves/categories/_homebrewMoveCategory.type";
 import { MoveCategoryAutocomplete } from "../MoveCategoryAutocomplete";
 
 export interface MoveCategoryFormDialogProps {
@@ -52,8 +52,8 @@ export function MoveCategoryDialogForm(props: MoveCategoryFormDialogProps) {
       ? {
           label: existingMoveCategory.label,
           description: existingMoveCategory.description,
-          enhancesId: existingMoveCategory.enhancesId,
-          replacesId: existingMoveCategory.replacesId,
+          enhancesId: existingMoveCategory.enhancesId ?? undefined,
+          replacesId: existingMoveCategory.replacesId ?? undefined,
         }
       : {},
   });
@@ -68,7 +68,7 @@ export function MoveCategoryDialogForm(props: MoveCategoryFormDialogProps) {
   const onSubmit: SubmitHandler<Form> = (values) => {
     setLoading(true);
 
-    const moveCategory: StoredMoveCategory = {
+    const moveCategory: HomebrewMoveCategoryDocument = {
       collectionId: homebrewId,
       label: values.label,
     };
@@ -76,12 +76,9 @@ export function MoveCategoryDialogForm(props: MoveCategoryFormDialogProps) {
     if (values.description) {
       moveCategory.description = values.description;
     }
-    if (values.enhancesId) {
-      moveCategory.enhancesId = values.enhancesId;
-    }
-    if (values.replacesId) {
-      moveCategory.replacesId = values.replacesId;
-    }
+    moveCategory.enhancesId = values.enhancesId ?? null;
+
+    moveCategory.replacesId = values.replacesId ?? null;
 
     if (existingMoveCategoryId) {
       updateMoveCategory(existingMoveCategoryId, moveCategory)

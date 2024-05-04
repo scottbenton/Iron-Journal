@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogContent, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { StoredCampaign } from "types/Campaign.type";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { CampaignActionsMenu } from "./CampaignActionsMenu";
 import { PageHeader } from "components/shared/Layout";
 import {
@@ -14,7 +14,7 @@ import { useStore } from "stores/store";
 import { EditableTitle } from "components/shared/EditableTitle";
 
 export interface CampaignSheetHeaderProps {
-  campaign: StoredCampaign;
+  campaign: CampaignDocument;
   campaignId: string;
 }
 

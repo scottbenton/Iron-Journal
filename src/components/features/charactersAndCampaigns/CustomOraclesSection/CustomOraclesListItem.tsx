@@ -1,4 +1,4 @@
-import { StoredOracle } from "types/Oracles.type";
+import { StoredOracle } from "api-calls/user/custom-oracles/_custom-oracles.type";
 import {
   Box,
   IconButton,

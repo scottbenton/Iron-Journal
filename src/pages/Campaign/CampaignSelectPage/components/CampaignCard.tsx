@@ -6,11 +6,11 @@ import {
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useStore } from "stores/store";
-import { StoredCampaign } from "types/Campaign.type";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import OpenIcon from "@mui/icons-material/ChevronRight";
 
 export interface CampaignCard {
-  campaign: StoredCampaign;
+  campaign: CampaignDocument;
   campaignId: string;
 }
 

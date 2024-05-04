@@ -1,9 +1,7 @@
 import { Datasworn } from "@datasworn/core";
 import { License } from "types/Datasworn";
-import {
-  StoredOracleCollection,
-  StoredOracleTable,
-} from "types/homebrew/HomebrewOracles.type";
+import { HomebrewOracleTableDocument } from "api-calls/homebrew/oracles/tables/_homebrewOracleTable.type";
+import { HomebrewOracleCollectionDocument } from "api-calls/homebrew/oracles/collections/_homebrewOracleCollection.type";
 
 const DEFAULT_SOURCE: Datasworn.SourceInfo = {
   title: "Homebrew Content",
@@ -15,55 +13,65 @@ const DEFAULT_SOURCE: Datasworn.SourceInfo = {
 
 export function convertStoredOraclesToCollections(
   homebrewId: string,
-  storedCollections: Record<string, StoredOracleCollection>,
-  storedTables: Record<string, StoredOracleTable>
+  storedCollections: Record<string, HomebrewOracleCollectionDocument>,
+  storedTables: Record<string, HomebrewOracleTableDocument>
 ): Record<string, Datasworn.OracleTablesCollection> {
   const collections: Record<string, Datasworn.OracleTablesCollection> = {};
 
   const collectionParentMap: Record<string, string[]> = {};
   const tableParentMap: Record<string, string[]> = {};
 
-  Object.keys(storedCollections).forEach((collectionId) => {
-    const parentId = storedCollections[collectionId].parentOracleCollectionId;
-    if (parentId) {
-      if (!collectionParentMap[parentId]) {
-        collectionParentMap[parentId] = [];
+  Object.keys(storedCollections)
+    .sort((c1, c2) =>
+      storedCollections[c1].label.localeCompare(storedCollections[c2].label)
+    )
+    .forEach((collectionId) => {
+      const parentId = storedCollections[collectionId].parentOracleCollectionId;
+      if (parentId) {
+        if (!collectionParentMap[parentId]) {
+          collectionParentMap[parentId] = [];
+        }
+        collectionParentMap[parentId].push(collectionId);
+      } else {
+        const storedCollection = storedCollections[collectionId];
+        collections[collectionId] = {
+          _id: `${homebrewId}/collections/oracles/${collectionId}`,
+          name: storedCollection.label,
+          _source: DEFAULT_SOURCE,
+          description: storedCollection.description,
+          enhances: storedCollection.enhancesId ?? undefined,
+          replaces: storedCollection.replacesId ?? undefined,
+          contents: {},
+          collections: {},
+          oracle_type: "tables",
+        };
       }
-      collectionParentMap[parentId].push(collectionId);
-    } else {
-      const storedCollection = storedCollections[collectionId];
-      collections[collectionId] = {
-        _id: `${homebrewId}/collections/oracles/${collectionId}`,
-        name: storedCollection.label,
-        _source: DEFAULT_SOURCE,
-        description: storedCollection.description,
-        enhances: storedCollection.enhancesId,
-        replaces: storedCollection.replacesId,
-        contents: {},
-        collections: {},
-        oracle_type: "tables",
-      };
-    }
-  });
+    });
 
-  Object.keys(storedTables).forEach((tableId) => {
-    const table = storedTables[tableId];
-    if (!tableParentMap[table.oracleCollectionId]) {
-      tableParentMap[table.oracleCollectionId] = [];
-    }
-    tableParentMap[table.oracleCollectionId].push(tableId);
-  });
+  Object.keys(storedTables)
+    .sort((t1, t2) =>
+      storedTables[t1].label.localeCompare(storedTables[t2].label)
+    )
+    .forEach((tableId) => {
+      const table = storedTables[tableId];
+      if (!tableParentMap[table.oracleCollectionId]) {
+        tableParentMap[table.oracleCollectionId] = [];
+      }
+      tableParentMap[table.oracleCollectionId].push(tableId);
+    });
 
-  Object.keys(collections).forEach((collectionId) => {
-    populateCollection(
-      collectionId,
-      collections[collectionId],
-      storedCollections,
-      collectionParentMap,
-      storedTables,
-      tableParentMap
-    );
-  });
+  Object.keys(collections)
+    .sort((c1, c2) => collections[c1].name.localeCompare(collections[c2].name))
+    .forEach((collectionId) => {
+      populateCollection(
+        collectionId,
+        collections[collectionId],
+        storedCollections,
+        collectionParentMap,
+        storedTables,
+        tableParentMap
+      );
+    });
 
   return collections;
 }
@@ -71,104 +79,110 @@ export function convertStoredOraclesToCollections(
 function populateCollection(
   collectionId: string,
   collection: Datasworn.OracleCollection,
-  collections: Record<string, StoredOracleCollection>,
+  collections: Record<string, HomebrewOracleCollectionDocument>,
   storedCollectionParentMap: Record<string, string[]>,
-  tables: Record<string, StoredOracleTable>,
+  tables: Record<string, HomebrewOracleTableDocument>,
   storedTableParentMap: Record<string, string[]>
 ): Datasworn.OracleCollection {
   const collectionIds = storedCollectionParentMap[collectionId] ?? [];
 
   if (collection.oracle_type === "tables") {
-    collectionIds.forEach((subCollectionId) => {
-      const subColl = collections[subCollectionId];
+    collectionIds
+      .sort((c1, c2) =>
+        collections[c1].label.localeCompare(collections[c2].label)
+      )
+      .forEach((subCollectionId) => {
+        const subColl = collections[subCollectionId];
 
-      if (!collection.collections) {
-        collection.collections = {};
-      }
-      if (collection.collections) {
-        const subCollectionDataswornId = `${collection._id}/${subCollectionId}`;
+        if (!collection.collections) {
+          collection.collections = {};
+        }
+        if (collection.collections) {
+          const subCollectionDataswornId = `${collection._id}/${subCollectionId}`;
 
-        const subCollection: Datasworn.OracleTablesCollection = {
-          _id: subCollectionDataswornId,
-          name: subColl.label,
-          _source: DEFAULT_SOURCE,
-          description: subColl.description,
-          enhances: subColl.enhancesId,
-          replaces: subColl.replacesId,
-          contents: {},
-          collections: {},
-          oracle_type: "tables",
-        };
+          const subCollection: Datasworn.OracleTablesCollection = {
+            _id: subCollectionDataswornId,
+            name: subColl.label,
+            _source: DEFAULT_SOURCE,
+            description: subColl.description,
+            enhances: subColl.enhancesId ?? undefined,
+            replaces: subColl.replacesId ?? undefined,
+            contents: {},
+            collections: {},
+            oracle_type: "tables",
+          };
 
-        populateCollection(
-          subCollectionId,
-          subCollection,
-          collections,
-          storedCollectionParentMap,
-          tables,
-          storedTableParentMap
-        );
+          populateCollection(
+            subCollectionId,
+            subCollection,
+            collections,
+            storedCollectionParentMap,
+            tables,
+            storedTableParentMap
+          );
 
-        collection.collections[subCollectionId] = subCollection;
-      }
-    });
+          collection.collections[subCollectionId] = subCollection;
+        }
+      });
   }
 
   const tableIds = storedTableParentMap[collectionId] ?? [];
 
-  tableIds.forEach((tableId) => {
-    const table = tables[tableId];
-    if (!collection.contents) {
-      collection.contents = {};
-    }
-    if (collection.contents) {
-      const tableDataswornId = `${collection._id}/${tableId}`;
+  tableIds
+    .sort((t1, t2) => tables[t1].label.localeCompare(tables[t2].label))
+    .forEach((tableId) => {
+      const table = tables[tableId];
+      if (!collection.contents) {
+        collection.contents = {};
+      }
+      if (collection.contents) {
+        const tableDataswornId = `${collection._id}/${tableId}`;
 
-      const hasDetails = table.columnLabels.detail;
-      const tableType: "table_simple" | "table_details" = "table_simple";
-      const rows:
-        | Datasworn.OracleTableRow[]
-        | Datasworn.OracleTableRowDetails[] = [];
+        const hasDetails = table.columnLabels.detail;
+        const tableType: "table_simple" | "table_details" = "table_simple";
+        const rows:
+          | Datasworn.OracleTableRow[]
+          | Datasworn.OracleTableRowDetails[] = [];
 
-      let total = 0;
-      let runningMin = 1;
+        let total = 0;
+        let runningMin = 1;
 
-      table.rows.forEach((row) => {
-        const min = runningMin;
-        const max = runningMin + row.chance - 1;
-        rows.push(
-          hasDetails
-            ? {
-                min,
-                max,
-                result: row.result,
-                detail: row.detail ?? null,
-              }
-            : {
-                min,
-                max,
-                result: row.result,
-                detail: null,
-              }
-        );
+        table.rows.forEach((row) => {
+          const min = runningMin;
+          const max = runningMin + row.chance - 1;
+          rows.push(
+            hasDetails
+              ? {
+                  min,
+                  max,
+                  result: row.result,
+                  detail: row.detail ?? null,
+                }
+              : {
+                  min,
+                  max,
+                  result: row.result,
+                  detail: null,
+                }
+          );
 
-        runningMin += row.chance;
-        total += row.chance;
-      });
+          runningMin += row.chance;
+          total += row.chance;
+        });
 
-      collection.contents[tableId] = {
-        _id: tableDataswornId,
-        name: table.label,
-        description: table.description,
-        oracle_type: tableType,
-        dice: `1d${total}`,
-        replaces: table.replaces,
-        _source: DEFAULT_SOURCE,
-        column_labels: table.columnLabels,
-        rows,
-      };
-    }
-  });
+        collection.contents[tableId] = {
+          _id: tableDataswornId,
+          name: table.label,
+          description: table.description,
+          oracle_type: tableType,
+          dice: `1d${total}`,
+          replaces: table.replaces ?? undefined,
+          _source: DEFAULT_SOURCE,
+          column_labels: table.columnLabels,
+          rows,
+        };
+      }
+    });
 
   return collection;
 }

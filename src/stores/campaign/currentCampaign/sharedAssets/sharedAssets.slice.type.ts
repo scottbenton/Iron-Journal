@@ -1,9 +1,9 @@
 import { Asset } from "dataforged";
 import { Unsubscribe } from "firebase/firestore";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 
 export interface SharedAssetSliceData {
-  assets: { [key: string]: StoredAsset };
+  assets: { [key: string]: AssetDocument };
   loading: boolean;
   error?: string;
 }
@@ -11,7 +11,7 @@ export interface SharedAssetSliceData {
 export interface SharedAssetSliceActions {
   subscribe: (campaignId: string) => Unsubscribe;
 
-  addAsset: (asset: StoredAsset) => Promise<void>;
+  addAsset: (asset: AssetDocument) => Promise<void>;
   removeAsset: (assetId: string) => Promise<void>;
   updateAssetInput: (
     assetId: string,

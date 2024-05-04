@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import { useStore } from "stores/store";
-import { StarforgedLocationSettlement } from "types/LocationStarforged.type";
+import { StarforgedLocationSettlement } from "api-calls/world/sectors/sectorLocations/_sectorLocations.type";
 import { GMSectionHeader } from "../../GMSectionHeader";
 
 export interface SettlementContentProps {

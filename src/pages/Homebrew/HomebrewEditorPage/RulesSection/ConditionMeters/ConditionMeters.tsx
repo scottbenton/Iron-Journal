@@ -8,7 +8,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { StoredConditionMeter } from "types/homebrew/HomebrewRules.type";
+import { HomebrewConditionMeterDocument } from "api-calls/homebrew/rules/conditionMeters/_homebrewConditionMeters.type";
 import ViewIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -58,7 +58,9 @@ export function ConditionMeters(props: ConditionMetersProps) {
     return <></>;
   }
 
-  const handleDialogOutput = (conditionMeter: StoredConditionMeter) => {
+  const handleDialogOutput = (
+    conditionMeter: HomebrewConditionMeterDocument
+  ) => {
     if (editingConditionMeterKey) {
       return updateConditionMeter(editingConditionMeterKey, conditionMeter);
     } else {

@@ -1,6 +1,6 @@
 import { Unsubscribe } from "firebase/auth";
 import { onSnapshot, query, where } from "firebase/firestore";
-import { LoreDocument } from "types/Lore.type";
+import { Lore } from "types/Lore.type";
 import {
   constructLoreImagePath,
   convertFromDatabase,
@@ -11,7 +11,7 @@ import { getImageUrl } from "lib/storage.lib";
 export function listenToLoreDocuments(
   worldId: string,
   isWorldOwner: boolean,
-  updateLore: (loreId: string, lore: LoreDocument) => void,
+  updateLore: (loreId: string, lore: Lore) => void,
   updateLoreImage: (loreId: string, imageUrl: string) => void,
   removeLore: (loreId: string) => void,
   onError: (error: string) => void

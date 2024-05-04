@@ -1,7 +1,7 @@
 import { Divider, Stack } from "@mui/material";
 import { useState } from "react";
 import { useStore } from "stores/store";
-import { TRACK_SECTION_PROGRESS_TRACKS, TRACK_STATUS } from "types/Track.type";
+import { TrackSectionProgressTracks, TrackStatus } from "types/Track.type";
 import { ProgressTrack } from "./ProgressTrack";
 import { EmptyState } from "components/shared/EmptyState";
 import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
@@ -9,7 +9,7 @@ import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
 export interface ProgressTracksProps {
   isCampaign?: boolean;
   isCompleted?: boolean;
-  trackType: TRACK_SECTION_PROGRESS_TRACKS;
+  trackType: TrackSectionProgressTracks;
   typeLabel: string;
   headingBreakContainer?: boolean;
   readOnly?: boolean;
@@ -28,10 +28,10 @@ export function ProgressTracks(props: ProgressTracksProps) {
   const tracks = useStore((store) =>
     isCampaign
       ? store.campaigns.currentCampaign.tracks.trackMap[
-          isCompleted ? TRACK_STATUS.COMPLETED : TRACK_STATUS.ACTIVE
+          isCompleted ? TrackStatus.Completed : TrackStatus.Active
         ][trackType]
       : store.characters.currentCharacter.tracks.trackMap[
-          isCompleted ? TRACK_STATUS.COMPLETED : TRACK_STATUS.ACTIVE
+          isCompleted ? TrackStatus.Completed : TrackStatus.Active
         ][trackType]
   );
 
@@ -62,7 +62,7 @@ export function ProgressTracks(props: ProgressTracksProps) {
     : updateCharacterProgressTrack;
 
   const deleteProgressTrack = (trackId: string) => {
-    updateProgressTrack(trackId, { status: TRACK_STATUS.COMPLETED }).catch(
+    updateProgressTrack(trackId, { status: TrackStatus.Completed }).catch(
       () => {}
     );
   };
@@ -124,9 +124,7 @@ export function ProgressTracks(props: ProgressTracksProps) {
         <EditOrCreateTrackDialog
           open={!!currentlyEditingTrack}
           handleClose={() => setCurrentlyEditingTrackId(undefined)}
-          trackType={
-            currentlyEditingTrack.type as TRACK_SECTION_PROGRESS_TRACKS
-          }
+          trackType={currentlyEditingTrack.type as TrackSectionProgressTracks}
           trackTypeName={`${typeLabel}`}
           initialTrack={currentlyEditingTrack}
           handleTrack={(track) =>

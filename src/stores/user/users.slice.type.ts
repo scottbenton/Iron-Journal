@@ -1,4 +1,4 @@
-import { UserDocument } from "types/User.type";
+import { UserDocument } from "api-calls/user/_user.type";
 
 export interface UserSliceData {
   userMap: { [userId: string]: { loading: boolean; doc?: UserDocument } };

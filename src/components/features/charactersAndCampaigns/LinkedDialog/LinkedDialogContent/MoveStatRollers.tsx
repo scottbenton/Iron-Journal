@@ -4,7 +4,7 @@ import { PlayerConditionMeter } from "types/stats.enum";
 import { useStore } from "stores/store";
 import { MoveStatRoller } from "./MoveStatRoller";
 import { assetMap } from "data/assets";
-import { LEGACY_TRACK_TYPES, LegacyTrack } from "types/LegacyTrack.type";
+import { LEGACY_TrackTypes, LegacyTrack } from "types/LegacyTrack.type";
 
 export interface MoveStatsProps {
   moveName: string;
@@ -111,14 +111,14 @@ export function MoveStatRollers(props: MoveStatsProps) {
 
     if (currentCharacter) {
       return {
-        [LEGACY_TRACK_TYPES.BONDS]: getLegacyValue(
-          currentCharacter.legacyTracks?.[LEGACY_TRACK_TYPES.BONDS]
+        [LEGACY_TrackTypes.BONDS]: getLegacyValue(
+          currentCharacter.legacyTracks?.[LEGACY_TrackTypes.BONDS]
         ),
-        [LEGACY_TRACK_TYPES.QUESTS]: getLegacyValue(
-          currentCharacter.legacyTracks?.[LEGACY_TRACK_TYPES.QUESTS]
+        [LEGACY_TrackTypes.QUESTS]: getLegacyValue(
+          currentCharacter.legacyTracks?.[LEGACY_TrackTypes.QUESTS]
         ),
-        [LEGACY_TRACK_TYPES.DISCOVERIES]: getLegacyValue(
-          currentCharacter.legacyTracks?.[LEGACY_TRACK_TYPES.DISCOVERIES]
+        [LEGACY_TrackTypes.DISCOVERIES]: getLegacyValue(
+          currentCharacter.legacyTracks?.[LEGACY_TrackTypes.DISCOVERIES]
         ),
       };
     }

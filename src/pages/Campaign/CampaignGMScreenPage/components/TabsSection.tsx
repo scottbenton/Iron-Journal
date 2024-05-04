@@ -3,7 +3,7 @@ import { MovesSection as MovesSectionOld } from "components/features/charactersA
 import { MovesSection } from "components/features/charactersAndCampaigns/NewMovesSection";
 import { useEffect } from "react";
 import { useState } from "react";
-import { StoredCampaign } from "types/Campaign.type";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { CharacterSection } from "./CharacterSection";
 import { TracksSection } from "./TracksSection";
 import { OracleSection as OracleSectionOld } from "components/features/charactersAndCampaigns/OracleSection";
@@ -41,7 +41,7 @@ enum TABS {
 }
 
 export interface TabsSectionProps {
-  campaign: StoredCampaign;
+  campaign: CampaignDocument;
 }
 
 export function TabsSection(props: TabsSectionProps) {
@@ -91,19 +91,19 @@ export function TabsSection(props: TabsSectionProps) {
         onChange={(evt, value) => handleTabChange(value)}
       >
         {isMobile && <StyledTab label={"Moves"} value={TABS.MOVES} />}
-        {isMobile && <StyledTab label='Oracle' value={TABS.ORACLE} />}
-        <StyledTab label='Characters' value={TABS.CHARACTERS} />
-        <StyledTab label='Tracks' value={TABS.TRACKS} />
-        <StyledTab label='Notes' value={TABS.NOTES} />
-        <StyledTab label='World' value={TABS.WORLD} />
+        {isMobile && <StyledTab label="Oracle" value={TABS.ORACLE} />}
+        <StyledTab label="Characters" value={TABS.CHARACTERS} />
+        <StyledTab label="Tracks" value={TABS.TRACKS} />
+        <StyledTab label="Notes" value={TABS.NOTES} />
+        <StyledTab label="World" value={TABS.WORLD} />
         {shouldShowSectors ? (
-          <StyledTab label='Sectors' value={TABS.SECTORS} />
+          <StyledTab label="Sectors" value={TABS.SECTORS} />
         ) : (
-          <StyledTab label='Locations' value={TABS.LOCATIONS} />
+          <StyledTab label="Locations" value={TABS.LOCATIONS} />
         )}
-        <StyledTab label='NPCs' value={TABS.NPCS} />
-        <StyledTab label='Lore' value={TABS.LORE} />
-        <StyledTab label='Settings' value={TABS.SETTINGS} />
+        <StyledTab label="NPCs" value={TABS.NPCS} />
+        <StyledTab label="Lore" value={TABS.LORE} />
+        <StyledTab label="Settings" value={TABS.SETTINGS} />
       </StyledTabs>
       <ContainedTabPanel isVisible={selectedTab === TABS.MOVES}>
         {showNewMovesAndOracles ? <MovesSection /> : <MovesSectionOld />}

@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 import { useState } from "react";
-import { Clock, TRACK_STATUS, TRACK_TYPES } from "types/Track.type";
+import { Clock, TrackStatus, TrackTypes } from "types/Track.type";
 import { ClockCircle } from "./ClockCircle";
 
 const segmentOptions = [4, 6, 8, 10];
@@ -61,8 +61,8 @@ export function ClockDialog(props: ClockDialogProps) {
 
     const clock: Clock = {
       createdDate: new Date(),
-      status: TRACK_STATUS.ACTIVE,
-      type: TRACK_TYPES.CLOCK,
+      status: TrackStatus.Active,
+      type: TrackTypes.Clock,
       ...(initialClock ?? {}),
       label: title,
       description,

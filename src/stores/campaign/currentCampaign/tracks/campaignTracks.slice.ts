@@ -5,8 +5,8 @@ import { listenToProgressTracks } from "api-calls/tracks/listenToProgressTracks"
 import {
   Clock,
   ProgressTrack,
-  TRACK_STATUS,
-  TRACK_TYPES,
+  TrackStatus,
+  TrackTypes,
 } from "types/Track.type";
 import { addProgressTrack } from "api-calls/tracks/addProgressTrack";
 import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
@@ -17,7 +17,7 @@ export const createCampaignTracksSlice: CreateSliceType<CampaignTracksSlice> = (
 ) => ({
   ...defaultCampaignTracksSlice,
 
-  subscribe: (campaignId, status = TRACK_STATUS.ACTIVE) => {
+  subscribe: (campaignId, status = TrackStatus.Active) => {
     const unsubscribe = listenToProgressTracks(
       campaignId,
       undefined,
@@ -27,24 +27,24 @@ export const createCampaignTracksSlice: CreateSliceType<CampaignTracksSlice> = (
           Object.keys(tracks).forEach((trackId) => {
             const track = tracks[trackId];
             switch (track.type) {
-              case TRACK_TYPES.FRAY:
+              case TrackTypes.Fray:
                 store.campaigns.currentCampaign.tracks.trackMap[status][
-                  TRACK_TYPES.FRAY
+                  TrackTypes.Fray
                 ][trackId] = track as ProgressTrack;
                 break;
-              case TRACK_TYPES.JOURNEY:
+              case TrackTypes.Journey:
                 store.campaigns.currentCampaign.tracks.trackMap[status][
-                  TRACK_TYPES.JOURNEY
+                  TrackTypes.Journey
                 ][trackId] = track as ProgressTrack;
                 break;
-              case TRACK_TYPES.VOW:
+              case TrackTypes.Vow:
                 store.campaigns.currentCampaign.tracks.trackMap[status][
-                  TRACK_TYPES.VOW
+                  TrackTypes.Vow
                 ][trackId] = track as ProgressTrack;
                 break;
-              case TRACK_TYPES.CLOCK:
+              case TrackTypes.Clock:
                 store.campaigns.currentCampaign.tracks.trackMap[status][
-                  TRACK_TYPES.CLOCK
+                  TrackTypes.Clock
                 ][trackId] = track as Clock;
                 break;
               default:

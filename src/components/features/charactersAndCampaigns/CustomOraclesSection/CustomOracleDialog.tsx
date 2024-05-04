@@ -20,7 +20,7 @@ import {
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 import { FieldArray, Formik } from "formik";
 import { useState } from "react";
-import { StoredOracle } from "types/Oracles.type";
+import { StoredOracle } from "api-calls/user/custom-oracles/_custom-oracles.type";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDataswornId } from "hooks/useDataswornId";
 

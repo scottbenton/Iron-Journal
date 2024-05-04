@@ -48,7 +48,7 @@ export function HomebrewSelectPage() {
   return (
     <>
       <PageHeader
-        label={"Your Homebrew Collections"}
+        label={"Your Homebrew Library"}
         actions={
           <Button
             variant={"contained"}
@@ -120,7 +120,7 @@ export function HomebrewSelectPage() {
                 }}
                 key={collectionKey}
               >
-                <Card>
+                <Card sx={{ height: "100%" }}>
                   <CardActionArea
                     LinkComponent={LinkComponent}
                     href={constructHomebrewEditorPath(collectionKey)}
@@ -129,6 +129,7 @@ export function HomebrewSelectPage() {
                       alignItems: "center",
                       justifyContent: "space-between",
                       p: 2,
+                      height: "100%",
                     }}
                   >
                     <Box>

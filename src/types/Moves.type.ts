@@ -7,8 +7,3 @@ export interface StoredMove {
   text: string;
   oracleIds?: string[];
 }
-
-export interface MoveDocument {
-  moves: { [moveId: string]: StoredMove };
-  moveOrder: string[];
-}

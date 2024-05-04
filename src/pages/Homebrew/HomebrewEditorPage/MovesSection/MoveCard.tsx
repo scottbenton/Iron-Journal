@@ -1,8 +1,6 @@
 import { Box, Card, IconButton, Tooltip, Typography } from "@mui/material";
-import {
-  StoredMove,
-  StoredMoveCategory,
-} from "types/homebrew/HomebrewMoves.type";
+import { HomebrewMoveDocument } from "api-calls/homebrew/moves/moves/_homebrewMove.type";
+import { HomebrewMoveCategoryDocument } from "api-calls/homebrew/moves/categories/_homebrewMoveCategory.type";
 import PreviewIcon from "@mui/icons-material/Visibility";
 import MoveIcon from "@mui/icons-material/DriveFileMove";
 import EditIcon from "@mui/icons-material/Edit";
@@ -13,8 +11,8 @@ import { useStore } from "stores/store";
 
 export interface MoveCardProps {
   moveId: string;
-  move: StoredMove;
-  moveCategories: Record<string, StoredMoveCategory>;
+  move: HomebrewMoveDocument;
+  moveCategories: Record<string, HomebrewMoveCategoryDocument>;
   handleEdit: () => void;
   handleDelete: () => void;
   isEditor: boolean;
@@ -36,6 +34,8 @@ export function MoveCard(props: MoveCardProps) {
 
   const openDialog = useStore((store) => store.appState.openDialog);
 
+  const moveMap = useStore((store) => store.rules.moveMaps.nonReplacedMoveMap);
+
   return (
     <>
       <Card
@@ -49,7 +49,14 @@ export function MoveCard(props: MoveCardProps) {
           justifyContent: "space-between",
         }}
       >
-        <Typography>{move.label}</Typography>
+        <Box>
+          <Typography variant={"h6"}>{move.label}</Typography>
+          {move.replacesId && (
+            <Typography color={"textSecondary"}>
+              Replaces &quot;{moveMap[move.replacesId].name}&quot;
+            </Typography>
+          )}
+        </Box>
         <Box>
           {isEditor ? (
             <>

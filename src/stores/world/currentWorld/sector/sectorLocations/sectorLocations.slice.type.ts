@@ -1,8 +1,8 @@
 import { Unsubscribe } from "firebase/firestore";
-import { StarforgedLocation } from "types/LocationStarforged.type";
+import { SectorLocationDocument } from "api-calls/world/sectors/sectorLocations/_sectorLocations.type";
 
 export interface SectorLocationsSliceData {
-  locations: { [locationId: string]: StarforgedLocation };
+  locations: { [locationId: string]: SectorLocationDocument };
   openLocationNotes?: Uint8Array;
   openLocationGMNotes?: Uint8Array;
 
@@ -18,10 +18,10 @@ export interface SectorLocationsSliceActions {
     isPrivate?: boolean
   ) => Unsubscribe;
 
-  createLocation: (location: StarforgedLocation) => Promise<string>;
+  createLocation: (location: SectorLocationDocument) => Promise<string>;
   updateLocation: (
     locationId: string,
-    location: Partial<StarforgedLocation>
+    location: Partial<SectorLocationDocument>
   ) => Promise<void>;
   deleteLocation: (locationId: string) => Promise<void>;
   updateLocationNotes: (

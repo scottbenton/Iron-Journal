@@ -8,11 +8,11 @@ import {
 } from "@mui/material";
 import { useSnackbar } from "providers/SnackbarProvider";
 import { ProgressTrack } from "../ProgressTrack";
-import { DIFFICULTY, TRACK_TYPES } from "types/Track.type";
+import { Difficulty, TrackTypes } from "types/Track.type";
 
 export interface BondsSectionProps {
   isStarforged: boolean;
-  difficulty?: DIFFICULTY;
+  difficulty?: Difficulty;
 
   bondedCharacters?: string[];
   isBonded: boolean;
@@ -104,7 +104,7 @@ export function BondsSection(props: BondsSectionProps) {
               value={bondProgress}
               onValueChange={(value) => updateBondProgressValue(value)}
               difficulty={difficulty}
-              trackType={TRACK_TYPES.BOND_PROGRESS}
+              trackType={TrackTypes.BondProgress}
               hideDifficultyLabel
             />
           </Grid>

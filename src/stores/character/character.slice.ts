@@ -163,7 +163,7 @@ export const createCharacterSlice: CreateSliceType<CharacterSlice> = (
       return deleteCharacter({
         uid,
         characterId,
-        campaignId: character.campaignId,
+        campaignId: character.campaignId ?? undefined,
         portraitFilename: character.profileImage?.filename,
       });
     },

@@ -1,13 +1,15 @@
 import { Unsubscribe } from "firebase/firestore";
-import { IAccessibilitySettings } from "types/UserAccessibilitySettings.type";
+import { AccessibilitySettingsDocument } from "api-calls/user/settings/_settings.type";
 
 export interface AccessibilitySettingsSliceData {
-  settings: IAccessibilitySettings;
+  settings: AccessibilitySettingsDocument;
 }
 
 export interface AccessibilitySettingsSliceActions {
   listenToSettings: (uid: string) => Unsubscribe;
-  updateSettings: (settings: Partial<IAccessibilitySettings>) => Promise<void>;
+  updateSettings: (
+    settings: Partial<AccessibilitySettingsDocument>
+  ) => Promise<void>;
 }
 
 export type AccessibilitySettingsSlice = AccessibilitySettingsSliceData &

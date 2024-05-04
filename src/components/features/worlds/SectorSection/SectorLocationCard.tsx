@@ -1,9 +1,9 @@
-import { StarforgedLocation } from "types/LocationStarforged.type";
+import { SectorLocationDocument } from "api-calls/world/sectors/sectorLocations/_sectorLocations.type";
 import { hexTypeMap } from "./hexTypes";
 import { Box, Card, CardActionArea, Typography } from "@mui/material";
 
 export interface SectorLocationCardProps {
-  sectorLocation: StarforgedLocation;
+  sectorLocation: SectorLocationDocument;
   onClick: () => void;
 }
 

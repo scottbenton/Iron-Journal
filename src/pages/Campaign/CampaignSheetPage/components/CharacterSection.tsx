@@ -4,14 +4,14 @@ import { EmptyState } from "components/shared/EmptyState/EmptyState";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { StoredCampaign } from "types/Campaign.type";
+import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { AddCharacterDialog } from "./AddCharacterDialog";
 import { constructCharacterSheetPath } from "pages/Character/routes";
 import { useStore } from "stores/store";
 import { PlayerCard } from "./PlayerCard";
 
 export interface CharacterSectionProps {
-  campaign: StoredCampaign;
+  campaign: CampaignDocument;
   campaignId: string;
 }
 

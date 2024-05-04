@@ -2,9 +2,9 @@ import { Datasworn } from "@datasworn/core";
 import { License } from "types/Datasworn";
 import {
   MoveType,
-  StoredMove,
-  StoredMoveCategory,
-} from "types/homebrew/HomebrewMoves.type";
+  HomebrewMoveDocument,
+} from "api-calls/homebrew/moves/moves/_homebrewMove.type";
+import { HomebrewMoveCategoryDocument } from "api-calls/homebrew/moves/categories/_homebrewMoveCategory.type";
 
 const DEFAULT_SOURCE: Datasworn.SourceInfo = {
   title: "Homebrew Content",
@@ -16,37 +16,45 @@ const DEFAULT_SOURCE: Datasworn.SourceInfo = {
 
 export function convertStoredMovesToCategories(
   homebrewId: string,
-  storedCategories: Record<string, StoredMoveCategory>,
-  storedMoves: Record<string, StoredMove>
+  storedCategories: Record<string, HomebrewMoveCategoryDocument>,
+  storedMoves: Record<string, HomebrewMoveDocument>
 ): Record<string, Datasworn.MoveCategory> {
   const categories: Record<string, Datasworn.MoveCategory> = {};
 
-  Object.keys(storedCategories).forEach((categoryId) => {
-    const storedCategory = storedCategories[categoryId];
-    categories[categoryId] = {
-      _id: `${homebrewId}/collections/moves/${categoryId}`,
-      name: storedCategory.label,
-      _source: DEFAULT_SOURCE,
-      description: storedCategory.description,
-      enhances: storedCategory.enhancesId,
-      replaces: storedCategory.replacesId,
-      contents: {},
-    };
-  });
+  Object.keys(storedCategories)
+    .sort((c1, c2) =>
+      storedCategories[c1].label.localeCompare(storedCategories[c2].label)
+    )
+    .forEach((categoryId) => {
+      const storedCategory = storedCategories[categoryId];
+      categories[categoryId] = {
+        _id: `${homebrewId}/collections/moves/${categoryId}`,
+        name: storedCategory.label,
+        _source: DEFAULT_SOURCE,
+        description: storedCategory.description,
+        enhances: storedCategory.enhancesId ?? undefined,
+        replaces: storedCategory.replacesId ?? undefined,
+        contents: {},
+      };
+    });
 
-  Object.keys(storedMoves).forEach((moveId) => {
-    const move = storedMoves[moveId];
+  Object.keys(storedMoves)
+    .sort((m1, m2) =>
+      storedMoves[m1].label.localeCompare(storedMoves[m2].label)
+    )
+    .forEach((moveId) => {
+      const move = storedMoves[moveId];
 
-    const convertedMove = convertStoredMove(homebrewId, moveId, move);
+      const convertedMove = convertStoredMove(homebrewId, moveId, move);
 
-    const moveCategory = categories[move.categoryId];
+      const moveCategory = categories[move.categoryId];
 
-    if (!moveCategory.contents) {
-      moveCategory.contents = { [moveId]: convertedMove };
-    } else {
-      moveCategory.contents[moveId] = convertedMove;
-    }
-  });
+      if (!moveCategory.contents) {
+        moveCategory.contents = { [moveId]: convertedMove };
+      } else {
+        moveCategory.contents[moveId] = convertedMove;
+      }
+    });
 
   return categories;
 }
@@ -54,14 +62,14 @@ export function convertStoredMovesToCategories(
 function convertStoredMove(
   homebrewId: string,
   moveId: string,
-  move: StoredMove
+  move: HomebrewMoveDocument
 ): Datasworn.Move {
   if (move.type === MoveType.NoRoll) {
     const m: Datasworn.MoveNoRoll = {
       _id: `${homebrewId}/moves/${move.categoryId}/${moveId}`,
       name: move.label,
       text: move.text,
-      replaces: move.replacesId,
+      replaces: move.replacesId ?? undefined,
       roll_type: "no_roll",
       _source: DEFAULT_SOURCE,
       trigger: {
@@ -77,7 +85,7 @@ function convertStoredMove(
       _id: `${homebrewId}/moves/${move.categoryId}/${moveId}`,
       name: move.label,
       text: move.text,
-      replaces: move.replacesId,
+      replaces: move.replacesId ?? undefined,
       roll_type: "action_roll",
       _source: DEFAULT_SOURCE,
       trigger: {
@@ -122,7 +130,7 @@ function convertStoredMove(
       _id: `${homebrewId}/moves/${move.categoryId}/${moveId}`,
       name: move.label,
       text: move.text,
-      replaces: move.replacesId,
+      replaces: move.replacesId ?? undefined,
       roll_type: "progress_roll",
       _source: DEFAULT_SOURCE,
       trigger: {
@@ -154,7 +162,7 @@ function convertStoredMove(
       _id: `${homebrewId}/moves/${move.categoryId}/${moveId}`,
       name: move.label,
       text: move.text,
-      replaces: move.replacesId,
+      replaces: move.replacesId ?? undefined,
       roll_type: "special_track",
       _source: DEFAULT_SOURCE,
       trigger: {

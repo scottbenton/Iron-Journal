@@ -29,7 +29,9 @@ export function CharacterMenu() {
                 uid={characters[characterId].uid}
                 characterId={characterId}
                 name={characters[characterId].name}
-                portraitSettings={characters[characterId].profileImage}
+                portraitSettings={
+                  characters[characterId].profileImage ?? undefined
+                }
                 colorful
               />
             </ListItemAvatar>

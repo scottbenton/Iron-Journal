@@ -1,11 +1,11 @@
 import { createApiFunction } from "api-calls/createApiFunction";
 import { addDoc } from "firebase/firestore";
 import { getHomebrewImpactsCollection } from "./_getRef";
-import { StoredImpactCategory } from "types/homebrew/HomebrewRules.type";
+import { HomebrewImpactCategoryDocument } from "api-calls/homebrew/rules/impacts/_homebrewImpacts.type";
 
 export const createHomebrewImpactCategory = createApiFunction<
   {
-    impactCategory: StoredImpactCategory;
+    impactCategory: HomebrewImpactCategoryDocument;
   },
   void
 >((params) => {

@@ -5,44 +5,44 @@ import { DerelictIcon } from "./assets/DerelictIcon";
 import { SightingIcon } from "./assets/SightingIcon";
 import { SettlementIcon } from "./assets/SettlementIcon";
 import PathIcon from "@mui/icons-material/Timeline";
-import { SECTOR_HEX_TYPES } from "types/Sector.type";
+import { SectorHexTypes } from "types/Sector.type";
 
-export { SECTOR_HEX_TYPES };
+export { SectorHexTypes as SECTOR_HEX_TYPES };
 
 export const hexTypeMap: {
-  [key in SECTOR_HEX_TYPES]: {
+  [key in SectorHexTypes]: {
     Icon: typeof PathIcon | typeof StarIcon;
     color?: string;
     name: string;
   };
 } = {
-  [SECTOR_HEX_TYPES.PATH]: {
+  [SectorHexTypes.Path]: {
     Icon: PathIcon,
     color: "#cbd5e1",
     name: "Path",
   },
-  [SECTOR_HEX_TYPES.PLANET]: {
+  [SectorHexTypes.Planet]: {
     Icon: PlanetIcon,
     color: "#2dd4bf",
     name: "Planet",
   },
-  [SECTOR_HEX_TYPES.SETTLEMENT]: {
+  [SectorHexTypes.Settlement]: {
     Icon: SettlementIcon,
     color: "#e2e8f0",
     name: "Settlement",
   },
-  [SECTOR_HEX_TYPES.STAR]: { Icon: StarIcon, color: "#eab308", name: "Star" },
-  [SECTOR_HEX_TYPES.DERELICT]: {
+  [SectorHexTypes.Star]: { Icon: StarIcon, color: "#eab308", name: "Star" },
+  [SectorHexTypes.Derelict]: {
     Icon: DerelictIcon,
     color: "#f59e0b",
     name: "Derelict",
   },
-  [SECTOR_HEX_TYPES.VAULT]: {
+  [SectorHexTypes.Vault]: {
     Icon: VaultIcon,
     color: "#38bdf8",
     name: "Vault",
   },
-  [SECTOR_HEX_TYPES.OTHER]: {
+  [SectorHexTypes.Other]: {
     Icon: SightingIcon,
     color: "#4ade80",
     name: "Other",

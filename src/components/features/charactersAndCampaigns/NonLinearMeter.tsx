@@ -2,10 +2,10 @@ import { Box, ButtonBase, SxProps, Theme, Typography } from "@mui/material";
 import { useDebouncedState } from "hooks/useDebouncedState";
 import { useEffect, useId, useRef } from "react";
 import { useStore } from "stores/store";
-import { StoredNonLinearMeter } from "types/homebrew/HomebrewRules.type";
+import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type";
 
 export interface NonLinearMeterProps {
-  meter: StoredNonLinearMeter;
+  meter: HomebrewNonLinearMeterDocument;
   value?: number;
   onChange: (index: number) => void;
   sx?: SxProps<Theme>;

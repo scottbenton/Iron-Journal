@@ -1,12 +1,11 @@
 import { onSnapshot } from "firebase/firestore";
-import { CharacterDocument } from "../../types/Character.type";
+import { CharacterDocument } from "api-calls/character/_character.type";
 import { getCharacterDoc } from "./_getRef";
 
 export function listenToCharacter(
   characterId: string,
   onCharacter: (character: CharacterDocument) => void,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onError: (error: any) => void
+  onError: (error: unknown) => void
 ) {
   return onSnapshot(
     getCharacterDoc(characterId),

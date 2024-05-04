@@ -1,11 +1,11 @@
 import { Datasworn } from "@datasworn/core";
 import { Box, Checkbox, Typography } from "@mui/material";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 
 export interface AssetAbilitiesProps {
   asset: Datasworn.Asset;
-  storedAsset?: StoredAsset;
+  storedAsset?: AssetDocument;
   onAbilityToggle?: (abilityIndex: number, checked: boolean) => void;
 }
 

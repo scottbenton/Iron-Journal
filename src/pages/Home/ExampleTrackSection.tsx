@@ -3,10 +3,10 @@ import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { useState } from "react";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import {
-  DIFFICULTY,
+  Difficulty,
   ProgressTrack as IProgressTrack,
-  TRACK_STATUS,
-  TRACK_TYPES,
+  TrackStatus,
+  TrackTypes,
 } from "types/Track.type";
 import { TryItOut } from "./TryItOut";
 
@@ -16,18 +16,18 @@ export function ExampleTrackSection() {
       label: "Protect Kingsmark",
       description:
         "Serve Jarl Redflame to keep Kingsmark stable and safe from the forces that seek to overthrow him",
-      difficulty: DIFFICULTY.FORMIDABLE,
-      type: TRACK_TYPES.VOW,
-      status: TRACK_STATUS.ACTIVE,
+      difficulty: Difficulty.Formidable,
+      type: TrackTypes.Vow,
+      status: TrackStatus.Active,
       createdDate: new Date(),
     },
     [GAME_SYSTEMS.STARFORGED]: {
       label: "Find the missing Exodus Ship",
       description:
         "Find The Rebirth, the Exodus ship that recently vanished from the Forge.",
-      difficulty: DIFFICULTY.FORMIDABLE,
-      type: TRACK_TYPES.VOW,
-      status: TRACK_STATUS.ACTIVE,
+      difficulty: Difficulty.Formidable,
+      type: TrackTypes.Vow,
+      status: TrackStatus.Active,
       createdDate: new Date(),
     },
   });
@@ -42,7 +42,7 @@ export function ExampleTrackSection() {
         label={trackDetails.label}
         description={trackDetails.description}
         difficulty={trackDetails.difficulty}
-        trackType={TRACK_TYPES.VOW}
+        trackType={TrackTypes.Vow}
         onValueChange={(value) => {
           setTrackValue(value);
         }}

@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, Stack } from "@mui/material";
-import { StoredLegacyTrack } from "types/homebrew/HomebrewRules.type";
+import { HomebrewLegacyTrackDocument } from "api-calls/homebrew/rules/legacyTracks/_homebrewLegacyTrack.type";
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import { useGameSystem } from "hooks/useGameSystem";
@@ -8,7 +8,7 @@ import { LegacyTrack } from "pages/Character/CharacterSheetPage/Tabs/TracksSecti
 import { ProgressTrack } from "components/features/ProgressTrack";
 
 export interface LegacyTrackPreviewDialogProps {
-  legacyTrack: StoredLegacyTrack;
+  legacyTrack: HomebrewLegacyTrackDocument;
   open: boolean;
   onClose: () => void;
 }

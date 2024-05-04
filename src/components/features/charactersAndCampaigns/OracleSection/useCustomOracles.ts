@@ -3,7 +3,8 @@ import { useDataswornId } from "hooks/useDataswornId";
 import { useEffect, useMemo, useState } from "react";
 import { useStore } from "stores/store";
 import { License } from "types/Datasworn";
-import { StoredOracle, TableColumnType } from "types/Oracles.type";
+import { TableColumnType } from "types/Oracles.type";
+import { StoredOracle } from "api-calls/user/custom-oracles/_custom-oracles.type";
 
 function convertStoredOracleToOracle(
   categoryId: string,

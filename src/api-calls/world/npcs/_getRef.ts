@@ -6,12 +6,8 @@ import {
   DocumentReference,
   Timestamp,
 } from "firebase/firestore";
-import {
-  StoredGMNPCDocument,
-  NPCDocument,
-  NPCNotesDocument,
-  NPCDocumentFirestore,
-} from "types/NPCs.type";
+import { NPC } from "types/NPCs.type";
+import { GMNPCDocument, NPCNotesDocument, NPCDocument } from "./_npcs.type";
 
 export function constructNPCsPath(worldId: string) {
   return `/worlds/${worldId}/npcs`;
@@ -48,21 +44,21 @@ export function getNPCCollection(worldId: string) {
   return collection(
     firestore,
     constructNPCsPath(worldId)
-  ) as CollectionReference<NPCDocumentFirestore>;
+  ) as CollectionReference<NPCDocument>;
 }
 
 export function getNPCDoc(worldId: string, npcId: string) {
   return doc(
     firestore,
     constructNPCDocPath(worldId, npcId)
-  ) as DocumentReference<NPCDocumentFirestore>;
+  ) as DocumentReference<NPCDocument>;
 }
 
 export function getPrivateDetailsNPCDoc(worldId: string, npcId: string) {
   return doc(
     firestore,
     constructPrivateDetailsNPCDocPath(worldId, npcId)
-  ) as DocumentReference<StoredGMNPCDocument>;
+  ) as DocumentReference<GMNPCDocument>;
 }
 
 export function getPublicNotesNPCDoc(worldId: string, npcId: string) {
@@ -72,12 +68,10 @@ export function getPublicNotesNPCDoc(worldId: string, npcId: string) {
   ) as DocumentReference<NPCNotesDocument>;
 }
 
-export function convertToDatabase(
-  npc: Partial<NPCDocument>
-): Partial<NPCDocumentFirestore> {
+export function convertToDatabase(npc: Partial<NPC>): Partial<NPCDocument> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { updatedDate, createdDate, ...restNPC } = npc;
-  const newNPC: Partial<NPCDocumentFirestore> = {
+  const newNPC: Partial<NPCDocument> = {
     updatedTimestamp: Timestamp.now(),
     ...restNPC,
   };
@@ -89,7 +83,7 @@ export function convertToDatabase(
   return newNPC;
 }
 
-export function convertFromDatabase(npc: NPCDocumentFirestore): NPCDocument {
+export function convertFromDatabase(npc: NPCDocument): NPC {
   const { updatedTimestamp, createdTimestamp, ...restNPC } = npc;
   return {
     updatedDate: updatedTimestamp.toDate(),

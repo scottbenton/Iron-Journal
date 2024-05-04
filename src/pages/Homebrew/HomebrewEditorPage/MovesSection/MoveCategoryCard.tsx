@@ -1,10 +1,10 @@
 import { Box, Card, CardActionArea, Typography } from "@mui/material";
 import ChevronRight from "@mui/icons-material/ChevronRight";
 import { useStore } from "stores/store";
-import { StoredMoveCategory } from "types/homebrew/HomebrewMoves.type";
+import { HomebrewMoveCategoryDocument } from "api-calls/homebrew/moves/categories/_homebrewMoveCategory.type";
 
 export interface MoveCategoryCardProps {
-  category: StoredMoveCategory;
+  category: HomebrewMoveCategoryDocument;
   onClick: () => void;
 }
 
@@ -12,7 +12,7 @@ export function MoveCategoryCard(props: MoveCategoryCardProps) {
   const { category, onClick } = props;
 
   const moveCategoryMap = useStore(
-    (store) => store.rules.moveMaps.moveCategoryMap
+    (store) => store.rules.moveMaps.nonReplacedMoveCategoryMap
   );
 
   return (

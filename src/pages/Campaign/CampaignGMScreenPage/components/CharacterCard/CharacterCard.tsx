@@ -8,7 +8,6 @@ import {
   Typography,
 } from "@mui/material";
 import { StatComponent } from "components/features/characters/StatComponent";
-import { CharacterDocument, INITIATIVE_STATUS } from "types/Character.type";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { AssetCard as OldAssetCard } from "components/features/assets/AssetCard";
 import { AssetCard } from "components/features/assets/NewAssetCard";
@@ -22,6 +21,10 @@ import { IronswornTracks } from "./IronswornTracks";
 import { LegacyTracks } from "./LegacyTracks";
 import { useNewCustomContentPage } from "hooks/featureFlags/useNewCustomContentPage";
 import { getNewDataswornId, getOldDataswornId } from "data/assets";
+import {
+  CharacterDocument,
+  InitiativeStatus,
+} from "api-calls/character/_character.type";
 
 export interface CharacterCardProps {
   uid: string;
@@ -65,7 +68,7 @@ export function CharacterCard(props: CharacterCardProps) {
     (store) => store.campaigns.currentCampaign.characters.updateCharacter
   );
 
-  const updateCharacterInitiative = (initiativeStatus: INITIATIVE_STATUS) => {
+  const updateCharacterInitiative = (initiativeStatus: InitiativeStatus) => {
     updateCharacter(characterId, { initiativeStatus }).catch(() => {});
   };
 
@@ -79,7 +82,7 @@ export function CharacterCard(props: CharacterCardProps) {
             uid={uid}
             characterId={characterId}
             name={character.name}
-            portraitSettings={character.profileImage}
+            portraitSettings={character.profileImage ?? undefined}
             colorful
             size={"medium"}
           />
@@ -97,9 +100,7 @@ export function CharacterCard(props: CharacterCardProps) {
         </Box>
         <Box px={2}>
           <InitiativeStatusChip
-            status={
-              character.initiativeStatus ?? INITIATIVE_STATUS.OUT_OF_COMBAT
-            }
+            status={character.initiativeStatus ?? InitiativeStatus.OutOfCombat}
             handleStatusChange={updateCharacterInitiative}
             variant={"outlined"}
           />

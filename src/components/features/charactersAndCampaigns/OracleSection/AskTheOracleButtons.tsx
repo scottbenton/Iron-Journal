@@ -3,52 +3,51 @@ import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { GAME_SYSTEMS, GameSystemChooser } from "types/GameSystems.type";
 import { useRoller } from "stores/appState/useRoller";
 
-export enum ORACLE_KEYS {
-  ALMOST_CERTAIN = "almostCertain",
-  LIKELY = "likely",
-  FIFTY_FIFTY = "fiftyFifty",
-  UNLIKELY = "unlikely",
-  SMALL_CHANCE = "smallChance",
+export enum OracleKeys {
+  AlmostCertain = "almostCertain",
+  Likely = "likely",
+  FiftyFifty = "fiftyFifty",
+  Unlikely = "unlikely",
+  SmallChance = "smallChance",
 }
 
 const oracleOrder = [
-  ORACLE_KEYS.SMALL_CHANCE,
-  ORACLE_KEYS.UNLIKELY,
-  ORACLE_KEYS.FIFTY_FIFTY,
-  ORACLE_KEYS.LIKELY,
-  ORACLE_KEYS.ALMOST_CERTAIN,
+  OracleKeys.SmallChance,
+  OracleKeys.Unlikely,
+  OracleKeys.FiftyFifty,
+  OracleKeys.Likely,
+  OracleKeys.AlmostCertain,
 ];
 
-const askTheOracleOracles: GameSystemChooser<{ [key in ORACLE_KEYS]: string }> =
+const askTheOracleOracles: GameSystemChooser<{ [key in OracleKeys]: string }> =
   {
     [GAME_SYSTEMS.IRONSWORN]: {
-      [ORACLE_KEYS.ALMOST_CERTAIN]:
+      [OracleKeys.AlmostCertain]:
         "ironsworn/oracles/moves/ask_the_oracle/almost_certain",
-      [ORACLE_KEYS.LIKELY]: "ironsworn/oracles/moves/ask_the_oracle/likely",
-      [ORACLE_KEYS.FIFTY_FIFTY]: "ironsworn/oracles/moves/ask_the_oracle/50_50",
-      [ORACLE_KEYS.UNLIKELY]: "ironsworn/oracles/moves/ask_the_oracle/unlikely",
-      [ORACLE_KEYS.SMALL_CHANCE]:
+      [OracleKeys.Likely]: "ironsworn/oracles/moves/ask_the_oracle/likely",
+      [OracleKeys.FiftyFifty]: "ironsworn/oracles/moves/ask_the_oracle/50_50",
+      [OracleKeys.Unlikely]: "ironsworn/oracles/moves/ask_the_oracle/unlikely",
+      [OracleKeys.SmallChance]:
         "ironsworn/oracles/moves/ask_the_oracle/small_chance",
     },
     [GAME_SYSTEMS.STARFORGED]: {
-      [ORACLE_KEYS.ALMOST_CERTAIN]:
+      [OracleKeys.AlmostCertain]:
         "starforged/oracles/moves/ask_the_oracle/almost_certain",
-      [ORACLE_KEYS.LIKELY]: "starforged/oracles/moves/ask_the_oracle/likely",
-      [ORACLE_KEYS.FIFTY_FIFTY]:
+      [OracleKeys.Likely]: "starforged/oracles/moves/ask_the_oracle/likely",
+      [OracleKeys.FiftyFifty]:
         "starforged/oracles/moves/ask_the_oracle/fifty-fifty",
-      [ORACLE_KEYS.UNLIKELY]:
-        "starforged/oracles/moves/ask_the_oracle/unlikely",
-      [ORACLE_KEYS.SMALL_CHANCE]:
+      [OracleKeys.Unlikely]: "starforged/oracles/moves/ask_the_oracle/unlikely",
+      [OracleKeys.SmallChance]:
         "starforged/oracles/moves/ask_the_oracle/small_chance",
     },
   };
 
-const askTheOracleLabels: { [key in ORACLE_KEYS]: string } = {
-  [ORACLE_KEYS.ALMOST_CERTAIN]: "Almost Certain",
-  [ORACLE_KEYS.LIKELY]: "Likely",
-  [ORACLE_KEYS.FIFTY_FIFTY]: "50/50",
-  [ORACLE_KEYS.UNLIKELY]: "Unlikely",
-  [ORACLE_KEYS.SMALL_CHANCE]: "Small Chance",
+const askTheOracleLabels: { [key in OracleKeys]: string } = {
+  [OracleKeys.AlmostCertain]: "Almost Certain",
+  [OracleKeys.Likely]: "Likely",
+  [OracleKeys.FiftyFifty]: "50/50",
+  [OracleKeys.Unlikely]: "Unlikely",
+  [OracleKeys.SmallChance]: "Small Chance",
 };
 
 export function AskTheOracleButtons() {
@@ -77,10 +76,10 @@ export function AskTheOracleButtons() {
             px: 1,
           })}
           onClick={() =>
-            rollOracleTable(oracles[oracleKey as ORACLE_KEYS], true, true)
+            rollOracleTable(oracles[oracleKey as OracleKeys], true, true)
           }
         >
-          {askTheOracleLabels[oracleKey as ORACLE_KEYS]}
+          {askTheOracleLabels[oracleKey as OracleKeys]}
         </Button>
       ))}
     </Box>

@@ -1,5 +1,5 @@
 import { Datasworn } from "@datasworn/core";
-import { StoredNonLinearMeter } from "types/homebrew/HomebrewRules.type";
+import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type";
 
 export interface RulesSliceData {
   expansionIds: string[];
@@ -8,11 +8,12 @@ export interface RulesSliceData {
   rootOracleCollectionIds: string[];
   stats: Datasworn.Rules["stats"];
   conditionMeters: Datasworn.Rules["condition_meters"];
-  nonLinearMeters: Record<string, StoredNonLinearMeter>;
+  nonLinearMeters: Record<string, HomebrewNonLinearMeterDocument>;
   specialTracks: Datasworn.Rules["special_tracks"];
   impacts: Datasworn.Rules["impacts"];
   assetMaps: {
     assetCollectionMap: Record<string, Datasworn.AssetCollection>;
+    nonReplacedAssetCollectionMap: Record<string, Datasworn.AssetCollection>;
     assetMap: Record<string, Datasworn.Asset>;
   };
   oracleMaps: {
@@ -21,13 +22,21 @@ export interface RulesSliceData {
       Datasworn.OracleRollable | Datasworn.OracleCollection
     >;
     oracleCollectionMap: Record<string, Datasworn.OracleCollection>;
+    nonReplacedOracleCollectionMap: Record<string, Datasworn.OracleCollection>;
     oracleRollableMap: Record<string, Datasworn.OracleRollable>;
+    nonReplacedOracleRollableMap: Record<string, Datasworn.OracleRollable>;
     oracleTableRollableMap: Record<string, Datasworn.OracleTableRollable>;
+    nonReplacedOracleTableRollableMap: Record<
+      string,
+      Datasworn.OracleTableRollable
+    >;
   };
   rootMoveCollectionIds: string[];
   moveMaps: {
     moveCategoryMap: Record<string, Datasworn.MoveCategory>;
+    nonReplacedMoveCategoryMap: Record<string, Datasworn.MoveCategory>;
     moveMap: Record<string, Datasworn.Move>;
+    nonReplacedMoveMap: Record<string, Datasworn.Move>;
   };
 }
 

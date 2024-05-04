@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { ForwardedRef, ReactNode, forwardRef, useState } from "react";
 import { Track } from "components/features/Track";
-import { StoredAsset } from "types/Asset.type";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 import { Asset, AssetAlterPropertiesConditionMeter } from "dataforged";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import { AssetCardField } from "./AssetCardField";
@@ -30,7 +30,7 @@ import { FieldType } from "./FieldType";
 
 export interface AssetCardProps {
   assetId: string;
-  storedAsset?: StoredAsset;
+  storedAsset?: AssetDocument;
 
   showSharedIcon?: boolean;
   sx?: SxProps<Theme>;

@@ -8,7 +8,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { StoredNonLinearMeter } from "types/homebrew/HomebrewRules.type";
+import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type";
 import ViewIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -59,7 +59,7 @@ export function NonLinearMeters(props: NonLinearMetersProps) {
     return <></>;
   }
 
-  const handleDialogOutput = (meter: StoredNonLinearMeter) => {
+  const handleDialogOutput = (meter: HomebrewNonLinearMeterDocument) => {
     if (editingNonLinearMeterKey) {
       return updateNonLinearMeter(editingNonLinearMeterKey, meter);
     } else {

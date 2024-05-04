@@ -10,7 +10,8 @@ import {
   decodeDataswornId,
   encodeDataswornId,
 } from "functions/dataswornIdEncoder";
-import { EncodedWorld, Truth, World } from "types/World.type";
+import { Truth, World } from "types/World.type";
+import { WorldDocument } from "./_world.type";
 
 export function constructWorldsPath() {
   return `/worlds`;
@@ -24,17 +25,17 @@ export function getWorldCollection() {
   return collection(
     firestore,
     constructWorldsPath()
-  ) as CollectionReference<EncodedWorld>;
+  ) as CollectionReference<WorldDocument>;
 }
 
 export function getWorldDoc(worldId: string) {
   return doc(
     firestore,
     constructWorldDocPath(worldId)
-  ) as DocumentReference<EncodedWorld>;
+  ) as DocumentReference<WorldDocument>;
 }
 
-export function encodeWorld(world: World): EncodedWorld {
+export function encodeWorld(world: World): WorldDocument {
   const { truths: decodedTruths, worldDescription, ...remainingWorld } = world;
 
   const encodedTruths: { [key: string]: Truth } = {};
@@ -45,7 +46,7 @@ export function encodeWorld(world: World): EncodedWorld {
     });
   }
 
-  const encodedWorld: EncodedWorld = {
+  const encodedWorld: WorldDocument = {
     ...remainingWorld,
     truths: encodedTruths,
   };
@@ -57,7 +58,7 @@ export function encodeWorld(world: World): EncodedWorld {
   return encodedWorld;
 }
 
-export function decodeWorld(encodedWorld: EncodedWorld): World {
+export function decodeWorld(encodedWorld: WorldDocument): World {
   const {
     truths: encodedTruths,
     worldDescription,

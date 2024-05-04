@@ -1,19 +1,19 @@
+import { InitiativeStatus } from "api-calls/character/_character.type";
 import { InitiativeStatusChip } from "components/features/characters/InitiativeStatusChip";
-import { INITIATIVE_STATUS } from "types/Character.type";
 import { useStore } from "stores/store";
 
 export function InitiativeButtons() {
   const initiativeStatus = useStore(
     (store) =>
       store.characters.currentCharacter.currentCharacter?.initiativeStatus ??
-      INITIATIVE_STATUS.OUT_OF_COMBAT
+      InitiativeStatus.OutOfCombat
   );
 
   const updateCharacter = useStore(
     (store) => store.characters.currentCharacter.updateCurrentCharacter
   );
 
-  const updateCharacterInitiative = (status: INITIATIVE_STATUS) => {
+  const updateCharacterInitiative = (status: InitiativeStatus) => {
     updateCharacter({ initiativeStatus: status }).catch();
   };
 

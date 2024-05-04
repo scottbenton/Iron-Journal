@@ -16,7 +16,7 @@ import { updateUser } from "lib/auth.lib";
 import { useEffect, useState } from "react";
 import { useStore } from "stores/store";
 import { UserAvatar } from "./UserAvatar";
-import { UserDocument } from "types/User.type";
+import { UserDocument } from "api-calls/user/_user.type";
 import { DialogTitleWithCloseButton } from "./DialogTitleWithCloseButton";
 
 export interface UserNameDialogProps {

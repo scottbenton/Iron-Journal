@@ -12,7 +12,7 @@ import { SectorMap } from "./SectorMap";
 import { useStore } from "stores/store";
 import { ItemHeader } from "../ItemHeader";
 import { SECTOR_TABS } from "stores/world/currentWorld/sector/sector.slice.type";
-import { SECTOR_HEX_TYPES } from "types/Sector.type";
+import { SectorHexTypes } from "types/Sector.type";
 import { SectorRegionAutocomplete } from "./SectorRegionAutocomplete";
 import { useRoller } from "stores/appState/useRoller";
 import { planetDescriptions } from "data/oracles";
@@ -84,20 +84,20 @@ export function OpenSector(props: OpenSectorProps) {
   const handleAddHex = async (
     row: number,
     col: number,
-    hexType?: SECTOR_HEX_TYPES
+    hexType?: SectorHexTypes
   ) => {
     let locationId: string | undefined = undefined;
-    if (hexType === SECTOR_HEX_TYPES.STAR) {
+    if (hexType === SectorHexTypes.Star) {
       const description = rollOracleTable(
         "starforged/oracles/space/stellar_object",
         false
       );
       locationId = await createLocation({
         name: "New Star",
-        type: SECTOR_HEX_TYPES.STAR,
+        type: SectorHexTypes.Star,
         description,
       });
-    } else if (hexType === SECTOR_HEX_TYPES.PLANET) {
+    } else if (hexType === SectorHexTypes.Planet) {
       const planetClass = rollOracleTable(
         "starforged/oracles/planets/class",
         false
@@ -124,40 +124,40 @@ export function OpenSector(props: OpenSectorProps) {
 
       locationId = await createLocation({
         name: name ?? "New Planet",
-        type: SECTOR_HEX_TYPES.PLANET,
+        type: SectorHexTypes.Planet,
         subType: convertedClass,
         planetClassName,
         description,
       });
-    } else if (hexType === SECTOR_HEX_TYPES.SETTLEMENT) {
+    } else if (hexType === SectorHexTypes.Settlement) {
       const name = rollOracleTable(
         "starforged/oracles/settlements/name",
         false
       );
       locationId = await createLocation({
         name: name ?? "New Sector",
-        type: SECTOR_HEX_TYPES.SETTLEMENT,
+        type: SectorHexTypes.Settlement,
       });
-    } else if (hexType === SECTOR_HEX_TYPES.DERELICT) {
+    } else if (hexType === SectorHexTypes.Derelict) {
       locationId = await createLocation({
         name: "New Derelict",
-        type: SECTOR_HEX_TYPES.DERELICT,
+        type: SectorHexTypes.Derelict,
       });
-    } else if (hexType === SECTOR_HEX_TYPES.VAULT) {
+    } else if (hexType === SectorHexTypes.Vault) {
       locationId = await createLocation({
         name: "New Vault",
-        type: SECTOR_HEX_TYPES.VAULT,
+        type: SectorHexTypes.Vault,
       });
-    } else if (hexType === SECTOR_HEX_TYPES.OTHER) {
+    } else if (hexType === SectorHexTypes.Other) {
       locationId = await createLocation({
         name: "Unknown Location",
-        type: SECTOR_HEX_TYPES.OTHER,
+        type: SectorHexTypes.Other,
       });
     }
 
     const cell:
       | {
-          type: SECTOR_HEX_TYPES;
+          type: SectorHexTypes;
           locationId?: string;
         }
       | undefined = hexType ? { type: hexType } : undefined;

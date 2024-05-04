@@ -11,8 +11,8 @@ import {
   TrackProgressRoll,
 } from "types/DieRolls.type";
 import { getRollResultLabel } from "components/features/charactersAndCampaigns/RollDisplay";
-import { TRACK_TYPES } from "types/Track.type";
-import { LEGACY_TRACK_TYPES } from "types/LegacyTrack.type";
+import { TrackTypes } from "types/Track.type";
+import { LEGACY_TrackTypes } from "types/LegacyTrack.type";
 import { rollOracle } from "./rollers/rollOracle";
 
 export const getRoll = (dieMax: number) => {
@@ -160,7 +160,7 @@ export function useRoller() {
 
       const isOracleResultRegex = new RegExp(/\[⏵[^\]]*\]([^)]*)\)/gm);
       if (entry.match(isOracleResultRegex)) {
-        const secondHalfRegex = new RegExp(/\]([^)]*)\)/gm);
+        const secondHalfRegex = new RegExp(/\]\(([^)]*)\)/gm);
         entry = entry.replaceAll("[⏵", "").replaceAll(secondHalfRegex, "");
       }
 
@@ -256,7 +256,7 @@ export function useRoller() {
 
   const rollTrackProgress = useCallback(
     (
-      trackType: TRACK_TYPES | LEGACY_TRACK_TYPES,
+      trackType: TrackTypes | LEGACY_TrackTypes,
       trackLabel: string,
       trackProgress: number
     ) => {

@@ -5,7 +5,7 @@ import {
   doc,
 } from "firebase/firestore";
 import { firestore } from "config/firebase.config";
-import { StoredHomebrewAssetCollection } from "types/homebrew/HomebrewAssets.type";
+import { HomebrewAssetCollectionDocument } from "api-calls/homebrew/assets/collections/_homebrewAssetCollection.type";
 
 export function constructHomebrewAssetCollectionCollectionPath() {
   return `homebrew/homebrew/asset_collections`;
@@ -19,12 +19,12 @@ export function getHomebrewAssetCollectionCollection() {
   return collection(
     firestore,
     constructHomebrewAssetCollectionCollectionPath()
-  ) as CollectionReference<StoredHomebrewAssetCollection>;
+  ) as CollectionReference<HomebrewAssetCollectionDocument>;
 }
 
 export function getHomebrewAssetCollectionDoc(collectionId: string) {
   return doc(
     firestore,
     constructHomebrewAssetCollectionDocPath(collectionId)
-  ) as DocumentReference<StoredHomebrewAssetCollection>;
+  ) as DocumentReference<HomebrewAssetCollectionDocument>;
 }
