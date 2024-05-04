@@ -19,7 +19,6 @@ export function HomebrewEditorInvitationPage() {
     if (editorInviteKey) {
       getHomebrewCollectionFromInviteUrl(editorInviteKey)
         .then((parsedHomebrewId) => {
-          console.debug(parsedHomebrewId);
           setHomebrewId(parsedHomebrewId ?? undefined);
         })
         .catch((e) => console.error(e));
