@@ -1,3 +1,5 @@
+import { Nullable } from "api-calls/helpers.type";
+
 export enum MoveType {
   ActionRoll = "actionRoll",
   NoRoll = "noRoll",
@@ -11,7 +13,7 @@ export interface GenericHomebrewMove {
   label: string;
   text: string;
   oracles?: string[];
-  replacesId?: string;
+  replacesId?: Nullable<string>;
   type: MoveType;
 }
 

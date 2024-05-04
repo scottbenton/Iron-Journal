@@ -84,77 +84,83 @@ export function CharacterSection() {
   return (
     <Stack spacing={2} pb={2}>
       {showNewDebilities ? <NewDebilities /> : <Debilities />}
-      {!usingNewHomebrew && <CharacterSettings />}
-      {!usingNewHomebrew && <Stats />}
-
-      {!campaignId && <CustomTrackSettings />}
-      {!campaignId && (
+      {!usingNewHomebrew && (
         <>
-          <CustomMovesSection
-            customMoves={customMoves}
-            hiddenMoveIds={hiddenMoveIds}
-            showOrHideCustomMove={showOrHideCustomMove}
-          />
-          {gameSystem === GAME_SYSTEMS.IRONSWORN && (
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={shouldShowDelveMoves}
-                  onChange={(evt, value) => {
-                    updateSettings({ hideDelveMoves: !value }).catch(() => {});
-                  }}
+          {" "}
+          <CharacterSettings />
+          <Stats />
+          {!campaignId && <CustomTrackSettings />}
+          {!campaignId && (
+            <>
+              <CustomMovesSection
+                customMoves={customMoves}
+                hiddenMoveIds={hiddenMoveIds}
+                showOrHideCustomMove={showOrHideCustomMove}
+              />
+              {gameSystem === GAME_SYSTEMS.IRONSWORN && (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={shouldShowDelveMoves}
+                      onChange={(evt, value) => {
+                        updateSettings({ hideDelveMoves: !value }).catch(
+                          () => {}
+                        );
+                      }}
+                    />
+                  }
+                  label={"Show Delve Moves?"}
+                  sx={{ px: 2 }}
                 />
-              }
-              label={"Show Delve Moves?"}
-              sx={{ px: 2 }}
-            />
+              )}
+            </>
           )}
+          {!campaignId && (
+            <>
+              <CustomOracleSection
+                customOracles={customOracles}
+                hiddenOracleIds={hiddenOracleIds}
+                showOrHideCustomOracle={showOrHideCustomOracle}
+              />
+              {gameSystem === GAME_SYSTEMS.IRONSWORN && (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={shouldShowDelveOracles}
+                      onChange={(evt, value) => {
+                        updateSettings({ hideDelveOracles: !value }).catch(
+                          () => {}
+                        );
+                      }}
+                    />
+                  }
+                  label={"Show Delve Oracles?"}
+                  sx={{ px: 2 }}
+                />
+              )}
+            </>
+          )}
+          <SectionHeading label={"Misc"} />
+          <Box px={2}>
+            <Alert severity="info">
+              <div>
+                {appName} includes an overlay for OBS or other webcam editors so
+                you can overlay information about your character as you play.
+                You can add the given link as a browser source over your camera
+                to display this information.
+              </div>
+              <Button
+                onClick={() => copyLinkToClipboard()}
+                color={"inherit"}
+                variant={"outlined"}
+                sx={{ mt: 1 }}
+              >
+                Copy link to Card Overlay for OBS
+              </Button>
+            </Alert>
+          </Box>
         </>
       )}
-      {!campaignId && (
-        <>
-          <CustomOracleSection
-            customOracles={customOracles}
-            hiddenOracleIds={hiddenOracleIds}
-            showOrHideCustomOracle={showOrHideCustomOracle}
-          />
-          {gameSystem === GAME_SYSTEMS.IRONSWORN && (
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={shouldShowDelveOracles}
-                  onChange={(evt, value) => {
-                    updateSettings({ hideDelveOracles: !value }).catch(
-                      () => {}
-                    );
-                  }}
-                />
-              }
-              label={"Show Delve Oracles?"}
-              sx={{ px: 2 }}
-            />
-          )}
-        </>
-      )}
-      <SectionHeading label={"Misc"} />
-      <Box px={2}>
-        <Alert severity='info'>
-          <div>
-            {appName} includes an overlay for OBS or other webcam editors so you
-            can overlay information about your character as you play. You can
-            add the given link as a browser source over your camera to display
-            this information.
-          </div>
-          <Button
-            onClick={() => copyLinkToClipboard()}
-            color={"inherit"}
-            variant={"outlined"}
-            sx={{ mt: 1 }}
-          >
-            Copy link to Card Overlay for OBS
-          </Button>
-        </Alert>
-      </Box>
     </Stack>
   );
 }

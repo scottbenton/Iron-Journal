@@ -12,7 +12,7 @@ export function MoveCategoryCard(props: MoveCategoryCardProps) {
   const { category, onClick } = props;
 
   const moveCategoryMap = useStore(
-    (store) => store.rules.moveMaps.moveCategoryMap
+    (store) => store.rules.moveMaps.nonReplacedMoveCategoryMap
   );
 
   return (

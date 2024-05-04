@@ -19,36 +19,44 @@ export function convertHomebrewAssetDocumentsToCollections(
 ): Record<string, Datasworn.AssetCollection> {
   const collections: Record<string, Datasworn.AssetCollection> = {};
 
-  Object.keys(storedCollections).forEach((collectionId) => {
-    const storedCollection = storedCollections[collectionId];
-    collections[collectionId] = {
-      _id: `${homebrewId}/collections/assets/${collectionId}`,
-      name: storedCollection.label,
-      replaces: storedCollection.replacesId,
-      enhances: storedCollection.enhancesId,
-      description: storedCollection.description,
-      _source: DEFAULT_SOURCE,
-      contents: {},
-    };
-  });
+  Object.keys(storedCollections)
+    .sort((c1, c2) =>
+      storedCollections[c1].label.localeCompare(storedCollections[c2].label)
+    )
+    .forEach((collectionId) => {
+      const storedCollection = storedCollections[collectionId];
+      collections[collectionId] = {
+        _id: `${homebrewId}/collections/assets/${collectionId}`,
+        name: storedCollection.label,
+        replaces: storedCollection.replacesId ?? undefined,
+        enhances: storedCollection.enhancesId ?? undefined,
+        description: storedCollection.description,
+        _source: DEFAULT_SOURCE,
+        contents: {},
+      };
+    });
 
-  Object.keys(storedAssets).forEach((assetId) => {
-    const asset = storedAssets[assetId];
-    const convertedAsset = convertAssetDocument(
-      homebrewId,
-      assetId,
-      asset,
-      collections[asset.categoryKey].name
-    );
+  Object.keys(storedAssets)
+    .sort((a1, a2) =>
+      storedAssets[a1].label.localeCompare(storedAssets[a2].label)
+    )
+    .forEach((assetId) => {
+      const asset = storedAssets[assetId];
+      const convertedAsset = convertAssetDocument(
+        homebrewId,
+        assetId,
+        asset,
+        collections[asset.categoryKey].name
+      );
 
-    const assetCollection = collections[asset.categoryKey];
+      const assetCollection = collections[asset.categoryKey];
 
-    if (!assetCollection.contents) {
-      assetCollection.contents = { [assetId]: convertedAsset };
-    } else {
-      assetCollection.contents[assetId] = convertedAsset;
-    }
-  });
+      if (!assetCollection.contents) {
+        assetCollection.contents = { [assetId]: convertedAsset };
+      } else {
+        assetCollection.contents[assetId] = convertedAsset;
+      }
+    });
 
   return collections;
 }

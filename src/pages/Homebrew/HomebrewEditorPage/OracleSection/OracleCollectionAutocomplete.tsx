@@ -8,15 +8,26 @@ export interface OracleCollectionAutocompleteProps {
   disabled?: boolean;
   onBlur: () => void;
   helperText?: string;
+  showOriginalNames?: boolean;
 }
 
 export function OracleCollectionAutocomplete(
   props: OracleCollectionAutocompleteProps
 ) {
-  const { label, value, onChange, disabled, onBlur, helperText } = props;
+  const {
+    label,
+    value,
+    onChange,
+    disabled,
+    onBlur,
+    helperText,
+    showOriginalNames,
+  } = props;
 
-  const oracleCollectionMap = useStore(
-    (store) => store.rules.oracleMaps.oracleCollectionMap
+  const oracleCollectionMap = useStore((store) =>
+    showOriginalNames
+      ? store.rules.oracleMaps.nonReplacedOracleCollectionMap
+      : store.rules.oracleMaps.oracleCollectionMap
   );
 
   return (

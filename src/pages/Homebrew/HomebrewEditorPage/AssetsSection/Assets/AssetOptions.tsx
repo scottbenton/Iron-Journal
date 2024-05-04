@@ -92,20 +92,25 @@ export function AssetOptions(props: AssetOptionsProps) {
                     }),
                   }}
                 />
-                <TextField
-                  disabled={disabled}
-                  label={`Option Type`}
-                  select
-                  fullWidth
-                  required
-                  inputProps={{
-                    defaultValue: "",
-                    ...register(`options.${index}.type`),
-                  }}
-                >
-                  <MenuItem value={"text"}>Text</MenuItem>
-                  <MenuItem value={"select"}>Select</MenuItem>
-                </TextField>
+                <Controller
+                  name={`options.${index}.type`}
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      disabled={disabled}
+                      label={`Option Type`}
+                      select
+                      fullWidth
+                      required
+                      value={field.value ?? ""}
+                      onChange={(evt) => field.onChange(evt.target.value)}
+                      onBlur={() => field.onBlur()}
+                    >
+                      <MenuItem value={"text"}>Text</MenuItem>
+                      <MenuItem value={"select"}>Select</MenuItem>
+                    </TextField>
+                  )}
+                />
                 <OptionalFieldWrapper
                   control={control}
                   when={{

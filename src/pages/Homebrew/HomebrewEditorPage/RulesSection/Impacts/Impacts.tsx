@@ -208,7 +208,6 @@ export function Impacts(props: ImpactsProps) {
                 </Box>
                 {isEditor && (
                   <>
-                    {" "}
                     {Object.keys(impactCategories[categoryKey].contents)
                       .length > 0 ? (
                       <List>

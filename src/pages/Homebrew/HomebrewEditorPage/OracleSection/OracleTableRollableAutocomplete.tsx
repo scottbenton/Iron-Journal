@@ -8,15 +8,26 @@ export interface OracleTableRollableAutocompleteProps {
   disabled?: boolean;
   onBlur: () => void;
   helperText?: string;
+  showOriginalNames?: boolean;
 }
 
 export function OracleTableRollableAutocomplete(
   props: OracleTableRollableAutocompleteProps
 ) {
-  const { label, value, onChange, disabled, onBlur, helperText } = props;
+  const {
+    label,
+    value,
+    onChange,
+    disabled,
+    onBlur,
+    helperText,
+    showOriginalNames,
+  } = props;
 
-  const oracleTableRollableMap = useStore(
-    (store) => store.rules.oracleMaps.oracleTableRollableMap
+  const oracleTableRollableMap = useStore((store) =>
+    showOriginalNames
+      ? store.rules.oracleMaps.nonReplacedOracleTableRollableMap
+      : store.rules.oracleMaps.oracleTableRollableMap
   );
 
   return (

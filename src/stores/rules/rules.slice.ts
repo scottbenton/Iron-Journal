@@ -39,9 +39,18 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
         let oracleCollectionMap = {
           ...baseRulesetMaps.oracleCollectionMap,
         };
+        let nonReplacedOracleCollectionMap = {
+          ...baseRulesetMaps.nonReplacedOracleCollectionMap,
+        };
         let oracleRollableMap = { ...baseRulesetMaps.oracleRollableMap };
+        let nonReplacedOracleRollableMap = {
+          ...baseRulesetMaps.nonReplacedOracleRollableMap,
+        };
         let oracleTableRollableMap = {
           ...baseRulesetMaps.oracleTableRollableMap,
+        };
+        let nonReplacedOracleTableRollableMap = {
+          ...baseRulesetMaps.nonReplacedOracleTableRollableMap,
         };
 
         store.rules.expansionIds.forEach((expansionId) => {
@@ -65,13 +74,25 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
             ...oracleCollectionMap,
             ...expansionOracleMaps.oracleCollectionMap,
           };
+          nonReplacedOracleCollectionMap = {
+            ...nonReplacedOracleCollectionMap,
+            ...expansionOracleMaps.nonReplacedOracleCollectionMap,
+          };
           oracleRollableMap = {
             ...oracleRollableMap,
             ...expansionOracleMaps.oracleRollableMap,
           };
+          nonReplacedOracleRollableMap = {
+            ...nonReplacedOracleRollableMap,
+            ...expansionOracleMaps.nonReplacedOracleRollableMap,
+          };
           oracleTableRollableMap = {
             ...oracleTableRollableMap,
             ...expansionOracleMaps.oracleTableRollableMap,
+          };
+          nonReplacedOracleTableRollableMap = {
+            ...nonReplacedOracleTableRollableMap,
+            ...expansionOracleMaps.nonReplacedOracleTableRollableMap,
           };
 
           Object.values(expansionOracles).forEach((oracle) => {
@@ -84,8 +105,11 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
         store.rules.oracleMaps = {
           allOraclesMap,
           oracleCollectionMap,
+          nonReplacedOracleCollectionMap,
           oracleRollableMap,
+          nonReplacedOracleRollableMap,
           oracleTableRollableMap,
+          nonReplacedOracleTableRollableMap,
         };
         store.rules.rootOracleCollectionIds = rootOracleCollectionIds;
       }
@@ -103,6 +127,12 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
 
         let moveCategoryMap = { ...baseRulesetMaps.moveCategoryMap };
         let moveMap = { ...baseRulesetMaps.moveMap };
+        let nonReplacedMoveCategoryMap = {
+          ...baseRulesetMaps.nonReplacedMoveCategoryMap,
+        };
+        let nonReplacedMoveMap = {
+          ...baseRulesetMaps.nonReplacedMoveMap,
+        };
 
         store.rules.expansionIds.forEach((expansionId) => {
           let expansionMoveCategories: Record<string, Datasworn.MoveCategory>;
@@ -120,11 +150,21 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
             ...expansionMoveMaps.moveCategoryMap,
           };
           moveMap = { ...moveMap, ...expansionMoveMaps.moveMap };
+          nonReplacedMoveCategoryMap = {
+            ...nonReplacedMoveCategoryMap,
+            ...expansionMoveMaps.nonReplacedMoveCategoryMap,
+          };
+          nonReplacedMoveMap = {
+            ...nonReplacedMoveMap,
+            ...expansionMoveMaps.nonReplacedMoveMap,
+          };
         });
 
         store.rules.moveMaps = {
           moveCategoryMap,
           moveMap,
+          nonReplacedMoveCategoryMap,
+          nonReplacedMoveMap,
         };
         store.rules.rootMoveCollectionIds = rootMoveCollectionIds;
       }
@@ -147,12 +187,14 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
           } else {
             const expansionStats =
               store.homebrew.collections[expansionId]?.stats?.data ?? {};
-            Object.values(expansionStats).forEach((expansionStat) => {
-              statMap[expansionStat.dataswornId] = {
-                label: expansionStat.label,
-                description: expansionStat.description ?? "",
-              };
-            });
+            Object.values(expansionStats)
+              .sort((s1, s2) => s1.label.localeCompare(s2.label))
+              .forEach((expansionStat) => {
+                statMap[expansionStat.dataswornId] = {
+                  label: expansionStat.label,
+                  description: expansionStat.description ?? "",
+                };
+              });
           }
         });
 
@@ -178,8 +220,9 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
             const expansionConditionMeters =
               store.homebrew.collections[expansionId]?.conditionMeters?.data ??
               {};
-            Object.values(expansionConditionMeters).forEach(
-              (conditionMeter) => {
+            Object.values(expansionConditionMeters)
+              .sort((c1, c2) => c1.label.localeCompare(c2.label))
+              .forEach((conditionMeter) => {
                 conditionMeters[conditionMeter.dataswornId] = {
                   label: conditionMeter.label,
                   description: conditionMeter.description ?? "",
@@ -189,8 +232,7 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
                   max: conditionMeter.max,
                   rollable: true, // conditionMeter.rollable ?? false
                 };
-              }
-            );
+              });
           }
         });
 
@@ -207,7 +249,16 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
           const expansionNonLinearMeters =
             store.homebrew.collections[expansionId]?.nonLinearMeters?.data ??
             {};
-          nonLinearMeters = { ...nonLinearMeters, ...expansionNonLinearMeters };
+          nonLinearMeters = { ...nonLinearMeters };
+          Object.keys(expansionNonLinearMeters)
+            .sort((m1, m2) =>
+              expansionNonLinearMeters[m1].label.localeCompare(
+                expansionNonLinearMeters[m2].label
+              )
+            )
+            .forEach((meterKey) => {
+              nonLinearMeters[meterKey] = expansionNonLinearMeters[meterKey];
+            });
         }
       });
       store.rules.nonLinearMeters = nonLinearMeters;
@@ -230,14 +281,16 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
           } else {
             const expansionSpecialTracks =
               store.homebrew.collections[expansionId]?.legacyTracks?.data ?? {};
-            Object.values(expansionSpecialTracks).forEach((specialTrack) => {
-              specialTracks[specialTrack.dataswornId] = {
-                label: specialTrack.label,
-                description: specialTrack.description ?? "",
-                shared: specialTrack.shared,
-                optional: specialTrack.optional,
-              };
-            });
+            Object.values(expansionSpecialTracks)
+              .sort((s1, s2) => s1.label.localeCompare(s2.label))
+              .forEach((specialTrack) => {
+                specialTracks[specialTrack.dataswornId] = {
+                  label: specialTrack.label,
+                  description: specialTrack.description ?? "",
+                  shared: specialTrack.shared,
+                  optional: specialTrack.optional,
+                };
+              });
           }
         });
 
@@ -263,27 +316,39 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
             const expansionImpacts =
               store.homebrew.collections[expansionId]?.impactCategories?.data ??
               {};
-            Object.keys(expansionImpacts).forEach((impactCategoryId) => {
-              const impactCategory = expansionImpacts[impactCategoryId];
-              const impactContents: Record<string, Datasworn.ImpactRule> = {};
+            Object.keys(expansionImpacts)
+              .sort((c1, c2) =>
+                expansionImpacts[c1].label.localeCompare(
+                  expansionImpacts[c2].label
+                )
+              )
+              .forEach((impactCategoryId) => {
+                const impactCategory = expansionImpacts[impactCategoryId];
+                const impactContents: Record<string, Datasworn.ImpactRule> = {};
 
-              Object.keys(impactCategory.contents).forEach((impactKey) => {
-                const impact = impactCategory.contents[impactKey];
-                impactContents[impact.dataswornId] = {
-                  label: impact.label,
-                  description: impact.description ?? "",
-                  shared: impact.shared,
-                  prevents_recovery: impact.preventsRecovery,
-                  permanent: impact.permanent,
+                Object.keys(impactCategory.contents)
+                  .sort((i1, i2) =>
+                    impactCategory.contents[i1].label.localeCompare(
+                      impactCategory.contents[i2].label
+                    )
+                  )
+                  .forEach((impactKey) => {
+                    const impact = impactCategory.contents[impactKey];
+                    impactContents[impact.dataswornId] = {
+                      label: impact.label,
+                      description: impact.description ?? "",
+                      shared: impact.shared,
+                      prevents_recovery: impact.preventsRecovery,
+                      permanent: impact.permanent,
+                    };
+                  });
+
+                impacts[impactCategoryId] = {
+                  label: impactCategory.label,
+                  description: impactCategory.description ?? "",
+                  contents: impactContents,
                 };
               });
-
-              impacts[impactCategoryId] = {
-                label: impactCategory.label,
-                description: impactCategory.description ?? "",
-                contents: impactContents,
-              };
-            });
           }
         });
 
@@ -299,6 +364,9 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
 
         let assetCollectionMap = { ...baseRulesetMaps.assetCollectionMap };
         let assetMap = { ...baseRulesetMaps.assetMap };
+        let nonReplacedAssetCollectionMap = {
+          ...baseRulesetMaps.nonReplacedAssetCollectionMap,
+        };
 
         store.rules.expansionIds.forEach((expansionId) => {
           let expansionAssetCollections: Record<
@@ -321,6 +389,10 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
             ...expansionAssetMaps.assetCollectionMap,
           };
           assetMap = { ...assetMap, ...expansionAssetMaps.assetMap };
+          nonReplacedAssetCollectionMap = {
+            ...nonReplacedAssetCollectionMap,
+            ...expansionAssetMaps.nonReplacedAssetCollectionMap,
+          };
 
           Object.keys(expansionAssetMaps.assetCollectionMap).forEach(
             (collectionKey) => {
@@ -331,9 +403,21 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
               } else if (collection.enhances) {
                 const original = assetCollectionMap[collection.enhances];
                 if (original) {
+                  const newContents: Record<string, Datasworn.Asset> = {};
+                  const oldContents = collection.contents;
+                  if (oldContents) {
+                    Object.keys(oldContents).forEach((assetKey) => {
+                      const asset = oldContents[assetKey];
+                      newContents[assetKey] = {
+                        ...asset,
+                        category: original.name.replace("Assets", ""),
+                      };
+                      assetMap[asset._id] = newContents[assetKey];
+                    });
+                  }
                   assetCollectionMap[collection.enhances] = {
                     ...original,
-                    contents: { ...original.contents, ...collection.contents },
+                    contents: { ...original.contents, ...newContents },
                   };
                 }
               }
@@ -344,6 +428,7 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
         store.rules.assetMaps = {
           assetCollectionMap,
           assetMap,
+          nonReplacedAssetCollectionMap,
         };
       }
     });

@@ -14,7 +14,7 @@ export function MoveCategoryAutocomplete(props: MoveCategoryAutocompleteProps) {
   const { label, value, onChange, disabled, onBlur, helperText } = props;
 
   const moveCategoryMap = useStore(
-    (store) => store.rules.moveMaps.moveCategoryMap
+    (store) => store.rules.moveMaps.nonReplacedMoveCategoryMap
   );
 
   return (

@@ -11,7 +11,7 @@ export function AssetCollectionCard(props: AssetCollectionCardProps) {
   const { collection } = props;
 
   const assetCollectionMap = useStore(
-    (store) => store.rules.assetMaps.assetCollectionMap
+    (store) => store.rules.assetMaps.nonReplacedAssetCollectionMap
   );
 
   return (

@@ -66,7 +66,7 @@ export function MoveDialogForm(props: MoveFormDialogProps) {
       ? {
           label: existingMove.label,
           text: existingMove.text,
-          replacesId: existingMove.replacesId,
+          replacesId: existingMove.replacesId ?? undefined,
           oracles: existingMove.oracles,
           type: existingMove.type,
           stats:
@@ -108,9 +108,7 @@ export function MoveDialogForm(props: MoveFormDialogProps) {
       type: values.type,
     };
 
-    if (values.replacesId) {
-      genericMove.replacesId = values.replacesId;
-    }
+    genericMove.replacesId = values.replacesId ?? null;
     if (values.oracles) {
       genericMove.oracles = values.oracles;
     }
@@ -228,6 +226,7 @@ export function MoveDialogForm(props: MoveFormDialogProps) {
                   onBlur={field.onBlur}
                   disabled={disabled}
                   helperText={"Replaces an existing move with this one."}
+                  showOriginalMoveName
                 />
               )}
             />

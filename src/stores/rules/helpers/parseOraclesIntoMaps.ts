@@ -9,51 +9,68 @@ export function parseOraclesIntoMaps(
     Datasworn.OracleRollable | Datasworn.OracleCollection
   > = {};
   const oracleCollectionMap: Record<string, Datasworn.OracleCollection> = {};
-  const oracleRollableMap: Record<string, Datasworn.OracleRollable> = {};
-  const oracleTablesCollectionMap: Record<
+  const nonReplacedOracleCollectionMap: Record<
     string,
-    Datasworn.OracleTablesCollection
+    Datasworn.OracleCollection
   > = {};
+  const oracleRollableMap: Record<string, Datasworn.OracleRollable> = {};
+  const nonReplacedOracleRollableMap: Record<string, Datasworn.OracleRollable> =
+    {};
   const oracleTableRollableMap: Record<string, Datasworn.OracleTableRollable> =
     {};
+  const nonReplacedOracleTableRollableMap: Record<
+    string,
+    Datasworn.OracleTableRollable
+  > = {};
 
   const parseOracleTableCollectionIntoMaps = (
-    category: Datasworn.OracleTablesCollection
+    category: Datasworn.OracleCollection
   ) => {
-    oracleTablesCollectionMap[category._id] = category;
     allOraclesMap[category._id] = category;
     oracleCollectionMap[category._id] = category;
-    Object.values(category.contents ?? {}).forEach((oracleContent) => {
-      allOraclesMap[oracleContent._id] = oracleContent;
-      oracleRollableMap[oracleContent._id] = oracleContent;
-      oracleTableRollableMap[oracleContent._id] = oracleContent;
-    });
-    Object.values(category.collections ?? {}).forEach((subCollection) => {
-      oracleCollectionMap[subCollection._id] = subCollection;
-      if (subCollection.replaces) {
-        oracleCollectionMap[subCollection.replaces] = subCollection;
-      }
-      if (subCollection.oracle_type === "tables") {
-        allOraclesMap[subCollection._id] = subCollection;
-        parseOracleTableCollectionIntoMaps(subCollection);
-      } else if (
-        subCollection.oracle_type === "table_shared_rolls" ||
-        subCollection.oracle_type === "table_shared_results" ||
-        subCollection.oracle_type === "table_shared_details"
-      ) {
-        allOraclesMap[subCollection._id] = subCollection;
-        Object.values(subCollection.contents ?? {}).forEach(
-          (
-            content:
-              | Datasworn.OracleColumnSimple
-              | Datasworn.OracleColumnDetails
-          ) => {
-            allOraclesMap[content._id] = content;
-            oracleRollableMap[content._id] = content;
+    nonReplacedOracleCollectionMap[category._id] = category;
+    if (category.replaces) {
+      allOraclesMap[category.replaces] = category;
+      oracleCollectionMap[category.replaces] = category;
+    }
+    if (category.contents) {
+      Object.values(category.contents).forEach(
+        (
+          oracleContent:
+            | Datasworn.OracleTableRollable
+            | Datasworn.OracleColumnSimple
+            | Datasworn.OracleColumnDetails
+        ) => {
+          allOraclesMap[oracleContent._id] = oracleContent;
+          oracleRollableMap[oracleContent._id] = oracleContent;
+          nonReplacedOracleRollableMap[oracleContent._id] = oracleContent;
+          if (
+            oracleContent.oracle_type === "table_details" ||
+            oracleContent.oracle_type === "table_simple"
+          ) {
+            oracleTableRollableMap[oracleContent._id] = oracleContent;
+            nonReplacedOracleTableRollableMap[oracleContent._id] =
+              oracleContent;
           }
-        );
-      }
-    });
+          if (oracleContent.replaces) {
+            allOraclesMap[oracleContent.replaces] = oracleContent;
+            oracleRollableMap[oracleContent.replaces] = oracleContent;
+            if (
+              oracleContent.oracle_type === "table_details" ||
+              oracleContent.oracle_type === "table_simple"
+            ) {
+              oracleTableRollableMap[oracleContent.replaces] = oracleContent;
+            }
+          }
+        }
+      );
+    }
+
+    if (category.oracle_type === "tables") {
+      Object.values(category.collections ?? {}).forEach((subCollection) => {
+        parseOracleTableCollectionIntoMaps(subCollection);
+      });
+    }
   };
 
   Object.values(oracles).forEach((oracleTableCollection) => {
@@ -63,7 +80,10 @@ export function parseOraclesIntoMaps(
   return {
     allOraclesMap,
     oracleCollectionMap,
+    nonReplacedOracleCollectionMap,
     oracleRollableMap,
+    nonReplacedOracleRollableMap,
     oracleTableRollableMap,
+    nonReplacedOracleTableRollableMap,
   };
 }

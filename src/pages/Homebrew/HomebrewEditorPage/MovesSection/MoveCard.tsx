@@ -34,6 +34,8 @@ export function MoveCard(props: MoveCardProps) {
 
   const openDialog = useStore((store) => store.appState.openDialog);
 
+  const moveMap = useStore((store) => store.rules.moveMaps.nonReplacedMoveMap);
+
   return (
     <>
       <Card
@@ -47,7 +49,14 @@ export function MoveCard(props: MoveCardProps) {
           justifyContent: "space-between",
         }}
       >
-        <Typography>{move.label}</Typography>
+        <Box>
+          <Typography variant={"h6"}>{move.label}</Typography>
+          {move.replacesId && (
+            <Typography color={"textSecondary"}>
+              Replaces &quot;{moveMap[move.replacesId].name}&quot;
+            </Typography>
+          )}
+        </Box>
         <Box>
           {isEditor ? (
             <>

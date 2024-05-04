@@ -14,7 +14,7 @@ export function OracleTablesCollectionCard(
   const { oracle, onClick } = props;
 
   const oracleCollectionMap = useStore(
-    (store) => store.rules.oracleMaps.oracleCollectionMap
+    (store) => store.rules.oracleMaps.nonReplacedOracleCollectionMap
   );
 
   return (

@@ -5,6 +5,10 @@ export function parseAssetsIntoMaps(
   assetCategories: Record<string, Datasworn.AssetCollection>
 ): RulesSliceData["assetMaps"] {
   const assetCollectionMap: Record<string, Datasworn.AssetCollection> = {};
+  const nonReplacedAssetCollectionMap: Record<
+    string,
+    Datasworn.AssetCollection
+  > = {};
   const assetMap: Record<string, Datasworn.Asset> = {};
 
   Object.values(assetCategories).forEach((category) => {
@@ -13,6 +17,8 @@ export function parseAssetsIntoMaps(
         assetCollectionMap[category.replaces] = category;
       }
       assetCollectionMap[category._id] = category;
+      nonReplacedAssetCollectionMap[category._id] = category;
+
       Object.values(category.contents ?? {}).forEach((asset) => {
         assetMap[asset._id] = asset;
       });
@@ -22,5 +28,6 @@ export function parseAssetsIntoMaps(
   return {
     assetCollectionMap,
     assetMap,
+    nonReplacedAssetCollectionMap,
   };
 }

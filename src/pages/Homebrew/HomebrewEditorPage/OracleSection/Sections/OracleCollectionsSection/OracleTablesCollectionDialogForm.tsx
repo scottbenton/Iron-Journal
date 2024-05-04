@@ -59,8 +59,8 @@ export function OracleTablesCollectionDialogForm(
       ? {
           name: existingCollection.label,
           description: existingCollection.description,
-          enhancesId: existingCollection.enhancesId,
-          replacesId: existingCollection.replacesId,
+          enhancesId: existingCollection.enhancesId ?? undefined,
+          replacesId: existingCollection.replacesId ?? undefined,
         }
       : {},
   });
@@ -93,12 +93,9 @@ export function OracleTablesCollectionDialogForm(
     if (values.description) {
       oracleCollection.description = values.description;
     }
-    if (values.enhancesId) {
-      oracleCollection.enhancesId = values.enhancesId;
-    }
-    if (values.replacesId) {
-      oracleCollection.replacesId = values.replacesId;
-    }
+
+    oracleCollection.enhancesId = values.enhancesId ?? null;
+    oracleCollection.replacesId = values.replacesId ?? null;
 
     if (existingCollectionId) {
       updateOracleCollection(existingCollectionId, oracleCollection)
@@ -184,6 +181,7 @@ export function OracleTablesCollectionDialogForm(
                   helperText={
                     "Replaces all oracles within the given collection"
                   }
+                  showOriginalNames
                 />
               )}
             />

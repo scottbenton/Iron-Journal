@@ -40,6 +40,10 @@ export function OracleTableCard(props: OracleTableCardProps) {
       .catch(() => {});
   };
 
+  const oracleMap = useStore(
+    (store) => store.rules.oracleMaps.nonReplacedOracleRollableMap
+  );
+
   const [moveOracleDialogOpen, setMoveOracleDialogOpen] = useState(false);
 
   return (
@@ -61,6 +65,11 @@ export function OracleTableCard(props: OracleTableCardProps) {
             Table
           </Typography>
           <Typography variant={"h6"}>{oracle.label}</Typography>
+          {oracle.replaces && (
+            <Typography color={"textSecondary"}>
+              Replaces &quot;{oracleMap[oracle.replaces]?.name}&quot;
+            </Typography>
+          )}
         </Box>
         <Box>
           {isEditor ? (

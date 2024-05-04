@@ -52,8 +52,8 @@ export function MoveCategoryDialogForm(props: MoveCategoryFormDialogProps) {
       ? {
           label: existingMoveCategory.label,
           description: existingMoveCategory.description,
-          enhancesId: existingMoveCategory.enhancesId,
-          replacesId: existingMoveCategory.replacesId,
+          enhancesId: existingMoveCategory.enhancesId ?? undefined,
+          replacesId: existingMoveCategory.replacesId ?? undefined,
         }
       : {},
   });
@@ -76,12 +76,9 @@ export function MoveCategoryDialogForm(props: MoveCategoryFormDialogProps) {
     if (values.description) {
       moveCategory.description = values.description;
     }
-    if (values.enhancesId) {
-      moveCategory.enhancesId = values.enhancesId;
-    }
-    if (values.replacesId) {
-      moveCategory.replacesId = values.replacesId;
-    }
+    moveCategory.enhancesId = values.enhancesId ?? null;
+
+    moveCategory.replacesId = values.replacesId ?? null;
 
     if (existingMoveCategoryId) {
       updateMoveCategory(existingMoveCategoryId, moveCategory)

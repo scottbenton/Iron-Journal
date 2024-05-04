@@ -13,6 +13,7 @@ export interface RulesSliceData {
   impacts: Datasworn.Rules["impacts"];
   assetMaps: {
     assetCollectionMap: Record<string, Datasworn.AssetCollection>;
+    nonReplacedAssetCollectionMap: Record<string, Datasworn.AssetCollection>;
     assetMap: Record<string, Datasworn.Asset>;
   };
   oracleMaps: {
@@ -21,13 +22,21 @@ export interface RulesSliceData {
       Datasworn.OracleRollable | Datasworn.OracleCollection
     >;
     oracleCollectionMap: Record<string, Datasworn.OracleCollection>;
+    nonReplacedOracleCollectionMap: Record<string, Datasworn.OracleCollection>;
     oracleRollableMap: Record<string, Datasworn.OracleRollable>;
+    nonReplacedOracleRollableMap: Record<string, Datasworn.OracleRollable>;
     oracleTableRollableMap: Record<string, Datasworn.OracleTableRollable>;
+    nonReplacedOracleTableRollableMap: Record<
+      string,
+      Datasworn.OracleTableRollable
+    >;
   };
   rootMoveCollectionIds: string[];
   moveMaps: {
     moveCategoryMap: Record<string, Datasworn.MoveCategory>;
+    nonReplacedMoveCategoryMap: Record<string, Datasworn.MoveCategory>;
     moveMap: Record<string, Datasworn.Move>;
+    nonReplacedMoveMap: Record<string, Datasworn.Move>;
   };
 }
 

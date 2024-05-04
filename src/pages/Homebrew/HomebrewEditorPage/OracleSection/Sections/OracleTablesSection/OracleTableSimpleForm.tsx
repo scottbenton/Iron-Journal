@@ -113,9 +113,7 @@ export function OracleTableSimpleForm(props: OracleTableSimpleFormProps) {
       oracleTable.columnLabels.detail = "Details";
     }
 
-    if (values.replacesId) {
-      oracleTable.replaces = values.replacesId;
-    }
+    oracleTable.replaces = values.replacesId ?? null;
 
     if (editingOracleTableId) {
       updateTable(editingOracleTableId, oracleTable)
@@ -181,6 +179,7 @@ export function OracleTableSimpleForm(props: OracleTableSimpleFormProps) {
                   onChange={(ids) => field.onChange(ids ?? null)}
                   onBlur={field.onBlur}
                   helperText={"Replaces an existing oracle table with this one"}
+                  showOriginalNames
                 />
               )}
             />
@@ -246,7 +245,7 @@ function getDefaultValues(
     return {
       name: existingOracle.label,
       description: existingOracle.description,
-      replacesId: existingOracle.replaces,
+      replacesId: existingOracle.replaces ?? undefined,
 
       showDetails: false,
       columnValues,
@@ -265,7 +264,7 @@ function getDefaultValues(
     return {
       name: existingOracle.label,
       description: existingOracle.description,
-      replacesId: existingOracle.replaces,
+      replacesId: existingOracle.replaces ?? undefined,
       showDetails: true,
       columnValues,
     };
