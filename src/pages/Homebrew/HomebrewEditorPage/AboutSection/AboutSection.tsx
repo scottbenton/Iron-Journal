@@ -192,7 +192,7 @@ export function AboutSection(props: AboutSectionProps) {
               <Typography variant={"h6"}>Viewers</Typography>
               <Typography color={"textSecondary"} variant={"body2"}>
                 Viewers will be able to add this content to their own homebrew
-                page to use for characters and campaigns, but will not be
+                libraries to use for characters and campaigns, but will not be
                 allowed to edit anything.
               </Typography>
               <Button
@@ -206,9 +206,9 @@ export function AboutSection(props: AboutSectionProps) {
 
               <Box mt={2}>
                 <Typography color={"textSecondary"}>
-                  {details.viewers?.length ?? 0} viewer
-                  {details.viewers?.length === 1 ? " " : "s "}
-                  added this to their collection
+                  {details.viewers?.length ?? 0} people
+                  {(details.viewers?.length ?? 0) === 1 ? " " : "s "}
+                  added this to their homebrew library
                 </Typography>
               </Box>
             </Card>

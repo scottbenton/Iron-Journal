@@ -48,7 +48,7 @@ export function HomebrewSelectPage() {
   return (
     <>
       <PageHeader
-        label={"Your Homebrew Collections"}
+        label={"Your Homebrew Library"}
         actions={
           <Button
             variant={"contained"}
