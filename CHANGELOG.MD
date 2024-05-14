@@ -13,6 +13,7 @@
 - Added the ability to delete Rolls from the log (AnnB)
 - Added ability for GMs to remove other players and their characters from campaigns
 - Added the ability for users to view completed campaign & character tracks and clocks
+- Added missing rule for cancelling out the action die when your negative momentum matches your action die.
 
 ### Bug Fixes
 
