@@ -48,9 +48,12 @@ export function RollDisplay(props: RollDisplayProps) {
                   modifier: roll.modifier,
                   adds: roll.adds,
                   rollTotal:
-                    roll.action + (roll.modifier ?? 0) + (roll.adds ?? 0),
+                    (roll.matchedNegativeMomentum ? 0 : roll.action) +
+                    (roll.modifier ?? 0) +
+                    (roll.adds ?? 0),
                 }}
                 crossOutD6={!!roll.momentumBurned}
+                crossOutD6Value={roll.matchedNegativeMomentum}
                 d10Results={[roll.challenge1, roll.challenge2]}
                 fixedResult={
                   roll.momentumBurned
@@ -64,6 +67,9 @@ export function RollDisplay(props: RollDisplayProps) {
                 extras={[
                   ...(roll.challenge1 === roll.challenge2 ? ["Match"] : []),
                   ...(roll.action === 1 ? ["One on the action die"] : []),
+                  ...(roll.matchedNegativeMomentum
+                    ? ["Matched negative momentum"]
+                    : []),
                 ]}
               />
             </RollContainer>

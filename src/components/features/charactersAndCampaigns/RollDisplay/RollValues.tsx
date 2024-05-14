@@ -15,10 +15,18 @@ export interface RollValuesProps {
     value: string | number;
   };
   crossOutD6?: boolean;
+  crossOutD6Value?: boolean;
   isExpanded: boolean;
 }
 export function RollValues(props: RollValuesProps) {
-  const { d10Results, d6Result, crossOutD6, fixedResult, isExpanded } = props;
+  const {
+    d10Results,
+    d6Result,
+    crossOutD6,
+    crossOutD6Value,
+    fixedResult,
+    isExpanded,
+  } = props;
 
   if (!isExpanded) {
     return null;
@@ -47,7 +55,7 @@ export function RollValues(props: RollValuesProps) {
             <Typography ml={1} color={(theme) => theme.palette.grey[200]}>
               <Box
                 component={"span"}
-                sx={
+                sx={[
                   d6Result.action === 1
                     ? {
                         borderRadius: 1,
@@ -56,11 +64,17 @@ export function RollValues(props: RollValuesProps) {
                         borderStyle: "solid",
                         px: 0.5,
                       }
-                    : {}
-                }
+                    : {},
+                  crossOutD6Value
+                    ? {
+                        textDecoration: "line-through",
+                      }
+                    : {},
+                ]}
               >
                 {d6Result.action}
               </Box>
+              {crossOutD6Value ? " (0)" : ""}
               {d6Result.modifier ? ` + ${d6Result.modifier}` : ""}
 
               {d6Result.adds ? ` + ${d6Result.adds}` : ""}

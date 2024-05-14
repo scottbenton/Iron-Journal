@@ -36,6 +36,9 @@ export function useRoller() {
   const addRollToLog = useStore((store) => store.gameLog.addRoll);
 
   const newOracles = useStore((store) => store.rules.oracleMaps.allOraclesMap);
+  const momentum = useStore(
+    (store) => store.characters.currentCharacter.currentCharacter?.momentum ?? 0
+  );
 
   const { allCustomOracleMap, customOracleCategories } = useCustomOracles();
   const combinedOracleCategories = useMemo(() => {
@@ -60,7 +63,15 @@ export function useRoller() {
       const challenge2 = getRoll(10);
       const action = getRoll(6);
 
-      const actionTotal = Math.min(10, action + (modifier ?? 0) + (adds ?? 0));
+      let matchedNegativeMomentum = false;
+      if (momentum < 0 && Math.abs(momentum) === action) {
+        matchedNegativeMomentum = true;
+      }
+
+      const actionTotal = Math.min(
+        10,
+        (matchedNegativeMomentum ? 0 : action) + (modifier ?? 0) + (adds ?? 0)
+      );
 
       let result: ROLL_RESULT = ROLL_RESULT.WEAK_HIT;
       if (actionTotal > challenge1 && actionTotal > challenge2) {
@@ -81,6 +92,7 @@ export function useRoller() {
         characterId,
         uid,
         gmsOnly: false,
+        matchedNegativeMomentum,
       };
 
       if (adds) {
@@ -101,17 +113,29 @@ export function useRoller() {
         .catch(() => {});
 
       if (showSnackbar) {
+        let announcement = `Rolled ${
+          moveName ? moveName + " using stat " + label : label
+        }.`;
+        if (matchedNegativeMomentum) {
+          announcement += ` On your action die you rolled a ${
+            action === 10 ? "max of 10" : action
+          }, which matched your momentum of ${momentum}, so your action die got cancelled out. Your modifiers are ${modifier}${
+            adds ? " plus " + adds + " adds" : ""
+          } for a total of ${actionTotal}.`;
+        } else {
+          announcement += ` On your action die you rolled a ${
+            action === 10 ? "max of 10" : action
+          } plus ${modifier}${
+            adds ? " plus " + adds + " adds" : ""
+          } for a total of ${actionTotal}.`;
+        }
+
+        announcement += ` On your challenge die you rolled a ${challenge1} and a ${challenge2}, for a ${getRollResultLabel(
+          result
+        )}`;
         announce(
           verboseScreenReaderRolls
-            ? `Rolled ${
-                moveName ? moveName + " using stat " + label : label
-              }. On your action die you rolled a ${
-                action === 10 ? "max of 10" : action
-              } plus ${modifier}${
-                adds ? " plus " + adds + " adds" : ""
-              } for a total of ${actionTotal}. On your challenge die you rolled a ${challenge1} and a ${challenge2}, for a ${getRollResultLabel(
-                result
-              )}`
+            ? announcement
             : `Rolled ${
                 moveName ? moveName + "using stat" + label : label
               }. Your action die had a total of ${actionTotal} against ${challenge1} and ${challenge2}, for a ${getRollResultLabel(
@@ -130,6 +154,7 @@ export function useRoller() {
       characterId,
       uid,
       verboseScreenReaderRolls,
+      momentum,
     ]
   );
 

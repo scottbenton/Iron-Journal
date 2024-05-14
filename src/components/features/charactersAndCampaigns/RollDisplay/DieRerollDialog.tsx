@@ -27,6 +27,10 @@ export interface DieRerollDialogProps {
 export function DieRerollDialog(props: DieRerollDialogProps) {
   const { open, handleClose, roll, rollId } = props;
 
+  const momentum = useStore(
+    (store) => store.characters.currentCharacter.currentCharacter?.momentum ?? 0
+  );
+
   const { info } = useSnackbar();
   const updateRoll = useStore((store) => store.gameLog.updateRoll);
   const [loading, setLoading] = useState(false);
@@ -35,9 +39,12 @@ export function DieRerollDialog(props: DieRerollDialogProps) {
   const [challenge1, setChallenge1] = useState(roll.challenge1);
   const [challenge2, setChallenge2] = useState(roll.challenge2);
 
+  const matchedNegativeMomentum = momentum < 0 && Math.abs(momentum) === action;
   const actionTotal = Math.min(
     10,
-    action + (roll.modifier ?? 0) + (roll.adds ?? 0)
+    (matchedNegativeMomentum ? 0 : action) +
+      (roll.modifier ?? 0) +
+      (roll.adds ?? 0)
   );
 
   let result: ROLL_RESULT = ROLL_RESULT.WEAK_HIT;
@@ -53,6 +60,7 @@ export function DieRerollDialog(props: DieRerollDialogProps) {
     challenge1,
     challenge2,
     result,
+    matchedNegativeMomentum,
   };
 
   const handleRoll = (
