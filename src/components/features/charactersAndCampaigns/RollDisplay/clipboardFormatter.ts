@@ -133,7 +133,7 @@ export function extractOracleRollContents(
   roll: OracleTableRoll
 ): OracleRollContents {
   const title = roll.oracleCategoryName
-    ? `${roll.oracleCategoryName} ꞏ ${roll.rollLabel}`
+    ? `${roll.oracleCategoryName} / ${roll.rollLabel}`
     : roll.rollLabel;
   const rollSection = roll.roll + "";
   const result = roll.result;

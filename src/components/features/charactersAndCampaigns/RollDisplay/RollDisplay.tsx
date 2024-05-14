@@ -25,6 +25,7 @@ export function RollDisplay(props: RollDisplayProps) {
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
+        position: "relative",
       })}
     >
       <Box
@@ -39,7 +40,6 @@ export function RollDisplay(props: RollDisplayProps) {
               title={roll.moveName ? roll.moveName : roll.rollLabel}
               overline={roll.moveName ? roll.rollLabel : undefined}
               isExpanded={isExpanded}
-              actions={actions}
             />
             <RollContainer>
               <RollValues
@@ -71,11 +71,7 @@ export function RollDisplay(props: RollDisplayProps) {
         )}
         {roll.type === ROLL_TYPE.TRACK_PROGRESS && (
           <>
-            <RollTitle
-              title={roll.rollLabel}
-              isExpanded={isExpanded}
-              actions={actions}
-            />
+            <RollTitle title={roll.rollLabel} isExpanded={isExpanded} />
             <RollContainer>
               <RollValues
                 fixedResult={{
@@ -100,7 +96,6 @@ export function RollDisplay(props: RollDisplayProps) {
               overline={roll.oracleCategoryName}
               title={roll.rollLabel}
               isExpanded={isExpanded}
-              actions={actions}
             />
             <RollContainer>
               <RollValues d10Results={roll.roll} isExpanded={isExpanded} />
@@ -114,7 +109,6 @@ export function RollDisplay(props: RollDisplayProps) {
               overline={roll.oracleTitle}
               title={roll.rollLabel}
               isExpanded={isExpanded}
-              actions={actions}
             />
             <RollContainer>
               <RollValues d10Results={roll.roll} isExpanded={isExpanded} />
@@ -122,6 +116,9 @@ export function RollDisplay(props: RollDisplayProps) {
             </RollContainer>
           </>
         )}
+      </Box>
+      <Box position={"absolute"} top={0} right={0}>
+        {isExpanded && actions}
       </Box>
     </Card>
   );

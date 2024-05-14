@@ -38,6 +38,7 @@ export interface RulesSliceData {
     moveMap: Record<string, Datasworn.Move>;
     nonReplacedMoveMap: Record<string, Datasworn.Move>;
   };
+  worldTruths: Record<string, Datasworn.Truth>;
 }
 
 export interface RulesSliceActions {

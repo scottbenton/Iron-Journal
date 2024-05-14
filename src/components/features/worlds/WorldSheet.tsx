@@ -8,6 +8,8 @@ import { GAME_SYSTEMS, GameSystemChooser } from "types/GameSystems.type";
 import { IronswornWorldTruthsSection } from "components/features/worlds/IronswornWorldTruthsSection";
 import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { StarforgedWorldTruthsSection } from "components/features/worlds/StarforgedWorldTruthsSection";
+import { useNewCustomContentPage } from "hooks/featureFlags/useNewCustomContentPage";
+import { WorldTruths } from "./WorldTruths";
 
 export interface WorldSheetProps {
   canEdit: boolean;
@@ -39,7 +41,8 @@ export function WorldSheet(props: WorldSheetProps) {
     [updateWorldDescription, worldId]
   );
 
-  const TruthSection = useGameSystemValue(truthSection);
+  const shouldUseNewTruthSection = useNewCustomContentPage();
+  const OldTruthSection = useGameSystemValue(truthSection);
 
   if (!world || !worldId) return null;
 
@@ -77,7 +80,14 @@ export function WorldSheet(props: WorldSheetProps) {
           />
         </>
       )}
-      <TruthSection canEdit={canEdit} hideCampaignHints={hideCampaignHints} />
+      {shouldUseNewTruthSection ? (
+        <WorldTruths canEdit={canEdit} hideCampaignHints={hideCampaignHints} />
+      ) : (
+        <OldTruthSection
+          canEdit={canEdit}
+          hideCampaignHints={hideCampaignHints}
+        />
+      )}
     </>
   );
 }

@@ -8,6 +8,7 @@ import { updateWorldTruth } from "api-calls/world/updateWorldTruth";
 import { createNPCsSlice } from "./npcs/npcs.slice";
 import { createLoreSlice } from "./lore/lore.slice";
 import { createSectorSlice } from "./sector/sector.slice";
+import { updateWorldTruthNew } from "api-calls/world/updateWorldTruthNew";
 
 export const createCurrentWorldSlice: CreateSliceType<CurrentWorldSlice> = (
   ...params
@@ -55,6 +56,18 @@ export const createCurrentWorldSlice: CreateSliceType<CurrentWorldSlice> = (
         return updateWorldTruth({
           worldId,
           truthId,
+          truth,
+        });
+      } else {
+        return new Promise((res, reject) => reject("No world id defined."));
+      }
+    },
+    updateCurrentWorldTruthNew: (truthKey, truth) => {
+      const worldId = getState().worlds.currentWorld.currentWorldId;
+      if (worldId) {
+        return updateWorldTruthNew({
+          worldId,
+          truthKey,
           truth,
         });
       } else {

@@ -140,9 +140,9 @@ function flattenOracleTables(
         Table: fixedTable,
         Title: {
           $id: table.Title.$id,
-          Short: `${subsetTitlePrefix.Short} ꞏ ${table.Title.Short}`,
-          Canonical: `${subsetTitlePrefix.Canonical} ꞏ ${table.Title.Canonical}`,
-          Standard: `${subsetTitlePrefix.Standard} ꞏ ${table.Title.Standard}`,
+          Short: `${subsetTitlePrefix.Short} / ${table.Title.Short}`,
+          Canonical: `${subsetTitlePrefix.Canonical} / ${table.Title.Canonical}`,
+          Standard: `${subsetTitlePrefix.Standard} / ${table.Title.Standard}`,
         },
       };
     }
@@ -154,9 +154,9 @@ function flattenOracleTables(
       subsetTitlePrefix
         ? {
             $id: subSet.Title.$id,
-            Short: `${subsetTitlePrefix.Short} ꞏ ${subSet.Title.Short}`,
-            Canonical: `${subsetTitlePrefix.Canonical} ꞏ ${subSet.Title.Canonical}`,
-            Standard: `${subsetTitlePrefix.Standard} ꞏ ${subSet.Title.Standard}`,
+            Short: `${subsetTitlePrefix.Short} / ${subSet.Title.Short}`,
+            Canonical: `${subsetTitlePrefix.Canonical} / ${subSet.Title.Canonical}`,
+            Standard: `${subsetTitlePrefix.Standard} / ${subSet.Title.Standard}`,
           }
         : subSet.Title
     );

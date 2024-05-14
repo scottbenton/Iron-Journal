@@ -1,5 +1,5 @@
 import {
-  ButtonBase,
+  IconButton,
   ListItemIcon,
   ListItemText,
   Menu,
@@ -9,7 +9,7 @@ import { useRef, useState } from "react";
 import MoreIcon from "@mui/icons-material/MoreHoriz";
 import CopyIcon from "@mui/icons-material/CopyAll";
 import RerollIcon from "@mui/icons-material/Casino";
-import BackspaceIcon from '@mui/icons-material/Backspace';
+import BackspaceIcon from "@mui/icons-material/Backspace";
 import MomentumIcon from "@mui/icons-material/Whatshot";
 import { useSnackbar } from "providers/SnackbarProvider";
 import { convertRollToClipboard } from "./clipboardFormatter";
@@ -51,7 +51,9 @@ export function NormalRollActions(props: NormalRollActionsProps) {
   const characterId = useStore(
     (store) => store.characters.currentCharacter.currentCharacterId
   );
-  const campaignId = useStore((store) => store.campaigns.currentCampaign.currentCampaignId);
+  const campaignId = useStore(
+    (store) => store.campaigns.currentCampaign.currentCampaignId
+  );
   const momentum = useStore(
     (store) => store.characters.currentCharacter.currentCharacter?.momentum ?? 0
   );
@@ -64,9 +66,7 @@ export function NormalRollActions(props: NormalRollActionsProps) {
         store.auth.uid
       ) ?? false
   );
-  const removeLog = useStore(
-    (store) => store.gameLog.removeRoll
-  );
+  const removeLog = useStore((store) => store.gameLog.removeRoll);
 
   const updateRoll = useStore((store) => store.gameLog.updateRoll);
   const updateCharacter = useStore(
@@ -145,16 +145,25 @@ export function NormalRollActions(props: NormalRollActionsProps) {
 
   return (
     <>
-      <ButtonBase
+      <IconButton
+        aria-label={"Copy Roll Result"}
+        color={"inherit"}
+        onClick={() => {
+          handleCopyRoll();
+        }}
+      >
+        <CopyIcon />
+      </IconButton>
+      <IconButton
         aria-label={"Roll Menu"}
+        color={"inherit"}
         ref={menuParent}
-        onClick={(evt) => {
-          evt.stopPropagation();
+        onClick={() => {
           setIsMenuOpen(true);
         }}
       >
         <MoreIcon />
-      </ButtonBase>
+      </IconButton>
       {isMenuOpen && (
         <Menu
           sx={{
