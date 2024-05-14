@@ -5,12 +5,14 @@ export type TRUTH_IDS = (typeof truthIds)[number];
 
 export interface World {
   name: string;
-  truths?: { [key: string]: Truth };
   newTruths?: Record<string, NewTruth>;
   ownerIds: string[];
   worldDescription?: Uint8Array;
+  // Deprecated, use newTruths instead
+  truths?: { [key: string]: Truth };
 }
 
+// Deprecated
 export interface Truth {
   customTruth?: TruthOptionClassic;
   selectedSubItemId?: string | null;
