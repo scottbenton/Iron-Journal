@@ -132,12 +132,15 @@ export function AboutSection(props: AboutSectionProps) {
             />
           </Grid>
         )}
-        <Grid item xs={12}>
-          <Description
-            expansionId={id}
-            description={details.description ?? ""}
-          />
-        </Grid>
+        {(!!details.description || isEditor) && (
+          <Grid item xs={12}>
+            <Description
+              expansionId={id}
+              description={details.description ?? ""}
+              isEditor={isEditor}
+            />
+          </Grid>
+        )}
         {details.type === PackageTypes.Expansion && (
           <Grid item xs={12}>
             <Typography variant="overline">Expansion For</Typography>
