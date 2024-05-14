@@ -6,6 +6,7 @@ export interface BaseHomebrewCollectionDocument {
   type: PackageTypes;
   id: string;
   title: string;
+  description?: string;
   editors: string[];
   viewers?: string[];
   creator: string;

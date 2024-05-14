@@ -23,6 +23,7 @@ import { arrayRemove } from "firebase/firestore";
 import { removeSelfAsEditor } from "api-calls/homebrew/editorFunction/removeSelfAsEditor";
 import { useNavigate } from "react-router-dom";
 import { BASE_ROUTES, basePaths } from "routes";
+import { Description } from "./Description";
 
 export interface AboutSectionProps {
   id: string;
@@ -131,6 +132,12 @@ export function AboutSection(props: AboutSectionProps) {
             />
           </Grid>
         )}
+        <Grid item xs={12}>
+          <Description
+            expansionId={id}
+            description={details.description ?? ""}
+          />
+        </Grid>
         {details.type === PackageTypes.Expansion && (
           <Grid item xs={12}>
             <Typography variant="overline">Expansion For</Typography>
