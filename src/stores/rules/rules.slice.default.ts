@@ -11,6 +11,7 @@ import {
   defaultRuleset,
   defaultSpecialTracks,
   defaultStats,
+  defaultWorldTruths,
 } from "./baseRules";
 import { RulesSliceData } from "./rules.slice.type";
 
@@ -28,4 +29,5 @@ export const defaultRulesSlice: RulesSliceData = {
   moveMaps: defaultMoveMaps,
   assetMaps: defaultAssetMaps,
   nonLinearMeters: defaultNonLinearMeters,
+  worldTruths: defaultWorldTruths ?? {},
 };

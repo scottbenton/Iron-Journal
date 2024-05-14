@@ -4,22 +4,12 @@ import { WorldNameSection } from "pages/World/WorldSheetPage/components/WorldNam
 import { useStore } from "stores/store";
 import { RtcRichTextEditor } from "components/shared/RichTextEditor/RtcRichTextEditor";
 import { useCallback } from "react";
-import { GAME_SYSTEMS, GameSystemChooser } from "types/GameSystems.type";
-import { IronswornWorldTruthsSection } from "components/features/worlds/IronswornWorldTruthsSection";
-import { useGameSystemValue } from "hooks/useGameSystemValue";
-import { StarforgedWorldTruthsSection } from "components/features/worlds/StarforgedWorldTruthsSection";
+import { WorldTruths } from "./WorldTruths";
 
 export interface WorldSheetProps {
   canEdit: boolean;
   hideCampaignHints?: boolean;
 }
-
-const truthSection: GameSystemChooser<
-  (props: { canEdit: boolean; hideCampaignHints?: boolean }) => JSX.Element
-> = {
-  [GAME_SYSTEMS.IRONSWORN]: IronswornWorldTruthsSection,
-  [GAME_SYSTEMS.STARFORGED]: StarforgedWorldTruthsSection,
-};
 
 export function WorldSheet(props: WorldSheetProps) {
   const { canEdit, hideCampaignHints } = props;
@@ -38,8 +28,6 @@ export function WorldSheet(props: WorldSheetProps) {
         : new Promise<void>((res) => res()),
     [updateWorldDescription, worldId]
   );
-
-  const TruthSection = useGameSystemValue(truthSection);
 
   if (!world || !worldId) return null;
 
@@ -77,7 +65,7 @@ export function WorldSheet(props: WorldSheetProps) {
           />
         </>
       )}
-      <TruthSection canEdit={canEdit} hideCampaignHints={hideCampaignHints} />
+      <WorldTruths canEdit={canEdit} hideCampaignHints={hideCampaignHints} />
     </>
   );
 }

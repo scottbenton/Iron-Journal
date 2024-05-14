@@ -40,3 +40,4 @@ export const defaultRootMoveCollectionIds = Object.values(
 export const defaultMoveMaps = parseMovesIntoMaps(defaultRuleset.moves);
 export const defaultAssetMaps = parseAssetsIntoMaps(defaultRuleset.assets);
 export const defaultNonLinearMeters = {};
+export const defaultWorldTruths = defaultRuleset.truths;

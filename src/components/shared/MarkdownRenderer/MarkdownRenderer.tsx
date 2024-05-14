@@ -1,4 +1,12 @@
-import { Box, Link, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Link,
+  SxProps,
+  Theme,
+  Typography,
+  TypographyProps,
+  useTheme,
+} from "@mui/material";
 import { useCustomMoves } from "components/features/charactersAndCampaigns/MovesSection/useCustomMoves";
 import { useCustomOracles } from "components/features/charactersAndCampaigns/OracleSection/useCustomOracles";
 import { moveMap } from "data/moves";
@@ -13,10 +21,19 @@ export interface MarkdownRendererProps {
   markdown: string;
   inheritColor?: boolean;
   disableLinks?: boolean;
+  typographyVariant?: TypographyProps["variant"];
+  sx?: SxProps<Theme>;
 }
 
 export function MarkdownRenderer(props: MarkdownRendererProps) {
-  const { inlineParagraph, markdown, inheritColor, disableLinks } = props;
+  const {
+    inlineParagraph,
+    markdown,
+    inheritColor,
+    disableLinks,
+    typographyVariant,
+    sx,
+  } = props;
 
   const openDialog = useStore((store) => store.appState.openDialog);
 
@@ -28,6 +45,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
     (store) => store.rules.oracleMaps.allOraclesMap
   );
   const newMoveMap = useStore((store) => store.rules.moveMaps.moveMap);
+  const assetMap = useStore((store) => store.rules.assetMaps.assetMap);
 
   return (
     <ReactMarkdown
@@ -48,11 +66,13 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
               if (oracle) {
                 return <OracleTableRenderer oracle={oracle} />;
               }
+            } else if (content.match(/^{{table:[^/]+\/truths\/[^}]+}}$/)) {
+              return null;
             }
           }
           return (
             <Typography
-              variant={"body2"}
+              variant={typographyVariant ?? "body2"}
               display={inlineParagraph ? "inline" : "block"}
               color={
                 inheritColor
@@ -64,6 +84,8 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
               }
               py={inlineParagraph ? 0 : 1}
               textAlign={"left"}
+              whiteSpace={"pre-wrap"}
+              sx={sx}
             >
               {children}
             </Typography>
@@ -72,7 +94,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
         li: ({ children }) => (
           <Typography
             component={"li"}
-            variant={"body2"}
+            variant={typographyVariant ?? "body2"}
             color={
               inheritColor
                 ? "inherit"
@@ -81,12 +103,13 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
                       ? theme.palette.text.secondary
                       : theme.palette.text.primary
             }
+            sx={sx}
           >
             {children}
           </Typography>
         ),
         ul: ({ children }) => (
-          <Box component={"ul"} pl={1.5}>
+          <Box component={"ul"} pl={1.5} sx={sx}>
             {children}
           </Box>
         ),
@@ -98,7 +121,10 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
             border={1}
             borderColor={(theme) => theme.palette.divider}
             borderRadius={(theme) => `${theme.shape.borderRadius}px`}
-            sx={{ borderCollapse: "collapse" }}
+            sx={[
+              { borderCollapse: "collapse" },
+              ...(Array.isArray(sx) ? sx : [sx]),
+            ]}
           >
             {children}
           </Box>
@@ -107,6 +133,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
           <Box
             component={"thead"}
             bgcolor={(theme) => theme.palette.background.paperInlayDarker}
+            sx={sx}
           >
             {children}
           </Box>
@@ -114,10 +141,11 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
         th: ({ children }) => (
           <Typography
             component={"th"}
-            variant={"body2"}
+            variant={typographyVariant ?? "body2"}
             textAlign={"left"}
             p={1}
             minWidth={"8ch"}
+            sx={sx}
           >
             <b>{children}</b>
           </Typography>
@@ -125,11 +153,14 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
         tr: ({ children }) => (
           <Box
             component={"tr"}
-            sx={(theme) => ({
-              "&:nth-of-type(even)": {
-                backgroundColor: theme.palette.background.paperInlay,
-              },
-            })}
+            sx={[
+              (theme) => ({
+                "&:nth-of-type(even)": {
+                  backgroundColor: theme.palette.background.paperInlay,
+                },
+              }),
+              ...(Array.isArray(sx) ? sx : [sx]),
+            ]}
           >
             {children}
           </Box>
@@ -139,8 +170,9 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
             component={"td"}
             px={1}
             py={0.5}
-            variant={"body2"}
+            variant={typographyVariant ?? "body2"}
             color={(theme) => theme.palette.text.primary}
+            sx={sx}
           >
             {children}
           </Typography>
@@ -161,10 +193,13 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
                 <Link
                   component={"button"}
                   type={"button"}
-                  sx={{
-                    cursor: "pointer",
-                    verticalAlign: "baseline",
-                  }}
+                  sx={[
+                    {
+                      cursor: "pointer",
+                      verticalAlign: "baseline",
+                    },
+                    ...(Array.isArray(sx) ? sx : [sx]),
+                  ]}
                   color={
                     theme.palette.mode === "light" ? "info.dark" : "info.light"
                   }
@@ -181,10 +216,39 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
                   <Link
                     component={"button"}
                     type={"button"}
-                    sx={{
-                      cursor: "pointer",
-                      verticalAlign: "baseline",
-                    }}
+                    sx={[
+                      {
+                        cursor: "pointer",
+                        verticalAlign: "baseline",
+                      },
+                      ...(Array.isArray(sx) ? sx : [sx]),
+                    ]}
+                    color={
+                      theme.palette.mode === "light"
+                        ? "info.dark"
+                        : "info.light"
+                    }
+                    onClick={() => openDialog(strippedHref, true)}
+                  >
+                    {props.children}
+                  </Link>
+                );
+              }
+            }
+            if (href.match(/^id:[^/]*\/assets/)) {
+              const strippedHref = href.slice(3);
+              if (assetMap[strippedHref]) {
+                return (
+                  <Link
+                    component={"button"}
+                    type={"button"}
+                    sx={[
+                      {
+                        cursor: "pointer",
+                        verticalAlign: "baseline",
+                      },
+                      ...(Array.isArray(sx) ? sx : [sx]),
+                    ]}
                     color={
                       theme.palette.mode === "light"
                         ? "info.dark"
@@ -198,7 +262,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
               }
             }
 
-            console.error("Link: ", href);
+            console.debug("Link", href, "was not found");
 
             // TODO - add handlers for this situation;
             return <span>{props.children}</span>;
@@ -219,10 +283,14 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
                 <Link
                   component={"button"}
                   type={"button"}
-                  sx={{
-                    cursor: "pointer",
-                    verticalAlign: "baseline",
-                  }}
+                  sx={[
+                    {
+                      cursor: "pointer",
+                      verticalAlign: "baseline",
+                    },
+
+                    ...(Array.isArray(sx) ? sx : [sx]),
+                  ]}
                   color={
                     theme.palette.mode === "light" ? "info.dark" : "info.light"
                   }

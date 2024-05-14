@@ -1,15 +1,13 @@
-import { Box, Stack, Typography } from "@mui/material";
-import { ReactNode } from "react";
+import { Box, Typography } from "@mui/material";
 
 export interface RollTitleProps {
   overline?: string;
   title: string;
   isExpanded: boolean;
-  actions?: ReactNode;
 }
 
 export function RollTitle(props: RollTitleProps) {
-  const { isExpanded, title, overline, actions } = props;
+  const { isExpanded, title, overline } = props;
 
   return (
     <Box
@@ -37,10 +35,9 @@ export function RollTitle(props: RollTitleProps) {
           {title}
         </Typography>
       </div>
-      {actions && isExpanded && (
-        <Stack direction={"row"} spacing={1} sx={{ mr: -1 }}>
-          {actions}
-        </Stack>
+      {isExpanded && (
+        // Holds action space
+        <Box height={40 - 16} width={80 - 16} />
       )}
     </Box>
   );

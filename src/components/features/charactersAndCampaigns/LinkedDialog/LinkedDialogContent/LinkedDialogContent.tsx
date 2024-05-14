@@ -4,6 +4,7 @@ import { MoveDialogContent } from "./MoveDialogContent";
 import { OracleDialogContent } from "./OracleDialogContent";
 import { NewOracleDialogContent } from "./NewOracleDialogContent";
 import { NewMoveDialogContent } from "./NewMoveDialogContent";
+import { AssetDialogContent } from "./AssetDialogContent";
 
 export interface LinkedDialogContentProps {
   id?: string;
@@ -59,6 +60,17 @@ export function LinkedDialogContent(props: LinkedDialogContentProps) {
     }
     return (
       <OracleDialogContent
+        id={id}
+        handleBack={handleBack}
+        handleClose={handleClose}
+        isLastItem={isLastItem}
+      />
+    );
+  }
+
+  if (id?.match(/^[^/]*\/assets/)) {
+    return (
+      <AssetDialogContent
         id={id}
         handleBack={handleBack}
         handleClose={handleClose}

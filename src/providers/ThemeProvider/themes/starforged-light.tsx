@@ -42,6 +42,12 @@ export const starforgedLightTheme = createTheme({
         },
       },
     },
+    MuiRadio: {
+      defaultProps: {
+        icon: <HexboxUnchecked />,
+        checkedIcon: <HexboxChecked />,
+      },
+    },
     MuiCheckbox: {
       defaultProps: {
         icon: <HexboxUnchecked />,
