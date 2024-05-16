@@ -1,3 +1,4 @@
+import { AskTheOracle } from "config/system.config";
 import { Timestamp } from "firebase/firestore";
 
 export enum TrackTypes {
@@ -32,14 +33,6 @@ export enum Difficulty {
   Epic = "epic",
 }
 
-export enum ClockOracleKeys {
-  AlmostCertain = "almost_certain",
-  Likely = "likely",
-  FiftyFifty = "fifty_fifty",
-  Unlikely = "unlikely",
-  SmallChance = "small_chance",
-}
-
 export interface BaseTrack {
   label: string;
   type: TrackSectionTracks;
@@ -59,7 +52,7 @@ export interface ProgressTrack extends BaseTrack {
 
 export interface Clock extends BaseTrack {
   segments: number;
-  oracleKey?: ClockOracleKeys;
+  oracleKey?: AskTheOracle;
 }
 
 export type Track = ProgressTrack | Clock;

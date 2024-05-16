@@ -65,7 +65,7 @@ export function PlanetContent(props: PlanetContentProps) {
       <Grid item xs={12} sm={6}>
         <DebouncedOracleInput
           label={"Planet Name"}
-          oracleTableId={baseSubTypeId + "/sample_names"}
+          oracleTableId={baseSubTypeId + "/name"}
           initialValue={location.name}
           updateValue={(value) =>
             updateLocation(locationId, { name: value }).catch(() => {})
@@ -88,7 +88,7 @@ export function PlanetContent(props: PlanetContentProps) {
           <Grid item xs={12}>
             <DebouncedOracleInput
               label={"Feature"}
-              oracleTableId={baseSubTypeId + "/planetside_feature"}
+              oracleTableId={baseSubTypeId + "/feature"}
               initialValue={location.feature ?? ""}
               updateValue={(value) => {
                 updateLocation(locationId, { feature: value }).catch(() => {});

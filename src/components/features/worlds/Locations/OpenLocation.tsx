@@ -161,15 +161,15 @@ export function OpenLocation(props: OpenLocationProps) {
           updateLocation(locationId, { name: newName }).catch(() => {})
         }
         nameOracleIds={[
-          "ironsworn/oracles/settlement/name/landscape_feature",
-          "ironsworn/oracles/settlement/name/manmade_edifice",
-          "ironsworn/oracles/settlement/name/creature",
-          "ironsworn/oracles/settlement/name/historical_event",
-          "ironsworn/oracles/settlement/name/old_world_language",
-          "ironsworn/oracles/settlement/name/environmental_aspect",
+          "classic/oracles/settlement/name/landscape_feature",
+          "classic/oracles/settlement/name/manmade_edifice",
+          "classic/oracles/settlement/name/creature",
+          "classic/oracles/settlement/name/historical_event",
+          "classic/oracles/settlement/name/old_world_language",
+          "classic/oracles/settlement/name/environmental_aspect",
           [
-            "ironsworn/oracles/settlement/quick_name/prefix",
-            "ironsworn/oracles/settlement/quick_name/suffix",
+            "classic/oracles/settlement/quick_name/prefix",
+            "classic/oracles/settlement/quick_name/suffix",
           ],
         ]}
         actions={
@@ -222,7 +222,7 @@ export function OpenLocation(props: OpenLocationProps) {
                       descriptor,
                     }).catch(() => {})
                   }
-                  oracleTableId="ironsworn/oracles/place/descriptor"
+                  oracleTableId="classic/oracles/place/descriptor"
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -234,7 +234,7 @@ export function OpenLocation(props: OpenLocationProps) {
                       () => {}
                     );
                   }}
-                  oracleTableId={"ironsworn/oracles/settlement/trouble"}
+                  oracleTableId={"classic/oracles/settlement/trouble"}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -246,7 +246,7 @@ export function OpenLocation(props: OpenLocationProps) {
                       locationFeatures,
                     }).catch(() => {});
                   }}
-                  oracleTableId={"ironsworn/oracles/place/location"}
+                  oracleTableId={"classic/oracles/place/location"}
                 />
               </Grid>
               {!isSinglePlayer && showGMFields && (

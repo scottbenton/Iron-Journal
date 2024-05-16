@@ -240,7 +240,21 @@ export function useRoller() {
       const oracle = newOracles[oracleId];
       if (!oracle) return undefined;
 
-      const oracleRoll = rollOracle(oracle, characterId, uid, gmsOnly);
+      let oracleRoll = rollOracle(oracle, characterId, uid, gmsOnly);
+      if (!oracleRoll) return undefined;
+
+      let result = oracleRoll?.result ?? "";
+
+      const isOracleResultRegex = new RegExp(/\[[^\]]*\]([^)]*)\)/gm);
+      if (result.match(isOracleResultRegex)) {
+        const secondHalfRegex = new RegExp(/\]\(([^)]*)\)/gm);
+        result = result.replaceAll("[", "").replaceAll(secondHalfRegex, "");
+      }
+
+      oracleRoll = {
+        ...oracleRoll,
+        result,
+      };
 
       if (showSnackbar && oracleRoll) {
         if (characterId || campaignId) {

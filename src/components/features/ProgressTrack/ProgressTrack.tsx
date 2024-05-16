@@ -13,7 +13,6 @@ import CompleteIcon from "@mui/icons-material/Check";
 import DieIcon from "@mui/icons-material/Casino";
 import { useConfirm } from "material-ui-confirm";
 import { useRoller } from "stores/appState/useRoller";
-import { moveMap } from "data/moves";
 import { GAME_SYSTEMS, GameSystemChooser } from "types/GameSystems.type";
 import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { useStore } from "stores/store";
@@ -22,9 +21,9 @@ const trackMoveIdSystemValues: GameSystemChooser<{
   [key in ProgressTracks]: string;
 }> = {
   [GAME_SYSTEMS.IRONSWORN]: {
-    [TrackTypes.Vow]: "ironsworn/moves/quest/fulfill_your_vow",
-    [TrackTypes.Journey]: "ironsworn/moves/adventure/reach_your_destination",
-    [TrackTypes.Fray]: "ironsworn/moves/combat/end_the_fight",
+    [TrackTypes.Vow]: "classic/moves/quest/fulfill_your_vow",
+    [TrackTypes.Journey]: "classic/moves/adventure/reach_your_destination",
+    [TrackTypes.Fray]: "classic/moves/combat/end_the_fight",
     [TrackTypes.BondProgress]: "",
   },
   [GAME_SYSTEMS.STARFORGED]: {
@@ -105,6 +104,7 @@ export function ProgressTrack(props: ProgressTracksProps) {
   const { rollTrackProgress } = useRoller();
   const openDialog = useStore((store) => store.appState.openDialog);
 
+  const moveMap = useStore((store) => store.rules.moveMaps.moveMap);
   const move = trackType ? moveMap[trackMoveIds[trackType]] : undefined;
 
   const [checks, setChecks] = useState<number[]>([]);
@@ -135,7 +135,7 @@ export function ProgressTrack(props: ProgressTracksProps) {
 
   const handleRollClick = () => {
     if (trackType) {
-      openDialog(trackMoveIds[trackType]);
+      openDialog(trackMoveIds[trackType], true);
       rollTrackProgress(
         trackType,
         label || "",
@@ -355,7 +355,7 @@ export function ProgressTrack(props: ProgressTracksProps) {
           variant={"outlined"}
           sx={{ mt: 2 }}
         >
-          Roll {move?.Title.Short}
+          Roll {move?.name}
         </Button>
       )}
     </Box>

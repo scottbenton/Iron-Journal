@@ -42,7 +42,7 @@ export function DerelictContent(props: DerelictContentProps) {
           <Grid item xs={12} sm={6}>
             <DebouncedOracleInput
               label={"Location"}
-              oracleTableId={"starforged/oracles/derelicts/canonical"}
+              oracleTableId={"starforged/oracles/derelicts/location"}
               initialValue={location.location ?? ""}
               updateValue={(value) =>
                 updateLocation(locationId, { location: value }).catch(() => {})

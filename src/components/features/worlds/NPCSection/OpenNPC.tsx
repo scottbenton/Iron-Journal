@@ -45,16 +45,16 @@ export interface OpenNPCProps {
 
 const nameOracles: { [key in NPCSpecies]: string | string[] } = {
   [NPCSpecies.Ironlander]: [
-    "ironsworn/oracles/name/ironlander/a",
-    "ironsworn/oracles/name/ironlander/b",
+    "classic/oracles/name/ironlander/a",
+    "classic/oracles/name/ironlander/b",
   ],
-  [NPCSpecies.Elf]: "ironsworn/oracles/name/elf",
-  [NPCSpecies.Giant]: "ironsworn/oracles/name/other/giant",
-  [NPCSpecies.Varou]: "ironsworn/oracles/name/other/varou",
-  [NPCSpecies.Troll]: "ironsworn/oracles/name/other/troll",
+  [NPCSpecies.Elf]: "classic/oracles/name/elf",
+  [NPCSpecies.Giant]: "classic/oracles/name/other/giants",
+  [NPCSpecies.Varou]: "classic/oracles/name/other/varou",
+  [NPCSpecies.Troll]: "classic/oracles/name/other/trolls",
   [NPCSpecies.Other]: [
-    "ironsworn/oracles/name/ironlander/a",
-    "ironsworn/oracles/name/ironlander/b",
+    "classic/oracles/name/ironlander/a",
+    "classic/oracles/name/ironlander/b",
   ],
 };
 
@@ -166,21 +166,21 @@ export function OpenNPC(props: OpenNPCProps) {
   const npcNameOracles = useGameSystemValue<string | string[]>({
     [GAME_SYSTEMS.IRONSWORN]: nameOracles[npc.species ?? NPCSpecies.Ironlander],
     [GAME_SYSTEMS.STARFORGED]: [
-      "starforged/oracles/characters/names/given",
-      "starforged/oracles/characters/names/family_name",
+      "starforged/oracles/characters/name/given",
+      "starforged/oracles/characters/name/family_name",
     ],
   });
   const npcRoleOracle = useGameSystemValue<string>({
-    [GAME_SYSTEMS.IRONSWORN]: "ironsworn/oracles/character/role",
+    [GAME_SYSTEMS.IRONSWORN]: "classic/oracles/character/role",
     [GAME_SYSTEMS.STARFORGED]: "starforged/oracles/characters/role",
   });
   const npcDispositionOracle = useGameSystemValue<string>({
-    [GAME_SYSTEMS.IRONSWORN]: "ironsworn/oracles/character/disposition",
+    [GAME_SYSTEMS.IRONSWORN]: "delve/oracles/character/disposition",
     [GAME_SYSTEMS.STARFORGED]:
       "starforged/oracles/characters/initial_disposition",
   });
   const npcGoalOracle = useGameSystemValue<string>({
-    [GAME_SYSTEMS.IRONSWORN]: "ironsworn/oracles/character/goal",
+    [GAME_SYSTEMS.IRONSWORN]: "classic/oracles/character/goal",
     [GAME_SYSTEMS.STARFORGED]: "starforged/oracles/characters/goal",
   });
 
@@ -313,7 +313,7 @@ export function OpenNPC(props: OpenNPCProps) {
             {isStarforged && (
               <Grid item xs={12} sm={6}>
                 <DebouncedOracleInput
-                  oracleTableId={"starforged/oracles/characters/names/callsign"}
+                  oracleTableId={"starforged/oracles/characters/name/callsign"}
                   label={"Callsign"}
                   initialValue={npc.callsign ?? ""}
                   updateValue={(value) => handleUpdateNPC({ callsign: value })}
@@ -427,7 +427,7 @@ export function OpenNPC(props: OpenNPCProps) {
                           () => {}
                         )
                       }
-                      oracleTableId="ironsworn/oracles/character/descriptor"
+                      oracleTableId="classic/oracles/character/descriptor"
                     />
                   </Grid>
                 )}
@@ -477,7 +477,7 @@ export function OpenNPC(props: OpenNPCProps) {
                           () => {}
                         )
                       }
-                      oracleTableId="ironsworn/oracles/character/activity"
+                      oracleTableId="delve/oracles/character/activity"
                     />
                   </Grid>
                 )}

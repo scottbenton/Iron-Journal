@@ -8,13 +8,13 @@ import { useRoller } from "stores/appState/useRoller";
 import { TextFieldWithOracle } from "components/shared/TextFieldWithOracle/TextFieldWithOracle";
 
 const nameOraclesIronsworn = [
-  "ironsworn/oracles/name/ironlander/a",
-  "ironsworn/oracles/name/ironlander/b",
+  "classic/oracles/name/ironlander/a",
+  "classic/oracles/name/ironlander/b",
 ];
 
 const nameOracleStarforged = [
-  "starforged/oracles/characters/names/given",
-  "starforged/oracles/characters/names/family_name",
+  "starforged/oracles/characters/name/given",
+  "starforged/oracles/characters/name/family_name",
 ];
 
 export function ExampleStatsSection() {
@@ -27,18 +27,18 @@ export function ExampleStatsSection() {
     [GAME_SYSTEMS.STARFORGED]: true,
   });
 
-  const { rollOracleTable } = useRoller();
+  const { rollOracleTableNew } = useRoller();
   const handleOracleRoll = useCallback(() => {
     if (joinOracles) {
       return nameOracles
-        .map((id) => rollOracleTable(id, false) ?? "")
+        .map((id) => rollOracleTableNew(id, false)?.result ?? "")
         .join(" ");
     } else {
       const oracleIndex = Math.floor(Math.random() * nameOracles.length);
 
-      return rollOracleTable(nameOracles[oracleIndex], false);
+      return rollOracleTableNew(nameOracles[oracleIndex], false)?.result;
     }
-  }, [rollOracleTable, nameOracles, joinOracles]);
+  }, [rollOracleTableNew, nameOracles, joinOracles]);
 
   const [name, setName] = useState(() => handleOracleRoll() ?? "");
 

@@ -276,7 +276,9 @@ export function OpenSector(props: OpenSectorProps) {
             <Grid item xs={12} md={6}>
               <DebouncedOracleInput
                 label={"Sector Trouble"}
-                oracleTableId={"starforged/oracles/campaign/sector_trouble"}
+                oracleTableId={
+                  "starforged/oracles/campaign_launch/sector_trouble"
+                }
                 initialValue={sector.trouble ?? ""}
                 updateValue={(trouble) => updateSector({ trouble })}
               />

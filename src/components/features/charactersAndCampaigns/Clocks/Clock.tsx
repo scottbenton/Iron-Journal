@@ -12,33 +12,24 @@ import { Clock as IClock, TrackStatus } from "types/Track.type";
 import { ClockCircle } from "./ClockCircle";
 import CheckIcon from "@mui/icons-material/Check";
 import { useConfirm } from "material-ui-confirm";
-import { ClockOracleKeys } from "types/Track.type";
 import DieIcon from "@mui/icons-material/Casino";
 import { useRoller } from "stores/appState/useRoller";
-
-const clockOracleMap = {
-  [ClockOracleKeys.AlmostCertain]:
-    "starforged/oracles/moves/ask_the_oracle/almost_certain",
-  [ClockOracleKeys.Likely]: "starforged/oracles/moves/ask_the_oracle/likely",
-  [ClockOracleKeys.FiftyFifty]:
-    "starforged/oracles/moves/ask_the_oracle/fifty-fifty",
-  [ClockOracleKeys.Unlikely]:
-    "starforged/oracles/moves/ask_the_oracle/unlikely",
-  [ClockOracleKeys.SmallChance]:
-    "starforged/oracles/moves/ask_the_oracle/small_chance",
-};
+import { useSystemOracles } from "hooks/useSystemOracle";
+import { AskTheOracle } from "config/system.config";
 
 export interface ClockProps {
   clock: IClock;
   onEdit?: () => void;
   onValueChange?: (value: number) => void;
-  onSelectedOracleChange?: (oracleKey: ClockOracleKeys) => void;
+  onSelectedOracleChange?: (oracleKey: AskTheOracle) => void;
   onComplete?: () => void;
 }
 
 export function Clock(props: ClockProps) {
   const { clock, onEdit, onValueChange, onSelectedOracleChange, onComplete } =
     props;
+
+  const { askTheOracle } = useSystemOracles();
 
   const { rollClockProgression } = useRoller();
 
@@ -66,7 +57,7 @@ export function Clock(props: ClockProps) {
     if (onValueChange) {
       const result = rollClockProgression(
         clock.label,
-        clockOracleMap[clock.oracleKey ?? ClockOracleKeys.FiftyFifty]
+        askTheOracle[clock.oracleKey ?? AskTheOracle.FiftyFifty]
       );
 
       if (result && clock.value < clock.segments) {
@@ -132,23 +123,21 @@ export function Clock(props: ClockProps) {
           <TextField
             label={"Roll Progress"}
             select
-            value={clock.oracleKey ?? ClockOracleKeys.FiftyFifty}
+            value={clock.oracleKey ?? AskTheOracle.FiftyFifty}
             onChange={(evt) =>
               onSelectedOracleChange &&
-              onSelectedOracleChange(evt.target.value as ClockOracleKeys)
+              onSelectedOracleChange(evt.target.value as AskTheOracle)
             }
             disabled={!onSelectedOracleChange}
             fullWidth
           >
-            <MenuItem value={ClockOracleKeys.AlmostCertain}>
+            <MenuItem value={AskTheOracle.AlmostCertain}>
               Almost Certain
             </MenuItem>
-            <MenuItem value={ClockOracleKeys.Likely}>Likely</MenuItem>
-            <MenuItem value={ClockOracleKeys.FiftyFifty}>Fifty Fifty</MenuItem>
-            <MenuItem value={ClockOracleKeys.Unlikely}>Unlikely</MenuItem>
-            <MenuItem value={ClockOracleKeys.SmallChance}>
-              Small Chance
-            </MenuItem>
+            <MenuItem value={AskTheOracle.Likely}>Likely</MenuItem>
+            <MenuItem value={AskTheOracle.FiftyFifty}>Fifty Fifty</MenuItem>
+            <MenuItem value={AskTheOracle.Unlikely}>Unlikely</MenuItem>
+            <MenuItem value={AskTheOracle.SmallChance}>Small Chance</MenuItem>
           </TextField>
           {onValueChange && (
             <Button
