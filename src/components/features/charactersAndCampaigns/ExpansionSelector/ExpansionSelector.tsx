@@ -43,7 +43,9 @@ export function ExpansionSelector(props: ExpansionSelectorProps) {
   );
 
   const notFoundExpansionIds = Object.keys(enabledExpansionMap).filter(
-    (key) => !expansionIds.includes(key)
+    (key) =>
+      !officialExpansions.some((expansion) => expansion._id === key) &&
+      !expansionIds.includes(key)
   );
 
   return (
@@ -85,7 +87,7 @@ export function ExpansionSelector(props: ExpansionSelectorProps) {
                   />
                 }
                 label={
-                  homebrewExpansionMap[expansionId].base?.title ?? "Loading"
+                  homebrewExpansionMap[expansionId]?.base?.title ?? "Loading"
                 }
               />
             ))}
@@ -101,7 +103,7 @@ export function ExpansionSelector(props: ExpansionSelectorProps) {
                   />
                 }
                 label={
-                  homebrewExpansionMap[expansionId].base?.title ??
+                  homebrewExpansionMap[expansionId]?.base?.title ??
                   "Deleted Homebrew Expansion"
                 }
               />

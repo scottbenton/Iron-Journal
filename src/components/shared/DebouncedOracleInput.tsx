@@ -1,8 +1,8 @@
 import { TextFieldProps } from "@mui/material";
 import { TextFieldWithOracle } from "components/shared/TextFieldWithOracle/TextFieldWithOracle";
-import { oracleMap } from "data/oracles";
 import { useDebouncedState } from "hooks/useDebouncedState";
 import { useRoller } from "stores/appState/useRoller";
+import { useStore } from "stores/store";
 
 export type DebouncedOracleInputProps = Omit<TextFieldProps, "onChange"> & {
   initialValue: string;
@@ -22,7 +22,11 @@ export function DebouncedOracleInput(props: DebouncedOracleInputProps) {
 
   const [value, setValue] = useDebouncedState(updateValue, initialValue);
 
-  const { rollOracleTable } = useRoller();
+  const { rollOracleTableNew } = useRoller();
+
+  const oracleMap = useStore(
+    (store) => store.rules.oracleMaps.oracleRollableMap
+  );
 
   const doesOracleExist =
     Array.isArray(oracleTableId) ||
@@ -35,22 +39,33 @@ export function DebouncedOracleInput(props: DebouncedOracleInputProps) {
         .map((tableId) => {
           if (Array.isArray(tableId)) {
             return tableId
-              .map((id) => rollOracleTable(id, false) ?? "")
+              .map((id) => rollOracleTableNew(id, false)?.result ?? "")
               .join("");
           }
-          return rollOracleTable(tableId, false) ?? "";
+          return rollOracleTableNew(tableId, false)?.result ?? "";
         })
         .join(" ");
     } else if (Array.isArray(oracleTableId)) {
       const oracleIndex = Math.floor(Math.random() * oracleTableId.length);
       const oracleId = oracleTableId[oracleIndex];
+      console.debug("Rolling", oracleId);
       if (Array.isArray(oracleId)) {
-        return oracleId.map((id) => rollOracleTable(id, false) ?? "").join("");
+        return oracleId
+          .map((id) => {
+            const result = rollOracleTableNew(id, false)?.result ?? "";
+            console.debug("Rolled", id, result);
+            return result;
+          })
+          .join("");
       }
-      return rollOracleTable(oracleId, false) ?? "";
+      const result = rollOracleTableNew(oracleId, false)?.result ?? "";
+      console.debug("Rolled", result);
+      return result;
     }
 
-    return rollOracleTable(oracleTableId, false) ?? "";
+    const result = rollOracleTableNew(oracleTableId, false)?.result ?? "";
+    console.debug("Rolled", result);
+    return result;
   };
 
   return (
