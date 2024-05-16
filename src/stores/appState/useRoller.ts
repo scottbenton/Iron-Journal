@@ -240,10 +240,10 @@ export function useRoller() {
       const oracle = newOracles[oracleId];
       if (!oracle) return undefined;
 
-      let oracleRoll = rollOracle(oracle, characterId, uid, gmsOnly);
+      const oracleRoll = rollOracle(oracle, characterId, uid, gmsOnly);
       if (!oracleRoll) return undefined;
 
-      let result = oracleRoll?.result ?? "";
+      let result = oracleRoll.result ?? "";
 
       const isOracleResultRegex = new RegExp(/\[[^\]]*\]([^)]*)\)/gm);
       if (result.match(isOracleResultRegex)) {
@@ -251,35 +251,38 @@ export function useRoller() {
         result = result.replaceAll("[", "").replaceAll(secondHalfRegex, "");
       }
 
-      oracleRoll = {
+      const definedOracleRoll = {
         ...oracleRoll,
         result,
       };
 
-      if (showSnackbar && oracleRoll) {
+      if (showSnackbar && definedOracleRoll) {
         if (characterId || campaignId) {
           addRollToLog({
             campaignId,
             characterId: characterId || undefined,
-            roll: oracleRoll,
+            roll: definedOracleRoll,
           })
             .then((rollId) => {
-              addRollToScreen(rollId, oracleRoll);
+              addRollToScreen(rollId, definedOracleRoll);
             })
             .catch(() => {});
         } else {
-          addRollToScreen(oracleRoll.timestamp.toISOString(), oracleRoll);
+          addRollToScreen(
+            definedOracleRoll.timestamp.toISOString(),
+            definedOracleRoll
+          );
         }
         announce(
           `Rolled ${
             verboseScreenReaderRolls
-              ? `a ${oracleRoll.roll} on the ${oracleRoll.rollLabel} table`
-              : oracleRoll.rollLabel
-          } and got result ${oracleRoll.result}`
+              ? `a ${definedOracleRoll.roll} on the ${definedOracleRoll.rollLabel} table`
+              : definedOracleRoll.rollLabel
+          } and got result ${definedOracleRoll.result}`
         );
       }
 
-      return oracleRoll;
+      return definedOracleRoll;
     },
     [
       newOracles,
