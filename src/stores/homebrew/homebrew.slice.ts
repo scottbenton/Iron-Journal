@@ -44,7 +44,7 @@ import { deleteHomebrewMoveCategory } from "api-calls/homebrew/moves/categories/
 import { createHomebrewMove } from "api-calls/homebrew/moves/moves/createHomebrewMove";
 import { updateHomebrewMove } from "api-calls/homebrew/moves/moves/updateHomebrewMove";
 import { convertStoredMovesToCategories } from "functions/convertStoredMovesToCategories";
-import { defaultExpansions } from "stores/rules/rules.slice";
+import { defaultExpansions } from "data/rulesets";
 import { createHomebrewAssetCollection } from "api-calls/homebrew/assets/collections/createHomebrewAssetCollection";
 import { updateHomebrewAssetCollection } from "api-calls/homebrew/assets/collections/updateHomebrewAssetCollection";
 import { deleteHomebrewAsset } from "api-calls/homebrew/assets/assets/deleteHomebrewAsset";

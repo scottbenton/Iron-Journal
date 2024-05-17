@@ -1,7 +1,4 @@
 import { TruthOptionClassic } from "dataforged";
-import { truthIds } from "data/truths";
-
-export type TRUTH_IDS = (typeof truthIds)[number];
 
 export interface World {
   name: string;

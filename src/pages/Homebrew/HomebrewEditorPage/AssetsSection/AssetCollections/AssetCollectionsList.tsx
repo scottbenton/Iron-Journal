@@ -23,8 +23,7 @@ export function AssetCollectionsList(props: AssetCollectionsListProps) {
       store.homebrew.collections[homebrewId]?.assetCollections?.data ?? {}
   );
   const collectionsLoading = useStore(
-    (store) =>
-      !store.homebrew.collections[homebrewId]?.assetCollections?.loaded ?? true
+    (store) => !store.homebrew.collections[homebrewId]?.assetCollections?.loaded
   );
 
   if (collectionsLoading) return <>Loading...</>;

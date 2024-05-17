@@ -84,7 +84,7 @@ export function MoveStatRollers(props: MoveStatsProps) {
       const inputKeys = Object.keys(asset.inputs ?? {});
       const assetInputName =
         inputKeys.length > 0
-          ? (asset.inputs ?? {})[inputKeys[0]].trim() || undefined
+          ? (asset.inputs ?? {})[inputKeys[0]]?.trim() || undefined
           : undefined;
       companions.push({
         name: assetInputName ?? actualAsset.Title.Short ?? "",
@@ -97,7 +97,7 @@ export function MoveStatRollers(props: MoveStatsProps) {
       const inputKeys = Object.keys(asset.inputs ?? {});
       const assetInputName =
         inputKeys.length > 0
-          ? (asset.inputs ?? {})[inputKeys[0]].trim() || undefined
+          ? (asset.inputs ?? {})[inputKeys[0]]?.trim() || undefined
           : undefined;
       vehicles.push({
         name: assetInputName ?? actualAsset.Title.Short ?? "",

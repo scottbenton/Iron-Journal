@@ -48,23 +48,19 @@ export function DebouncedOracleInput(props: DebouncedOracleInputProps) {
     } else if (Array.isArray(oracleTableId)) {
       const oracleIndex = Math.floor(Math.random() * oracleTableId.length);
       const oracleId = oracleTableId[oracleIndex];
-      console.debug("Rolling", oracleId);
       if (Array.isArray(oracleId)) {
         return oracleId
           .map((id) => {
             const result = rollOracleTableNew(id, false)?.result ?? "";
-            console.debug("Rolled", id, result);
             return result;
           })
           .join("");
       }
       const result = rollOracleTableNew(oracleId, false)?.result ?? "";
-      console.debug("Rolled", result);
       return result;
     }
 
     const result = rollOracleTableNew(oracleTableId, false)?.result ?? "";
-    console.debug("Rolled", result);
     return result;
   };
 

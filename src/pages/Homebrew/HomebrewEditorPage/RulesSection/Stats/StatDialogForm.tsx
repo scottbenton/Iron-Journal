@@ -7,13 +7,13 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useRules } from "data/hooks/useRules";
 import { convertIdPart } from "functions/dataswornIdEncoder";
 import { useState } from "react";
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 import { Preview } from "../../Preview";
 import { StatPreviewComponent } from "./StatPreviewComponent";
 import { MarkdownEditor } from "components/shared/RichTextEditor/MarkdownEditor";
+import { useStore } from "stores/store";
 
 export interface StatDialogFormProps {
   homebrewId: string;
@@ -34,7 +34,7 @@ export function StatDialogForm(props: StatDialogFormProps) {
   const existingStat = editingStatKey
     ? stats[editingStatKey] ?? undefined
     : undefined;
-  const { stats: baseStats } = useRules();
+  const baseStats = useStore((store) => store.rules.baseRuleset?.rules.stats);
   const existingStatKeys = Object.keys({ ...baseStats });
   Object.values(stats).forEach((stat) =>
     existingStatKeys.push(stat.dataswornId)

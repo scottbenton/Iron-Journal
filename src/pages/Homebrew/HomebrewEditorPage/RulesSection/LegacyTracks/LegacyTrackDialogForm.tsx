@@ -11,11 +11,11 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useRules } from "data/hooks/useRules";
 import { convertIdPart } from "functions/dataswornIdEncoder";
 import { useState } from "react";
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 import { MarkdownEditor } from "components/shared/RichTextEditor/MarkdownEditor";
+import { useStore } from "stores/store";
 
 export interface LegacyTrackDialogFormProps {
   homebrewId: string;
@@ -39,7 +39,9 @@ export function LegacyTrackDialogForm(props: LegacyTrackDialogFormProps) {
   const existingLegacyTrack = editingLegacyTrackKey
     ? legacyTracks[editingLegacyTrackKey] ?? undefined
     : undefined;
-  const { special_tracks: baseSpecialTracks } = useRules();
+  const baseSpecialTracks = useStore(
+    (store) => store.rules.baseRuleset?.rules.special_tracks ?? {}
+  );
   const existingSpecialTrackKeys = Object.keys({
     ...legacyTracks,
     ...baseSpecialTracks,

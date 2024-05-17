@@ -34,8 +34,8 @@ export function Assets(props: AssetsProps) {
 
   return (
     <>
-      <SectionHeading label='Assets' breakContainer />
-      <Alert severity='info'>{defaultRuleAlertText}</Alert>
+      <SectionHeading label="Assets" breakContainer />
+      <Alert severity="info">{defaultRuleAlertText}</Alert>
       {fields.length > 0 ? (
         <>
           <Grid container spacing={2}>
@@ -120,7 +120,6 @@ export function Assets(props: AssetsProps) {
           });
           setIsAddAssetDialogOpen(false);
         }}
-        showSharedAssetWarning
       />
     </>
   );

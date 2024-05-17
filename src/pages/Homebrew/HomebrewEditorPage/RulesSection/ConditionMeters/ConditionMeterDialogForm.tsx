@@ -10,7 +10,6 @@ import {
   TextField,
 } from "@mui/material";
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
-import { useRules } from "data/hooks/useRules";
 import { useState } from "react";
 import { HomebrewConditionMeterDocument } from "api-calls/homebrew/rules/conditionMeters/_homebrewConditionMeters.type";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
@@ -18,6 +17,7 @@ import { convertIdPart } from "functions/dataswornIdEncoder";
 import { Preview } from "../../Preview";
 import { ConditionMeterPreview } from "./ConditionMeterPreview";
 import { MarkdownEditor } from "components/shared/RichTextEditor/MarkdownEditor";
+import { useStore } from "stores/store";
 
 export interface ConditionMeterDialogFormProps {
   homebrewId: string;
@@ -50,7 +50,9 @@ export function ConditionMeterDialogForm(props: ConditionMeterDialogFormProps) {
     ? conditionMeters[editingConditionMeterKey] ?? undefined
     : undefined;
 
-  const { condition_meters: baseConditionMeters } = useRules();
+  const baseConditionMeters = useStore(
+    (store) => store.rules.baseRuleset?.rules.condition_meters ?? {}
+  );
   const allConditionMeters = { ...baseConditionMeters, ...conditionMeters };
 
   const [loading, setLoading] = useState(false);

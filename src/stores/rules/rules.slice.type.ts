@@ -42,6 +42,7 @@ export interface RulesSliceData {
 }
 
 export interface RulesSliceActions {
+  setBaseRuleset: (ruleset: Datasworn.Ruleset) => void;
   setExpansionIds: (expansionIds: string[]) => void;
   rebuildOracles: () => void;
   rebuildMoves: () => void;
@@ -51,6 +52,7 @@ export interface RulesSliceActions {
   rebuildSpecialTracks: () => void;
   rebuildImpacts: () => void;
   rebuildAssets: () => void;
+  rebuildWorldTruths: () => void;
 }
 
 export type RulesSlice = RulesSliceData & RulesSliceActions;
