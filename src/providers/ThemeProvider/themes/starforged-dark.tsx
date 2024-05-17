@@ -27,7 +27,7 @@ export const starforgedDarkTheme = createTheme({
     divider: starforgedGrey[600],
   },
   typography: {
-    fontFamily: ["RubikVariable", ...baseFontFamilies].join(","),
+    fontFamily: ["'Rubik Variable'", ...baseFontFamilies].join(","),
   },
   fontFamilyTitle: ["'Bebas Neue'", ...baseFontFamilies].join(","),
   shape: {

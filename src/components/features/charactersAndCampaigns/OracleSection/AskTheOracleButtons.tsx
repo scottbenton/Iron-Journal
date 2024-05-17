@@ -3,7 +3,7 @@ import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { GAME_SYSTEMS, GameSystemChooser } from "types/GameSystems.type";
 import { useRoller } from "stores/appState/useRoller";
 
-export enum OracleKeys {
+enum OracleKeys {
   AlmostCertain = "almostCertain",
   Likely = "likely",
   FiftyFifty = "fiftyFifty",

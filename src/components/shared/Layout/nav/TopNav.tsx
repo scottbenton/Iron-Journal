@@ -7,8 +7,8 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { ReactComponent as IronFellowshipLogo } from "assets/iron-fellowship-logo.svg";
-import { ReactComponent as CrewLinkLogo } from "assets/crew-link-logo.svg";
+import IronFellowshipLogo from "assets/iron-fellowship-logo.svg?react";
+import CrewLinkLogo from "assets/crew-link-logo.svg?react";
 
 import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { GAME_SYSTEMS } from "types/GameSystems.type";

@@ -20,37 +20,42 @@ export const updateCharacterPortrait = createApiFunction<
   const { uid, characterId, oldPortraitFilename, portrait, scale, position } =
     params;
 
-  return new Promise(async (resolve, reject) => {
-    try {
-      if (portrait) {
-        await replaceImage(
-          constructCharacterPortraitFolderPath(uid, characterId),
-          oldPortraitFilename,
-          portrait
-        );
-      }
-    } catch (e) {
-      reject(e);
-      return;
+  return new Promise((resolve, reject) => {
+    let replaceImagePromise: Promise<void> | undefined;
+
+    if (portrait) {
+      replaceImagePromise = replaceImage(
+        constructCharacterPortraitFolderPath(uid, characterId),
+        oldPortraitFilename,
+        portrait
+      );
+    } else {
+      replaceImagePromise = Promise.resolve();
     }
 
-    updateDoc(
-      getCharacterDoc(characterId),
-      portrait
-        ? {
-            profileImage: {
-              filename: portrait.name,
-              position,
-              scale,
-            },
-          }
-        : {
-            "profileImage.position": position,
-            "profileImage.scale": scale,
-          }
-    )
+    replaceImagePromise
       .then(() => {
-        resolve();
+        updateDoc(
+          getCharacterDoc(characterId),
+          portrait
+            ? {
+                profileImage: {
+                  filename: portrait.name,
+                  position,
+                  scale,
+                },
+              }
+            : {
+                "profileImage.position": position,
+                "profileImage.scale": scale,
+              }
+        )
+          .then(() => {
+            resolve();
+          })
+          .catch((e) => {
+            reject(e);
+          });
       })
       .catch((e) => {
         reject(e);

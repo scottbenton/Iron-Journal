@@ -30,7 +30,7 @@ export const sunderedIslesDarkTheme = createTheme({
     divider: sunderedIslesGrey[600],
   },
   typography: {
-    fontFamily: ["RubikVariable", ...baseFontFamilies].join(","),
+    fontFamily: ["'Rubik Variable'", ...baseFontFamilies].join(","),
   },
   fontFamilyTitle: ["'Bebas Neue'", ...baseFontFamilies].join(","),
   shape: {

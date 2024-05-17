@@ -104,7 +104,7 @@ export function AssetControl(props: AssetControlProps) {
           label={capitalize(control.label)}
         />
       );
-    case "condition_meter":
+    case "condition_meter": {
       const subControls = control.controls;
       return (
         <Box>
@@ -146,6 +146,7 @@ export function AssetControl(props: AssetControlProps) {
           />
         </Box>
       );
+    }
   }
 
   return null;

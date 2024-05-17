@@ -26,7 +26,7 @@ export const starforgedLightTheme = createTheme({
     grey: starforgedGrey,
   },
   typography: {
-    fontFamily: ["RubikVariable", ...baseFontFamilies].join(","),
+    fontFamily: ["'Rubik Variable'", ...baseFontFamilies].join(","),
   },
   fontFamilyTitle: ["'Bebas Neue'", ...baseFontFamilies].join(","),
   shape: {

@@ -1,6 +1,6 @@
 import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { Helmet } from "react-helmet-async";
-import { appDetails } from "./HeadProvider";
+import { appDetails } from "config/appDetails.config";
 
 export interface HeadProps {
   title: string;

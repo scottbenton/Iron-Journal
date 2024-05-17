@@ -12,7 +12,7 @@ import { StarforgedTruthCard } from "./StarforgedTruthCard";
 import { useStore } from "stores/store";
 import { Truth } from "types/World.type";
 import { useState } from "react";
-import { getCustomTruthId } from "../IronswornWorldTruthsSection/IronswornWorldTruthChooser";
+import { getCustomTruthId } from "../IronswornWorldTruthsSection/getCustomTruthId";
 import CheckIcon from "@mui/icons-material/CheckCircle";
 
 export interface StarforgedTruthChooserProps {

@@ -29,7 +29,7 @@ export const sunderedIslesLightTheme = createTheme({
     grey: sunderedIslesGrey,
   },
   typography: {
-    fontFamily: ["RubikVariable", ...baseFontFamilies].join(","),
+    fontFamily: ["'Rubik Variable'", ...baseFontFamilies].join(","),
   },
   fontFamilyTitle: ["'Bebas Neue'", ...baseFontFamilies].join(","),
   shape: {

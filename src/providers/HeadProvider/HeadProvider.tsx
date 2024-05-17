@@ -1,31 +1,9 @@
+import { appDetails } from "config/appDetails.config";
 import { getPublicAssetPath } from "functions/getPublicAssetPath";
 import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { PropsWithChildren } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
-import { GAME_SYSTEMS, GameSystemChooser } from "types/GameSystems.type";
-
-export const appDetails: GameSystemChooser<{
-  title: string;
-  description: string;
-  icon: string;
-  game: string;
-}> = {
-  [GAME_SYSTEMS.IRONSWORN]: {
-    title: "Iron Fellowship for Ironsworn",
-    description:
-      "A character sheet and campaign manager for players and GMs playing Ironsworn",
-    icon: "/iron-fellowship-logo.svg",
-    game: "Ironsworn",
-  },
-  [GAME_SYSTEMS.STARFORGED]: {
-    title: "Crew Link for Starforged",
-    description:
-      "A character sheet and campaign manager for players and GMs playing Starforged",
-    icon: "/crew-link-logo.svg",
-    game: "Starforged",
-  },
-};
 
 export function HeadProvider(props: PropsWithChildren) {
   const { children } = props;

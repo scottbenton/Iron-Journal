@@ -6,7 +6,7 @@ export function getErrorMessage(error: any, fallbackMessage: string): string {
   if (
     error !== null &&
     typeof error === "object" &&
-    error.hasOwnProperty("message") &&
+    Object.prototype.hasOwnProperty.call(error, "message") &&
     typeof error.message === "string"
   ) {
     return error.message;
@@ -14,7 +14,7 @@ export function getErrorMessage(error: any, fallbackMessage: string): string {
   if (
     error !== null &&
     typeof error === "object" &&
-    error.hasOwnProperty("error") &&
+    Object.prototype.hasOwnProperty.call(error, "error") &&
     typeof error.error === "string"
   ) {
     return error.error;
