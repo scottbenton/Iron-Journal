@@ -2,21 +2,33 @@ import { CreateSliceType } from "stores/store.type";
 import { RulesSlice } from "./rules.slice.type";
 import { defaultRulesSlice } from "./rules.slice.default";
 import { Datasworn } from "@datasworn/core";
-import ironswornDelve from "@datasworn/ironsworn-classic-delve/json/delve.json";
 import { parseOraclesIntoMaps } from "./helpers/parseOraclesIntoMaps";
 import { parseMovesIntoMaps } from "./helpers/parseMovesIntoMaps";
 import { parseAssetsIntoMaps } from "./helpers/parseAssetsIntoMaps";
 import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type";
-
-export const defaultExpansions: Record<string, Datasworn.Expansion> = {
-  [ironswornDelve._id]: ironswornDelve as unknown as Datasworn.Expansion,
-};
+import { defaultExpansions } from "data/rulesets";
 
 export const createRulesSlice: CreateSliceType<RulesSlice> = (
   set,
   getState
 ) => ({
   ...defaultRulesSlice,
+
+  setBaseRuleset: (ruleset) => {
+    set((store) => {
+      store.rules.baseRuleset = ruleset;
+    });
+
+    const state = getState();
+    state.rules.rebuildOracles();
+    state.rules.rebuildMoves();
+    state.rules.rebuildStats();
+    state.rules.rebuildConditionMeters();
+    state.rules.rebuildNonLinearMeters();
+    state.rules.rebuildSpecialTracks();
+    state.rules.rebuildImpacts();
+    state.rules.rebuildAssets();
+  },
 
   setExpansionIds: (expansionIds) => {
     set((store) => {

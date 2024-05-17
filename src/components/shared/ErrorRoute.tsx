@@ -3,6 +3,7 @@ import { EmptyState } from "./EmptyState";
 import { useAppName } from "hooks/useAppName";
 import { useEffect, useState } from "react";
 import { reportPageError } from "lib/analytics.lib";
+import { Box } from "@mui/material";
 
 const supportEmail = "support@scottbenton.dev";
 
@@ -51,15 +52,15 @@ export function ErrorRoute() {
       title={`${appName} encountered an error`}
       message={
         <>
-          <div>
+          <Box component={"span"} display={"block"}>
             Sorry for the inconvenience! If you are having trouble accessing the
             app, please reach out on the discord, or by emailing{" "}
             <b>{supportEmail}</b> with a description of the error.
-          </div>
+          </Box>
           {errorMessage && (
-            <div>
+            <Box component={"span"} display={"block"}>
               Please include the following in your message: {errorMessage}
-            </div>
+            </Box>
           )}
         </>
       }

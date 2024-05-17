@@ -12,8 +12,6 @@ import type {
 } from "dataforged";
 import { GAME_SYSTEMS, GameSystemChooser } from "types/GameSystems.type";
 
-import ironswornRules from "@datasworn/ironsworn-classic/json/classic.json";
-import starforgedRules from "@datasworn/starforged/json/starforged.json";
 import { Datasworn } from "@datasworn/core";
 import { parseAssetsIntoMaps } from "stores/rules/helpers/parseAssetsIntoMaps";
 import { capitalize } from "@mui/material";
@@ -50,10 +48,6 @@ Object.values(ironswornAssetCategories).forEach((category) => {
     oldIronswornAssets[asset.$id] = asset;
   });
 });
-
-const newIronswornAssets: Record<string, Datasworn.Asset> = parseAssetsIntoMaps(
-  (ironswornRules as Datasworn.Ruleset).assets
-).assetMap;
 
 const oldStarforgedAssets: Record<string, DataforgedAsset> = {};
 Object.values(starforgedAssetCategories).forEach((category) => {
@@ -153,9 +147,6 @@ export function getNewControlKey(inputKey: string): string {
     .replaceAll("-", "_")
     .replaceAll("/", "_");
 }
-
-const newStarforgedAssets: Record<string, Datasworn.Asset> =
-  parseAssetsIntoMaps((starforgedRules as Datasworn.Ruleset).assets).assetMap;
 
 const compareAssets = (
   oldAssets: Record<string, DataforgedAsset>,

@@ -1,4 +1,3 @@
-import { useRules } from "data/hooks/useRules";
 import { useState } from "react";
 import { HomebrewImpactCategoryDocument } from "api-calls/homebrew/rules/impacts/_homebrewImpacts.type";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -12,6 +11,7 @@ import {
 import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithCloseButton";
 import { convertIdPart } from "functions/dataswornIdEncoder";
 import { MarkdownEditor } from "components/shared/RichTextEditor/MarkdownEditor";
+import { useStore } from "stores/store";
 
 export interface ImpactCategoryDialogFormProps {
   homebrewId: string;
@@ -34,7 +34,8 @@ export function ImpactCategoryDialogForm(props: ImpactCategoryDialogFormProps) {
     ? impactCategories[editingCategoryKey] ?? undefined
     : undefined;
 
-  const { impacts } = useRules();
+  const impacts = useStore((store) => store.rules.baseRuleset?.rules.impacts);
+
   const allImpactCategories = { ...impacts, ...impactCategories };
 
   const [loading, setLoading] = useState(false);

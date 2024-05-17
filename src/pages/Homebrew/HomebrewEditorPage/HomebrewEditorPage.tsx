@@ -122,7 +122,7 @@ export function HomebrewEditorPage() {
   const isViewer = uid
     ? homebrewDetails?.viewers?.includes(uid) ?? false
     : false;
-  const isOwner = uid ? homebrewDetails?.creator === uid ?? false : false;
+  const isOwner = uid ? homebrewDetails?.creator === uid : false;
 
   const getPageHeaderProps = (): Partial<PageHeaderProps> => {
     if (isEditor) {

@@ -1,7 +1,5 @@
-import { Datasworn } from "@datasworn/core";
 import { useGameSystemValue } from "hooks/useGameSystemValue";
-import { GAME_SYSTEMS, GameSystemChooser } from "types/GameSystems.type";
-import delve from "@datasworn/ironsworn-classic-delve/json/delve.json";
+import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { useStore } from "stores/store";
 import {
   Box,
@@ -11,11 +9,9 @@ import {
   Typography,
 } from "@mui/material";
 import { EmptyState } from "components/shared/EmptyState";
+import { defaultExpansions } from "data/rulesets";
 
-const defaultExpansions: GameSystemChooser<Datasworn.Expansion[]> = {
-  [GAME_SYSTEMS.IRONSWORN]: [delve as unknown as Datasworn.Expansion],
-  [GAME_SYSTEMS.STARFORGED]: [],
-};
+const expansions = Object.values(defaultExpansions);
 
 export interface ExpansionSelectorProps {
   enabledExpansionMap: Record<string, boolean>;
@@ -30,8 +26,6 @@ export function ExpansionSelector(props: ExpansionSelectorProps) {
     [GAME_SYSTEMS.STARFORGED]: "starforged",
   });
 
-  const officialExpansions = useGameSystemValue(defaultExpansions);
-
   const homebrewExpansionMap = useStore((store) => store.homebrew.collections);
   const sortedExpansionIds = useStore(
     (store) => store.homebrew.sortedHomebrewCollectionIds
@@ -44,17 +38,17 @@ export function ExpansionSelector(props: ExpansionSelectorProps) {
 
   const notFoundExpansionIds = Object.keys(enabledExpansionMap).filter(
     (key) =>
-      !officialExpansions.some((expansion) => expansion._id === key) &&
+      !expansions.some((expansion) => expansion._id === key) &&
       !expansionIds.includes(key)
   );
 
   return (
     <Box>
-      {officialExpansions.length > 0 && (
+      {expansions.length > 0 && (
         <Box>
           <Typography variant={"overline"}>Official Expansions</Typography>
           <FormGroup>
-            {officialExpansions.map((expansion) => (
+            {expansions.map((expansion) => (
               <FormControlLabel
                 key={expansion._id}
                 control={
@@ -71,7 +65,7 @@ export function ExpansionSelector(props: ExpansionSelectorProps) {
           </FormGroup>
         </Box>
       )}
-      <Box mt={officialExpansions.length > 0 ? 4 : 0}>
+      <Box mt={expansions.length > 0 ? 4 : 0}>
         <Typography variant={"overline"}>Homebrew Expansions</Typography>
         {expansionIds.length > 0 ? (
           <FormGroup>
