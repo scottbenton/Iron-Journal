@@ -3,8 +3,7 @@ import ReactDOM from "react-dom/client";
 import { AppProviders } from "providers/AppProviders";
 import { Router } from "Router";
 
-import "@fontsource/staatliches";
-import "@fontsource/rubik/variable.css";
+import "@fontsource-variable/rubik";
 import "@fontsource/bebas-neue";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

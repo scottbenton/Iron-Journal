@@ -14,7 +14,6 @@ export function MoveTypeFieldWrapper(
   const { control, moveType, children } = props;
 
   const type = useWatch<Form>({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     name: "type",
     control,
   });

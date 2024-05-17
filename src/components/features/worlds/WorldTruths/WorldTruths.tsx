@@ -12,7 +12,8 @@ import { useStore } from "stores/store";
 import CharacterIcon from "@mui/icons-material/Person";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import { TruthCard } from "./TruthCard";
-import { CUSTOM_TRUTH_INDEX, TruthChooser } from "./TruthChooser";
+import { TruthChooser } from "./TruthChooser";
+import { CUSTOM_TRUTH_INDEX } from "./customTruthIndex";
 
 export interface WorldTruthsProps {
   canEdit: boolean;

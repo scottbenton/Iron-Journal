@@ -1,18 +1,8 @@
 import { Box, Divider, Typography } from "@mui/material";
-import { ROLL_RESULT, StatRoll } from "types/DieRolls.type";
+import { StatRoll } from "types/DieRolls.type";
 import { D6Icon } from "assets/D6Icon";
 import { D10Icon } from "assets/D10Icon";
-
-export const getRollResultLabel = (result: ROLL_RESULT) => {
-  switch (result) {
-    case ROLL_RESULT.HIT:
-      return "Strong Hit";
-    case ROLL_RESULT.WEAK_HIT:
-      return "Weak Hit";
-    case ROLL_RESULT.MISS:
-      return "Miss";
-  }
-};
+import { getRollResultLabel } from "components/features/charactersAndCampaigns/RollDisplay";
 
 export interface StatRollCardProps {
   roll: StatRoll;

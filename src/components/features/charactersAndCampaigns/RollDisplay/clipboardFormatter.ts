@@ -33,25 +33,28 @@ export function convertRollToClipboard(roll: Roll):
     }
   | undefined {
   switch (roll.type) {
-    case ROLL_TYPE.STAT:
+    case ROLL_TYPE.STAT: {
       const statContents = extractStatRollContents(roll);
       return {
         rich: convertStatRollToClipboardRich(statContents),
         plain: convertStatRollToClipboardPlain(statContents),
       };
-    case ROLL_TYPE.ORACLE_TABLE:
+    }
+    case ROLL_TYPE.ORACLE_TABLE: {
       const oracleContents = extractOracleRollContents(roll);
       return {
         rich: convertOracleRollToClipboardRich(oracleContents),
         plain: convertOracleRollToClipboardPlain(oracleContents),
       };
-    case ROLL_TYPE.TRACK_PROGRESS:
+    }
+    case ROLL_TYPE.TRACK_PROGRESS: {
       const trackProgressContents = extractTrackProgressRollContents(roll);
       return {
         rich: convertTrackProgressRollToClipboardRich(trackProgressContents),
         plain: convertTrackProgressRollToClipboardPlain(trackProgressContents),
       };
-    case ROLL_TYPE.CLOCK_PROGRESSION:
+    }
+    case ROLL_TYPE.CLOCK_PROGRESSION: {
       const clockProgressionContents =
         extractClockProgressionRollContents(roll);
 
@@ -63,6 +66,7 @@ export function convertRollToClipboard(roll: Roll):
           clockProgressionContents
         ),
       };
+    }
     default:
       return undefined;
   }

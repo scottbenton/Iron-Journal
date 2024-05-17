@@ -177,12 +177,12 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
             {children}
           </Typography>
         ),
-        a: (props) => {
+        a: (linkProps) => {
           if (disableLinks) {
-            return <>{props.children}</>;
+            return <>{linkProps.children}</>;
           }
 
-          const propertiesHref = props.node.properties?.href;
+          const propertiesHref = linkProps.node?.properties?.href;
 
           const href = typeof propertiesHref === "string" ? propertiesHref : "";
           // V2 versions
@@ -205,7 +205,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
                   }
                   onClick={() => openDialog(strippedHref, true)}
                 >
-                  {props.children}
+                  {linkProps.children}
                 </Link>
               );
             }
@@ -230,7 +230,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
                     }
                     onClick={() => openDialog(strippedHref, true)}
                   >
-                    {props.children}
+                    {linkProps.children}
                   </Link>
                 );
               }
@@ -256,7 +256,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
                     }
                     onClick={() => openDialog(strippedHref, true)}
                   >
-                    {props.children}
+                    {linkProps.children}
                   </Link>
                 );
               }
@@ -265,7 +265,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
             console.debug("Link", href, "was not found");
 
             // TODO - add handlers for this situation;
-            return <span>{props.children}</span>;
+            return <span>{linkProps.children}</span>;
           }
           // V1 versions
           if (href.startsWith("ironsworn/") || href.startsWith("starforged/")) {
@@ -296,17 +296,18 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
                   }
                   onClick={() => openDialog(href)}
                 >
-                  {props.children}
+                  {linkProps.children}
                 </Link>
               );
             }
 
             // TODO - add handlers for this situation;
-            return <span>{props.children}</span>;
+            return <span>{linkProps.children}</span>;
           }
-          return <a {...props} />;
+          return <a {...linkProps} />;
         },
       }}
+      urlTransform={(url) => url}
     >
       {markdown}
     </ReactMarkdown>

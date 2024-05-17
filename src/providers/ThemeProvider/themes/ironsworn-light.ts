@@ -23,9 +23,9 @@ export const ironswornLightTheme = createTheme({
     grey: ironswornGrey,
   },
   typography: {
-    fontFamily: ["RubikVariable", ...baseFontFamilies].join(","),
+    fontFamily: ["'Rubik Variable'", ...baseFontFamilies].join(","),
   },
-  fontFamilyTitle: ["Staatliches", ...baseFontFamilies].join(","),
+  fontFamilyTitle: ["'Bebas Neue'", ...baseFontFamilies].join(","),
   shape: {
     borderRadius: 4,
   },

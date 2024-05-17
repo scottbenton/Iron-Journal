@@ -161,7 +161,7 @@ function convertFormValuesToAsset(values: FormValues) {
           Adjustable: false,
         };
         break;
-      case InputType.Select:
+      case InputType.Select: {
         const selectId = `${assetId}/inputs/${encodeContents(input.label)}`;
 
         const options: { [key: string]: InputSelectOption } = {};
@@ -182,6 +182,7 @@ function convertFormValuesToAsset(values: FormValues) {
           "Sets attributes": {},
         };
         break;
+      }
     }
   });
 
@@ -321,7 +322,7 @@ export function CreateCustomAsset(props: CreateCustomAssetProps) {
                               key={index}
                               action={
                                 <Button
-                                  color='inherit'
+                                  color="inherit"
                                   onClick={() => remove(index)}
                                 >
                                   Remove
@@ -487,7 +488,7 @@ export function CreateCustomAsset(props: CreateCustomAssetProps) {
                 <SectionHeading label={"Asset Abilities"} />
               </Grid>
               <Grid item xs={12}>
-                <FieldArray name='abilities'>
+                <FieldArray name="abilities">
                   {({ remove, push }) => (
                     <TableContainer component={Paper} variant={"outlined"}>
                       <Table size={"small"}>

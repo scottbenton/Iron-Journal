@@ -14,34 +14,36 @@ export const deleteCampaign = createApiFunction<
 >((params) => {
   const { campaignId, characterIds } = params;
 
-  return new Promise(async (resolve, reject) => {
-    try {
-      const characterPromises = characterIds.map((characterId) => {
-        return updateDoc(getCharacterDoc(characterId), {
-          campaignId: deleteField(),
-        });
+  return new Promise((resolve, reject) => {
+    const characterPromises = characterIds.map((characterId) => {
+      return updateDoc(getCharacterDoc(characterId), {
+        campaignId: deleteField(),
       });
+    });
 
-      await Promise.all(characterPromises);
-      resolve();
-    } catch (e) {
-      reject(e);
-    }
+    Promise.all(characterPromises)
+      .then(() => {
+        const promises: Promise<unknown>[] = [];
 
-    try {
-      const promises: Promise<unknown>[] = [];
+        promises.push(deleteDoc(getCampaignDoc(campaignId)));
+        promises.push(deleteNotes({ campaignId }));
+        promises.push(deleteAllLogs({ campaignId }));
+        promises.push(deleteAllAssets({ campaignId }));
+        promises.push(deleteAllProgressTracks({ campaignId }));
+        promises.push(deleteDoc(getCampaignSettingsDoc(campaignId)));
 
-      promises.push(deleteDoc(getCampaignDoc(campaignId)));
-      promises.push(deleteNotes({ campaignId }));
-      promises.push(deleteAllLogs({ campaignId }));
-      promises.push(deleteAllAssets({ campaignId }));
-      promises.push(deleteAllProgressTracks({ campaignId }));
-      promises.push(deleteDoc(getCampaignSettingsDoc(campaignId)));
-
-      await Promise.all(promises);
-      resolve();
-    } catch (e) {
-      reject(e);
-    }
+        Promise.all(promises)
+          .then(() => {
+            resolve();
+          })
+          .catch((e) => {
+            console.error(e);
+            reject(e);
+          });
+      })
+      .catch((e) => {
+        reject(e);
+        console.error(e);
+      });
   });
 }, "Failed to delete campaign.");

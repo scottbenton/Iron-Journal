@@ -22,39 +22,56 @@ export const deleteCharacter = createApiFunction<
   },
   void
 >((params) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const { uid, characterId, campaignId, portraitFilename } = params;
 
-    try {
-      if (campaignId) {
-        await removeCharacterFromCampaign({
-          uid: firebaseAuth.currentUser?.uid ?? "",
-          campaignId,
-          characterId,
-        });
-      }
-      const promises: Promise<unknown>[] = [];
-
-      if (portraitFilename) {
-        promises.push(
-          deleteImage(
-            constructCharacterPortraitFolderPath(uid, characterId),
-            portraitFilename
-          )
-        );
-      }
-
-      promises.push(deleteNotes({ characterId }));
-      promises.push(deleteDoc(getCharacterSettingsDoc(characterId)));
-      promises.push(deleteAllAssets({ characterId }));
-      promises.push(deleteAllLogs({ characterId }));
-      promises.push(deleteAllProgressTracks({ characterId }));
-
-      await Promise.all(promises);
-      await deleteDoc(getCharacterDoc(characterId));
-      resolve();
-    } catch (e) {
-      reject(e);
+    let removeCharacterFromCampaignPromise: Promise<void> = Promise.resolve();
+    if (campaignId) {
+      removeCharacterFromCampaignPromise = removeCharacterFromCampaign({
+        uid: firebaseAuth.currentUser?.uid ?? "",
+        campaignId,
+        characterId,
+      });
     }
+
+    removeCharacterFromCampaignPromise
+      .then(() => {
+        const promises: Promise<unknown>[] = [];
+
+        if (portraitFilename) {
+          promises.push(
+            deleteImage(
+              constructCharacterPortraitFolderPath(uid, characterId),
+              portraitFilename
+            )
+          );
+        }
+
+        promises.push(deleteNotes({ characterId }));
+        promises.push(deleteDoc(getCharacterSettingsDoc(characterId)));
+        promises.push(deleteAllAssets({ characterId }));
+        promises.push(deleteAllLogs({ characterId }));
+        promises.push(deleteAllProgressTracks({ characterId }));
+
+        Promise.all(promises)
+          .then(() => {
+            deleteDoc(getCharacterDoc(characterId))
+              .then(() => {
+                resolve();
+              })
+              .catch((e) => {
+                reject(e);
+                console.error(e);
+              });
+          })
+          .catch((e) => {
+            reject(e);
+            console.error(e);
+          });
+      })
+      .catch((e) => {
+        console.error(e);
+        reject(e);
+      });
   });
 }, "Failed to delete character.");

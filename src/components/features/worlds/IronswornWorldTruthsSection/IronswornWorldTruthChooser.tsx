@@ -12,16 +12,13 @@ import { useState } from "react";
 import { useStore } from "stores/store";
 import CheckIcon from "@mui/icons-material/CheckCircle";
 import { Truth } from "types/World.type";
+import { getCustomTruthId } from "./getCustomTruthId";
 
 export interface IronswornWorldTruthChooserProps {
   truthId: string;
   initialTruth?: Truth;
   maxCols?: number;
 }
-
-export const getCustomTruthId = (truthId: string) => {
-  return `${truthId}/custom`;
-};
 
 export function IronswornWorldTruthChooser(
   props: IronswornWorldTruthChooserProps

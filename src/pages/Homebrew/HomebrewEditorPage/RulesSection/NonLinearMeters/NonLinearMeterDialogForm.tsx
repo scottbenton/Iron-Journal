@@ -18,7 +18,8 @@ import { Preview } from "../../Preview";
 import { NonLinearMeterPreview } from "./NonLinearMeterPreview";
 import { MarkdownEditor } from "components/shared/RichTextEditor/MarkdownEditor";
 import { NonLinearMeterDialogOptions } from "./NonLinearMeterDialogOptions";
-import { NonLinearRollableToggle, isNumeric } from "./NonLinearRollableToggle";
+import { NonLinearRollableToggle } from "./NonLinearRollableToggle";
+import { isNumeric } from "functions/isNumeric";
 
 export interface NonLinearMeterDialogFormProps {
   homebrewId: string;

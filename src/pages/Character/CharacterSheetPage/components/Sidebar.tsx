@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useStore } from "stores/store";
 import { useNewCustomContentPage } from "hooks/featureFlags/useNewCustomContentPage";
 
-export enum SIDEBAR_TABS {
+enum SIDEBAR_TABS {
   MOVES = "moves",
   ORACLES = "oracles",
 }

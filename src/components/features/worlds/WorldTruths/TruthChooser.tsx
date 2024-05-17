@@ -13,14 +13,13 @@ import { useState } from "react";
 import CheckIcon from "@mui/icons-material/CheckCircle";
 import { Datasworn } from "@datasworn/core";
 import { TruthCard } from "./TruthCard";
+import { CUSTOM_TRUTH_INDEX } from "./customTruthIndex";
 
 export interface TruthChooserProps {
   truthKey: string;
   truth: Datasworn.Truth;
   maxCols?: number;
 }
-
-export const CUSTOM_TRUTH_INDEX = -1;
 
 export function TruthChooser(props: TruthChooserProps) {
   const { truthKey, truth, maxCols = 12 } = props;

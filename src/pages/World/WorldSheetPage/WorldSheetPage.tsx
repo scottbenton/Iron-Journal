@@ -21,7 +21,7 @@ import { EmptyState } from "components/shared/EmptyState";
 import { LinkComponent } from "components/shared/LinkComponent";
 import { useUpdateQueryStringValueWithoutNavigation } from "hooks/useUpdateQueryStringValueWithoutNavigation";
 
-export enum TABS {
+enum TABS {
   DETAILS = "details",
   SECTORS = "sectors",
   LOCATIONS = "locations",
