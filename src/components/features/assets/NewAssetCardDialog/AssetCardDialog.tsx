@@ -1,6 +1,4 @@
 import {
-  Alert,
-  AlertTitle,
   Box,
   Button,
   Dialog,
@@ -24,17 +22,10 @@ export interface AssetCardDialogProps {
   loading?: boolean;
   handleClose: () => void;
   handleAssetSelection: (asset: Omit<AssetDocument, "order">) => void;
-  showSharedAssetWarning?: boolean;
 }
 
 export function AssetCardDialog(props: AssetCardDialogProps) {
-  const {
-    open,
-    loading,
-    handleClose,
-    handleAssetSelection,
-    showSharedAssetWarning,
-  } = props;
+  const { open, loading, handleClose, handleAssetSelection } = props;
 
   const assetGroups = useStore(
     (store) => store.rules.assetMaps.assetCollectionMap
@@ -97,14 +88,14 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
           </Tabs>
         </Box>
         <Box py={1}>
-          {showSharedAssetWarning && (
+          {/* {showSharedAssetWarning && assetGroups[selectedTabId]. && (
             <Alert severity={"warning"}>
               <AlertTitle>Shared Assets</AlertTitle>
               These assets are shared amongst characters playing together in a
               campaign. If you plan on playing with multiple characters, add
               these assets to your campaign, instead of to your character.
             </Alert>
-          )}
+          )} */}
           <MarkdownRenderer
             markdown={assetGroups[selectedTabId]?.description ?? ""}
           />

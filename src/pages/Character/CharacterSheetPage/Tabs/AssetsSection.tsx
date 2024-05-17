@@ -357,9 +357,6 @@ export function AssetsSection() {
                 : nextAssetIndex,
             })
           }
-          showSharedAssetWarning={
-            isInCampaign && !isAssetDialogOpen.addToCampaign
-          }
         />
       ) : (
         <OldAssetCardDialog

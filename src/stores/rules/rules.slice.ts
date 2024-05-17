@@ -28,6 +28,7 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
     state.rules.rebuildSpecialTracks();
     state.rules.rebuildImpacts();
     state.rules.rebuildAssets();
+    state.rules.rebuildWorldTruths();
   },
 
   setExpansionIds: (expansionIds) => {
@@ -442,6 +443,15 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
           assetMap,
           nonReplacedAssetCollectionMap,
         };
+      }
+    });
+  },
+
+  rebuildWorldTruths: () => {
+    set((store) => {
+      const baseRulesetTruths = store.rules.baseRuleset?.truths;
+      if (baseRulesetTruths) {
+        store.rules.worldTruths = baseRulesetTruths;
       }
     });
   },

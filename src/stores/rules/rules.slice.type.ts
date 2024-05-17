@@ -52,6 +52,7 @@ export interface RulesSliceActions {
   rebuildSpecialTracks: () => void;
   rebuildImpacts: () => void;
   rebuildAssets: () => void;
+  rebuildWorldTruths: () => void;
 }
 
 export type RulesSlice = RulesSliceData & RulesSliceActions;
