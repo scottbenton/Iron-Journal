@@ -121,9 +121,9 @@ export function TruthCard(props: TruthCardProps) {
                   onSelectSubItem && onSelectSubItem(parseInt(index))
                 }
               >
-                {truthOption.table.map((row, index) => (
+                {truthOption.table?.rows.map((row, index) => (
                   <FormControlLabel
-                    label={row.result}
+                    label={row.text}
                     key={index}
                     value={index}
                     disabled={(onSelect && !selected) || !onSelectSubItem}
@@ -141,9 +141,9 @@ export function TruthCard(props: TruthCardProps) {
                 <HexradioChecked color={"primary"} />
                 <Typography ml={2}>
                   {
-                    truthOption.table?.find(
+                    truthOption.table?.rows.find(
                       (_, index) => index === selectedSubItemIndex
-                    )?.result
+                    )?.text
                   }
                 </Typography>
               </Box>

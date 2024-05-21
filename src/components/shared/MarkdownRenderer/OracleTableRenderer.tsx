@@ -12,17 +12,17 @@ export function OracleTableRenderer(props: OracleTableRendererProps) {
   const { oracle } = props;
 
   if (
-    oracle.oracle_type === "table_simple" ||
-    oracle.oracle_type === "column_simple" ||
-    oracle.oracle_type === "table_details" ||
-    oracle.oracle_type === "column_details"
+    oracle.oracle_type === "table_text" ||
+    oracle.oracle_type === "table_text2" ||
+    oracle.oracle_type === "table_text3"
   ) {
     return <OracleRollableTable oracle={oracle} />;
   } else if (oracle.oracle_type === "table_shared_rolls") {
     return <OracleTableSharedRolls oracle={oracle} />;
   } else if (
-    oracle.oracle_type === "table_shared_results" ||
-    oracle.oracle_type === "table_shared_details"
+    oracle.oracle_type === "table_shared_text" ||
+    oracle.oracle_type === "table_shared_text2" ||
+    oracle.oracle_type === "table_shared_text3"
   ) {
     return <OracleTableSharedResults oracle={oracle} />;
   } else if (oracle.oracle_type === "tables") {

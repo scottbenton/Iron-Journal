@@ -28,7 +28,9 @@ export function RollResult(props: RollResultProps) {
         </Typography>
       )}
       {markdown && (
-        <MarkdownRenderer markdown={markdown} inheritColor disableLinks />
+        <Box maxWidth={"30ch"}>
+          <MarkdownRenderer markdown={markdown} inheritColor disableLinks />
+        </Box>
       )}
       {Array.isArray(extras) &&
         extras.map((extra) => (

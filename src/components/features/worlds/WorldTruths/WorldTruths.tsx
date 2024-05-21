@@ -115,7 +115,6 @@ export function WorldTruths(props: WorldTruthsProps) {
                     truthSelections[truthKey].selectedTruthOptionIndex ===
                     CUSTOM_TRUTH_INDEX
                       ? {
-                          _id: "",
                           description:
                             truthSelections[truthKey].customTruth
                               ?.description ?? "",

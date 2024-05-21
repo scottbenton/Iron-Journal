@@ -7,6 +7,8 @@ import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import { OracleTableSharedRolls } from "./OracleTableSharedRolls";
 import { OracleTableSharedResults } from "./OracleTableSharedResults";
 import { OracleCollection } from "./OracleCollection";
+import { OracleRollableColumn } from "./OracleRollableColumn";
+import { OracleButton } from "components/features/charactersAndCampaigns/NewOracleSection/OracleButton";
 
 export interface NewOracleDialogContentProps {
   id: string;
@@ -66,27 +68,45 @@ export function NewOracleDialogContent(props: NewOracleDialogContentProps) {
       </LinkedDialogContentTitle>
       <DialogContent>
         {oracle.summary &&
-          (oracle.oracle_type === "column_simple" ||
-            oracle.oracle_type === "column_details" ||
+          (oracle.oracle_type === "column_text" ||
+            oracle.oracle_type === "column_text2" ||
+            oracle.oracle_type === "column_text3" ||
             !oracle.description) && (
             <MarkdownRenderer markdown={oracle.summary} />
           )}
-        {oracle.oracle_type !== "column_simple" &&
-          oracle.oracle_type !== "column_details" &&
+        {oracle.oracle_type !== "column_text" &&
+          oracle.oracle_type !== "column_text2" &&
+          oracle.oracle_type !== "column_text3" &&
           oracle.description && (
             <MarkdownRenderer markdown={oracle.description} />
           )}
-        {(oracle.oracle_type === "table_simple" ||
-          oracle.oracle_type === "column_simple" ||
-          oracle.oracle_type === "table_details" ||
-          oracle.oracle_type === "column_details") && (
+        {oracle.oracle_type !== "table_shared_text" &&
+          oracle.oracle_type !== "table_shared_text2" &&
+          oracle.oracle_type !== "table_shared_text3" &&
+          oracle.oracle_type !== "tables" && (
+            <OracleButton
+              oracleId={id}
+              color={"inherit"}
+              variant={"outlined"}
+              sx={{ mt: 1 }}
+            />
+          )}
+        {(oracle.oracle_type === "table_text" ||
+          oracle.oracle_type === "table_text2" ||
+          oracle.oracle_type === "table_text3") && (
           <OracleRollableTable oracle={oracle} />
+        )}
+        {(oracle.oracle_type === "column_text" ||
+          oracle.oracle_type === "column_text2" ||
+          oracle.oracle_type === "column_text3") && (
+          <OracleRollableColumn oracle={oracle} />
         )}
         {oracle.oracle_type === "table_shared_rolls" && (
           <OracleTableSharedRolls oracle={oracle} />
         )}
-        {(oracle.oracle_type === "table_shared_results" ||
-          oracle.oracle_type === "table_shared_details") && (
+        {(oracle.oracle_type === "table_shared_text" ||
+          oracle.oracle_type === "table_shared_text2" ||
+          oracle.oracle_type === "table_shared_text3") && (
           <OracleTableSharedResults oracle={oracle} />
         )}
         {oracle.oracle_type === "tables" && (

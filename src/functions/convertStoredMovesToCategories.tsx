@@ -29,6 +29,7 @@ export function convertStoredMovesToCategories(
       const storedCategory = storedCategories[categoryId];
       categories[categoryId] = {
         _id: `${homebrewId}/collections/moves/${categoryId}`,
+        type: "move_category",
         name: storedCategory.label,
         _source: DEFAULT_SOURCE,
         description: storedCategory.description,
@@ -67,6 +68,7 @@ function convertStoredMove(
   if (move.type === MoveType.NoRoll) {
     const m: Datasworn.MoveNoRoll = {
       _id: `${homebrewId}/moves/${move.categoryId}/${moveId}`,
+      type: "move",
       name: move.label,
       text: move.text,
       replaces: move.replacesId ?? undefined,
@@ -83,6 +85,7 @@ function convertStoredMove(
   } else if (move.type === MoveType.ActionRoll) {
     const m: Datasworn.MoveActionRoll = {
       _id: `${homebrewId}/moves/${move.categoryId}/${moveId}`,
+      type: "move",
       name: move.label,
       text: move.text,
       replaces: move.replacesId ?? undefined,
@@ -128,6 +131,7 @@ function convertStoredMove(
   } else if (move.type === MoveType.ProgressRoll) {
     const m: Datasworn.MoveProgressRoll = {
       _id: `${homebrewId}/moves/${move.categoryId}/${moveId}`,
+      type: "move",
       name: move.label,
       text: move.text,
       replaces: move.replacesId ?? undefined,
@@ -160,6 +164,7 @@ function convertStoredMove(
   } else {
     const m: Datasworn.MoveSpecialTrack = {
       _id: `${homebrewId}/moves/${move.categoryId}/${moveId}`,
+      type: "move",
       name: move.label,
       text: move.text,
       replaces: move.replacesId ?? undefined,

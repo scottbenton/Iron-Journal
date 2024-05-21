@@ -2,16 +2,10 @@ import { Datasworn } from "@datasworn/core";
 import { OracleTableRoll, ROLL_TYPE } from "types/DieRolls.type";
 import { rollDie } from "./rollDie";
 
-function rollOracleColumn(
-  column:
-    | Datasworn.OracleColumnSimple
-    | Datasworn.OracleColumnDetails
-    | Datasworn.OracleTableSimple
-    | Datasworn.OracleTableDetails
-):
+function rollOracleColumn(column: Datasworn.OracleRollable):
   | {
       roll: number;
-      result: Datasworn.OracleTableRowSimple | Datasworn.OracleTableRowDetails;
+      result: Datasworn.OracleTableRow;
     }
   | undefined {
   const roll = rollDie(column.dice);
@@ -33,12 +27,7 @@ function rollOracleColumn(
 }
 
 export function rollOracle(
-  oracle:
-    | Datasworn.OracleRollable
-    | Datasworn.OracleTableSharedRolls
-    | Datasworn.OracleTableSharedResults
-    | Datasworn.OracleTableSharedDetails
-    | Datasworn.OracleTablesCollection,
+  oracle: Datasworn.OracleCollection | Datasworn.OracleRollable,
   characterId: string | null,
   uid: string,
   gmsOnly: boolean
@@ -48,8 +37,9 @@ export function rollOracle(
     console.error("Oracle table collections cannot be rolled");
     return undefined;
   } else if (
-    oracle.oracle_type === "table_shared_results" ||
-    oracle.oracle_type === "table_shared_details"
+    oracle.oracle_type === "table_shared_text" ||
+    oracle.oracle_type === "table_shared_text2" ||
+    oracle.oracle_type === "table_shared_text3"
   ) {
     console.error(
       "Shared Results tables cannot be rolled - please specify a contents table to roll instead."
@@ -70,7 +60,7 @@ export function rollOracle(
           return "";
         } else {
           tmpRolls.push(rollResult.roll);
-          return `* ${col.name}: ${rollResult.result.result}`;
+          return `* ${col.name}: ${rollResult.result.text}`;
         }
       })
       .join("\n");
@@ -79,7 +69,7 @@ export function rollOracle(
     const rollResult = rollOracleColumn(oracle);
     if (rollResult) {
       rolls = rollResult.roll;
-      resultString = rollResult.result.result;
+      resultString = rollResult.result.text;
     }
   }
 
