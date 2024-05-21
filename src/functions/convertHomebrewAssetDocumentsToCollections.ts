@@ -27,6 +27,7 @@ export function convertHomebrewAssetDocumentsToCollections(
       const storedCollection = storedCollections[collectionId];
       collections[collectionId] = {
         _id: `${homebrewId}/collections/assets/${collectionId}`,
+        type: "asset_collection",
         name: storedCollection.label,
         replaces: storedCollection.replacesId ?? undefined,
         enhances: storedCollection.enhancesId ?? undefined,
@@ -147,6 +148,7 @@ function convertAssetDocument(
 
   return {
     _id: `${homebrewId}/assets/${asset.categoryKey}/${assetId}`,
+    type: "asset",
     name: asset.label,
     count_as_impact: false,
     shared: false,

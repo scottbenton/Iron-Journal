@@ -35,18 +35,14 @@ export function parseOraclesIntoMaps(
     }
     if (category.contents) {
       Object.values(category.contents).forEach(
-        (
-          oracleContent:
-            | Datasworn.OracleTableRollable
-            | Datasworn.OracleColumnSimple
-            | Datasworn.OracleColumnDetails
-        ) => {
+        (oracleContent: Datasworn.OracleRollable) => {
           allOraclesMap[oracleContent._id] = oracleContent;
           oracleRollableMap[oracleContent._id] = oracleContent;
           nonReplacedOracleRollableMap[oracleContent._id] = oracleContent;
           if (
-            oracleContent.oracle_type === "table_details" ||
-            oracleContent.oracle_type === "table_simple"
+            oracleContent.oracle_type === "table_text" ||
+            oracleContent.oracle_type === "table_text2" ||
+            oracleContent.oracle_type === "table_text3"
           ) {
             oracleTableRollableMap[oracleContent._id] = oracleContent;
             nonReplacedOracleTableRollableMap[oracleContent._id] =
@@ -56,8 +52,9 @@ export function parseOraclesIntoMaps(
             allOraclesMap[oracleContent.replaces] = oracleContent;
             oracleRollableMap[oracleContent.replaces] = oracleContent;
             if (
-              oracleContent.oracle_type === "table_details" ||
-              oracleContent.oracle_type === "table_simple"
+              oracleContent.oracle_type === "table_text" ||
+              oracleContent.oracle_type === "table_text2" ||
+              oracleContent.oracle_type === "table_text3"
             ) {
               oracleTableRollableMap[oracleContent.replaces] = oracleContent;
             }

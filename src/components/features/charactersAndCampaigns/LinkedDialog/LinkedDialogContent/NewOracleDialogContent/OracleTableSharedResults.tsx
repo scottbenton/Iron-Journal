@@ -7,8 +7,9 @@ import {
 
 export interface OracleTableSharedResultsProps {
   oracle:
-    | Datasworn.OracleTableSharedResults
-    | Datasworn.OracleTableSharedDetails;
+    | Datasworn.OracleTableSharedText
+    | Datasworn.OracleTableSharedText2
+    | Datasworn.OracleTableSharedText3;
 }
 
 export function OracleTableSharedResults(props: OracleTableSharedResultsProps) {
@@ -21,11 +22,15 @@ export function OracleTableSharedResults(props: OracleTableSharedResultsProps) {
     return null;
   }
 
-  const columns: SimpleTableColumnDefinition<Datasworn.OracleTableRowSimple>[] =
+  const columns: SimpleTableColumnDefinition<Datasworn.OracleTableRowText3>[] =
     [];
 
   const contentValues:
-    | (Datasworn.OracleColumnSimple | Datasworn.OracleColumnDetails)[]
+    | (
+        | Datasworn.OracleColumnText
+        | Datasworn.OracleColumnText2
+        | Datasworn.OracleColumnText3
+      )[]
     | undefined = oracle.contents ? Object.values(oracle.contents) : undefined;
 
   contentValues?.forEach((subOracle) => {
@@ -45,19 +50,18 @@ export function OracleTableSharedResults(props: OracleTableSharedResultsProps) {
   });
 
   columns.push({
-    label: oracle.column_labels.result,
-    renderer: (row) => <MarkdownRenderer markdown={row.result} />,
+    label: oracle.column_labels.text,
+    renderer: (row) => <MarkdownRenderer markdown={row.text} />,
   });
 
-  if (oracle.oracle_type === "table_shared_details") {
+  if (
+    oracle.oracle_type === "table_shared_text2" ||
+    oracle.oracle_type === "table_shared_text3"
+  ) {
     columns.push({
-      label: oracle.column_labels.detail,
+      label: (oracle as Datasworn.OracleTableSharedText2).column_labels.text2,
       renderer: (row) =>
-        (row as Datasworn.OracleTableRowDetails).detail ? (
-          <MarkdownRenderer
-            markdown={(row as Datasworn.OracleTableRowDetails).detail ?? ""}
-          />
-        ) : null,
+        row.text2 ? <MarkdownRenderer markdown={row.text2 ?? ""} /> : null,
     });
   }
 

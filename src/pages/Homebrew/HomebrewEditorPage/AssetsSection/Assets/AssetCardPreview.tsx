@@ -114,6 +114,7 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
 
   const asset: Datasworn.Asset = {
     _id: "",
+    type: "asset",
     name: label,
     count_as_impact: false,
     shared: false,

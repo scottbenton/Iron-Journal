@@ -4,11 +4,7 @@ import { useStore } from "stores/store";
 import { Datasworn } from "@datasworn/core";
 
 export interface OracleListItemActionOpenDialogButtonProps {
-  item:
-    | Datasworn.OracleTableSharedRolls
-    | Datasworn.OracleTableSharedResults
-    | Datasworn.OracleTableSharedDetails
-    | Datasworn.OracleRollable;
+  item: Datasworn.OracleCollection | Datasworn.OracleRollable;
   disabled?: boolean;
 }
 

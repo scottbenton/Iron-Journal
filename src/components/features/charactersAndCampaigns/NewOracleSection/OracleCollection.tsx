@@ -100,8 +100,9 @@ export function OracleCollection(props: OracleCollectionProps) {
   ) {
     return null;
   } else if (
-    collection.oracle_type === "table_shared_details" ||
-    collection.oracle_type === "table_shared_results"
+    collection.oracle_type === "table_shared_text" ||
+    collection.oracle_type === "table_shared_text2" ||
+    collection.oracle_type === "table_shared_text3"
   ) {
     return (
       <OracleSelectableRollableCollectionListItem

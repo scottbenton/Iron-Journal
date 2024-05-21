@@ -36,6 +36,7 @@ export function convertStoredOraclesToCollections(
         const storedCollection = storedCollections[collectionId];
         collections[collectionId] = {
           _id: `${homebrewId}/collections/oracles/${collectionId}`,
+          type: "oracle_collection",
           name: storedCollection.label,
           _source: DEFAULT_SOURCE,
           description: storedCollection.description,
@@ -109,6 +110,7 @@ function populateCollection(
             replaces: subColl.replacesId ?? undefined,
             contents: {},
             collections: {},
+            type: "oracle_collection",
             oracle_type: "tables",
           };
 
@@ -139,10 +141,8 @@ function populateCollection(
         const tableDataswornId = `${collection._id}/${tableId}`;
 
         const hasDetails = table.columnLabels.detail;
-        const tableType: "table_simple" | "table_details" = "table_simple";
-        const rows:
-          | Datasworn.OracleTableRow[]
-          | Datasworn.OracleTableRowDetails[] = [];
+        const tableType: "table_text" | "table_text2" = "table_text";
+        const rows: Datasworn.OracleTableRow[] = [];
 
         let total = 0;
         let runningMin = 1;
@@ -155,14 +155,13 @@ function populateCollection(
               ? {
                   min,
                   max,
-                  result: row.result,
-                  detail: row.detail ?? null,
+                  text: row.result,
+                  text2: row.detail ?? null,
                 }
               : {
                   min,
                   max,
-                  result: row.result,
-                  detail: null,
+                  text: row.result,
                 }
           );
 
@@ -170,15 +169,27 @@ function populateCollection(
           total += row.chance;
         });
 
+        const columnLabels = hasDetails
+          ? {
+              roll: table.columnLabels.roll,
+              text: table.columnLabels.result,
+              text2: table.columnLabels.detail,
+            }
+          : {
+              roll: table.columnLabels.roll,
+              text: table.columnLabels.result,
+            };
+
         collection.contents[tableId] = {
           _id: tableDataswornId,
+          type: "oracle_rollable",
           name: table.label,
           description: table.description,
           oracle_type: tableType,
           dice: `1d${total}`,
           replaces: table.replaces ?? undefined,
           _source: DEFAULT_SOURCE,
-          column_labels: table.columnLabels,
+          column_labels: columnLabels,
           rows,
         };
       }

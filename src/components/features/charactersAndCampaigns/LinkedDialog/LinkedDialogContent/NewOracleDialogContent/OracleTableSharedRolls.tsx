@@ -21,25 +21,24 @@ export function OracleTableSharedRolls(
     return null;
   }
 
-  const columns: SimpleTableColumnDefinition<Datasworn.OracleTableRowSimple>[] =
-    [
-      {
-        label: oracle.column_labels.roll,
-        renderer: (row) =>
-          row.min !== null && row.max !== null
-            ? row.max - row.min === 0
-              ? row.min
-              : `${row.min} - ${row.max}`
-            : null,
-        textColor: "text.secondary",
-      },
-    ];
+  const columns: SimpleTableColumnDefinition<Datasworn.OracleTableRowText>[] = [
+    {
+      label: oracle.column_labels.roll,
+      renderer: (row) =>
+        row.min !== null && row.max !== null
+          ? row.max - row.min === 0
+            ? row.min
+            : `${row.min} - ${row.max}`
+          : null,
+      textColor: "text.secondary",
+    },
+  ];
 
   Object.values(oracle.contents ?? {}).forEach((subOracle) => {
     columns.push({
       label: subOracle.name,
       renderer: (_, index) => (
-        <MarkdownRenderer markdown={subOracle.rows[index].result} />
+        <MarkdownRenderer markdown={subOracle.rows[index].text} />
       ),
     });
   });

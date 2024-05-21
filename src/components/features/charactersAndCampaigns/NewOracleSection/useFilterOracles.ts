@@ -51,6 +51,7 @@ export function useFilterOracles() {
       const collection: IPinnedOracleCollection = {
         _id: pinnedOracleId,
         name: "Pinned Oracles",
+        type: "oracle_collection",
         _source: {
           title: "Pinned Oracles",
           authors: [],
@@ -132,12 +133,7 @@ export function useFilterOracles() {
       }
       if (collection.contents) {
         Object.values(collection.contents).forEach(
-          (
-            table:
-              | Datasworn.OracleTableRollable
-              | Datasworn.OracleColumnSimple
-              | Datasworn.OracleColumnDetails
-          ) => {
+          (table: Datasworn.OracleRollable) => {
             if (
               table &&
               table.name

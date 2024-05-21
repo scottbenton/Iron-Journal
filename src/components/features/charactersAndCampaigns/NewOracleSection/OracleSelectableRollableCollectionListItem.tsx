@@ -7,8 +7,9 @@ import { ListItemButtonWithSecondaryAction } from "./ListItemButtonWithSecondary
 
 export interface OracleSelectableRollableCollectionListItemProps {
   collection:
-    | Datasworn.OracleTableSharedResults
-    | Datasworn.OracleTableSharedDetails;
+    | Datasworn.OracleTableSharedText
+    | Datasworn.OracleTableSharedText2
+    | Datasworn.OracleTableSharedText3;
   disabled?: boolean;
 }
 
