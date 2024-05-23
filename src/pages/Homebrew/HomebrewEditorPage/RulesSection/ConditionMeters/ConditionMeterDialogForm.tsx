@@ -89,7 +89,7 @@ export function ConditionMeterDialogForm(props: ConditionMeterDialogFormProps) {
       value: values.defaultValue,
       min: values.min,
       max: values.max,
-      rollable: values.rollable,
+      rollable: true, // values.rollable,
     })
       .then(() => {
         setLoading(false);
@@ -253,7 +253,7 @@ export function ConditionMeterDialogForm(props: ConditionMeterDialogFormProps) {
                 <FormHelperText>{errors.shared.message}</FormHelperText>
               )}
             </FormControl>
-            <FormControl error={touchedFields.rollable && !!errors.rollable}>
+            {/* <FormControl error={touchedFields.rollable && !!errors.rollable}>
               <FormControlLabel
                 disabled={disabled}
                 control={
@@ -274,7 +274,7 @@ export function ConditionMeterDialogForm(props: ConditionMeterDialogFormProps) {
               {touchedFields.rollable && errors.rollable && (
                 <FormHelperText>{errors.rollable.message}</FormHelperText>
               )}
-            </FormControl>
+            </FormControl> */}
             <Preview>
               <ConditionMeterPreview control={control} />
             </Preview>

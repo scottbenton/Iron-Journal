@@ -51,6 +51,8 @@ export interface CharacterDocument {
     scale: number;
   }>;
 
+  expansionIds?: string[];
+
   // Deprecated below this line - the above properties should be up to date
   // TODO - remove once new homebrew expansion is complete
   health: number;
@@ -61,5 +63,4 @@ export interface CharacterDocument {
   customTracks?: {
     [trackName: string]: number;
   };
-  expansionIds?: string[];
 }

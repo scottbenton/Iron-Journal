@@ -18,7 +18,7 @@ export function StatAutocomplete(props: StatAutocompleteProps) {
     <Autocomplete
       multiple={true}
       options={Object.keys(stats)}
-      getOptionLabel={(statKey) => capitalize(stats[statKey].label)}
+      getOptionLabel={(statKey) => capitalize(stats[statKey]?.label ?? statKey)}
       renderInput={(params) => (
         <TextField {...params} label={label ?? "Stats"} />
       )}
