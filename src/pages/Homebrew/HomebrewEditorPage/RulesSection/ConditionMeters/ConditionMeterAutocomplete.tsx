@@ -20,7 +20,7 @@ export function ConditionMeterAutocomplete(
     <Autocomplete
       multiple={true}
       options={Object.keys(conditionMeters)}
-      getOptionLabel={(key) => capitalize(conditionMeters[key].label)}
+      getOptionLabel={(key) => capitalize(conditionMeters[key]?.label ?? key)}
       renderInput={(params) => (
         <TextField {...params} label={label ?? "Condition Meters"} />
       )}

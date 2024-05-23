@@ -136,6 +136,7 @@ export function TracksSection() {
                   onChange={(newValue) =>
                     updateConditionMeter(conditionMeterKey, newValue)
                   }
+                  disableRoll={!conditionMeters[conditionMeterKey].rollable}
                   min={conditionMeters[conditionMeterKey].min}
                   max={conditionMeters[conditionMeterKey].max}
                 />
@@ -213,6 +214,7 @@ export function TracksSection() {
                   onChange={(newValue) => updateTrackValue("health", newValue)}
                   min={healthTrack.min}
                   max={healthTrack.max}
+                  disableRoll={false}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -222,6 +224,7 @@ export function TracksSection() {
                   onChange={(newValue) => updateTrackValue("spirit", newValue)}
                   min={spiritTrack.min}
                   max={spiritTrack.max}
+                  disableRoll={false}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -231,6 +234,7 @@ export function TracksSection() {
                   onChange={(newValue) => updateTrackValue("supply", newValue)}
                   min={supplyTrack.min}
                   max={supplyTrack.max}
+                  disableRoll={false}
                 />
               </Grid>
               <Grid item xs={6}>

@@ -16,6 +16,7 @@ export interface AuthSliceData {
 export interface AuthSliceActions {
   subscribe: () => Unsubscribe;
   closeUserNameDialog: () => void;
+  markUpdatesAsRead: (updateIds: string[]) => void;
 }
 
 export type AuthSlice = AuthSliceData & AuthSliceActions;

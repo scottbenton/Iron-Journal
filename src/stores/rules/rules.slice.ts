@@ -243,7 +243,7 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
                   value: conditionMeter.value,
                   min: conditionMeter.min,
                   max: conditionMeter.max,
-                  rollable: true, // conditionMeter.rollable ?? false
+                  rollable: true,
                 };
               });
           }

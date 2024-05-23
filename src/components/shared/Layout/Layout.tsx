@@ -16,6 +16,7 @@ import { StarforgedStarBackground } from "./StarforgedStarBackground";
 import { useGameSystem } from "hooks/useGameSystem";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { useNewSunderedIslesTheme } from "hooks/featureFlags/useNewSunderedIslesTheme";
+import { UpdateDialog } from "./UpdateDialog";
 
 export function Layout() {
   useSyncFeatureFlags();
@@ -77,6 +78,7 @@ export function Layout() {
         open={userNameDialogOpen}
         handleClose={closeUserNameDialog}
       />
+      <UpdateDialog />
       <LinkedDialog />
       <RollSnackbarSection />
     </Box>

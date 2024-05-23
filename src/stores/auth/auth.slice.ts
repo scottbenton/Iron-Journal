@@ -6,8 +6,9 @@ import { firebaseAuth } from "config/firebase.config";
 import { UserDocument } from "api-calls/user/_user.type";
 import { clearAnalyticsUser, setAnalyticsUser } from "lib/analytics.lib";
 import { updateUserDoc } from "api-calls/user/updateUserDoc";
+import { markUpdatesAsRead } from "api-calls/user/markUpdatesAsRead";
 
-export const createAuthSlice: CreateSliceType<AuthSlice> = (set) => ({
+export const createAuthSlice: CreateSliceType<AuthSlice> = (set, getState) => ({
   ...defaultAuthSlice,
 
   subscribe: () => {
@@ -60,5 +61,11 @@ export const createAuthSlice: CreateSliceType<AuthSlice> = (set) => ({
     set((state) => {
       state.auth.userNameDialogOpen = false;
     });
+  },
+
+  markUpdatesAsRead: (updateIds: string[]) => {
+    const uid = getState().auth.uid;
+
+    markUpdatesAsRead({ uid, updateIds }).catch(() => {});
   },
 });

@@ -12,10 +12,11 @@ export interface MobileStatTrackProps {
   min: number;
   max: number;
   onChange: (newValue: number) => Promise<void>;
+  disableRoll: boolean;
 }
 
 export function MobileStatTrack(props: MobileStatTrackProps) {
-  const { label, value, min, max, onChange } = props;
+  const { label, value, min, max, onChange, disableRoll } = props;
 
   const hasUnsavedChangesRef = useRef(false);
   const announce = useStore((store) => store.appState.announce);
@@ -64,7 +65,11 @@ export function MobileStatTrack(props: MobileStatTrackProps) {
       >
         <SubtractIcon />
       </IconButton>
-      <StatComponent label={label} value={localValue} />
+      <StatComponent
+        disableRoll={disableRoll}
+        label={label}
+        value={localValue}
+      />
       <IconButton
         disabled={localValue >= max}
         onClick={() => handleChange(localValue + 1)}

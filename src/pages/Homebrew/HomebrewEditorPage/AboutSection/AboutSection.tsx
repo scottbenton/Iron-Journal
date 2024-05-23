@@ -216,8 +216,8 @@ export function AboutSection(props: AboutSectionProps) {
 
               <Box mt={2}>
                 <Typography color={"textSecondary"}>
-                  {details.viewers?.length ?? 0} people
-                  {(details.viewers?.length ?? 0) === 1 ? " " : "s "}
+                  {details.viewers?.length ?? 0}{" "}
+                  {(details.viewers?.length ?? 0) === 1 ? "person " : "people "}
                   added this to their homebrew library
                 </Typography>
               </Box>
