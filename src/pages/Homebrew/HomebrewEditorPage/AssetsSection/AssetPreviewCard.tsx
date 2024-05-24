@@ -1,10 +1,10 @@
 import { Datasworn } from "@datasworn/core";
 import { Box, Card, IconButton, Tooltip } from "@mui/material";
-import { AssetAbilities } from "components/features/assets/NewAssetCard/AssetAbilities";
-import { AssetControls } from "components/features/assets/NewAssetCard/AssetControls";
-import { AssetHeader } from "components/features/assets/NewAssetCard/AssetHeader";
-import { AssetNameAndDescription } from "components/features/assets/NewAssetCard/AssetNameAndDescription";
-import { AssetOptions } from "components/features/assets/NewAssetCard/AssetOptions";
+import { AssetAbilities } from "components/features/assets/AssetCard/AssetAbilities";
+import { AssetControls } from "components/features/assets/AssetCard/AssetControls";
+import { AssetHeader } from "components/features/assets/AssetCard/AssetHeader";
+import { AssetNameAndDescription } from "components/features/assets/AssetCard/AssetNameAndDescription";
+import { AssetOptions } from "components/features/assets/AssetCard/AssetOptions";
 import { convertIdPart } from "functions/dataswornIdEncoder";
 import { HomebrewAssetDocument } from "api-calls/homebrew/assets/assets/_homebrewAssets.type";
 import EditIcon from "@mui/icons-material/Edit";

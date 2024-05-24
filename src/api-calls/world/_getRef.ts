@@ -6,11 +6,7 @@ import {
   doc,
   DocumentReference,
 } from "firebase/firestore";
-import {
-  decodeDataswornId,
-  encodeDataswornId,
-} from "functions/dataswornIdEncoder";
-import { Truth, World } from "types/World.type";
+import { World } from "types/World.type";
 import { WorldDocument } from "./_world.type";
 
 export function constructWorldsPath() {
@@ -36,19 +32,10 @@ export function getWorldDoc(worldId: string) {
 }
 
 export function encodeWorld(world: World): WorldDocument {
-  const { truths: decodedTruths, worldDescription, ...remainingWorld } = world;
-
-  const encodedTruths: { [key: string]: Truth } = {};
-
-  if (decodedTruths) {
-    Object.keys(decodedTruths).forEach((truthId) => {
-      encodedTruths[encodeDataswornId(truthId)] = decodedTruths[truthId];
-    });
-  }
+  const { worldDescription, ...remainingWorld } = world;
 
   const encodedWorld: WorldDocument = {
     ...remainingWorld,
-    truths: encodedTruths,
   };
 
   if (worldDescription) {
@@ -59,25 +46,11 @@ export function encodeWorld(world: World): WorldDocument {
 }
 
 export function decodeWorld(encodedWorld: WorldDocument): World {
-  const {
-    truths: encodedTruths,
-    worldDescription,
-    ...remainingWorld
-  } = encodedWorld;
-
-  const decodedTruths: { [key: string]: Truth } = {};
-
-  if (encodedTruths) {
-    Object.keys(encodedTruths).forEach((encodedTruthId) => {
-      decodedTruths[decodeDataswornId(encodedTruthId)] =
-        encodedTruths[encodedTruthId];
-    });
-  }
+  const { worldDescription, ...remainingWorld } = encodedWorld;
 
   const world: World = {
     ...remainingWorld,
     worldDescription: worldDescription?.toUint8Array(),
-    truths: decodedTruths,
   };
 
   return world;

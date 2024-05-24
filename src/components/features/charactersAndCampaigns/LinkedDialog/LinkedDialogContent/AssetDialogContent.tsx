@@ -1,7 +1,7 @@
 import { useStore } from "stores/store";
 import { LinkedDialogContentTitle } from "./LinkedDialogContentTitle";
 import { Box, DialogContent } from "@mui/material";
-import { AssetCard } from "components/features/assets/NewAssetCard";
+import { AssetCard } from "components/features/assets/AssetCard";
 
 export interface AssetDialogContentProps {
   id: string;

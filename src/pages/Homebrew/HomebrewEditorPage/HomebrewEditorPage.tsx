@@ -16,7 +16,7 @@ import { useListenToHomebrewContent } from "stores/homebrew/useListenToHomebrewC
 import { useUpdateQueryStringValueWithoutNavigation } from "hooks/useUpdateQueryStringValueWithoutNavigation";
 import { OracleSection } from "./OracleSection";
 import { MovesSection } from "./MovesSection";
-import { AssetsSection } from "./AssetsSection/AssetsSection";
+import { AssetsSection } from "./AssetsSection";
 import { arrayUnion } from "firebase/firestore";
 import { useSnackbar } from "providers/SnackbarProvider";
 

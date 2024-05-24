@@ -135,7 +135,7 @@ export function ProgressTrack(props: ProgressTracksProps) {
 
   const handleRollClick = () => {
     if (trackType) {
-      openDialog(trackMoveIds[trackType], true);
+      openDialog(trackMoveIds[trackType]);
       rollTrackProgress(
         trackType,
         label || "",

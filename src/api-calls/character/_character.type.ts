@@ -52,14 +52,6 @@ export interface CharacterDocument {
   }>;
 
   expansionIds?: string[];
-
-  // Deprecated below this line - the above properties should be up to date
-  // TODO - remove once new homebrew expansion is complete
-  health: number;
-  spirit: number;
-  supply: number;
-  legacyTracks?: Record<string, SpecialTrack>;
-  bonds?: number;
   customTracks?: {
     [trackName: string]: number;
   };

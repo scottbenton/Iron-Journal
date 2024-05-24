@@ -1,8 +1,6 @@
 import { SwipeableDrawer } from "@mui/material";
-import { MovesSection as MovesSectionOld } from "./MovesSection";
-import { MovesSection } from "./NewMovesSection";
+import { MovesSection } from "./MovesSection";
 import React, { useCallback } from "react";
-import { useNewCustomContentPage } from "hooks/featureFlags/useNewCustomContentPage";
 
 export interface MoveDrawerProps {
   open: boolean;
@@ -12,7 +10,6 @@ export interface MoveDrawerProps {
 function MoveDrawerUnMemoized(props: MoveDrawerProps) {
   const { open, onClose } = props;
 
-  const useNewMoves = useNewCustomContentPage();
   const openCallback = useCallback(() => {}, []);
   return (
     <SwipeableDrawer
@@ -23,7 +20,7 @@ function MoveDrawerUnMemoized(props: MoveDrawerProps) {
       disableDiscovery
       onClose={onClose}
     >
-      {useNewMoves ? <MovesSection /> : <MovesSectionOld />}
+      <MovesSection />
     </SwipeableDrawer>
   );
 }

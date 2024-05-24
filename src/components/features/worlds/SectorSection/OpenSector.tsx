@@ -15,7 +15,6 @@ import { SECTOR_TABS } from "stores/world/currentWorld/sector/sector.slice.type"
 import { SectorHexTypes } from "types/Sector.type";
 import { SectorRegionAutocomplete } from "./SectorRegionAutocomplete";
 import { useRoller } from "stores/appState/useRoller";
-import { planetDescriptions } from "data/oracles";
 import { SectorLocationCard } from "./SectorLocationCard";
 import { SectorLocationDialog } from "./SectorLocationDialog";
 import { useWorldPermissions } from "../useWorldPermissions";
@@ -81,6 +80,10 @@ export function OpenSector(props: OpenSectorProps) {
       store.worlds.currentWorld.currentWorldSectors.locations.setOpenLocationId
   );
 
+  const oracleCollections = useStore(
+    (store) => store.rules.oracleMaps.oracleCollectionMap
+  );
+
   const handleAddHex = async (
     row: number,
     col: number,
@@ -95,7 +98,7 @@ export function OpenSector(props: OpenSectorProps) {
       locationId = await createLocation({
         name: "New Star",
         type: SectorHexTypes.Star,
-        description,
+        description: description?.result ?? "",
       });
     } else if (hexType === SectorHexTypes.Planet) {
       const planetClass = rollOracleTable(
@@ -105,12 +108,12 @@ export function OpenSector(props: OpenSectorProps) {
       if (!planetClass) {
         return;
       }
-      const convertedClass = planetClass
+      const convertedClass = planetClass?.result
         ?.split(" ")[0]
-        .toLocaleLowerCase()
-        .replace("[⏵", "");
+        .toLocaleLowerCase();
+
       const name = rollOracleTable(
-        `starforged/oracles/planets/${convertedClass}/sample_names`,
+        `starforged/oracles/planets/${convertedClass}/name`,
         false
       );
       const planetClassName =
@@ -118,12 +121,16 @@ export function OpenSector(props: OpenSectorProps) {
         convertedClass.slice(1) +
         " World";
 
-      const description = convertedClass
-        ? planetDescriptions[convertedClass] ?? ""
-        : "";
+      const planetClassCollectionId = convertedClass
+        ? `starforged/collections/oracles/planets/${convertedClass}`
+        : undefined;
+
+      const description = planetClassCollectionId
+        ? oracleCollections[planetClassCollectionId]?.summary
+        : undefined;
 
       locationId = await createLocation({
-        name: name ?? "New Planet",
+        name: name?.result ?? "New Planet",
         type: SectorHexTypes.Planet,
         subType: convertedClass,
         planetClassName,
@@ -133,7 +140,7 @@ export function OpenSector(props: OpenSectorProps) {
       const name = rollOracleTable(
         "starforged/oracles/settlements/name",
         false
-      );
+      )?.result;
       locationId = await createLocation({
         name: name ?? "New Sector",
         type: SectorHexTypes.Settlement,

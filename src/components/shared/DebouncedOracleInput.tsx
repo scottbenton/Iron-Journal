@@ -22,7 +22,7 @@ export function DebouncedOracleInput(props: DebouncedOracleInputProps) {
 
   const [value, setValue] = useDebouncedState(updateValue, initialValue);
 
-  const { rollOracleTableNew } = useRoller();
+  const { rollOracleTable } = useRoller();
 
   const oracleMap = useStore(
     (store) => store.rules.oracleMaps.oracleRollableMap
@@ -39,10 +39,10 @@ export function DebouncedOracleInput(props: DebouncedOracleInputProps) {
         .map((tableId) => {
           if (Array.isArray(tableId)) {
             return tableId
-              .map((id) => rollOracleTableNew(id, false)?.result ?? "")
+              .map((id) => rollOracleTable(id, false)?.result ?? "")
               .join("");
           }
-          return rollOracleTableNew(tableId, false)?.result ?? "";
+          return rollOracleTable(tableId, false)?.result ?? "";
         })
         .join(" ");
     } else if (Array.isArray(oracleTableId)) {
@@ -51,16 +51,16 @@ export function DebouncedOracleInput(props: DebouncedOracleInputProps) {
       if (Array.isArray(oracleId)) {
         return oracleId
           .map((id) => {
-            const result = rollOracleTableNew(id, false)?.result ?? "";
+            const result = rollOracleTable(id, false)?.result ?? "";
             return result;
           })
           .join("");
       }
-      const result = rollOracleTableNew(oracleId, false)?.result ?? "";
+      const result = rollOracleTable(oracleId, false)?.result ?? "";
       return result;
     }
 
-    const result = rollOracleTableNew(oracleTableId, false)?.result ?? "";
+    const result = rollOracleTable(oracleTableId, false)?.result ?? "";
     return result;
   };
 

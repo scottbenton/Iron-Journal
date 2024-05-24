@@ -23,7 +23,6 @@ import { StickyHeader } from "components/shared/StickyHeader";
 import { CharacterHeaderMoveOracleButtons } from "./CharacterHeaderMoveOracleButtons";
 import { CharacterPortrait } from "./CharacterPortrait";
 import CharacterSettingsIcon from "@mui/icons-material/ManageAccounts";
-import { useNewCustomContentPage } from "hooks/featureFlags/useNewCustomContentPage";
 import { CharacterSettingsMenu } from "./CharacterSettings/CharacterSettingsMenu";
 import { useState } from "react";
 
@@ -49,7 +48,6 @@ export function CharacterHeader() {
     useMediaQuery(theme.breakpoints.down("lg")) && !isMobile && !isSmall;
   const isLargerThanMedium = useMediaQuery(theme.breakpoints.up("lg"));
 
-  const isUsingNewHomebrewContent = useNewCustomContentPage();
   const [characterSettingsMenuParent, setCharacterSettingsMenuParent] =
     useState<HTMLElement | null>(null);
 
@@ -84,7 +82,7 @@ export function CharacterHeader() {
                   color={"primary"}
                   variant={"outlined"}
                   icon={<LinkIcon />}
-                  label='Campaign'
+                  label="Campaign"
                   component={Link}
                   to={constructCampaignSheetPath(
                     campaignId,
@@ -112,26 +110,22 @@ export function CharacterHeader() {
         </Box>
         <Box display={"flex"} alignItems={"center"}>
           {isLargerThanMedium && <StatsSection />}
-          {isUsingNewHomebrewContent && (
-            <>
-              <Tooltip title={"Character Settings"}>
-                <IconButton
-                  sx={{ ml: 2 }}
-                  color={"inherit"}
-                  onClick={(evt) =>
-                    setCharacterSettingsMenuParent(evt.currentTarget)
-                  }
-                >
-                  <CharacterSettingsIcon />
-                </IconButton>
-              </Tooltip>
-              <CharacterSettingsMenu
-                open={!!characterSettingsMenuParent}
-                onClose={() => setCharacterSettingsMenuParent(null)}
-                anchorElement={characterSettingsMenuParent}
-              />
-            </>
-          )}
+          <Tooltip title={"Character Settings"}>
+            <IconButton
+              sx={{ ml: 2 }}
+              color={"inherit"}
+              onClick={(evt) =>
+                setCharacterSettingsMenuParent(evt.currentTarget)
+              }
+            >
+              <CharacterSettingsIcon />
+            </IconButton>
+          </Tooltip>
+          <CharacterSettingsMenu
+            open={!!characterSettingsMenuParent}
+            onClose={() => setCharacterSettingsMenuParent(null)}
+            anchorElement={characterSettingsMenuParent}
+          />
         </Box>
       </Box>
       {isMedium && (

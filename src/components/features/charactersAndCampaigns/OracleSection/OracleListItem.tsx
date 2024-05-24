@@ -1,71 +1,45 @@
-import {
-  IconButton,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
-import { useIsTouchDevice } from "hooks/useIsTouchDevice";
-import TableIcon from "@mui/icons-material/ListAlt";
+import { Datasworn } from "@datasworn/core";
+import { ListItemText } from "@mui/material";
+import { CATEGORY_VISIBILITY } from "./useFilterOracles";
+import { useRoller } from "stores/appState/useRoller";
+import { OracleListItemActionOpenDialogButton } from "./OracleListItemActionOpenDialogButton";
+import { ListItemButtonWithSecondaryAction } from "./ListItemButtonWithSecondaryAction";
 
 export interface OracleListItemProps {
-  id: string;
-  onRollClick: () => void;
-  text: string;
-  onOpenClick: () => void;
+  oracleId: string;
+  oracles: Record<string, Datasworn.OracleRollable>;
+  visibleOracles: Record<string, boolean>;
   disabled?: boolean;
+  collectionVisibility?: CATEGORY_VISIBILITY;
 }
 
 export function OracleListItem(props: OracleListItemProps) {
-  const { id, text, onRollClick, onOpenClick, disabled } = props;
+  const { oracleId, oracles, visibleOracles, disabled, collectionVisibility } =
+    props;
 
-  const isTouchDevice = useIsTouchDevice();
+  const oracle = oracles[oracleId];
+  const { rollOracleTable } = useRoller();
+
+  if (
+    (collectionVisibility !== CATEGORY_VISIBILITY.ALL &&
+      !visibleOracles[oracleId]) ||
+    !oracle
+  ) {
+    return null;
+  }
 
   return (
-    <ListItem
-      id={id}
-      disablePadding
-      sx={(theme) => ({
-        "&:nth-of-type(even)": {
-          backgroundColor: theme.palette.background.paperInlay,
-        },
-        "& #open-table": {
-          display: isTouchDevice ? "inline-flex" : "none",
-        },
-        "&:hover": {
-          backgroundColor: theme.palette.action.selected,
-          "& #open-table": {
-            display: "inline-flex",
-          },
-        },
-        "&:focus-visible #open-table": {
-          display: "inline-flex",
-        },
-      })}
+    <ListItemButtonWithSecondaryAction
       secondaryAction={
-        <IconButton
+        <OracleListItemActionOpenDialogButton
+          item={oracle}
           disabled={disabled}
-          id={"open-table"}
-          onClick={() => onOpenClick()}
-          sx={{
-            "&:focus-visible": {
-              display: "inline-flex",
-            },
-            "&:hover": {
-              display: "inline-flex",
-            },
-          }}
-        >
-          <TableIcon />
-        </IconButton>
+        />
       }
+      disabled={disabled}
+      onClick={() => rollOracleTable(oracle._id, true)}
     >
-      <ListItemButton
-        disabled={disabled}
-        onClick={() => onRollClick()}
-        sx={{ pr: "96px!important" }}
-      >
-        <ListItemText primary={text} />
-      </ListItemButton>
-    </ListItem>
+      <ListItemText primary={oracle.name} />
+    </ListItemButtonWithSecondaryAction>
   );
 }

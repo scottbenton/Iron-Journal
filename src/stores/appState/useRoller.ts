@@ -1,10 +1,7 @@
-import { useCustomOracles } from "components/features/charactersAndCampaigns/OracleSection/useCustomOracles";
 import { useStore } from "stores/store";
-import { oracleCategoryMap, oracleMap } from "data/oracles";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import {
   ClockProgressionRoll,
-  OracleTableRoll,
   ROLL_RESULT,
   ROLL_TYPE,
   StatRoll,
@@ -39,17 +36,6 @@ export function useRoller() {
   const momentum = useStore(
     (store) => store.characters.currentCharacter.currentCharacter?.momentum ?? 0
   );
-
-  const { allCustomOracleMap, customOracleCategories } = useCustomOracles();
-  const combinedOracleCategories = useMemo(() => {
-    const categories = {
-      ...oracleCategoryMap,
-    };
-    customOracleCategories.forEach((category) => {
-      categories[category.$id] = category;
-    });
-    return categories;
-  }, [customOracleCategories]);
 
   const rollStat = useCallback(
     (
@@ -159,83 +145,6 @@ export function useRoller() {
   );
 
   const rollOracleTable = useCallback(
-    (oracleId: string, showSnackbar = true, gmsOnly = false) => {
-      const oracleCategoryId = oracleId.match(
-        /(ironsworn|starforged)\/oracles\/[^/]*/gm
-      )?.[0];
-
-      const oracle = oracleMap[oracleId] ?? allCustomOracleMap?.[oracleId];
-
-      const oracleCategory = oracleCategoryId
-        ? combinedOracleCategories[oracleCategoryId]
-        : undefined;
-
-      if (!oracle || !oracleCategory) return undefined;
-
-      const roll = getRoll(100);
-
-      let entry =
-        oracle.Table.find(
-          (entry) =>
-            entry.Floor !== null &&
-            entry.Ceiling !== null &&
-            entry.Floor <= roll &&
-            roll <= entry.Ceiling
-        )?.Result ?? "Failed to get oracle entry.";
-
-      const isOracleResultRegex = new RegExp(/\[⏵[^\]]*\]([^)]*)\)/gm);
-      if (entry.match(isOracleResultRegex)) {
-        const secondHalfRegex = new RegExp(/\]\(([^)]*)\)/gm);
-        entry = entry.replaceAll("[⏵", "").replaceAll(secondHalfRegex, "");
-      }
-
-      const oracleRoll: OracleTableRoll = {
-        type: ROLL_TYPE.ORACLE_TABLE,
-        roll,
-        result: entry,
-        oracleCategoryName: oracleCategory.Title.Short,
-        rollLabel: oracle.Title.Short,
-        timestamp: new Date(),
-        characterId,
-        uid,
-        gmsOnly,
-      };
-
-      if (showSnackbar) {
-        addRollToLog({
-          campaignId,
-          characterId: characterId || undefined,
-          roll: oracleRoll,
-        })
-          .then((rollId) => {
-            addRollToScreen(rollId, oracleRoll);
-          })
-          .catch(() => {});
-        announce(
-          `Rolled ${
-            verboseScreenReaderRolls
-              ? `a ${oracleRoll.roll} on the ${oracleRoll.rollLabel} table`
-              : oracleRoll.rollLabel
-          } and got result ${oracleRoll.result}`
-        );
-      }
-
-      return entry;
-    },
-    [
-      addRollToLog,
-      addRollToScreen,
-      announce,
-      characterId,
-      campaignId,
-      uid,
-      allCustomOracleMap,
-      combinedOracleCategories,
-      verboseScreenReaderRolls,
-    ]
-  );
-
-  const rollOracleTableNew = useCallback(
     (oracleId: string, showSnackbar = true, gmsOnly = false) => {
       const oracle = newOracles[oracleId];
       if (!oracle) return undefined;
@@ -353,30 +262,18 @@ export function useRoller() {
 
   const rollClockProgression = useCallback(
     (clockTitle: string, oracleId: string) => {
-      const oracleCategoryId = oracleId.match(
-        /(ironsworn|starforged)\/oracles\/[^/]*/gm
-      )?.[0];
+      const oracle = newOracles[oracleId];
+      if (!oracle) return undefined;
 
-      const oracle = oracleMap[oracleId] ?? allCustomOracleMap?.[oracleId];
+      const result = rollOracle(oracle, null, uid, true);
 
-      const oracleCategory = oracleCategoryId
-        ? combinedOracleCategories[oracleCategoryId]
-        : undefined;
-
-      if (!oracle || !oracleCategory) return false;
-
-      const roll = getRoll(100);
-      const entry =
-        oracle.Table.find(
-          (entry) =>
-            (entry.Floor ?? 0) <= roll && roll <= (entry.Ceiling ?? 100)
-        )?.Result ?? "Failed to get oracle entry.";
+      if (!result) return undefined;
 
       const clockRoll: ClockProgressionRoll = {
         type: ROLL_TYPE.CLOCK_PROGRESSION,
-        roll,
-        result: entry,
-        oracleTitle: oracle.Title.Short,
+        roll: Array.isArray(result.roll) ? result.roll[0] : result.roll,
+        result: result.result,
+        oracleTitle: result.rollLabel,
         rollLabel: clockTitle,
         timestamp: new Date(),
         characterId,
@@ -398,18 +295,22 @@ export function useRoller() {
           `Rolled for clock ${clockRoll.rollLabel} with a ${
             clockRoll.roll
           } against oracle ${clockRoll.oracleTitle}. Your clock ${
-            entry === "Yes" ? "progressed by one segment." : "did not progress"
+            result.result === "Yes"
+              ? "progressed by one segment."
+              : "did not progress"
           }`
         );
       } else {
         announce(
           `Your clock ${clockRoll.rollLabel} ${
-            entry === "Yes" ? "progressed by one segment." : "did not progress"
+            result.result === "Yes"
+              ? "progressed by one segment."
+              : "did not progress"
           }`
         );
       }
 
-      return entry === "Yes";
+      return result.result === "Yes";
     },
     [
       announce,
@@ -419,16 +320,14 @@ export function useRoller() {
       uid,
       addRollToLog,
       addRollToScreen,
-      allCustomOracleMap,
-      combinedOracleCategories,
+      newOracles,
     ]
   );
 
   return {
     rollStat,
-    rollOracleTable,
     rollClockProgression,
     rollTrackProgress,
-    rollOracleTableNew,
+    rollOracleTable,
   };
 }

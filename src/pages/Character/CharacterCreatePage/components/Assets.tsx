@@ -6,8 +6,8 @@ import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { Alert, Button, Grid } from "@mui/material";
 import { EmptyState } from "components/shared/EmptyState";
 import { useState } from "react";
-import { AssetCardDialog } from "components/features/assets/NewAssetCardDialog";
-import { AssetCard } from "components/features/assets/NewAssetCard";
+import { AssetCardDialog } from "components/features/assets/AssetCardDialog";
+import { AssetCard } from "components/features/assets/AssetCard";
 
 export interface AssetsProps {
   control: Control<Form>;

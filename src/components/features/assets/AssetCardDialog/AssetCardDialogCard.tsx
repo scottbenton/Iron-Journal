@@ -1,10 +1,9 @@
-import { Asset } from "dataforged";
 import { AssetCard } from "../AssetCard/AssetCard";
 import { Button } from "@mui/material";
 import { useEffect, useRef } from "react";
 
 export interface AssetCardDialogCardProps {
-  asset: Asset;
+  assetId: string;
   selectAsset: () => void;
   searched: boolean;
   clearSearched: () => void;
@@ -12,7 +11,7 @@ export interface AssetCardDialogCardProps {
 }
 
 export function AssetCardDialogCard(props: AssetCardDialogCardProps) {
-  const { asset, selectAsset, searched, clearSearched, loading } = props;
+  const { assetId, selectAsset, searched, clearSearched, loading } = props;
 
   const assetRef = useRef<HTMLDivElement | null>(null);
 
@@ -26,8 +25,7 @@ export function AssetCardDialogCard(props: AssetCardDialogCardProps) {
   return (
     <AssetCard
       ref={assetRef}
-      assetId={asset.$id}
-      readOnly
+      assetId={assetId}
       showSharedIcon
       actions={
         <Button color={"inherit"} onClick={selectAsset} disabled={loading}>

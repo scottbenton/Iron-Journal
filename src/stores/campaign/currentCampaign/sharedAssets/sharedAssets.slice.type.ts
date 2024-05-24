@@ -1,4 +1,3 @@
-import { Asset } from "dataforged";
 import { Unsubscribe } from "firebase/firestore";
 import { AssetDocument } from "api-calls/assets/_asset.type";
 
@@ -13,25 +12,11 @@ export interface SharedAssetSliceActions {
 
   addAsset: (asset: AssetDocument) => Promise<void>;
   removeAsset: (assetId: string) => Promise<void>;
-  updateAssetInput: (
-    assetId: string,
-    inputLabel: string,
-    inputKey: string,
-    inputValue: string
-  ) => Promise<void>;
   updateAssetCheckbox: (
     assetId: string,
     abilityIndex: number,
     checked: boolean
   ) => Promise<void>;
-  updateAssetTrack: (assetId: string, trackValue: number) => Promise<void>;
-  updateCustomAsset: (assetId: string, asset: Asset) => Promise<void>;
-  updateAssetCondition: (
-    assetId: string,
-    condition: string,
-    checked: boolean
-  ) => Promise<void>;
-
   updateAssetOption: (
     assetId: string,
     optionKey: string,

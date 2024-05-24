@@ -19,7 +19,6 @@ export interface CurrentCampaignSliceActions {
   removePlayerFromCampaign: (uid: string) => Promise<void>;
   addCharacter: (characterId: string) => Promise<void>;
   removeCharacter: (userId: string, characterId: string) => Promise<void>;
-  updateCampaignSupply: (supply: number) => Promise<void>;
   updateCampaignConditionMeter: (
     conditionMeterKey: string,
     value: number

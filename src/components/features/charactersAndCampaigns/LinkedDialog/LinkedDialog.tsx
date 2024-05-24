@@ -4,7 +4,7 @@ import { LinkedDialogContent } from "./LinkedDialogContent";
 import { useIsMobile } from "hooks/useIsMobile";
 
 export function LinkedDialog() {
-  const { isOpen, previousIds, openId, newVersion } = useStore(
+  const { isOpen, previousIds, openId } = useStore(
     (store) => store.appState.openDialogState
   );
   const handleBack = useStore((store) => store.appState.prevDialog);
@@ -12,7 +12,7 @@ export function LinkedDialog() {
 
   const isMobile = useIsMobile();
 
-  if (isMobile && newVersion) {
+  if (isMobile) {
     return (
       <SwipeableDrawer
         anchor={"bottom"}
@@ -39,7 +39,6 @@ export function LinkedDialog() {
           isLastItem={previousIds.length === 0}
           handleBack={handleBack}
           handleClose={handleClose}
-          newVersion={newVersion}
         />
       </SwipeableDrawer>
     );
@@ -52,7 +51,6 @@ export function LinkedDialog() {
         isLastItem={previousIds.length === 0}
         handleBack={handleBack}
         handleClose={handleClose}
-        newVersion={newVersion}
       />
     </Dialog>
   );

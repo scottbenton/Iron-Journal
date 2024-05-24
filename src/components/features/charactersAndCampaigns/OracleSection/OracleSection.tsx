@@ -1,18 +1,21 @@
-import { Box, Input, InputAdornment, Typography } from "@mui/material";
-import { OracleCategory } from "./OracleCategory";
+import { Box, Input, InputAdornment, List, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useFilterOracles } from "./useFilterOracles";
-import { AskTheOracleButtons } from "./AskTheOracleButtons";
 import { EmptyState } from "components/shared/EmptyState";
+import { OracleCollection } from "./OracleCollection";
+import { AskTheOracleButtons } from "./AskTheOracleButtons";
 
 export function OracleSection() {
   const {
-    oracleCategories,
-    isSearchActive,
-    visibleOracleCategoryIds,
-    visibleOracleIds,
+    oracleCollections,
     setSearch,
+    oracles,
+    visibleOracleCollectionIds,
+    visibleOracleIds,
+    isSearchActive,
     isEmpty,
+    rootOracles,
+    enhancesCollections,
   } = useFilterOracles();
 
   return (
@@ -22,50 +25,73 @@ export function OracleSection() {
         bgcolor={(theme) => theme.palette.darkGrey.dark}
         borderBottom={(theme) => `1px solid ${theme.palette.darkGrey.dark}`}
       >
-        <Typography
-          variant={"body2"}
-          component={"div"}
-          textAlign={"center"}
-          fontFamily={(theme) => theme.fontFamilyTitle}
+        <Box
+          color={(theme) => theme.palette.darkGrey.contrastText}
+          bgcolor={(theme) => theme.palette.darkGrey.dark}
+          borderBottom={(theme) => `1px solid ${theme.palette.darkGrey.dark}`}
         >
-          Ask the Oracle
-        </Typography>
-        <AskTheOracleButtons />
+          <Typography
+            variant={"body2"}
+            component={"div"}
+            textAlign={"center"}
+            fontFamily={(theme) => theme.fontFamilyTitle}
+          >
+            Ask the Oracle
+          </Typography>
+          <AskTheOracleButtons />
+        </Box>
+        <Input
+          fullWidth
+          startAdornment={
+            <InputAdornment position={"start"}>
+              <SearchIcon
+                sx={(theme) => ({ color: theme.palette.grey[300] })}
+              />
+            </InputAdornment>
+          }
+          aria-label={"Filter Oracles"}
+          placeholder={"Filter Oracles"}
+          onChange={(evt) => setSearch(evt.currentTarget.value)}
+          color={"primary"}
+          sx={(theme) => ({
+            backgroundColor: theme.palette.darkGrey.main,
+            color: "#fff",
+            px: 2,
+            borderBottomColor: theme.palette.darkGrey.light,
+          })}
+        />
       </Box>
-
-      <Input
-        fullWidth
-        startAdornment={
-          <InputAdornment position={"start"}>
-            <SearchIcon sx={(theme) => ({ color: theme.palette.grey[300] })} />
-          </InputAdornment>
-        }
-        aria-label={"Filter Oracles"}
-        placeholder={"Filter Oracles"}
-        onChange={(evt) => setSearch(evt.target.value)}
-        color={"primary"}
-        sx={(theme) => ({
-          backgroundColor: theme.palette.darkGrey.main,
-          color: "#fff",
-          px: 2,
-          borderBottomColor: theme.palette.darkGrey.light,
-        })}
-      />
-      <Box sx={{ overflow: "auto", flexGrow: 1 }}>
-        {!isEmpty ? (
-          oracleCategories.map((category, index) => (
-            <OracleCategory
-              category={category}
-              key={index}
+      {!isEmpty ? (
+        <List
+          sx={{
+            overflow: "auto",
+            flexGrow: 1,
+            py: 0,
+          }}
+        >
+          {rootOracles.map((collectionId) => (
+            <OracleCollection
+              key={collectionId}
+              collectionId={collectionId}
+              collections={oracleCollections}
+              oracles={oracles}
               forceOpen={isSearchActive}
-              visibleCategories={visibleOracleCategoryIds}
+              visibleCollections={visibleOracleCollectionIds}
               visibleOracles={visibleOracleIds}
+              enhancesCollections={enhancesCollections}
             />
-          ))
-        ) : (
-          <EmptyState message={"No Oracles Found"} />
-        )}
-      </Box>
+          ))}
+        </List>
+      ) : (
+        <Box
+          sx={{
+            overflow: "auto",
+            flexGrow: 1,
+          }}
+        >
+          <EmptyState message={"No Oracles Found"} sx={{ pb: 2 }} />
+        </Box>
+      )}
     </>
   );
 }

@@ -1,9 +1,7 @@
 import { DialogContent } from "@mui/material";
 import { LinkedDialogContentTitle } from "./LinkedDialogContentTitle";
-import { MoveDialogContent } from "./MoveDialogContent";
 import { OracleDialogContent } from "./OracleDialogContent";
-import { NewOracleDialogContent } from "./NewOracleDialogContent";
-import { NewMoveDialogContent } from "./NewMoveDialogContent";
+import { MoveDialogContent } from "./MoveDialogContent";
 import { AssetDialogContent } from "./AssetDialogContent";
 
 export interface LinkedDialogContentProps {
@@ -11,27 +9,12 @@ export interface LinkedDialogContentProps {
   handleBack: () => void;
   handleClose: () => void;
   isLastItem: boolean;
-  newVersion?: boolean;
 }
 
 export function LinkedDialogContent(props: LinkedDialogContentProps) {
-  const { id, handleBack, handleClose, isLastItem, newVersion } = props;
+  const { id, handleBack, handleClose, isLastItem } = props;
 
-  if (
-    id?.startsWith("ironsworn/moves") ||
-    id?.startsWith("starforged/moves") ||
-    (newVersion && id?.match(/^[^/]*\/moves/))
-  ) {
-    if (newVersion) {
-      return (
-        <NewMoveDialogContent
-          id={id}
-          handleBack={handleBack}
-          handleClose={handleClose}
-          isLastItem={isLastItem}
-        />
-      );
-    }
+  if (id?.match(/^[^/]*\/moves/)) {
     return (
       <MoveDialogContent
         id={id}
@@ -42,22 +25,7 @@ export function LinkedDialogContent(props: LinkedDialogContentProps) {
     );
   }
 
-  if (
-    id?.startsWith("ironsworn/oracles") ||
-    id?.startsWith("starforged/oracles") ||
-    (newVersion &&
-      (id?.includes("collections/oracles") || id?.match(/^[^/]*\/oracles/)))
-  ) {
-    if (newVersion) {
-      return (
-        <NewOracleDialogContent
-          id={id}
-          handleBack={handleBack}
-          handleClose={handleClose}
-          isLastItem={isLastItem}
-        />
-      );
-    }
+  if (id?.includes("collections/oracles") || id?.match(/^[^/]*\/oracles/)) {
     return (
       <OracleDialogContent
         id={id}

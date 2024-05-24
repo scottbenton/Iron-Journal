@@ -10,6 +10,4 @@ export interface CampaignDocument {
   customTracks?: Record<string, number>;
   conditionMeters?: Record<string, number>;
   specialTracks?: Record<string, LegacyTrack>;
-  // TODO - Remove once expansions are in
-  supply: number;
 }

@@ -147,27 +147,10 @@ export const createCurrentCampaignSlice: CreateSliceType<
       }
       return removeCharacterFromCampaign({ uid, campaignId, characterId });
     },
-    updateCampaignSupply: (supply) => {
-      const campaignId = getState().campaigns.currentCampaign.currentCampaignId;
-      if (!campaignId) {
-        return new Promise((res, reject) => reject("No campaign found."));
-      }
-      return updateCampaign({
-        campaignId,
-        campaign: { supply, [`conditionMeters.supply`]: supply },
-      });
-    },
     updateCampaignConditionMeter: (conditionMeterKey, value) => {
       const campaignId = getState().campaigns.currentCampaign.currentCampaignId;
       if (!campaignId) {
         return new Promise((res, reject) => reject("No campaign found."));
-      }
-      // TODO - remove once new version is totally in place.
-      if (conditionMeterKey === "supply") {
-        return updateCampaign({
-          campaignId,
-          campaign: { supply: value, [`conditionMeters.supply`]: value },
-        });
       }
       return updateCampaign({
         campaignId,

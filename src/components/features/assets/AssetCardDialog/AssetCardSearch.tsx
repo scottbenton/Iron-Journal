@@ -1,23 +1,30 @@
 import { Autocomplete, TextField } from "@mui/material";
-import { assetGroups } from "data/assets";
+import { useMemo } from "react";
+import { useStore } from "stores/store";
 
 export interface AssetCardSearchProps {
   handleSearch: (groupId: string, assetId: string) => void;
 }
 
-const options = assetGroups
-  .flatMap((group) =>
-    Object.values(group.Assets).map((asset) => ({
-      groupId: group.$id,
-      groupName: group.Title.Standard,
-      assetId: asset.$id,
-      name: asset.Title.Standard,
-    }))
-  )
-  .sort((a, b) => a.groupName.localeCompare(b.groupName));
-
 export function AssetCardSearch(props: AssetCardSearchProps) {
   const { handleSearch } = props;
+
+  const assetGroups = useStore(
+    (store) => store.rules.assetMaps.assetCollectionMap
+  );
+  const options = useMemo(() => {
+    return Object.values(assetGroups)
+      .filter((group) => !group.enhances)
+      .flatMap((group) =>
+        Object.values(group.contents ?? {}).map((asset) => ({
+          groupId: group._id,
+          groupName: group.name,
+          assetId: asset._id,
+          name: asset.name,
+        }))
+      )
+      .sort((a, b) => a.groupName.localeCompare(b.groupName));
+  }, [assetGroups]);
 
   return (
     <Autocomplete

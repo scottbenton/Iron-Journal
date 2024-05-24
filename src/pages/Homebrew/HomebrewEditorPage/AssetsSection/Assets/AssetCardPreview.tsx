@@ -2,11 +2,11 @@ import { Control, useWatch } from "react-hook-form";
 import { Form } from "./AssetDialogForm";
 import { Box, Card } from "@mui/material";
 import { Datasworn } from "@datasworn/core";
-import { AssetHeader } from "components/features/assets/NewAssetCard/AssetHeader";
-import { AssetNameAndDescription } from "components/features/assets/NewAssetCard/AssetNameAndDescription";
-import { AssetAbilities } from "components/features/assets/NewAssetCard/AssetAbilities";
-import { AssetOptions } from "components/features/assets/NewAssetCard/AssetOptions";
-import { AssetControls } from "components/features/assets/NewAssetCard/AssetControls";
+import { AssetHeader } from "components/features/assets/AssetCard/AssetHeader";
+import { AssetNameAndDescription } from "components/features/assets/AssetCard/AssetNameAndDescription";
+import { AssetAbilities } from "components/features/assets/AssetCard/AssetAbilities";
+import { AssetOptions } from "components/features/assets/AssetCard/AssetOptions";
+import { AssetControls } from "components/features/assets/AssetCard/AssetControls";
 import { convertIdPart } from "functions/dataswornIdEncoder";
 
 export interface AssetCardPreviewProps {

@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useMoves } from "./useMoves";
+import { useStore } from "stores/store";
 
 export enum CATEGORY_VISIBILITY {
   HIDDEN,
@@ -10,45 +10,53 @@ export enum CATEGORY_VISIBILITY {
 export function useFilterMoves() {
   const [search, setSearch] = useState("");
 
-  const moveCategories = useMoves();
+  const moveCategories = useStore(
+    (store) => store.rules.moveMaps.moveCategoryMap
+  );
+
+  const moveMap = useStore((store) => store.rules.moveMaps.moveMap);
+
   const { visibleMoveCategoryIds, visibleMoveIds, isEmpty } = useMemo(() => {
     const visibleCategories: Record<string, CATEGORY_VISIBILITY> = {};
     const visibleMoves: Record<string, boolean> = {};
     let isEmpty: boolean = true;
 
-    moveCategories.forEach((category) => {
+    Object.values(moveCategories).forEach((category) => {
       if (
         !search ||
-        (category.Title.Standard.toLocaleLowerCase().includes(
-          search.toLocaleLowerCase()
-        ) &&
-          Object.keys(category.Moves).length > 0)
+        (category.name
+          .toLocaleLowerCase()
+          .includes(search.toLocaleLowerCase()) &&
+          Object.keys(category.contents ?? {}).length > 0)
       ) {
-        visibleCategories[category.$id] = CATEGORY_VISIBILITY.ALL;
+        visibleCategories[category._id] = CATEGORY_VISIBILITY.ALL;
         isEmpty = false;
         return;
       }
 
       let hasMove = false;
 
-      Object.keys(category.Moves).forEach((moveId) => {
-        const move = category.Moves[moveId];
+      const contents = category.contents;
+      if (contents) {
+        Object.keys(contents).forEach((moveId) => {
+          const move = contents[moveId];
 
-        if (
-          move.Title.Standard.toLocaleLowerCase().includes(
-            search.toLocaleLowerCase()
-          )
-        ) {
-          hasMove = true;
-          visibleMoves[move.$id] = true;
-        }
-      });
-
+          if (
+            move.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+          ) {
+            hasMove = true;
+            visibleMoves[move._id] = true;
+          }
+        });
+      }
       if (hasMove) {
         isEmpty = false;
-        visibleCategories[category.$id] = CATEGORY_VISIBILITY.SOME;
+        visibleCategories[category._id] = CATEGORY_VISIBILITY.SOME;
+        if (category.enhances) {
+          visibleCategories[category.enhances] = CATEGORY_VISIBILITY.SOME;
+        }
       } else {
-        visibleCategories[category.$id] = CATEGORY_VISIBILITY.HIDDEN;
+        visibleCategories[category._id] = CATEGORY_VISIBILITY.HIDDEN;
       }
     });
 
@@ -61,6 +69,7 @@ export function useFilterMoves() {
 
   return {
     moveCategories,
+    moveMap,
     setSearch,
     visibleMoveCategoryIds,
     visibleMoveIds,

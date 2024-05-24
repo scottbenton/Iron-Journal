@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { TryItOut } from "./TryItOut";
 import { Track } from "components/features/Track";
-import { supplyTrack } from "data/defaultTracks";
 import { StatComponent } from "components/features/characters/StatComponent";
 import { Box } from "@mui/material";
 
@@ -17,8 +16,8 @@ export function ExampleSupplySection() {
             maxWidth: 400,
             minWidth: 300,
           }}
-          min={supplyTrack.min}
-          max={supplyTrack.max}
+          min={0}
+          max={5}
           value={supply}
           onChange={(newValue) => {
             setSupply(newValue);

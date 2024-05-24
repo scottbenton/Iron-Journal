@@ -7,10 +7,6 @@ import {
   TypographyProps,
   useTheme,
 } from "@mui/material";
-import { useCustomMoves } from "components/features/charactersAndCampaigns/MovesSection/useCustomMoves";
-import { useCustomOracles } from "components/features/charactersAndCampaigns/OracleSection/useCustomOracles";
-import { moveMap } from "data/moves";
-import { oracleMap } from "data/oracles";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useStore } from "stores/store";
@@ -39,8 +35,6 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
 
   const theme = useTheme();
 
-  const { allCustomOracleMap } = useCustomOracles();
-  const { customMoveMap } = useCustomMoves();
   const newOracleMap = useStore(
     (store) => store.rules.oracleMaps.allOraclesMap
   );
@@ -203,7 +197,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
                   color={
                     theme.palette.mode === "light" ? "info.dark" : "info.light"
                   }
-                  onClick={() => openDialog(strippedHref, true)}
+                  onClick={() => openDialog(strippedHref)}
                 >
                   {linkProps.children}
                 </Link>
@@ -228,7 +222,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
                         ? "info.dark"
                         : "info.light"
                     }
-                    onClick={() => openDialog(strippedHref, true)}
+                    onClick={() => openDialog(strippedHref)}
                   >
                     {linkProps.children}
                   </Link>
@@ -254,7 +248,7 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
                         ? "info.dark"
                         : "info.light"
                     }
-                    onClick={() => openDialog(strippedHref, true)}
+                    onClick={() => openDialog(strippedHref)}
                   >
                     {linkProps.children}
                   </Link>
@@ -263,43 +257,6 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
             }
 
             console.debug("Link", href, "was not found");
-
-            // TODO - add handlers for this situation;
-            return <span>{linkProps.children}</span>;
-          }
-          // V1 versions
-          if (href.startsWith("ironsworn/") || href.startsWith("starforged/")) {
-            if (
-              (href.startsWith("ironsworn/moves") ||
-                href.startsWith("ironsworn/oracles") ||
-                href.startsWith("starforged/moves") ||
-                href.startsWith("starforged/oracles")) &&
-              (!!moveMap[href] ||
-                !!oracleMap[href] ||
-                !!customMoveMap[href] ||
-                !!allCustomOracleMap[href])
-            ) {
-              return (
-                <Link
-                  component={"button"}
-                  type={"button"}
-                  sx={[
-                    {
-                      cursor: "pointer",
-                      verticalAlign: "baseline",
-                    },
-
-                    ...(Array.isArray(sx) ? sx : [sx]),
-                  ]}
-                  color={
-                    theme.palette.mode === "light" ? "info.dark" : "info.light"
-                  }
-                  onClick={() => openDialog(href)}
-                >
-                  {linkProps.children}
-                </Link>
-              );
-            }
 
             // TODO - add handlers for this situation;
             return <span>{linkProps.children}</span>;

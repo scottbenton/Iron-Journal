@@ -2,17 +2,16 @@ import { updateDoc } from "firebase/firestore";
 import { getWorldDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 import { Truth } from "types/World.type";
-import { encodeDataswornId } from "functions/dataswornIdEncoder";
 
 export const updateWorldTruth = createApiFunction<
-  { worldId: string; truthId: string; truth: Truth },
+  { worldId: string; truthKey: string; truth: Truth },
   void
 >((params) => {
-  const { worldId, truthId, truth } = params;
+  const { worldId, truthKey, truth } = params;
 
   return new Promise((resolve, reject) => {
     updateDoc(getWorldDoc(worldId), {
-      [`truths.${encodeDataswornId(truthId)}`]: truth,
+      [`newTruths.${truthKey}`]: truth,
     })
       .then(() => {
         resolve();

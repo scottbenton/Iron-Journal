@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useStore } from "stores/store";
-import { NewTruth } from "types/World.type";
+import { Truth } from "types/World.type";
 import { useState } from "react";
 import CheckIcon from "@mui/icons-material/CheckCircle";
 import { Datasworn } from "@datasworn/core";
@@ -24,7 +24,7 @@ export interface TruthChooserProps {
 export function TruthChooser(props: TruthChooserProps) {
   const { truthKey, truth, maxCols = 12 } = props;
 
-  const storedTruth: NewTruth | undefined = useStore(
+  const storedTruth: Truth | undefined = useStore(
     (store) =>
       (store.worlds.currentWorld.currentWorld?.newTruths ?? {})[truthKey]
   );
@@ -44,13 +44,13 @@ export function TruthChooser(props: TruthChooserProps) {
   );
 
   const updateWorldTruth = useStore(
-    (store) => store.worlds.currentWorld.updateCurrentWorldTruthNew
+    (store) => store.worlds.currentWorld.updateCurrentWorldTruth
   );
   const selectTruthOption = (truthOptionIndex: number) => {
     setSelectedOptionIndex(truthOptionIndex);
     setSelectedSubOptionIndex(null);
 
-    const updatedTruth: NewTruth = {
+    const updatedTruth: Truth = {
       selectedTruthOptionIndex: truthOptionIndex,
       selectedSubItemIndex: null,
     };
