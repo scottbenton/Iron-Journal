@@ -6,6 +6,7 @@ import { RollResult } from "./RollResult";
 import { getRollResultLabel } from "./getRollResultLabel";
 import { RollContainer } from "./RollContainer";
 import { ReactNode } from "react";
+import { useStore } from "stores/store";
 
 export interface RollDisplayProps {
   roll: Roll;
@@ -16,6 +17,8 @@ export interface RollDisplayProps {
 
 export function RollDisplay(props: RollDisplayProps) {
   const { roll, onClick, isExpanded, actions } = props;
+
+  const oracles = useStore((store) => store.rules.oracleMaps.oracleRollableMap);
 
   return (
     <Card
@@ -105,7 +108,17 @@ export function RollDisplay(props: RollDisplayProps) {
             />
             <RollContainer>
               <RollValues d10Results={roll.roll} isExpanded={isExpanded} />
-              <RollResult markdown={roll.result} />
+              <RollResult
+                markdown={roll.result}
+                extras={
+                  roll.oracleId &&
+                  !!oracles[roll.oracleId]?.match &&
+                  !Array.isArray(roll.roll) &&
+                  checkIfMatch(roll.roll)
+                    ? ["Match"]
+                    : undefined
+                }
+              />
             </RollContainer>
           </>
         )}
@@ -128,4 +141,8 @@ export function RollDisplay(props: RollDisplayProps) {
       </Box>
     </Card>
   );
+}
+// A bit hacky, check if the last two digits of the number are equal to each other.
+function checkIfMatch(num: number) {
+  return num % 10 === Math.floor(num / 10) % 10;
 }

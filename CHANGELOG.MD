@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.1.0
+
+### New Features
+
+- Added a match reminder to the roll display for oracle rolls that care about dice matching (ask the oracle moves)
+- Added asset clock and counter controls working for assets that use them (ex: Snub Fighter Ability #3, or Marked Ability #2).
+
+### Changes
+
+- Re-added missing roll buttons for assets in the move dialog
+
+### Bug Fixes
+
 ## 3.0.0
 
 ### New Features

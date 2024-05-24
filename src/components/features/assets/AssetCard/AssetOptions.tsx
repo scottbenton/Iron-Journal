@@ -4,27 +4,28 @@ import { Stack } from "@mui/material";
 import { AssetDocument } from "api-calls/assets/_asset.type";
 
 export interface AssetOptionsProps {
-  asset: Datasworn.Asset;
   storedAsset?: AssetDocument;
+  options: Record<
+    string,
+    Datasworn.AssetOptionField | Datasworn.AssetAbilityOptionField
+  >;
 
   onAssetOptionChange?: (assetOptionKey: string, value: string) => void;
 }
 
 export function AssetOptions(props: AssetOptionsProps) {
-  const { asset, storedAsset, onAssetOptionChange } = props;
+  const { options, storedAsset, onAssetOptionChange } = props;
 
-  const assetOptions = asset.options;
-
-  if (!assetOptions) {
+  if (Object.keys(options).length === 0) {
     return null;
   }
 
   return (
     <Stack spacing={1} mt={0.5}>
-      {Object.keys(assetOptions)
+      {Object.keys(options)
         .sort((o1, o2) => {
-          const option1 = assetOptions[o1];
-          const option2 = assetOptions[o2];
+          const option1 = options[o1];
+          const option2 = options[o2];
 
           return option1.label.localeCompare(option2.label);
         })
@@ -33,7 +34,7 @@ export function AssetOptions(props: AssetOptionsProps) {
             storedAsset={storedAsset}
             key={assetOptionKey}
             assetOptionKey={assetOptionKey}
-            assetOption={assetOptions[assetOptionKey]}
+            assetOption={options[assetOptionKey]}
             onAssetOptionChange={onAssetOptionChange}
           />
         ))}

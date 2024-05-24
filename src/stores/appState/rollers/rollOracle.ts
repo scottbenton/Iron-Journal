@@ -83,6 +83,7 @@ export function rollOracle(
       gmsOnly,
       roll: rolls,
       result: resultString,
+      oracleId: oracle._id,
     };
   }
 

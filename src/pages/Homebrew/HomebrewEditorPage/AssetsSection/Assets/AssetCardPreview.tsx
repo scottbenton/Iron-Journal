@@ -151,7 +151,10 @@ export function AssetCardPreview(props: AssetCardPreviewProps) {
         })}
       >
         <AssetNameAndDescription asset={asset} />
-        <AssetOptions asset={asset} onAssetOptionChange={() => {}} />
+        <AssetOptions
+          options={asset.options ?? {}}
+          onAssetOptionChange={() => {}}
+        />
         <AssetAbilities asset={asset} />
         <AssetControls controls={asset.controls} onControlChange={() => {}} />
       </Box>

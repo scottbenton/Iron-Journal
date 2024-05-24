@@ -4,7 +4,12 @@ import { AssetControl } from "./AssetControl";
 import { Stack } from "@mui/material";
 
 export interface AssetControlsProps {
-  controls: Record<string, Datasworn.AssetControlField> | undefined;
+  controls:
+    | Record<
+        string,
+        Datasworn.AssetControlField | Datasworn.AssetAbilityControlField
+      >
+    | undefined;
   storedAsset?: AssetDocument;
   row?: boolean;
   onControlChange?: (

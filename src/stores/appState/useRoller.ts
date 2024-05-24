@@ -41,7 +41,7 @@ export function useRoller() {
     (
       label: string,
       modifier: number,
-      moveName?: string,
+      move?: { name: string; id: string },
       adds?: number,
       showSnackbar = true
     ) => {
@@ -84,8 +84,9 @@ export function useRoller() {
       if (adds) {
         statRoll.adds = adds;
       }
-      if (moveName) {
-        statRoll.moveName = moveName;
+      if (move) {
+        statRoll.moveName = move.name;
+        statRoll.moveId = move.id;
       }
 
       addRollToLog({
@@ -100,7 +101,7 @@ export function useRoller() {
 
       if (showSnackbar) {
         let announcement = `Rolled ${
-          moveName ? moveName + " using stat " + label : label
+          move ? move.name + " using stat " + label : label
         }.`;
         if (matchedNegativeMomentum) {
           announcement += ` On your action die you rolled a ${
@@ -123,7 +124,7 @@ export function useRoller() {
           verboseScreenReaderRolls
             ? announcement
             : `Rolled ${
-                moveName ? moveName + "using stat" + label : label
+                move ? move.name + "using stat" + label : label
               }. Your action die had a total of ${actionTotal} against ${challenge1} and ${challenge2}, for a ${getRollResultLabel(
                 result
               )}`
@@ -209,7 +210,8 @@ export function useRoller() {
     (
       trackType: TrackTypes | LEGACY_TrackTypes,
       trackLabel: string,
-      trackProgress: number
+      trackProgress: number,
+      moveId: string
     ) => {
       const challenge1 = getRoll(10);
       const challenge2 = getRoll(10);
@@ -234,6 +236,7 @@ export function useRoller() {
         characterId,
         uid,
         gmsOnly: false,
+        moveId,
       };
 
       addRollToLog({
@@ -274,6 +277,7 @@ export function useRoller() {
         roll: Array.isArray(result.roll) ? result.roll[0] : result.roll,
         result: result.result,
         oracleTitle: result.rollLabel,
+        oracleId: oracleId,
         rollLabel: clockTitle,
         timestamp: new Date(),
         characterId,

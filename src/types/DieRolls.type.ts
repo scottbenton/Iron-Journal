@@ -25,6 +25,7 @@ export interface BaseRoll {
 export interface StatRoll extends BaseRoll {
   type: ROLL_TYPE.STAT;
   moveName?: string;
+  moveId?: string;
   action: number;
   challenge1: number;
   challenge2: number;
@@ -40,6 +41,7 @@ export interface OracleTableRoll extends BaseRoll {
   roll: number | number[];
   result: string;
   oracleCategoryName?: string;
+  oracleId?: string;
 }
 
 export interface TrackProgressRoll extends BaseRoll {
@@ -49,6 +51,7 @@ export interface TrackProgressRoll extends BaseRoll {
   trackProgress: number;
   result: ROLL_RESULT;
   trackType: TrackTypes | LEGACY_TrackTypes;
+  moveId?: string;
 }
 
 export interface ClockProgressionRoll extends BaseRoll {
@@ -56,6 +59,7 @@ export interface ClockProgressionRoll extends BaseRoll {
   roll: number;
   oracleTitle: string;
   result: string;
+  oracleId?: string;
 }
 
 export type Roll =

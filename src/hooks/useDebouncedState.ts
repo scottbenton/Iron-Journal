@@ -1,10 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 export function useDebouncedState<State>(
   persistChanges: (state: State) => void,
   initialState: State,
   delay = 2000
-): [State, (value: State) => void] {
+): [State, (value: SetStateAction<State>) => void] {
   const [state, setState] = useState<State>(initialState);
   const stateRef = useRef<State>(state);
 
@@ -42,9 +48,19 @@ export function useDebouncedState<State>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const setStateCallback = useCallback((newState: State) => {
-    setState(newState);
-    stateRef.current = newState;
+  const setStateCallback = useCallback((newState: SetStateAction<State>) => {
+    if (typeof newState === "function") {
+      setState((prevState) => {
+        const newStateValue = (newState as (prevState: State) => State)(
+          prevState
+        );
+        stateRef.current = newStateValue;
+        return newStateValue;
+      });
+    } else {
+      setState(newState);
+      stateRef.current = newState;
+    }
   }, []);
 
   return [state, setStateCallback];

@@ -11,10 +11,12 @@ import {
 import { Track } from "components/features/Track";
 import { AssetControls } from "./AssetControls";
 import { AssetDocument } from "api-calls/assets/_asset.type";
+import { AssetControlCounter } from "./AssetControlCounter";
+import { AssetControlClock } from "./AssetControlClock";
 
 export interface AssetControlProps {
   controlId: string;
-  control: Datasworn.AssetControlField;
+  control: Datasworn.AssetControlField | Datasworn.AssetAbilityControlField;
   storedAsset?: AssetDocument;
   onControlChange?: (
     controlKey: string,
@@ -145,6 +147,49 @@ export function AssetControl(props: AssetControlProps) {
             }
           />
         </Box>
+      );
+    }
+    case "text": {
+      return (
+        <TextField
+          label={capitalize(control.label)}
+          defaultValue={
+            storedAsset?.controlValues?.[controlId] ?? control.value ?? ""
+          }
+          disabled={!onControlChange}
+          onChange={(evt) =>
+            onControlChange && onControlChange(controlId, evt.target.value)
+          }
+          variant={"standard"}
+          sx={{ mt: 0.5 }}
+          fullWidth
+        />
+      );
+    }
+    case "clock": {
+      return (
+        <AssetControlClock
+          field={control}
+          value={typeof controlValue === "number" ? controlValue : undefined}
+          onChange={
+            onControlChange
+              ? (value) => onControlChange(controlId, value)
+              : undefined
+          }
+        />
+      );
+    }
+    case "counter": {
+      return (
+        <AssetControlCounter
+          value={typeof controlValue === "number" ? controlValue : undefined}
+          field={control}
+          onChange={
+            onControlChange
+              ? (value) => onControlChange(controlId, value)
+              : undefined
+          }
+        />
       );
     }
   }
