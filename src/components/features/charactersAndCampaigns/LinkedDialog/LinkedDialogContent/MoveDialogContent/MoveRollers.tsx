@@ -2,6 +2,7 @@ import { Datasworn } from "@datasworn/core";
 import { Chip, Stack } from "@mui/material";
 import { StatComponent } from "components/features/characters/StatComponent";
 import { useStore } from "stores/store";
+import { MoveAssetControl } from "./MoveAssetControl";
 
 export interface MoveRollersProps {
   move: Datasworn.Move;
@@ -105,10 +106,10 @@ export function MoveRollers(props: MoveRollersProps) {
             )
           )}
         {Object.keys(assetControls).map((assetControl) => (
-          <Chip
+          <MoveAssetControl
             key={assetControl}
-            label={assetControl}
-            sx={{ textTransform: "capitalize" }}
+            control={assetControl}
+            move={move}
           />
         ))}
       </Stack>
