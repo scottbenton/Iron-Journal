@@ -70,7 +70,10 @@ export function MoveRollers(props: MoveRollersProps) {
                 key={stat}
                 label={statRules[stat].label}
                 value={characterStats[stat]}
-                moveName={move.name}
+                moveInfo={{
+                  name: move.name,
+                  id: move._id,
+                }}
               />
             ) : (
               <Chip
@@ -88,7 +91,10 @@ export function MoveRollers(props: MoveRollersProps) {
                 key={conditionMeterKey}
                 label={conditionMeterRules[conditionMeterKey].label}
                 value={getConditionMeterValue(conditionMeterKey)}
-                moveName={move.name}
+                moveInfo={{
+                  name: move.name,
+                  id: move._id,
+                }}
               />
             ) : (
               <Chip

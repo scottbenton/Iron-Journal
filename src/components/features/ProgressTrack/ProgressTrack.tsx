@@ -139,7 +139,8 @@ export function ProgressTrack(props: ProgressTracksProps) {
       rollTrackProgress(
         trackType,
         label || "",
-        Math.min(Math.floor(value / 4), 10)
+        Math.min(Math.floor(value / 4), 10),
+        move?._id ?? ""
       );
     }
   };

@@ -16,11 +16,14 @@ export interface StatComponentProps {
   updateTrack?: (newValue: number) => Promise<void>;
   disableRoll?: boolean;
   sx?: SxProps;
-  moveName?: string;
+  moveInfo?: {
+    name: string;
+    id: string;
+  };
 }
 
 export function StatComponent(props: StatComponentProps) {
-  const { label, value, updateTrack, disableRoll, moveName, sx } = props;
+  const { label, value, updateTrack, disableRoll, moveInfo, sx } = props;
 
   const [inputValue, setInputValue] = useState<string>(value + "");
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -102,7 +105,7 @@ export function StatComponent(props: StatComponentProps) {
       component={updateTrack || disableRoll ? "div" : ButtonBase}
       onClick={() => {
         if (!(updateTrack || disableRoll)) {
-          rollStat(label, value, moveName, adds);
+          rollStat(label, value, moveInfo, adds);
           resetAdds({ adds: 0 }).catch(() => {});
         }
       }}
