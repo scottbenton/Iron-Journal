@@ -1,5 +1,6 @@
-import { useFeatureFlag } from "./useFeatureFlag";
+// import { useFeatureFlag } from "./useFeatureFlag";
 
 export function useNewCustomContentPage() {
-  return useFeatureFlag("custom-content-page");
+  return true;
+  // return useFeatureFlag("custom-content-page");
 }

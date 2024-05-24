@@ -5,10 +5,10 @@ export const activeFeatureFlags: {
   label: string;
   gameSystems?: GAME_SYSTEMS[];
 }[] = [
-  {
-    testId: "custom-content-page",
-    label: "Add new homebrew content management page",
-  },
+  // {
+  //   testId: "custom-content-page",
+  //   label: "Add new homebrew content management page",
+  // },
   {
     testId: "new-sundered-isles-theme",
     label: "Show potential theme for Sundered Isles Crew Link",

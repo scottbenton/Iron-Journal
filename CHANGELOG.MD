@@ -9,6 +9,7 @@
 ### Changes
 
 - Changed the layout of the app
+- Added new homebrew library for managing custom content throughout the application
 - Added ability to add extra experience points past 30 (Ironsworn)
 - Added the ability to delete Rolls from the log (AnnB)
 - Added ability for GMs to remove other players and their characters from campaigns
