@@ -19,15 +19,20 @@ export function ClockCircle(props: ClockCircleProps) {
     }>
   ) => {
     const { children, onClick, sx } = props;
+    const ariaLabel = `Clock with ${segments} segments. ${value} filled.`;
 
     if (onClick) {
       return (
-        <ButtonBase sx={sx} onClick={onClick}>
+        <ButtonBase sx={sx} onClick={onClick} aria-label={ariaLabel}>
           {children}
         </ButtonBase>
       );
     }
-    return <Box sx={sx}>{children}</Box>;
+    return (
+      <Box sx={sx} aria-label={ariaLabel}>
+        {children}
+      </Box>
+    );
   };
 
   return (

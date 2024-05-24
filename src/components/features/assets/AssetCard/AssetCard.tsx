@@ -7,6 +7,7 @@ import { AssetControls } from "./AssetControls";
 import { AssetHeader } from "./AssetHeader";
 import { AssetNameAndDescription } from "./AssetNameAndDescription";
 import { ForwardedRef, ReactNode, forwardRef } from "react";
+import { Datasworn } from "@datasworn/core";
 
 export interface AssetCardProps {
   assetId: string;
@@ -49,6 +50,39 @@ const AssetCardComponent = (
     return null;
   }
 
+  const assetControls: Record<
+    string,
+    Datasworn.AssetControlField | Datasworn.AssetAbilityControlField
+  > = { ...asset.controls };
+  const assetOptions = { ...asset.options };
+
+  asset.abilities.forEach((ability, index) => {
+    const isEnabled = ability.enabled || storedAsset?.enabledAbilities[index];
+
+    if (isEnabled) {
+      const controls = ability.controls ?? {};
+      const options = ability.options ?? {};
+      Object.keys(controls).forEach((controlKey) => {
+        assetControls[controlKey] = controls[controlKey];
+      });
+      Object.keys(options).forEach((optionKey) => {
+        assetOptions[optionKey] = options[optionKey];
+      });
+
+      const enhanceControls = ability.enhance_asset?.controls ?? {};
+      Object.keys(enhanceControls).forEach((controlKey) => {
+        const enhancement = enhanceControls[controlKey];
+        const assetControl = assetControls[controlKey];
+        if (assetControl?.field_type === enhancement.field_type) {
+          assetControls[controlKey] = {
+            ...assetControl,
+            ...(enhancement as Partial<typeof assetControl>),
+          };
+        }
+      });
+    }
+  });
+
   return (
     <Card
       ref={ref}
@@ -79,7 +113,7 @@ const AssetCardComponent = (
           showSharedIcon={showSharedIcon}
         />
         <AssetOptions
-          asset={asset}
+          options={assetOptions}
           storedAsset={storedAsset}
           onAssetOptionChange={onAssetOptionChange}
         />
@@ -89,7 +123,7 @@ const AssetCardComponent = (
           onAbilityToggle={onAssetAbilityToggle}
         />
         <AssetControls
-          controls={asset.controls}
+          controls={assetControls}
           storedAsset={storedAsset}
           onControlChange={onAssetControlChange}
         />
