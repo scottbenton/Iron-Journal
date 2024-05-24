@@ -4,7 +4,6 @@ import EmptyIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { useStore } from "stores/store";
 import { Box, Stack, Typography } from "@mui/material";
 import { ProgressTrack } from "components/features/ProgressTrack";
-import { useNewCustomContentPage } from "hooks/featureFlags/useNewCustomContentPage";
 
 const totalExp = 30;
 export interface IronswornTracksProps {
@@ -14,7 +13,6 @@ export interface IronswornTracksProps {
 export function IronswornTracks(props: IronswornTracksProps) {
   const { characterId } = props;
 
-  const showNewExpansions = useNewCustomContentPage();
   const specialTracks = useStore((store) => store.rules.specialTracks);
   const specialTrackValues = useStore(
     (store) =>
@@ -30,12 +28,6 @@ export function IronswornTracks(props: IronswornTracksProps) {
   const spentExp = xp?.spent ?? 0;
   const earnedExp = xp?.earned ?? 0;
 
-  const bondValue = useStore(
-    (store) =>
-      store.campaigns.currentCampaign.characters.characterMap[characterId]
-        .bonds ?? 0
-  );
-
   return (
     <Box>
       <Typography fontFamily={(theme) => theme.fontFamilyTitle}>
@@ -50,35 +42,25 @@ export function IronswornTracks(props: IronswornTracksProps) {
             <EarnedIcon key={index} color={"action"} fontSize={"small"} />
           ))}
 
-        {new Array(Math.max(totalExp, earnedExp) - earnedExp).fill(undefined).map((key, index) => (
-            <EmptyIcon key={index} color={"action"} fontSize={"small"} />
-          ))}
+          {new Array(Math.max(totalExp, earnedExp) - earnedExp)
+            .fill(undefined)
+            .map((key, index) => (
+              <EmptyIcon key={index} color={"action"} fontSize={"small"} />
+            ))}
         </Box>
       </Box>
-      {showNewExpansions ? (
-        <Stack spacing={2} mt={2}>
-          {Object.keys(specialTracks)
-            .filter((specialTrack) => !specialTracks[specialTrack].shared)
-            .map((specialTrack) => (
-              <ProgressTrack
-                key={specialTrack}
-                label={specialTracks[specialTrack].label}
-                value={specialTrackValues[specialTrack]?.value ?? 0}
-                max={40}
-              />
-            ))}
-        </Stack>
-      ) : (
-        <>
-          <Typography
-            fontFamily={(theme) => theme.fontFamilyTitle}
-            sx={{ mt: 2 }}
-          >
-            Bonds
-          </Typography>
-          <ProgressTrack value={bondValue} max={40} />
-        </>
-      )}
+      <Stack spacing={2} mt={2}>
+        {Object.keys(specialTracks)
+          .filter((specialTrack) => !specialTracks[specialTrack].shared)
+          .map((specialTrack) => (
+            <ProgressTrack
+              key={specialTrack}
+              label={specialTracks[specialTrack].label}
+              value={specialTrackValues[specialTrack]?.value ?? 0}
+              max={40}
+            />
+          ))}
+      </Stack>
     </Box>
   );
 }

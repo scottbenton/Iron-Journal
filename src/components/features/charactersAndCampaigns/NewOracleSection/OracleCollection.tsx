@@ -1,11 +1,13 @@
 import { Datasworn } from "@datasworn/core";
-import { CATEGORY_VISIBILITY } from "../OracleSection/useFilterOracles";
 import { useMemo, useState } from "react";
 import { CollapsibleSectionHeader } from "../CollapsibleSectionHeader";
 import { Collapse, List } from "@mui/material";
 import { OracleSelectableRollableCollectionListItem } from "./OracleSelectableRollableCollectionListItem";
 import { OracleListItem } from "./OracleListItem";
-import { CombinedCollectionType } from "./useFilterOracles";
+import {
+  CATEGORY_VISIBILITY,
+  CombinedCollectionType,
+} from "./useFilterOracles";
 
 export interface OracleCollectionProps {
   collectionId: string;

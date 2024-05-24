@@ -9,7 +9,6 @@ import {
   Typography,
 } from "@mui/material";
 import { PageContent, PageHeader } from "components/shared/Layout";
-import { useNewCustomContentPage } from "hooks/featureFlags/useNewCustomContentPage";
 import OpenIcon from "@mui/icons-material/ChevronRight";
 import { useStore } from "stores/store";
 import CollectionCreateIcon from "@mui/icons-material/CreateNewFolder";
@@ -21,8 +20,6 @@ import { EmptyState } from "components/shared/EmptyState";
 import { FooterFab } from "components/shared/Layout/FooterFab";
 
 export function HomebrewSelectPage() {
-  const showPage = useNewCustomContentPage();
-
   const sortedHomebrewIds = useStore(
     (store) => store.homebrew.sortedHomebrewCollectionIds
   );
@@ -32,10 +29,6 @@ export function HomebrewSelectPage() {
 
   const [createExpansionDialogOpen, setCreateExpansionDialogOpen] =
     useState(false);
-
-  if (!showPage) {
-    return null;
-  }
 
   const collectionIds = Object.values(homebrewCollections).map(
     (collection) => collection.base?.id

@@ -7,7 +7,9 @@ import {
   FormLabel,
 } from "@mui/material";
 import { SectionHeading } from "components/shared/SectionHeading";
+import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { useStore } from "stores/store";
+import { GAME_SYSTEMS } from "types/GameSystems.type";
 
 export function NewDebilities() {
   const impacts = useStore((store) => store.rules.impacts);
@@ -24,9 +26,14 @@ export function NewDebilities() {
     updateCharacter({ [`debilities.${debilityKey}`]: active }).catch(() => {});
   };
 
+  const impactsLabel = useGameSystemValue({
+    [GAME_SYSTEMS.IRONSWORN]: "Debilities",
+    [GAME_SYSTEMS.STARFORGED]: "Impacts",
+  });
+
   return (
     <>
-      <SectionHeading label={"Debilities"} />
+      <SectionHeading label={impactsLabel} />
       <Box px={2}>
         <Box
           display={"flex"}
@@ -36,11 +43,11 @@ export function NewDebilities() {
           {Object.keys(impacts).map((impactCategoryKey) => (
             <FormControl
               key={impactCategoryKey}
-              component='fieldset'
-              variant='standard'
+              component="fieldset"
+              variant="standard"
             >
               <FormLabel
-                component='legend'
+                component="legend"
                 sx={{ textTransform: "capitalize" }}
               >
                 {impacts[impactCategoryKey].label}

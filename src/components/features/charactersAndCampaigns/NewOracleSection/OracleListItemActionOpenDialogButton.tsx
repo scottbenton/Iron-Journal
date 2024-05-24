@@ -15,7 +15,7 @@ export function OracleListItemActionOpenDialogButton(
   const openDialog = useStore((store) => store.appState.openDialog);
 
   const handleOpenClick = () => {
-    openDialog(item._id, true);
+    openDialog(item._id);
   };
 
   return (

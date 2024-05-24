@@ -11,14 +11,11 @@ import { useStore } from "stores/store";
 import { AUTH_STATE } from "stores/auth/auth.slice.type";
 import { useFooterState } from "hooks/useFooterState";
 import { NavItem } from "./NavItem";
-import { useNewCustomContentPage } from "hooks/featureFlags/useNewCustomContentPage";
 import { NAV_ROUTES, useActiveNavRoute } from "hooks/useActiveNavRoute";
 
 export function BottomNav() {
   const authStatus = useStore((store) => store.auth.status);
   const activeRoute = useActiveNavRoute();
-
-  const newHomebrewViewActive = useNewCustomContentPage();
 
   const { isFooterVisible, footerHeight } = useFooterState();
 
@@ -64,15 +61,13 @@ export function BottomNav() {
                 active={activeRoute === NAV_ROUTES.WORLD}
                 sx={{ py: 1 }}
               />
-              {newHomebrewViewActive && (
-                <NavItem
-                  href={basePaths[BASE_ROUTES.HOMEBREW]}
-                  label={"Homebrew"}
-                  icon={<HomebrewIcon />}
-                  active={activeRoute === NAV_ROUTES.HOMEBREW}
-                  sx={{ py: 1 }}
-                />
-              )}{" "}
+              <NavItem
+                href={basePaths[BASE_ROUTES.HOMEBREW]}
+                label={"Homebrew"}
+                icon={<HomebrewIcon />}
+                active={activeRoute === NAV_ROUTES.HOMEBREW}
+                sx={{ py: 1 }}
+              />
             </>
           ) : (
             <>

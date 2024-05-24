@@ -7,12 +7,8 @@ import { SectionHeading } from "components/shared/SectionHeading";
 import { useConfirm } from "material-ui-confirm";
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { useState } from "react";
-import { AssetCardDialog as OldAssetCardDialog } from "components/features/assets/AssetCardDialog";
 import { AssetCardDialog } from "components/features/assets/NewAssetCardDialog";
-import { AssetCard as OldAssetCard } from "components/features/assets/AssetCard";
 import { AssetCard } from "components/features/assets/NewAssetCard";
-import { useNewCustomContentPage } from "hooks/featureFlags/useNewCustomContentPage";
-import { getNewDataswornId, getOldDataswornId } from "data/assets";
 
 export function CharacterSection() {
   const isStarforged = useGameSystem().gameSystem === GAME_SYSTEMS.STARFORGED;
@@ -46,20 +42,8 @@ export function CharacterSection() {
   const removeSharedAsset = useStore(
     (store) => store.campaigns.currentCampaign.assets.removeAsset
   );
-  const updateSharedAssetInput = useStore(
-    (store) => store.campaigns.currentCampaign.assets.updateAssetInput
-  );
   const updateSharedAssetCheckbox = useStore(
     (store) => store.campaigns.currentCampaign.assets.updateAssetCheckbox
-  );
-  const updateSharedAssetTrack = useStore(
-    (store) => store.campaigns.currentCampaign.assets.updateAssetTrack
-  );
-  const updateSharedCustomAsset = useStore(
-    (store) => store.campaigns.currentCampaign.assets.updateCustomAsset
-  );
-  const updateSharedAssetCondition = useStore(
-    (store) => store.campaigns.currentCampaign.assets.updateAssetCondition
   );
   const updateSharedAssetOption = useStore(
     (store) => store.campaigns.currentCampaign.assets.updateAssetOption
@@ -100,8 +84,6 @@ export function CharacterSection() {
       .catch(() => {});
   };
 
-  const showNewAssetCards = useNewCustomContentPage();
-
   return (
     <>
       {isStarforged && (
@@ -135,61 +117,20 @@ export function CharacterSection() {
                   xl={4}
                   sx={{ display: "flex", justifyContent: "center" }}
                 >
-                  {showNewAssetCards ? (
-                    <AssetCard
-                      assetId={getNewDataswornId(sharedAssets[assetId].id)}
-                      storedAsset={sharedAssets[assetId]}
-                      onAssetRemove={() => handleClick(assetId)}
-                      onAssetAbilityToggle={(abilityIndex, checked) =>
-                        updateSharedAssetCheckbox(
-                          assetId,
-                          abilityIndex,
-                          checked
-                        )
-                      }
-                      onAssetOptionChange={(optionKey, value) =>
-                        updateSharedAssetOption(assetId, optionKey, value)
-                      }
-                      onAssetControlChange={(controlKey, value) =>
-                        updateSharedAssetControl(assetId, controlKey, value)
-                      }
-                    />
-                  ) : (
-                    <OldAssetCard
-                      assetId={getOldDataswornId(sharedAssets[assetId].id)}
-                      storedAsset={sharedAssets[assetId]}
-                      handleInputChange={(label, inputKey, value) =>
-                        updateSharedAssetInput(
-                          assetId,
-                          label,
-                          inputKey,
-                          value
-                        ).catch(() => {})
-                      }
-                      sx={{
-                        // maxWidth: 380,
-                        minHeight: 450,
-                        width: "100%",
-                      }}
-                      handleAbilityCheck={(abilityIndex, checked) =>
-                        updateSharedAssetCheckbox(
-                          assetId,
-                          abilityIndex,
-                          checked
-                        )
-                      }
-                      handleTrackValueChange={(value) =>
-                        updateSharedAssetTrack(assetId, value)
-                      }
-                      handleConditionCheck={(condition, checked) =>
-                        updateSharedAssetCondition(assetId, condition, checked)
-                      }
-                      handleDeleteClick={() => handleClick(assetId)}
-                      handleCustomAssetUpdate={(asset) =>
-                        updateSharedCustomAsset(assetId, asset)
-                      }
-                    />
-                  )}
+                  <AssetCard
+                    assetId={sharedAssets[assetId].id}
+                    storedAsset={sharedAssets[assetId]}
+                    onAssetRemove={() => handleClick(assetId)}
+                    onAssetAbilityToggle={(abilityIndex, checked) =>
+                      updateSharedAssetCheckbox(assetId, abilityIndex, checked)
+                    }
+                    onAssetOptionChange={(optionKey, value) =>
+                      updateSharedAssetOption(assetId, optionKey, value)
+                    }
+                    onAssetControlChange={(controlKey, value) =>
+                      updateSharedAssetControl(assetId, controlKey, value)
+                    }
+                  />
                 </Grid>
               ))}
             </Grid>
@@ -201,31 +142,18 @@ export function CharacterSection() {
             </Box>
           )}
 
-          {showNewAssetCards ? (
-            <AssetCardDialog
-              open={isAssetDialogOpen}
-              loading={addAssetLoading}
-              handleClose={() => setIsAssetDialogOpen(false)}
-              handleAssetSelection={(asset) =>
-                handleAssetAdd({
-                  ...asset,
-                  order: nextSharedAssetIndex,
-                })
-              }
-            />
-          ) : (
-            <OldAssetCardDialog
-              open={isAssetDialogOpen}
-              loading={addAssetLoading}
-              handleClose={() => setIsAssetDialogOpen(false)}
-              handleAssetSelection={(asset) =>
-                handleAssetAdd({
-                  ...asset,
-                  order: nextSharedAssetIndex,
-                })
-              }
-            />
-          )}
+          <AssetCardDialog
+            open={isAssetDialogOpen}
+            loading={addAssetLoading}
+            handleClose={() => setIsAssetDialogOpen(false)}
+            handleAssetSelection={(asset) =>
+              handleAssetAdd({
+                ...asset,
+                order: nextSharedAssetIndex,
+              })
+            }
+          />
+
           <SectionHeading label={"Characters"} />
         </>
       )}

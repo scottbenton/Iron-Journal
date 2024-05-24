@@ -78,7 +78,7 @@ export function MoveCard(props: MoveCardProps) {
             </>
           ) : (
             <Tooltip title={"Preview Move"}>
-              <IconButton onClick={() => openDialog(dataswornId, true)}>
+              <IconButton onClick={() => openDialog(dataswornId)}>
                 <PreviewIcon />
               </IconButton>
             </Tooltip>

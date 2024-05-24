@@ -13,7 +13,6 @@ import CharacterIcon from "@mui/icons-material/Person";
 import CampaignIcon from "@mui/icons-material/Groups";
 import WorldIcon from "@mui/icons-material/Public";
 import HomebrewIcon from "@mui/icons-material/Brush";
-import { useNewCustomContentPage } from "hooks/featureFlags/useNewCustomContentPage";
 import { NAV_ROUTES, useActiveNavRoute } from "hooks/useActiveNavRoute";
 import { SettingsMenu } from "./SettingsMenu";
 import { useStore } from "stores/store";
@@ -43,8 +42,6 @@ export function NavRail() {
   const title = useAppName();
 
   const activeRoute = useActiveNavRoute();
-
-  const newHomebrewViewActive = useNewCustomContentPage();
 
   const [selectedMenu, setSelectedMenu] = useState<NAV_ROUTES>();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -131,17 +128,15 @@ export function NavRail() {
                   onHover={() => setIsMenuOpen(true)}
                   onClick={() => setIsMenuOpen(false)}
                 />
-                {newHomebrewViewActive && (
-                  <NavItem
-                    href={basePaths[BASE_ROUTES.HOMEBREW]}
-                    label={"Homebrew"}
-                    icon={<HomebrewIcon />}
-                    active={activeRoute === NAV_ROUTES.HOMEBREW}
-                    onMouseEnter={() => setSelectedMenu(NAV_ROUTES.HOMEBREW)}
-                    onHover={() => setIsMenuOpen(true)}
-                    onClick={() => setIsMenuOpen(false)}
-                  />
-                )}
+                <NavItem
+                  href={basePaths[BASE_ROUTES.HOMEBREW]}
+                  label={"Homebrew"}
+                  icon={<HomebrewIcon />}
+                  active={activeRoute === NAV_ROUTES.HOMEBREW}
+                  onMouseEnter={() => setSelectedMenu(NAV_ROUTES.HOMEBREW)}
+                  onHover={() => setIsMenuOpen(true)}
+                  onClick={() => setIsMenuOpen(false)}
+                />
               </>
             ) : (
               <>

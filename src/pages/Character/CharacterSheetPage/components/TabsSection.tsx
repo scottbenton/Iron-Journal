@@ -19,7 +19,6 @@ import { SectorSection } from "components/features/worlds/SectorSection";
 import { useGameSystem } from "hooks/useGameSystem";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { useUpdateQueryStringValueWithoutNavigation } from "hooks/useUpdateQueryStringValueWithoutNavigation";
-import { useNewCustomContentPage } from "hooks/featureFlags/useNewCustomContentPage";
 import { useGameSystemValue } from "hooks/useGameSystemValue";
 
 enum TABS {
@@ -27,7 +26,6 @@ enum TABS {
   ASSETS = "assets",
   ORACLE = "oracle",
   TRACKS = "tracks",
-  CHARACTER = "character",
   NOTES = "notes",
   WORLD = "world",
   LOCATIONS = "location",
@@ -41,7 +39,6 @@ export function TabsSection() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const usingNewHomebrew = useNewCustomContentPage();
   const impactsLabel = useGameSystemValue({
     [GAME_SYSTEMS.IRONSWORN]: "Debilities",
     [GAME_SYSTEMS.STARFORGED]: "Impacts",
@@ -110,11 +107,7 @@ export function TabsSection() {
         )}
         <StyledTab label={"NPCs"} value={TABS.NPCS} />
         <StyledTab label={"Lore"} value={TABS.LORE} />
-        {usingNewHomebrew ? (
-          <StyledTab label={impactsLabel} value={TABS.IMPACTS} />
-        ) : (
-          <StyledTab label="Character" value={TABS.CHARACTER} />
-        )}
+        <StyledTab label={impactsLabel} value={TABS.IMPACTS} />
       </StyledTabs>
       <ContainedTabPanel isVisible={selectedTab === TABS.ASSETS} greyBackground>
         <AssetsSection />
@@ -168,11 +161,7 @@ export function TabsSection() {
           showHiddenTag={isWorldOwner && isInCampaign}
         />
       </ContainedTabPanel>
-      <ContainedTabPanel
-        isVisible={
-          selectedTab === TABS.CHARACTER || selectedTab === TABS.IMPACTS
-        }
-      >
+      <ContainedTabPanel isVisible={selectedTab === TABS.IMPACTS}>
         <CharacterSection />
       </ContainedTabPanel>
     </Card>

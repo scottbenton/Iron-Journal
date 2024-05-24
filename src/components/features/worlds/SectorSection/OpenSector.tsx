@@ -35,7 +35,7 @@ interface OpenSectorProps {
 export function OpenSector(props: OpenSectorProps) {
   const { sectorId, openNPCTab } = props;
   const confirm = useConfirm();
-  const { rollOracleTable } = useRoller();
+  const { rollOracleTableNew } = useRoller();
 
   const worldId = useStore(
     (store) => store.worlds.currentWorld.currentWorldId ?? ""
@@ -88,31 +88,34 @@ export function OpenSector(props: OpenSectorProps) {
   ) => {
     let locationId: string | undefined = undefined;
     if (hexType === SectorHexTypes.Star) {
-      const description = rollOracleTable(
+      const description = rollOracleTableNew(
         "starforged/oracles/space/stellar_object",
         false
       );
       locationId = await createLocation({
         name: "New Star",
         type: SectorHexTypes.Star,
-        description,
+        description: description?.result ?? "",
       });
     } else if (hexType === SectorHexTypes.Planet) {
-      const planetClass = rollOracleTable(
+      const planetClass = rollOracleTableNew(
         "starforged/oracles/planets/class",
         false
       );
       if (!planetClass) {
         return;
       }
-      const convertedClass = planetClass
+      console.debug("Planet Class", planetClass);
+      const convertedClass = planetClass?.result
         ?.split(" ")[0]
-        .toLocaleLowerCase()
-        .replace("[⏵", "");
-      const name = rollOracleTable(
-        `starforged/oracles/planets/${convertedClass}/sample_names`,
+        .toLocaleLowerCase();
+      console.debug(convertedClass);
+      //starforged/oracles/planets/desert/name
+      const name = rollOracleTableNew(
+        `starforged/oracles/planets/${convertedClass}/name`,
         false
       );
+      console.debug("Name", name);
       const planetClassName =
         convertedClass.charAt(0).toUpperCase() +
         convertedClass.slice(1) +
@@ -123,17 +126,17 @@ export function OpenSector(props: OpenSectorProps) {
         : "";
 
       locationId = await createLocation({
-        name: name ?? "New Planet",
+        name: name?.result ?? "New Planet",
         type: SectorHexTypes.Planet,
         subType: convertedClass,
         planetClassName,
         description,
       });
     } else if (hexType === SectorHexTypes.Settlement) {
-      const name = rollOracleTable(
+      const name = rollOracleTableNew(
         "starforged/oracles/settlements/name",
         false
-      );
+      )?.result;
       locationId = await createLocation({
         name: name ?? "New Sector",
         type: SectorHexTypes.Settlement,

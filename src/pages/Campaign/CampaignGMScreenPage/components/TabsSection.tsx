@@ -1,12 +1,10 @@
 import { Card, useMediaQuery, useTheme } from "@mui/material";
-import { MovesSection as MovesSectionOld } from "components/features/charactersAndCampaigns/MovesSection";
 import { MovesSection } from "components/features/charactersAndCampaigns/NewMovesSection";
 import { useEffect } from "react";
 import { useState } from "react";
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { CharacterSection } from "./CharacterSection";
 import { TracksSection } from "./TracksSection";
-import { OracleSection as OracleSectionOld } from "components/features/charactersAndCampaigns/OracleSection";
 import { OracleSection } from "components/features/charactersAndCampaigns/NewOracleSection";
 import { CampaignNotesSection } from "./CampaignNotesSection";
 import { SettingsSection } from "./SettingsSection";
@@ -24,7 +22,6 @@ import { useGameSystem } from "hooks/useGameSystem";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { SectorSection } from "components/features/worlds/SectorSection";
 import { useUpdateQueryStringValueWithoutNavigation } from "hooks/useUpdateQueryStringValueWithoutNavigation";
-import { useNewCustomContentPage } from "hooks/featureFlags/useNewCustomContentPage";
 
 enum TABS {
   MOVES = "moves",
@@ -46,8 +43,6 @@ export interface TabsSectionProps {
 
 export function TabsSection(props: TabsSectionProps) {
   const { campaign } = props;
-
-  const showNewMovesAndOracles = useNewCustomContentPage();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -106,10 +101,10 @@ export function TabsSection(props: TabsSectionProps) {
         <StyledTab label="Settings" value={TABS.SETTINGS} />
       </StyledTabs>
       <ContainedTabPanel isVisible={selectedTab === TABS.MOVES}>
-        {showNewMovesAndOracles ? <MovesSection /> : <MovesSectionOld />}
+        <MovesSection />
       </ContainedTabPanel>
       <ContainedTabPanel isVisible={selectedTab === TABS.ORACLE}>
-        {showNewMovesAndOracles ? <OracleSection /> : <OracleSectionOld />}
+        <OracleSection />
       </ContainedTabPanel>
       <ContainedTabPanel
         isVisible={selectedTab === TABS.CHARACTERS}
@@ -118,7 +113,7 @@ export function TabsSection(props: TabsSectionProps) {
         <CharacterSection />
       </ContainedTabPanel>
       <ContainedTabPanel isVisible={selectedTab === TABS.TRACKS}>
-        <TracksSection supply={campaign.supply} />
+        <TracksSection />
       </ContainedTabPanel>
       <ContainedTabPanel isVisible={selectedTab === TABS.NOTES}>
         <CampaignNotesSection />

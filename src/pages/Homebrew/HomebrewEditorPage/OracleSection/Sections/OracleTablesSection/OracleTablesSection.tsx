@@ -72,8 +72,7 @@ export function OracleTablesSection(props: OracleTablesSectionProps) {
                   openLinkedDialog(
                     `${homebrewId}/collections/oracles/${ancestorIds.join(
                       "/"
-                    )}/${parentCollectionKey}/${key}`,
-                    true
+                    )}/${parentCollectionKey}/${key}`
                   );
                 }
               }}

@@ -59,7 +59,7 @@ export function MovesSection() {
               category={category}
               moveMap={moveMap}
               openMove={(move) => {
-                openDialog(move._id, true);
+                openDialog(move._id);
               }}
               forceOpen={isSearchActive}
               visibleCategories={visibleMoveCategoryIds}
