@@ -1,7 +1,7 @@
 import { DialogContent } from "@mui/material";
 import { LinkedDialogContentTitle } from "./LinkedDialogContentTitle";
-import { NewOracleDialogContent } from "./NewOracleDialogContent";
-import { NewMoveDialogContent } from "./NewMoveDialogContent";
+import { OracleDialogContent } from "./OracleDialogContent";
+import { MoveDialogContent } from "./MoveDialogContent";
 import { AssetDialogContent } from "./AssetDialogContent";
 
 export interface LinkedDialogContentProps {
@@ -16,7 +16,7 @@ export function LinkedDialogContent(props: LinkedDialogContentProps) {
 
   if (id?.match(/^[^/]*\/moves/)) {
     return (
-      <NewMoveDialogContent
+      <MoveDialogContent
         id={id}
         handleBack={handleBack}
         handleClose={handleClose}
@@ -27,7 +27,7 @@ export function LinkedDialogContent(props: LinkedDialogContentProps) {
 
   if (id?.includes("collections/oracles") || id?.match(/^[^/]*\/oracles/)) {
     return (
-      <NewOracleDialogContent
+      <OracleDialogContent
         id={id}
         handleBack={handleBack}
         handleClose={handleClose}

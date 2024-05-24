@@ -7,8 +7,8 @@ import { SectionHeading } from "components/shared/SectionHeading";
 import { useConfirm } from "material-ui-confirm";
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import { useState } from "react";
-import { AssetCardDialog } from "components/features/assets/NewAssetCardDialog";
-import { AssetCard } from "components/features/assets/NewAssetCard";
+import { AssetCardDialog } from "components/features/assets/AssetCardDialog";
+import { AssetCard } from "components/features/assets/AssetCard";
 
 export function CharacterSection() {
   const isStarforged = useGameSystem().gameSystem === GAME_SYSTEMS.STARFORGED;

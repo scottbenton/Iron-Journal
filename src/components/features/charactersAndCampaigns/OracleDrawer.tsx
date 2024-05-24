@@ -1,5 +1,5 @@
 import { SwipeableDrawer } from "@mui/material";
-import { OracleSection } from "./NewOracleSection";
+import { OracleSection } from "./OracleSection";
 import React, { useCallback } from "react";
 
 export interface OracleDrawerProps {

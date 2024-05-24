@@ -144,7 +144,7 @@ export function useRoller() {
     ]
   );
 
-  const rollOracleTableNew = useCallback(
+  const rollOracleTable = useCallback(
     (oracleId: string, showSnackbar = true, gmsOnly = false) => {
       const oracle = newOracles[oracleId];
       if (!oracle) return undefined;
@@ -328,6 +328,6 @@ export function useRoller() {
     rollStat,
     rollClockProgression,
     rollTrackProgress,
-    rollOracleTableNew,
+    rollOracleTable,
   };
 }

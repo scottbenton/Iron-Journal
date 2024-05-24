@@ -11,7 +11,7 @@ import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { useStore } from "stores/store";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 
-export function NewDebilities() {
+export function DebilitiesOrImpacts() {
   const impacts = useStore((store) => store.rules.impacts);
 
   const debilityChecks = useStore(

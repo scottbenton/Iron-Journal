@@ -2,17 +2,17 @@ import { DialogContent, Stack } from "@mui/material";
 import { LinkedDialogContentTitle } from "../LinkedDialogContentTitle";
 import { useStore } from "stores/store";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
-import { OracleButton } from "components/features/charactersAndCampaigns/NewOracleSection/OracleButton";
+import { OracleButton } from "components/features/charactersAndCampaigns/OracleSection/OracleButton";
 import { MoveRollers } from "./MoveRollers";
 
-export interface NewMoveDialogContentProps {
+export interface MoveDialogContentProps {
   id: string;
   handleBack: () => void;
   handleClose: () => void;
   isLastItem: boolean;
 }
 
-export function NewMoveDialogContent(props: NewMoveDialogContentProps) {
+export function MoveDialogContent(props: MoveDialogContentProps) {
   const { id, handleBack, handleClose, isLastItem } = props;
 
   const moves = useStore((store) => store.rules.moveMaps.moveMap);

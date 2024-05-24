@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import { OracleSection } from "components/features/charactersAndCampaigns/NewOracleSection/OracleSection";
+import { OracleSection } from "components/features/charactersAndCampaigns/OracleSection/OracleSection";
 
 export function ExampleOracles() {
   return (
     <Box
       borderRadius={1}
-      overflow='hidden'
+      overflow="hidden"
       border={"1px solid"}
       borderColor={"divider"}
     >

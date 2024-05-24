@@ -8,16 +8,16 @@ import { OracleTableSharedRolls } from "./OracleTableSharedRolls";
 import { OracleTableSharedResults } from "./OracleTableSharedResults";
 import { OracleCollection } from "./OracleCollection";
 import { OracleRollableColumn } from "./OracleRollableColumn";
-import { OracleButton } from "components/features/charactersAndCampaigns/NewOracleSection/OracleButton";
+import { OracleButton } from "components/features/charactersAndCampaigns/OracleSection/OracleButton";
 
-export interface NewOracleDialogContentProps {
+export interface OracleDialogContentProps {
   id: string;
   handleBack: () => void;
   handleClose: () => void;
   isLastItem: boolean;
 }
 
-export function NewOracleDialogContent(props: NewOracleDialogContentProps) {
+export function OracleDialogContent(props: OracleDialogContentProps) {
   const { id, handleBack, handleClose, isLastItem } = props;
 
   const oracles = useStore((store) => store.rules.oracleMaps.allOraclesMap);

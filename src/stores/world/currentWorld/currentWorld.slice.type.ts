@@ -1,4 +1,4 @@
-import { NewTruth, Truth, World } from "types/World.type";
+import { Truth, World } from "types/World.type";
 import { LocationsSlice } from "./locations/locations.slice.type";
 import { NPCsSlice } from "./npcs/npcs.slice.type";
 import { LoreSlice } from "./lore/lore.slice.type";
@@ -22,11 +22,7 @@ export interface CurrentWorldSliceActions {
     description: Uint8Array,
     isBeaconRequest?: boolean
   ) => Promise<void>;
-  updateCurrentWorldTruth: (truthId: string, truth: Truth) => Promise<void>;
-  updateCurrentWorldTruthNew: (
-    truthKey: string,
-    truth: NewTruth
-  ) => Promise<void>;
+  updateCurrentWorldTruth: (truthKey: string, truth: Truth) => Promise<void>;
 
   resetStore: () => void;
 }

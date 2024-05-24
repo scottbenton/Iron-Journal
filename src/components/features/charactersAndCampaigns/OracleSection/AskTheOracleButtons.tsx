@@ -20,7 +20,7 @@ const askTheOracleLabels: { [key in AskTheOracle]: string } = {
 };
 
 export function AskTheOracleButtons() {
-  const { rollOracleTableNew } = useRoller();
+  const { rollOracleTable } = useRoller();
 
   const { askTheOracle: oracles } = useSystemOracles();
 
@@ -46,7 +46,7 @@ export function AskTheOracleButtons() {
             px: 1,
           })}
           onClick={() =>
-            rollOracleTableNew(oracles[oracleKey as AskTheOracle], true, true)
+            rollOracleTable(oracles[oracleKey as AskTheOracle], true, true)
           }
         >
           {askTheOracleLabels[oracleKey as AskTheOracle]}

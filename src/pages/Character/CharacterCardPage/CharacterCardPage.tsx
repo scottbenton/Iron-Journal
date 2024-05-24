@@ -158,7 +158,7 @@ export function CharacterCardPage() {
                     }}
                   />
                   <Typography variant={"h3"} ml={1} width={36}>
-                    {character.health}
+                    {character.conditionMeters?.health ?? 5}
                   </Typography>
                 </Box>
                 <Box
@@ -177,7 +177,7 @@ export function CharacterCardPage() {
                     }}
                   />
                   <Typography variant={"h3"} ml={1} width={36}>
-                    {character.spirit}
+                    {character.conditionMeters?.spirit ?? 5}
                   </Typography>
                 </Box>
               </Box>

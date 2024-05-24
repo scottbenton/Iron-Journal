@@ -1,11 +1,11 @@
 import { Card, useMediaQuery, useTheme } from "@mui/material";
-import { MovesSection } from "components/features/charactersAndCampaigns/NewMovesSection";
+import { MovesSection } from "components/features/charactersAndCampaigns/MovesSection";
 import { useEffect } from "react";
 import { useState } from "react";
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import { CharacterSection } from "./CharacterSection";
 import { TracksSection } from "./TracksSection";
-import { OracleSection } from "components/features/charactersAndCampaigns/NewOracleSection";
+import { OracleSection } from "components/features/charactersAndCampaigns/OracleSection";
 import { CampaignNotesSection } from "./CampaignNotesSection";
 import { SettingsSection } from "./SettingsSection";
 import { WorldSection } from "./WorldSection";

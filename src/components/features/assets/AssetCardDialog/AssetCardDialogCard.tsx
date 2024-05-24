@@ -1,4 +1,4 @@
-import { AssetCard } from "../NewAssetCard/AssetCard";
+import { AssetCard } from "../AssetCard/AssetCard";
 import { Button } from "@mui/material";
 import { useEffect, useRef } from "react";
 

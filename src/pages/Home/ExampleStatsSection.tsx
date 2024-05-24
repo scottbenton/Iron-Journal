@@ -27,18 +27,18 @@ export function ExampleStatsSection() {
     [GAME_SYSTEMS.STARFORGED]: true,
   });
 
-  const { rollOracleTableNew } = useRoller();
+  const { rollOracleTable } = useRoller();
   const handleOracleRoll = useCallback(() => {
     if (joinOracles) {
       return nameOracles
-        .map((id) => rollOracleTableNew(id, false)?.result ?? "")
+        .map((id) => rollOracleTable(id, false)?.result ?? "")
         .join(" ");
     } else {
       const oracleIndex = Math.floor(Math.random() * nameOracles.length);
 
-      return rollOracleTableNew(nameOracles[oracleIndex], false)?.result;
+      return rollOracleTable(nameOracles[oracleIndex], false)?.result;
     }
-  }, [rollOracleTableNew, nameOracles, joinOracles]);
+  }, [rollOracleTable, nameOracles, joinOracles]);
 
   const [name, setName] = useState(() => handleOracleRoll() ?? "");
 

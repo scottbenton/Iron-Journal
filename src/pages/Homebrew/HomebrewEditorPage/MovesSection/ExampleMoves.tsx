@@ -1,5 +1,5 @@
 import { Box, Card, Typography } from "@mui/material";
-import { MovesSection as NewMovesSection } from "components/features/charactersAndCampaigns/NewMovesSection";
+import { MovesSection } from "components/features/charactersAndCampaigns/MovesSection";
 
 export function ExampleMoves() {
   return (
@@ -12,7 +12,7 @@ export function ExampleMoves() {
           Preview
         </Typography>
       </Box>
-      <NewMovesSection />
+      <MovesSection />
     </Card>
   );
 }

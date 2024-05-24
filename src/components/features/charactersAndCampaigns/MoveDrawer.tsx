@@ -1,5 +1,5 @@
 import { SwipeableDrawer } from "@mui/material";
-import { MovesSection } from "./NewMovesSection";
+import { MovesSection } from "./MovesSection";
 import React, { useCallback } from "react";
 
 export interface MoveDrawerProps {

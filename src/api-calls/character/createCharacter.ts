@@ -1,10 +1,5 @@
 import { addDoc } from "firebase/firestore";
-import {
-  healthTrack,
-  momentumTrack,
-  spiritTrack,
-  supplyTrack,
-} from "data/defaultTracks";
+import { momentumTrack } from "data/defaultTracks";
 import { AssetDocument } from "api-calls/assets/_asset.type";
 import {
   CharacterDocument,
@@ -32,9 +27,6 @@ export const createCharacter = createApiFunction<
       stats: stats,
       conditionMeters: {},
       specialTracks: {},
-      health: healthTrack.startingValue,
-      spirit: spiritTrack.startingValue,
-      supply: supplyTrack.startingValue,
       momentum: momentumTrack.startingValue,
     };
     if (expansionIds) {

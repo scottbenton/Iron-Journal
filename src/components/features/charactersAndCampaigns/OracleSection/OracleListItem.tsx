@@ -18,7 +18,7 @@ export function OracleListItem(props: OracleListItemProps) {
     props;
 
   const oracle = oracles[oracleId];
-  const { rollOracleTableNew } = useRoller();
+  const { rollOracleTable } = useRoller();
 
   if (
     (collectionVisibility !== CATEGORY_VISIBILITY.ALL &&
@@ -37,7 +37,7 @@ export function OracleListItem(props: OracleListItemProps) {
         />
       }
       disabled={disabled}
-      onClick={() => rollOracleTableNew(oracle._id, true)}
+      onClick={() => rollOracleTable(oracle._id, true)}
     >
       <ListItemText primary={oracle.name} />
     </ListItemButtonWithSecondaryAction>

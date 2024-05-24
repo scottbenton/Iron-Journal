@@ -26,7 +26,7 @@ const nameOracleStarforged = [
 
 export function CharacterDetails(props: CharacterDetailsProps) {
   const { control, watch } = props;
-  const { rollOracleTableNew } = useRoller();
+  const { rollOracleTable } = useRoller();
 
   const nameOracles = useGameSystemValue({
     [GAME_SYSTEMS.IRONSWORN]: nameOraclesIronsworn,
@@ -40,14 +40,14 @@ export function CharacterDetails(props: CharacterDetailsProps) {
   const handleOracleRoll = useCallback(() => {
     if (joinOracles) {
       return nameOracles
-        .map((id) => rollOracleTableNew(id, false)?.result ?? "")
+        .map((id) => rollOracleTable(id, false)?.result ?? "")
         .join(" ");
     } else {
       const oracleIndex = Math.floor(Math.random() * nameOracles.length);
 
-      return rollOracleTableNew(nameOracles[oracleIndex], false)?.result ?? "";
+      return rollOracleTable(nameOracles[oracleIndex], false)?.result ?? "";
     }
-  }, [rollOracleTableNew, nameOracles, joinOracles]);
+  }, [rollOracleTable, nameOracles, joinOracles]);
 
   return (
     <>
@@ -74,7 +74,7 @@ export function CharacterDetails(props: CharacterDetailsProps) {
         <Controller
           name={"name"}
           control={control}
-          defaultValue=''
+          defaultValue=""
           rules={{ required: "Character name is required." }}
           render={({ field, fieldState, formState }) => (
             <TextFieldWithOracle

@@ -18,7 +18,7 @@ export function OracleButton(props: OracleButtonProps) {
     (store) => !store.characters.currentCharacter.currentCharacterId
   );
 
-  const { rollOracleTableNew } = useRoller();
+  const { rollOracleTable } = useRoller();
 
   if (!oracle || oracle.oracle_type === "tables") {
     return null;
@@ -26,9 +26,7 @@ export function OracleButton(props: OracleButtonProps) {
   return (
     <Button
       {...buttonProps}
-      onClick={() =>
-        rollOracleTableNew(oracleId, true, shouldOracleRollBeGMSOnly)
-      }
+      onClick={() => rollOracleTable(oracleId, true, shouldOracleRollBeGMSOnly)}
       endIcon={<RollIcon />}
     >
       {oracle.name}

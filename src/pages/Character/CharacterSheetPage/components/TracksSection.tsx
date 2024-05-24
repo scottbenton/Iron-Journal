@@ -21,9 +21,6 @@ export function TracksSection() {
   const isInCampaign = useStore(
     (store) => !!store.characters.currentCharacter.currentCharacter?.campaignId
   );
-  const updateCampaignSupply = useStore(
-    (store) => store.campaigns.currentCampaign.updateCampaignSupply
-  );
   const updateCampaignConditionMeter = useStore(
     (store) => store.campaigns.currentCampaign.updateCampaignConditionMeter
   );
@@ -72,15 +69,10 @@ export function TracksSection() {
     return conditionMeter.value;
   };
 
-  const updateTrackValue = (track: TRACK_KEYS, newValue: number) => {
-    if (track === "supply" && isInCampaign) {
-      return updateCampaignSupply(newValue);
-    } else {
-      return updateCharacter({
-        [track]: newValue,
-        [`conditionMeters.${track}`]: newValue,
-      });
-    }
+  const updateMomentum = (newValue: number) => {
+    return updateCharacter({
+      momentum: newValue,
+    });
   };
   const updateConditionMeter = (
     conditionMeterKey: string,
@@ -135,7 +127,7 @@ export function TracksSection() {
         <Grid item xs={6}>
           <MomentumTrackMobile
             value={momentum}
-            onChange={(newValue) => updateTrackValue("momentum", newValue)}
+            onChange={(newValue) => updateMomentum(newValue)}
             min={momentumTrack.min}
             max={maxMomentum ?? momentumTrack.max}
             resetValue={momentumResetValue ?? momentumTrack.startingValue}
@@ -147,7 +139,7 @@ export function TracksSection() {
             <Track
               label={"Momentum"}
               value={momentum}
-              onChange={(newValue) => updateTrackValue("momentum", newValue)}
+              onChange={(newValue) => updateMomentum(newValue)}
               min={momentumTrack.min}
               max={maxMomentum ?? momentumTrack.max}
               sx={{ flexGrow: 1 }}
@@ -164,8 +156,7 @@ export function TracksSection() {
                 },
               })}
               onClick={() =>
-                updateTrackValue(
-                  "momentum",
+                updateMomentum(
                   momentumResetValue ?? momentumTrack.startingValue
                 )
               }

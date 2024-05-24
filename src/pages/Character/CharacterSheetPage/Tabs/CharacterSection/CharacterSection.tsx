@@ -1,10 +1,10 @@
 import { Stack } from "@mui/material";
-import { NewDebilities } from "./NewDebilities";
+import { DebilitiesOrImpacts } from "./DebilitiesOrImpacts";
 
 export function CharacterSection() {
   return (
     <Stack spacing={2} pb={2}>
-      <NewDebilities />
+      <DebilitiesOrImpacts />
     </Stack>
   );
 }

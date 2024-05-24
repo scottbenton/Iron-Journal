@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { StatComponent } from "components/features/characters/StatComponent";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { AssetCard } from "components/features/assets/NewAssetCard";
+import { AssetCard } from "components/features/assets/AssetCard";
 import { InitiativeStatusChip } from "components/features/characters/InitiativeStatusChip";
 import { PortraitAvatar } from "components/features/characters/PortraitAvatar/PortraitAvatar";
 import { useStore } from "stores/store";

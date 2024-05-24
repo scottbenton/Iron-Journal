@@ -6,7 +6,6 @@ import { createAssetsSlice } from "./assets/assets.slice";
 import { createCharacterTracksSlice } from "./tracks/characterTracks.slice";
 import { updateCharacterPortrait } from "api-calls/character/updateCharacterPortrait";
 import { removeCharacterPortrait } from "api-calls/character/removeCharacterPortrait";
-import { TRACK_KEYS } from "pages/Character/CharacterSheetPage/components/TracksSection";
 
 export const createCurrentCharacterSlice: CreateSliceType<
   CurrentCharacterSlice
@@ -46,25 +45,6 @@ export const createCurrentCharacterSlice: CreateSliceType<
         return new Promise((res, reject) =>
           reject("Character ID must be defined")
         );
-      }
-
-      // TODO - remove once old condition meters are gone
-      let oldTrackKey: TRACK_KEYS | undefined = undefined;
-      if (conditionMeterKey === "health") {
-        oldTrackKey = "health";
-      } else if (conditionMeterKey === "spirit") {
-        oldTrackKey = "spirit";
-      } else if (conditionMeterKey === "supply") {
-        oldTrackKey = "supply";
-      }
-      if (oldTrackKey) {
-        return updateCharacter({
-          characterId,
-          character: {
-            [oldTrackKey]: value,
-            [`conditionMeters.${conditionMeterKey}`]: value,
-          },
-        });
       }
 
       return updateCharacter({

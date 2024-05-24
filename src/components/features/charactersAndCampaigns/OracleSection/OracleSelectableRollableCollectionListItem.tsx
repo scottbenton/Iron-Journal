@@ -17,7 +17,7 @@ export function OracleSelectableRollableCollectionListItem(
   props: OracleSelectableRollableCollectionListItemProps
 ) {
   const { collection, disabled } = props;
-  const { rollOracleTableNew } = useRoller();
+  const { rollOracleTable } = useRoller();
 
   const options = collection.contents ?? {};
   const keys = Object.keys(options);
@@ -30,7 +30,7 @@ export function OracleSelectableRollableCollectionListItem(
       disabled={disabled || !selectedOptionId}
       onClick={
         selectedOptionId
-          ? () => rollOracleTableNew(selectedOptionId, true)
+          ? () => rollOracleTable(selectedOptionId, true)
           : undefined
       }
       secondaryAction={

@@ -1,6 +1,6 @@
 import { Box, Card } from "@mui/material";
-import { MovesSection } from "components/features/charactersAndCampaigns/NewMovesSection";
-import { OracleSection } from "components/features/charactersAndCampaigns/NewOracleSection";
+import { MovesSection } from "components/features/charactersAndCampaigns/MovesSection";
+import { OracleSection } from "components/features/charactersAndCampaigns/OracleSection";
 import { DarkStyledTabs, DarkStyledTab } from "components/shared/StyledTabs";
 import { useState } from "react";
 import { useStore } from "stores/store";

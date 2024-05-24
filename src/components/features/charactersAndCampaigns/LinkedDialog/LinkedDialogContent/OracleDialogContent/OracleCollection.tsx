@@ -1,7 +1,7 @@
 import { Datasworn } from "@datasworn/core";
 import { useStore } from "stores/store";
-import { OracleCollection as OracleCollectionRenderer } from "components/features/charactersAndCampaigns/NewOracleSection/OracleCollection";
-import { CATEGORY_VISIBILITY } from "components/features/charactersAndCampaigns/NewOracleSection/useFilterOracles";
+import { OracleCollection as OracleCollectionRenderer } from "components/features/charactersAndCampaigns/OracleSection/OracleCollection";
+import { CATEGORY_VISIBILITY } from "components/features/charactersAndCampaigns/OracleSection/useFilterOracles";
 
 export interface OracleCollectionProps {
   collection: Datasworn.OracleTablesCollection;
