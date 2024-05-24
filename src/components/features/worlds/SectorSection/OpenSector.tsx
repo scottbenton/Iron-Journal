@@ -105,11 +105,9 @@ export function OpenSector(props: OpenSectorProps) {
       if (!planetClass) {
         return;
       }
-      console.debug("Planet Class", planetClass);
       const convertedClass = planetClass?.result
         ?.split(" ")[0]
         .toLocaleLowerCase();
-      console.debug(convertedClass);
       //starforged/oracles/planets/desert/name
       const name = rollOracleTableNew(
         `starforged/oracles/planets/${convertedClass}/name`,
