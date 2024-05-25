@@ -5,7 +5,7 @@ import { listenToCampaignCharacters } from "api-calls/campaign/listenToCampaignC
 import { listenToAssets } from "api-calls/assets/listenToAssets";
 import { updateCharacter } from "api-calls/character/updateCharacter";
 import { listenToProgressTracks } from "api-calls/tracks/listenToProgressTracks";
-import { ProgressTrack, TrackStatus, TrackTypes } from "types/Track.type";
+import { TrackStatus, TrackTypes } from "types/Track.type";
 
 export const createCampaignCharactersSlice: CreateSliceType<
   CampaignCharactersSlice
@@ -83,29 +83,15 @@ export const createCampaignCharactersSlice: CreateSliceType<
                 [TrackTypes.Fray]: {},
                 [TrackTypes.Journey]: {},
                 [TrackTypes.Vow]: {},
+                [TrackTypes.SceneChallenge]: {},
+                [TrackTypes.Clock]: {},
               };
             }
             Object.keys(tracks).forEach((trackId) => {
               const track = tracks[trackId];
-              switch (track.type) {
-                case TrackTypes.Fray:
-                  store.campaigns.currentCampaign.characters.characterTracks[
-                    characterId
-                  ][TrackTypes.Fray][trackId] = track as ProgressTrack;
-                  break;
-                case TrackTypes.Journey:
-                  store.campaigns.currentCampaign.characters.characterTracks[
-                    characterId
-                  ][TrackTypes.Journey][trackId] = track as ProgressTrack;
-                  break;
-                case TrackTypes.Vow:
-                  store.campaigns.currentCampaign.characters.characterTracks[
-                    characterId
-                  ][TrackTypes.Vow][trackId] = track as ProgressTrack;
-                  break;
-                default:
-                  break;
-              }
+              store.campaigns.currentCampaign.characters.characterTracks[
+                characterId
+              ][track.type][trackId] = track;
             });
           });
         },

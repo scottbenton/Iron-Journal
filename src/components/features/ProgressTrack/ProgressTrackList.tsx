@@ -1,5 +1,5 @@
 import { Button, Checkbox, FormControlLabel } from "@mui/material";
-import { TrackSectionProgressTracks } from "types/Track.type";
+import { TrackSectionProgressTracks, TrackTypes } from "types/Track.type";
 import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { useState } from "react";
@@ -7,7 +7,7 @@ import { useStore } from "stores/store";
 import { ProgressTracks } from "./ProgressTracks";
 
 export interface ProgressTrackListProps {
-  trackType: TrackSectionProgressTracks;
+  trackType: TrackSectionProgressTracks | TrackTypes.SceneChallenge;
   typeLabel: string;
   headingBreakContainer?: boolean;
   readOnly?: boolean;

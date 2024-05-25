@@ -18,15 +18,19 @@ import {
   Difficulty,
   TrackStatus,
   TrackSectionProgressTracks,
+  TrackTypes,
+  SceneChallenge,
 } from "types/Track.type";
 
 export interface EditOrCreateTrackDialogProps {
   open: boolean;
   handleClose: () => void;
-  initialTrack?: ProgressTrack;
-  trackType: TrackSectionProgressTracks;
+  initialTrack?: ProgressTrack | SceneChallenge;
+  trackType: TrackSectionProgressTracks | TrackTypes.SceneChallenge;
   trackTypeName: string;
-  handleTrack: (track: ProgressTrack) => Promise<boolean | void>;
+  handleTrack: (
+    track: ProgressTrack | SceneChallenge
+  ) => Promise<boolean | void>;
 }
 
 export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
@@ -69,16 +73,29 @@ export function EditOrCreateTrackDialog(props: EditOrCreateTrackDialogProps) {
       return;
     }
 
-    const track: ProgressTrack = {
-      createdDate: new Date(),
-      status: TrackStatus.Active,
-      type: trackType,
-      ...(initialTrack ?? {}),
-      label: title,
-      description,
-      difficulty: difficulty,
-      value: initialTrack && !resetProgress ? initialTrack.value : 0,
-    };
+    const track: ProgressTrack | SceneChallenge =
+      trackType === TrackTypes.SceneChallenge
+        ? {
+            createdDate: new Date(),
+            status: TrackStatus.Active,
+            type: trackType,
+            ...((initialTrack as SceneChallenge | undefined) ?? {}),
+            label: title,
+            description,
+            difficulty: difficulty,
+            value: initialTrack && !resetProgress ? initialTrack.value : 0,
+            segmentsFilled: 0,
+          }
+        : {
+            createdDate: new Date(),
+            status: TrackStatus.Active,
+            type: trackType,
+            ...((initialTrack as ProgressTrack | undefined) ?? {}),
+            label: title,
+            description,
+            difficulty: difficulty,
+            value: initialTrack && !resetProgress ? initialTrack.value : 0,
+          };
 
     setLoading(true);
     handleTrack(track)

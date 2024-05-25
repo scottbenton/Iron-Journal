@@ -4,17 +4,14 @@ import {
   getCampaignTracksCollection,
   getCharacterTracksCollection,
 } from "./_getRef";
-import { Track, TrackTypes } from "types/Track.type";
+import { Track, TrackSectionTracks } from "types/Track.type";
 
 export function listenToProgressTracks(
   campaignId: string | undefined,
   characterId: string | undefined,
   status: string,
   addOrUpdateTracks: (tracks: { [trackId: string]: Track }) => void,
-  removeTrack: (
-    trackId: string,
-    trackType: TrackTypes.Fray | TrackTypes.Journey | TrackTypes.Vow
-  ) => void,
+  removeTrack: (trackId: string, trackType: TrackSectionTracks) => void,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onError: (error: any) => void
 ): Unsubscribe | undefined {
@@ -36,13 +33,7 @@ export function listenToProgressTracks(
 
       snapshot.docChanges().forEach((change) => {
         if (change.type === "removed") {
-          removeTrack(
-            change.doc.id,
-            change.doc.data().type as
-              | TrackTypes.Fray
-              | TrackTypes.Journey
-              | TrackTypes.Vow
-          );
+          removeTrack(change.doc.id, change.doc.data().type);
         } else {
           addOrUpdateChanges[change.doc.id] = convertFromDatabase(
             change.doc.data()

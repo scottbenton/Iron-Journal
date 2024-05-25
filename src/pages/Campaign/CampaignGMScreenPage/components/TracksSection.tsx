@@ -72,6 +72,13 @@ export function TracksSection() {
           typeLabel={isStarforged ? "Shared Expedition" : "Shared Journey"}
           isCampaign
         />
+        {isStarforged && (
+          <ProgressTrackList
+            trackType={TrackTypes.SceneChallenge}
+            typeLabel={"Shared Scene Challenge"}
+            isCampaign
+          />
+        )}
         {Object.keys(characterTracks).map((characterId) => (
           <div key={characterId}>
             {characters[characterId] &&
@@ -116,7 +123,7 @@ export function TracksSection() {
           </div>
         ))}
       </div>
-      {isStarforged && <ClockSection />}
+      <ClockSection />
     </Stack>
   );
 }

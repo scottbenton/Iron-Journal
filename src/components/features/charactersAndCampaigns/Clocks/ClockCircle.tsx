@@ -2,14 +2,22 @@ import { Box, ButtonBase, SxProps, useTheme } from "@mui/material";
 import { ClockSegment } from "./ClockSegment";
 import { PropsWithChildren } from "react";
 
+export type ClockSize = "small" | "medium";
+
+const sizes: Record<ClockSize, number> = {
+  small: 60,
+  medium: 100,
+};
+
 export interface ClockCircleProps {
   segments: number;
   value: number;
   onClick?: () => void;
+  size?: ClockSize;
 }
 
 export function ClockCircle(props: ClockCircleProps) {
-  const { segments, value, onClick } = props;
+  const { segments, value, onClick, size = "medium" } = props;
   const theme = useTheme();
 
   const Wrapper = (
@@ -38,8 +46,8 @@ export function ClockCircle(props: ClockCircleProps) {
   return (
     <Wrapper sx={{ borderRadius: 999 }} onClick={onClick}>
       <svg
-        width="100"
-        height="100"
+        width={sizes[size]}
+        height={sizes[size]}
         viewBox="-2 -2 104 104"
         stroke={theme.palette.grey[theme.palette.mode === "light" ? 700 : 600]}
       >

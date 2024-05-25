@@ -61,7 +61,7 @@ export function convertToDatabase(track: Track): TrackDocument {
   return {
     ...rest,
     createdTimestamp: Timestamp.fromDate(createdDate),
-  };
+  } as TrackDocument;
 }
 
 export function convertFromDatabase(track: TrackDocument): Track {

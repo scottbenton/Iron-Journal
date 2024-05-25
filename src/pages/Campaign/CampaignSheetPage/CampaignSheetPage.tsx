@@ -13,8 +13,6 @@ import { Head } from "providers/HeadProvider/Head";
 import { useStore } from "stores/store";
 import { useSyncStore } from "./hooks/useSyncStore";
 import { ClockSection } from "components/features/charactersAndCampaigns/Clocks/ClockSection";
-import { useGameSystem } from "hooks/useGameSystem";
-import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { EmptyState } from "components/shared/EmptyState";
 import { LinkComponent } from "components/shared/LinkComponent";
 import { CAMPAIGN_ROUTES, constructCampaignPath } from "../routes";
@@ -28,8 +26,6 @@ enum TABS {
 
 export function CampaignSheetPage() {
   useSyncStore();
-
-  const showClocks = useGameSystem().gameSystem === GAME_SYSTEMS.STARFORGED;
 
   const uid = useStore((store) => store.auth.uid);
 
@@ -134,7 +130,7 @@ export function CampaignSheetPage() {
         {selectedTab === TABS.TRACKS && (
           <>
             <TracksSection campaign={campaign} addTopMargin={false} />
-            {showClocks && <ClockSection headingBreakContainer />}
+            <ClockSection headingBreakContainer />
           </>
         )}
       </PageContent>
