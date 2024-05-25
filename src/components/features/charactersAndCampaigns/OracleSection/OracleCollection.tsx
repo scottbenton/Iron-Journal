@@ -132,7 +132,7 @@ export function OracleCollection(props: OracleCollectionProps) {
               oracles={oracles}
               disabled={!isExpandedOrForced || disabled}
               visibleOracles={visibleOracles}
-              collectionVisibility={visibleCollections[collectionId]}
+              collectionVisibility={visibleCollections[collection._id]}
             />
           ))}
           {subCollectionIds.map((subCollectionId) => (
