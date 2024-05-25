@@ -16,7 +16,6 @@ export interface OracleListItemProps {
 export function OracleListItem(props: OracleListItemProps) {
   const { oracleId, oracles, visibleOracles, disabled, collectionVisibility } =
     props;
-
   const oracle = oracles[oracleId];
   const { rollOracleTable } = useRoller();
 
