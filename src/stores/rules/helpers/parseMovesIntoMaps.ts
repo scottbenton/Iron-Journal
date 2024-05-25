@@ -13,8 +13,9 @@ export function parseMovesIntoMaps(
     if (category.contents) {
       if (category.replaces) {
         moveCategoryMap[category.replaces] = category;
+      } else {
+        moveCategoryMap[category._id] = category;
       }
-      moveCategoryMap[category._id] = category;
       nonReplacedMoveCategoryMap[category._id] = category;
       Object.values(category.contents).forEach((move) => {
         if (move.replaces) {

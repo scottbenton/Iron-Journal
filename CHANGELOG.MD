@@ -16,6 +16,9 @@
 
 ### Bug Fixes
 
+- Fixed "replaced" oracle tables not showing children
+- Fixed "replaced" move tables showing up twice
+
 ## 3.0.0
 
 ### New Features
