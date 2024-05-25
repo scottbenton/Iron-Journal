@@ -5,6 +5,7 @@ import {
   TrackStatus,
   TrackTypes,
   Track,
+  SceneChallenge,
 } from "types/Track.type";
 
 export interface CampaignTracksSliceData {
@@ -12,10 +13,11 @@ export interface CampaignTracksSliceData {
   trackMap: Record<
     TrackStatus,
     {
-      [TrackTypes.Fray]: { [trackId: string]: ProgressTrack };
-      [TrackTypes.Journey]: { [trackId: string]: ProgressTrack };
-      [TrackTypes.Vow]: { [trackId: string]: ProgressTrack };
-      [TrackTypes.Clock]: { [clockId: string]: Clock };
+      [TrackTypes.Fray]: Record<string, ProgressTrack>;
+      [TrackTypes.Journey]: Record<string, ProgressTrack>;
+      [TrackTypes.Vow]: Record<string, ProgressTrack>;
+      [TrackTypes.SceneChallenge]: Record<string, SceneChallenge>;
+      [TrackTypes.Clock]: Record<string, Clock>;
     }
   >;
   error?: string;

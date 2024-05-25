@@ -1,7 +1,12 @@
 import { Divider, Stack } from "@mui/material";
 import { useState } from "react";
 import { useStore } from "stores/store";
-import { TrackSectionProgressTracks, TrackStatus } from "types/Track.type";
+import {
+  SceneChallenge,
+  TrackSectionProgressTracks,
+  TrackStatus,
+  TrackTypes,
+} from "types/Track.type";
 import { ProgressTrack } from "./ProgressTrack";
 import { EmptyState } from "components/shared/EmptyState";
 import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
@@ -9,7 +14,7 @@ import { EditOrCreateTrackDialog } from "./EditOrCreateTrackDialog";
 export interface ProgressTracksProps {
   isCampaign?: boolean;
   isCompleted?: boolean;
-  trackType: TrackSectionProgressTracks;
+  trackType: TrackSectionProgressTracks | TrackTypes.SceneChallenge;
   typeLabel: string;
   headingBreakContainer?: boolean;
   readOnly?: boolean;
@@ -71,6 +76,13 @@ export function ProgressTracks(props: ProgressTracksProps) {
     updateProgressTrack(trackId, { value }).catch(() => {});
   };
 
+  const updateSceneChallengeValue = (
+    trackId: string,
+    segmentsFilled: number
+  ) => {
+    updateProgressTrack(trackId, { segmentsFilled }).catch(() => {});
+  };
+
   return (
     <>
       <Stack
@@ -90,7 +102,6 @@ export function ProgressTracks(props: ProgressTracksProps) {
             <ProgressTrack
               key={index}
               status={tracks[trackId].status}
-              trackType={trackType}
               label={tracks[trackId].label}
               description={tracks[trackId].description}
               difficulty={tracks[trackId].difficulty}
@@ -112,6 +123,23 @@ export function ProgressTracks(props: ProgressTracksProps) {
                   : () => setCurrentlyEditingTrackId(trackId)
               }
               hideRollButton={readOnly || isCompleted}
+              {...(trackType === TrackTypes.SceneChallenge
+                ? {
+                    sceneChallenge: {
+                      filledSegments: (tracks[trackId] as SceneChallenge)
+                        .segmentsFilled,
+                      onChange:
+                        readOnly || isCompleted
+                          ? undefined
+                          : (newFilledSegments: number) =>
+                              updateSceneChallengeValue(
+                                trackId,
+                                newFilledSegments
+                              ),
+                    },
+                    trackType: TrackTypes.SceneChallenge,
+                  }
+                : { trackType })}
             />
           ))
         ) : (

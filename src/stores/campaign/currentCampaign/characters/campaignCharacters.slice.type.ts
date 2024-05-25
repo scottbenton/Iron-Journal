@@ -1,7 +1,12 @@
 import { CharacterDocument } from "api-calls/character/_character.type";
 import { Unsubscribe } from "firebase/firestore";
 import { AssetDocument } from "api-calls/assets/_asset.type";
-import { ProgressTrack, TrackTypes } from "types/Track.type";
+import {
+  Clock,
+  ProgressTrack,
+  SceneChallenge,
+  TrackTypes,
+} from "types/Track.type";
 
 export interface CampaignCharactersSliceData {
   characterMap: Record<string, CharacterDocument>;
@@ -17,6 +22,12 @@ export interface CampaignCharactersSliceData {
       };
       [TrackTypes.Vow]: {
         [key: string]: ProgressTrack;
+      };
+      [TrackTypes.SceneChallenge]: {
+        [key: string]: SceneChallenge;
+      };
+      [TrackTypes.Clock]: {
+        [key: string]: Clock;
       };
     };
   };

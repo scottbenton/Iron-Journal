@@ -6,10 +6,12 @@
 
 - Added a match reminder to the roll display for oracle rolls that care about dice matching (ask the oracle moves)
 - Added asset clock and counter controls working for assets that use them (ex: Snub Fighter Ability #3, or Marked Ability #2).
+- Added scene challenges to Crew Link
 
 ### Changes
 
 - Re-added missing roll buttons for assets in the move dialog
+- Made tensions clocks available in Iron Fellowship
 
 ### Bug Fixes
 

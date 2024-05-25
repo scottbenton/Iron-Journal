@@ -1,8 +1,6 @@
 import { Datasworn } from "@datasworn/core";
 import { Box, Typography } from "@mui/material";
-import { useDebouncedState } from "hooks/useDebouncedState";
-import { useStore } from "stores/store";
-import { ClockCircle } from "components/features/charactersAndCampaigns/Clocks/ClockCircle";
+import { DebouncedClockCircle } from "components/features/charactersAndCampaigns/Clocks/DebouncedClockCircle";
 
 export interface AssetControlClockProps {
   value?: number;
@@ -12,28 +10,6 @@ export interface AssetControlClockProps {
 
 export function AssetControlClock(props: AssetControlClockProps) {
   const { value, field, onChange } = props;
-
-  const [localValue, setLocalValue] = useDebouncedState<number>(
-    (value) => onChange && onChange(value),
-    value ?? field.value,
-    500
-  );
-
-  const announce = useStore((store) => store.appState.announce);
-
-  const handleIncrement = () => {
-    setLocalValue((prev) => {
-      const newValue = prev + 1;
-      if (typeof field.max === "number" && field.max < newValue) {
-        announce(
-          `Cannot increase ${field.label} beyond ${field.max}. Resetting field to 0`
-        );
-        return 0;
-      }
-      announce(`Increased ${field.label} by 1 for a total of ${newValue}`);
-      return newValue;
-    });
-  };
 
   return (
     <Box>
@@ -45,10 +21,12 @@ export function AssetControlClock(props: AssetControlClockProps) {
         {field.label}
       </Typography>
 
-      <ClockCircle
-        value={localValue}
+      <DebouncedClockCircle
+        value={value ?? 0}
         segments={field.max}
-        onClick={handleIncrement}
+        onFilledSegmentsChange={onChange}
+        voiceLabel={field.label}
+        size={"small"}
       />
     </Box>
   );

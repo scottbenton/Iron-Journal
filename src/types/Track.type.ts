@@ -7,6 +7,7 @@ export enum TrackTypes {
   Fray = "fray",
   BondProgress = "bondProgress",
   Clock = "clock",
+  SceneChallenge = "sceneChallenge",
 }
 
 export type ProgressTracks =
@@ -18,7 +19,10 @@ export type TrackSectionProgressTracks =
   | TrackTypes.Fray
   | TrackTypes.Journey
   | TrackTypes.Vow;
-export type TrackSectionTracks = TrackSectionProgressTracks | TrackTypes.Clock;
+export type TrackSectionTracks =
+  | TrackSectionProgressTracks
+  | TrackTypes.Clock
+  | TrackTypes.SceneChallenge;
 
 export enum TrackStatus {
   Active = "active",
@@ -47,12 +51,20 @@ export interface BaseTrackDocument extends Omit<BaseTrack, "createdDate"> {
 }
 
 export interface ProgressTrack extends BaseTrack {
+  type: TrackSectionProgressTracks;
+  difficulty: Difficulty;
+}
+
+export interface SceneChallenge extends BaseTrack {
+  type: TrackTypes.SceneChallenge;
+  segmentsFilled: number;
   difficulty: Difficulty;
 }
 
 export interface Clock extends BaseTrack {
+  type: TrackTypes.Clock;
   segments: number;
   oracleKey?: AskTheOracle;
 }
 
-export type Track = ProgressTrack | Clock;
+export type Track = ProgressTrack | Clock | SceneChallenge;

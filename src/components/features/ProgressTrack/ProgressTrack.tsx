@@ -16,14 +16,16 @@ import { useRoller } from "stores/appState/useRoller";
 import { GAME_SYSTEMS, GameSystemChooser } from "types/GameSystems.type";
 import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { useStore } from "stores/store";
+import { DebouncedClockCircle } from "../charactersAndCampaigns/Clocks/DebouncedClockCircle";
 
 const trackMoveIdSystemValues: GameSystemChooser<{
-  [key in ProgressTracks]: string;
+  [key in ProgressTracks | TrackTypes.SceneChallenge]: string;
 }> = {
   [GAME_SYSTEMS.IRONSWORN]: {
     [TrackTypes.Vow]: "classic/moves/quest/fulfill_your_vow",
     [TrackTypes.Journey]: "classic/moves/adventure/reach_your_destination",
     [TrackTypes.Fray]: "classic/moves/combat/end_the_fight",
+    [TrackTypes.SceneChallenge]: "",
     [TrackTypes.BondProgress]: "",
   },
   [GAME_SYSTEMS.STARFORGED]: {
@@ -31,11 +33,13 @@ const trackMoveIdSystemValues: GameSystemChooser<{
     [TrackTypes.Journey]: "starforged/moves/exploration/finish_an_expedition",
     [TrackTypes.Fray]: "starforged/moves/combat/take_decisive_action",
     [TrackTypes.BondProgress]: "starforged/moves/connection/forge_a_bond",
+    [TrackTypes.SceneChallenge]:
+      "starforged/moves/scene_challenge/finish_the_scene",
   },
 };
 
-export interface ProgressTracksProps {
-  trackType?: ProgressTracks;
+export interface BaseProgressTrackProps {
+  trackType?: ProgressTracks | TrackTypes.SceneChallenge;
   status?: TrackStatus;
   label?: string;
   difficulty?: Difficulty;
@@ -48,6 +52,22 @@ export interface ProgressTracksProps {
   hideDifficultyLabel?: boolean;
   hideRollButton?: boolean;
 }
+
+interface ProgressTrackProgressProps extends BaseProgressTrackProps {
+  trackType?: ProgressTracks;
+}
+
+interface SceneChallengeProgressProps extends BaseProgressTrackProps {
+  trackType: TrackTypes.SceneChallenge;
+  sceneChallenge: {
+    filledSegments: number;
+    onChange?: (newValue: number) => void;
+  };
+}
+
+export type ProgressTracksProps =
+  | ProgressTrackProgressProps
+  | SceneChallengeProgressProps;
 
 const getDifficultyLabel = (difficulty: Difficulty): string => {
   switch (difficulty) {
@@ -227,114 +247,142 @@ export function ProgressTrack(props: ProgressTracksProps) {
           </Typography>
         )}
       </Box>
-      <Box display={"flex"} mt={label ? 1 : 0}>
-        {onValueChange && (
-          <ButtonBase
-            aria-label={"Decrement Track"}
-            onClick={() => {
-              if (onValueChange) {
-                const newValue = Math.max(
-                  value - getDifficultyStep(difficulty),
-                  0
-                );
-                onValueChange(newValue);
-                if (newValue === value) {
-                  announce(`${label} is already at zero ticks`);
-                } else {
-                  announce(`Updated ${label} to ${getValueText(newValue)}`);
-                }
-              }
-            }}
-            focusRipple
-            sx={(theme) => ({
-              backgroundColor:
-                theme.palette.darkGrey[
-                  theme.palette.mode === "light" ? "main" : "light"
-                ],
-              color: theme.palette.darkGrey.contrastText,
-              px: 0.5,
-              "&:hover": {
-                backgroundColor: theme.palette.darkGrey.dark,
-              },
-              borderTopLeftRadius: `${theme.shape.borderRadius}px`,
-              borderBottomLeftRadius: `${theme.shape.borderRadius}px`,
-            })}
-          >
-            <MinusIcon />
-          </ButtonBase>
-        )}
+      <Box display={"flex"} alignItems={"center"} flexWrap={"wrap"}>
         <Box
           display={"flex"}
-          bgcolor={(theme) => theme.palette.background.paper}
-          color={(theme) =>
-            theme.palette.mode === "light"
-              ? theme.palette.grey[600]
-              : theme.palette.grey[300]
-          }
-          borderTop={1}
-          borderBottom={1}
-          borderLeft={onValueChange ? 0 : 1}
-          borderRight={onValueChange ? 0 : 1}
-          borderColor={(theme) => theme.palette.divider}
-          role={"meter"}
-          aria-labelledby={labelId}
-          aria-valuemin={0}
-          aria-valuemax={max}
-          aria-valuenow={value}
-          aria-valuetext={getValueText(value)}
+          mt={label ? 1 : 0}
+          mr={trackType === TrackTypes.SceneChallenge ? 2 : 0}
         >
-          {checks.map((value, index) => (
-            <Box
-              key={index}
+          {onValueChange && (
+            <ButtonBase
+              aria-label={"Decrement Track"}
+              onClick={() => {
+                if (onValueChange) {
+                  const newValue = Math.max(
+                    value - getDifficultyStep(difficulty),
+                    0
+                  );
+                  onValueChange(newValue);
+                  if (newValue === value) {
+                    announce(`${label} is already at zero ticks`);
+                  } else {
+                    announce(`Updated ${label} to ${getValueText(newValue)}`);
+                  }
+                }
+              }}
+              focusRipple
               sx={(theme) => ({
-                borderWidth: 1,
-                borderStyle: "solid",
-                borderColor: "transparent",
-                borderLeftColor:
-                  index !== 0 ? theme.palette.divider : undefined,
+                backgroundColor:
+                  theme.palette.darkGrey[
+                    theme.palette.mode === "light" ? "main" : "light"
+                  ],
+                color: theme.palette.darkGrey.contrastText,
+                px: 0.5,
+                "&:hover": {
+                  backgroundColor: theme.palette.darkGrey.dark,
+                },
+                borderTopLeftRadius: `${theme.shape.borderRadius}px`,
+                borderBottomLeftRadius: `${theme.shape.borderRadius}px`,
               })}
             >
-              <ProgressTrackTick value={value} key={index} aria-hidden />
-            </Box>
-          ))}
-        </Box>
-        {onValueChange && (
-          <ButtonBase
-            aria-label={"Increment Track"}
-            onClick={() => {
-              if (onValueChange) {
-                const newValue = Math.min(
-                  value + getDifficultyStep(difficulty),
-                  max
-                );
-                onValueChange(newValue);
-                if (newValue === value) {
-                  announce(
-                    `${label} is already at its maximum value of ${max} ticks`
-                  );
-                } else {
-                  announce(`Updated ${label} to ${getValueText(newValue)}`);
-                }
-              }
-            }}
-            focusRipple
-            sx={(theme) => ({
-              backgroundColor:
-                theme.palette.darkGrey[
-                  theme.palette.mode === "light" ? "main" : "light"
-                ],
-              color: theme.palette.darkGrey.contrastText,
-              px: 0.5,
-              "&:hover": {
-                backgroundColor: theme.palette.darkGrey.dark,
-              },
-
-              borderTopRightRadius: `${theme.shape.borderRadius}px`,
-              borderBottomRightRadius: `${theme.shape.borderRadius}px`,
-            })}
+              <MinusIcon />
+            </ButtonBase>
+          )}
+          <Box
+            display={"flex"}
+            bgcolor={(theme) => theme.palette.background.paper}
+            color={(theme) =>
+              theme.palette.mode === "light"
+                ? theme.palette.grey[600]
+                : theme.palette.grey[300]
+            }
+            borderTop={1}
+            borderBottom={1}
+            borderLeft={onValueChange ? 0 : 1}
+            borderRight={onValueChange ? 0 : 1}
+            borderColor={(theme) => theme.palette.divider}
+            role={"meter"}
+            aria-labelledby={labelId}
+            aria-valuemin={0}
+            aria-valuemax={max}
+            aria-valuenow={value}
+            aria-valuetext={getValueText(value)}
           >
-            <PlusIcon />
-          </ButtonBase>
+            {checks.map((value, index) => (
+              <Box
+                key={index}
+                sx={(theme) => ({
+                  borderWidth: 1,
+                  borderStyle: "solid",
+                  borderColor: "transparent",
+                  borderLeftColor:
+                    index !== 0 ? theme.palette.divider : undefined,
+                })}
+              >
+                <ProgressTrackTick value={value} key={index} aria-hidden />
+              </Box>
+            ))}
+          </Box>
+          {onValueChange && (
+            <ButtonBase
+              aria-label={"Increment Track"}
+              onClick={() => {
+                if (onValueChange) {
+                  const newValue = Math.min(
+                    value + getDifficultyStep(difficulty),
+                    max
+                  );
+                  onValueChange(newValue);
+                  if (newValue === value) {
+                    announce(
+                      `${label} is already at its maximum value of ${max} ticks`
+                    );
+                  } else {
+                    announce(`Updated ${label} to ${getValueText(newValue)}`);
+                  }
+                }
+              }}
+              focusRipple
+              sx={(theme) => ({
+                backgroundColor:
+                  theme.palette.darkGrey[
+                    theme.palette.mode === "light" ? "main" : "light"
+                  ],
+                color: theme.palette.darkGrey.contrastText,
+                px: 0.5,
+                "&:hover": {
+                  backgroundColor: theme.palette.darkGrey.dark,
+                },
+
+                borderTopRightRadius: `${theme.shape.borderRadius}px`,
+                borderBottomRightRadius: `${theme.shape.borderRadius}px`,
+              })}
+            >
+              <PlusIcon />
+            </ButtonBase>
+          )}
+        </Box>
+
+        {trackType === TrackTypes.SceneChallenge && (
+          <DebouncedClockCircle
+            size={"small"}
+            segments={4}
+            value={props.sceneChallenge.filledSegments}
+            voiceLabel={label || "Scene Challenge"}
+            onFilledSegmentsChange={
+              props.sceneChallenge.onChange
+                ? () => {
+                    let newValue = props.sceneChallenge.filledSegments + 1;
+                    if (newValue > 4) {
+                      newValue = 0;
+                    }
+                    if (props.sceneChallenge.onChange) {
+                      props.sceneChallenge.onChange(newValue);
+                    }
+                  }
+                : undefined
+            }
+          />
         )}
       </Box>
       {onDelete && (

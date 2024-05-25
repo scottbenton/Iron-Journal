@@ -32,6 +32,14 @@ export function CampaignProgressTracks(props: CampaignProgressTracksProps) {
         isCampaign
         headingBreakContainer={!addPadding}
       />
+      {isStarforged && (
+        <ProgressTrackList
+          trackType={TrackTypes.SceneChallenge}
+          typeLabel={"Scene Challenge"}
+          isCampaign
+          headingBreakContainer={!addPadding}
+        />
+      )}
     </>
   );
 }
