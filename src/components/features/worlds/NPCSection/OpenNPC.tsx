@@ -13,7 +13,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { NPC, NPCSpecies } from "types/NPCs.type";
+import { NPC, DefaultNPCSpecies } from "types/NPCs.type";
 import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import { useRef } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -34,6 +34,60 @@ import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { Sector } from "types/Sector.type";
 import { Difficulty } from "types/Track.type";
 
+const defaultNPCSpeciesOptions: {
+  enum: DefaultNPCSpecies;
+  label: string;
+}[] = [
+  {
+    enum: DefaultNPCSpecies.Ironlander,
+    label: "Ironlander",
+  },
+  {
+    enum: DefaultNPCSpecies.Elf,
+    label: "Elf",
+  },
+  {
+    enum: DefaultNPCSpecies.Giant,
+    label: "Giant",
+  },
+  {
+    enum: DefaultNPCSpecies.Varou,
+    label: "Varou",
+  },
+  {
+    enum: DefaultNPCSpecies.Troll,
+    label: "Troll",
+  },
+  {
+    enum: DefaultNPCSpecies.Other,
+    label: "Other",
+  },
+];
+
+const getSpeciesEnumFromLabel = (
+  label: string | undefined | null
+): DefaultNPCSpecies | string | null => {
+  if (!label) {
+    return null;
+  }
+  const matchingOption = defaultNPCSpeciesOptions.find(
+    (option) => option.label === label
+  );
+  return matchingOption?.enum ?? label;
+};
+
+const getSpeciesLabelFromEnum = (
+  enumValue: DefaultNPCSpecies | string | null | undefined
+): string | null => {
+  if (!enumValue) {
+    return null;
+  }
+  const matchingOption = defaultNPCSpeciesOptions.find(
+    (option) => option.enum === enumValue
+  );
+  return matchingOption?.label ?? enumValue;
+};
+
 export interface OpenNPCProps {
   worldId: string;
   npcId: string;
@@ -43,16 +97,16 @@ export interface OpenNPCProps {
   closeNPC: () => void;
 }
 
-const nameOracles: { [key in NPCSpecies]: string | string[] } = {
-  [NPCSpecies.Ironlander]: [
+const nameOracles: { [key in DefaultNPCSpecies]: string | string[] } = {
+  [DefaultNPCSpecies.Ironlander]: [
     "classic/oracles/name/ironlander/a",
     "classic/oracles/name/ironlander/b",
   ],
-  [NPCSpecies.Elf]: "classic/oracles/name/elf",
-  [NPCSpecies.Giant]: "classic/oracles/name/other/giants",
-  [NPCSpecies.Varou]: "classic/oracles/name/other/varou",
-  [NPCSpecies.Troll]: "classic/oracles/name/other/trolls",
-  [NPCSpecies.Other]: [
+  [DefaultNPCSpecies.Elf]: "classic/oracles/name/elf",
+  [DefaultNPCSpecies.Giant]: "classic/oracles/name/other/giants",
+  [DefaultNPCSpecies.Varou]: "classic/oracles/name/other/varou",
+  [DefaultNPCSpecies.Troll]: "classic/oracles/name/other/trolls",
+  [DefaultNPCSpecies.Other]: [
     "classic/oracles/name/ironlander/a",
     "classic/oracles/name/ironlander/b",
   ],
@@ -164,7 +218,10 @@ export function OpenNPC(props: OpenNPCProps) {
   });
 
   const npcNameOracles = useGameSystemValue<string | string[]>({
-    [GAME_SYSTEMS.IRONSWORN]: nameOracles[npc.species ?? NPCSpecies.Ironlander],
+    [GAME_SYSTEMS.IRONSWORN]:
+      npc.species && npc.species in nameOracles
+        ? nameOracles[npc.species as DefaultNPCSpecies]
+        : nameOracles[DefaultNPCSpecies.Ironlander],
     [GAME_SYSTEMS.STARFORGED]: [
       "starforged/oracles/characters/name/given",
       "starforged/oracles/characters/name/family_name",
@@ -347,25 +404,20 @@ export function OpenNPC(props: OpenNPCProps) {
             )}
             {!isStarforged && (
               <Grid item xs={12} sm={6}>
-                <TextField
-                  select
-                  label={"Species"}
-                  value={npc.species}
-                  onChange={(evt) =>
-                    handleUpdateNPC({
-                      species: (evt.target.value ??
-                        NPCSpecies.Ironlander) as NPCSpecies,
-                    })
+                <Autocomplete
+                  freeSolo
+                  autoSelect
+                  options={defaultNPCSpeciesOptions.map(
+                    (option) => option.label
+                  )}
+                  value={getSpeciesLabelFromEnum(npc.species)}
+                  onChange={(evt, value) =>
+                    handleUpdateNPC({ species: getSpeciesEnumFromLabel(value) })
                   }
-                  fullWidth
-                >
-                  <MenuItem value={NPCSpecies.Ironlander}>Ironlander</MenuItem>
-                  <MenuItem value={NPCSpecies.Elf}>Elf</MenuItem>
-                  <MenuItem value={NPCSpecies.Giant}>Giant</MenuItem>
-                  <MenuItem value={NPCSpecies.Varou}>Varou</MenuItem>
-                  <MenuItem value={NPCSpecies.Troll}>Troll</MenuItem>
-                  <MenuItem value={NPCSpecies.Other}>Other</MenuItem>
-                </TextField>
+                  renderInput={(params) => (
+                    <TextField {...params} label={"Species"} fullWidth />
+                  )}
+                />
               </Grid>
             )}
             {!isStarforged && (

@@ -12,6 +12,7 @@
 
 - Re-added missing roll buttons for assets in the move dialog
 - Made tensions clocks available in Iron Fellowship
+- You can now enter other species into the NPC species box. They will use the default Ironlander name oracles (Ironsworn)
 
 ### Bug Fixes
 

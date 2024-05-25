@@ -1,6 +1,6 @@
 import { Difficulty } from "./Track.type";
 
-export enum NPCSpecies {
+export enum DefaultNPCSpecies {
   Ironlander = "ironlander",
   Elf = "elf",
   Giant = "giant",
@@ -12,7 +12,7 @@ export enum NPCSpecies {
 export interface NPC {
   name: string;
   pronouns?: string;
-  species?: NPCSpecies; // Ironsworn only
+  species?: string | null; // Ironsworn only
   lastLocationId?: string; // Ironsworn only
   lastSectorId?: string; // Starforged only
   imageFilenames?: string[];
