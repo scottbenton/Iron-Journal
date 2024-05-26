@@ -1,11 +1,12 @@
 import { Button, Menu, MenuItem } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CampaignDocument } from "api-calls/campaign/_campaign.type";
 import MoreIcon from "@mui/icons-material/MoreHoriz";
 import { useConfirm } from "material-ui-confirm";
 import { useNavigate } from "react-router-dom";
 import { CAMPAIGN_ROUTES, constructCampaignPath } from "pages/Campaign/routes";
 import { useStore } from "stores/store";
+import { ChooseCampaignTypeDialog } from "./ChooseCampaignTypeDialog";
 
 export interface CampaignActionsMenuProps {
   campaign: CampaignDocument;
@@ -87,6 +88,21 @@ export function CampaignActionsMenu(props: CampaignActionsMenuProps) {
 
   const isGm = !!uid && (gmIds?.includes(uid) ?? false);
 
+  const [campaignTypeDialogOpen, setCampaignTypeDialogOpen] = useState(false);
+  const isFirstCheck = useRef(true);
+  const campaignType = campaign?.type;
+  useEffect(() => {
+    if (
+      campaign &&
+      !campaignType &&
+      isFirstCheck.current &&
+      (isGm || campaign.users.length === 1)
+    ) {
+      isFirstCheck.current = false;
+      setCampaignTypeDialogOpen(true);
+    }
+  }, [campaignType, campaign, isGm]);
+
   return (
     <>
       <Button
@@ -106,11 +122,20 @@ export function CampaignActionsMenu(props: CampaignActionsMenuProps) {
           </MenuItem>
         )}
         {(isGm || campaign.users.length === 1) && (
+          <MenuItem onClick={() => setCampaignTypeDialogOpen(true)}>
+            Change Campaign Type
+          </MenuItem>
+        )}
+        {(isGm || campaign.users.length === 1) && (
           <MenuItem onClick={() => handleDeleteCampaign()}>
             End Campaign
           </MenuItem>
         )}
       </Menu>
+      <ChooseCampaignTypeDialog
+        open={campaignTypeDialogOpen}
+        onClose={() => setCampaignTypeDialogOpen(false)}
+      />
     </>
   );
 }
