@@ -128,7 +128,7 @@ export function CharacterHeader() {
           />
         </Box>
       </Box>
-      {isMedium && (
+      {(isSmall || isMedium) && (
         <Box
           display={"flex"}
           alignItems={"center"}
