@@ -7,8 +7,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { constructWorldSheetPath } from "pages/World/routes";
-import { useNavigate } from "react-router-dom";
 import { World } from "types/World.type";
 import { EmptyState } from "../../shared/EmptyState/EmptyState";
 import { useStore } from "stores/store";
@@ -31,8 +29,6 @@ export function WorldEmptyState(props: WorldEmptyStateProps) {
     isOnWorldTab,
   } = props;
 
-  const navigate = useNavigate();
-
   const characterId = useStore(
     (store) => store.characters.currentCharacter.currentCharacterId
   );
@@ -52,12 +48,12 @@ export function WorldEmptyState(props: WorldEmptyStateProps) {
   const handleWorldCreate = () => {
     createWorld()
       .then((worldId) => {
+        console.debug(campaignId, characterId, worldId);
         if (campaignId) {
           updateCampaign({ worldId }).catch(() => {});
         } else if (characterId) {
           updateCharacter({ worldId }).catch(() => {});
         }
-        navigate(constructWorldSheetPath(worldId));
       })
       .catch(() => {});
   };

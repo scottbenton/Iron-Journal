@@ -65,7 +65,7 @@ const router = createBrowserRouter(
             />
             <Route
               path={campaignPaths[CAMPAIGN_ROUTES.SHEET]}
-              lazy={() => import("pages/Campaign/CampaignSheetPage")}
+              lazy={() => import("pages/Campaign/CampaignPage")}
             />
             <Route
               path={campaignPaths[CAMPAIGN_ROUTES.GM_SCREEN]}
