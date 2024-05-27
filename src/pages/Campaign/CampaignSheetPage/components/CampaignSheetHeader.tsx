@@ -1,6 +1,9 @@
 import { Button, Dialog, DialogContent, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { CampaignDocument } from "api-calls/campaign/_campaign.type";
+import {
+  CampaignDocument,
+  CampaignType,
+} from "api-calls/campaign/_campaign.type";
 import { CampaignActionsMenu } from "./CampaignActionsMenu";
 import { PageHeader } from "components/shared/Layout";
 import {
@@ -12,6 +15,8 @@ import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithClo
 import { useSnackbar } from "providers/SnackbarProvider/useSnackbar";
 import { useStore } from "stores/store";
 import { EditableTitle } from "components/shared/EditableTitle";
+import { useCampaignType } from "hooks/useCampaignType";
+import { useNewCampaignType } from "hooks/featureFlags/useNewCampaginType";
 
 export interface CampaignSheetHeaderProps {
   campaign: CampaignDocument;
@@ -20,6 +25,9 @@ export interface CampaignSheetHeaderProps {
 
 export function CampaignSheetHeader(props: CampaignSheetHeaderProps) {
   const { campaign, campaignId } = props;
+
+  const usingNewCampaignType = useNewCampaignType();
+  const { campaignType, showGuidedPlayerView } = useCampaignType();
 
   const uid = useStore((store) => store.auth.uid);
 
@@ -72,30 +80,47 @@ export function CampaignSheetHeader(props: CampaignSheetHeaderProps) {
             onBlur={(evt) =>
               updateCampaign({ name: evt.currentTarget.value }).catch(() => {})
             }
-            readOnly={!isGm}
+            readOnly={usingNewCampaignType ? showGuidedPlayerView : !isGm}
           />
         }
-        subLabel={(campaign.gmIds?.length ?? 0) > 0 ? `GM: ${gmLabel}` : ""}
+        subLabel={
+          usingNewCampaignType
+            ? campaignType === CampaignType.Guided
+              ? (campaign.gmIds?.length ?? 0) > 0
+                ? `GM: ${gmLabel}`
+                : ""
+              : undefined
+            : (campaign.gmIds?.length ?? 0) > 0
+            ? `GM: ${gmLabel}`
+            : ""
+        }
         actions={
           <>
-            <Button
-              color={"primary"}
-              variant={"contained"}
-              onClick={() => setInviteUsersDialogOpen(true)}
-            >
-              Invite your Group
-            </Button>
-            {(!campaign.gmIds || campaign.gmIds.length === 0) && (
+            {(usingNewCampaignType
+              ? campaignType !== CampaignType.Solo && !showGuidedPlayerView
+              : true) && (
               <Button
-                onClick={() =>
-                  updateCampaignGM(uid).catch((e) => console.error(e))
-                }
-                variant={"outlined"}
-                color={"inherit"}
+                color={"primary"}
+                variant={"contained"}
+                onClick={() => setInviteUsersDialogOpen(true)}
               >
-                Mark self as GM
+                Invite your Group
               </Button>
             )}
+            {(usingNewCampaignType
+              ? campaignType !== CampaignType.Solo
+              : true) &&
+              (!campaign.gmIds || campaign.gmIds.length === 0) && (
+                <Button
+                  onClick={() =>
+                    updateCampaignGM(uid).catch((e) => console.error(e))
+                  }
+                  variant={"outlined"}
+                  color={"inherit"}
+                >
+                  Mark self as GM
+                </Button>
+              )}
             {isGm && (
               <Button
                 component={Link}

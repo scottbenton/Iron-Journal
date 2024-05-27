@@ -15,6 +15,7 @@ export const createCampaign = createApiFunction<
     const storedCampaign: CampaignDocument = {
       name: campaignName,
       users: [uid],
+      gmIds: campaignType === CampaignType.Coop ? [uid] : [],
       characters: [],
       type: campaignType,
     };
