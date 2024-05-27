@@ -83,8 +83,6 @@ export function WorldSection() {
       {worldId && !world && <LinearProgress />}
       {!worldId && !world && (
         <WorldEmptyState
-          isGM
-          isMultiplayer
           isOnWorldTab
           worldsToChooseFrom={sortedWorlds}
           onChooseWorld={(worldIndex) => {

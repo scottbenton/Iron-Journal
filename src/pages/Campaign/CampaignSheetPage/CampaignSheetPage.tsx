@@ -46,6 +46,24 @@ export function CampaignSheetPage() {
     (store) => store.campaigns.currentCampaign.currentCampaign
   );
 
+  const worldIds = useStore((store) =>
+    Object.keys(store.worlds.worldMap)
+      .filter((w) => store.worlds.worldMap[w].ownerIds.includes(uid))
+      .sort((w1, w2) =>
+        store.worlds.worldMap[w2].name.localeCompare(
+          store.worlds.worldMap[w1].name
+        )
+      )
+  );
+  const worlds = useStore((store) => store.worlds.worldMap);
+  const sortedWorlds = worldIds.map((worldId) => worlds[worldId]);
+
+  const updateCampaignWorld = useStore(
+    (store) => store.campaigns.currentCampaign.updateCampaignWorld
+  );
+  const [updateCampaignWorldLoading, setUpdateCampaignWorldLoading] =
+    useState(false);
+
   const [syncLoading, setSyncLoading] = useState(true);
 
   useEffect(() => {
@@ -121,8 +139,15 @@ export function CampaignSheetPage() {
               <WorldSection />
             ) : (
               <WorldEmptyState
-                isGM={!!uid && (campaign.gmIds?.includes(uid) ?? false)}
-                isMultiplayer
+                isOnWorldTab
+                worldsToChooseFrom={sortedWorlds}
+                onChooseWorld={(worldIndex) => {
+                  setUpdateCampaignWorldLoading(true);
+                  updateCampaignWorld(worldIds[worldIndex])
+                    .catch(() => {})
+                    .finally(() => setUpdateCampaignWorldLoading(false));
+                }}
+                worldUpdateLoading={updateCampaignWorldLoading}
               />
             )}
           </>

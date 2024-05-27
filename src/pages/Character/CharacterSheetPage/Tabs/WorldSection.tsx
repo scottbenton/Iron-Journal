@@ -25,12 +25,6 @@ export function WorldSection() {
         store.auth.uid
       ) ?? false
   );
-  const isGM = useStore(
-    (store) =>
-      store.campaigns.currentCampaign.currentCampaign?.gmIds?.includes(
-        store.auth.uid
-      ) ?? false
-  );
 
   const canEdit = !campaignId || isWorldOwner;
 
@@ -96,8 +90,6 @@ export function WorldSection() {
             canEdit && updateCharacterWorld(worldIds[worldIndex])
           }
           worldUpdateLoading={updateCharacterWorldLoading}
-          isMultiplayer={!!campaignId}
-          isGM={isGM}
           isOnWorldTab={canEdit}
         />
       )}

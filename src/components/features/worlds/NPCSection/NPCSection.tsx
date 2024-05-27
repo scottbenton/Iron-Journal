@@ -85,9 +85,7 @@ export function NPCSection(props: NPCSectionProps) {
   };
 
   if (!worldId) {
-    return (
-      <WorldEmptyState isMultiplayer={!isSinglePlayer} isGM={isWorldOwner} />
-    );
+    return <WorldEmptyState />;
   }
 
   const openNPC = openNPCId ? npcs[openNPCId] : undefined;

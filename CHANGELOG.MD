@@ -8,6 +8,7 @@
 - Added asset clock and counter controls working for assets that use them (ex: Snub Fighter Ability #3, or Marked Ability #2).
 - Added scene challenges to Crew Link
 - Added a new Hinterlands theme
+- Added types to campaigns
 
 ### Changes
 
