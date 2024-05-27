@@ -28,6 +28,16 @@ export function MoveRollers(props: MoveRollersProps) {
     (store) => store.campaigns.currentCampaign.currentCampaign?.conditionMeters
   );
 
+  const hasCharacter = useStore(
+    (store) => !!store.characters.currentCharacter.currentCharacter
+  );
+  const adds = useStore(
+    (store) => store.characters.currentCharacter.currentCharacter?.adds ?? 0
+  );
+  const updateAdds = useStore(
+    (store) => store.characters.currentCharacter.updateCurrentCharacter
+  );
+
   const getConditionMeterValue = (conditionMeterKey: string): number => {
     const conditionMeter = conditionMeterRules[conditionMeterKey];
 
@@ -112,6 +122,15 @@ export function MoveRollers(props: MoveRollersProps) {
             move={move}
           />
         ))}
+
+        {hasCharacter && (
+          <StatComponent
+            label={"Adds"}
+            updateTrack={(newValue) => updateAdds({ adds: newValue })}
+            value={adds}
+            sx={{ my: 0.5 }}
+          />
+        )}
       </Stack>
     );
   } else if (move.roll_type === "progress_roll") {

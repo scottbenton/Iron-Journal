@@ -7,6 +7,7 @@
 - Added a match reminder to the roll display for oracle rolls that care about dice matching (ask the oracle moves)
 - Added asset clock and counter controls working for assets that use them (ex: Snub Fighter Ability #3, or Marked Ability #2).
 - Added scene challenges to Crew Link
+- Added a new Hinterlands theme
 
 ### Changes
 
@@ -18,6 +19,7 @@
 
 - Fixed "replaced" oracle tables not showing children
 - Fixed "replaced" move tables showing up twice
+- Fixed adds being removed from the move dialogs
 
 ## 3.0.0
 
