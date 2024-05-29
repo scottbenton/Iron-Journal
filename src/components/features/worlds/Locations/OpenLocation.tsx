@@ -44,7 +44,7 @@ export function OpenLocation(props: OpenLocationProps) {
     openNPCTab,
   } = props;
 
-  const { isSinglePlayer, showGMFields, showGMTips } = useWorldPermissions();
+  const { showGMFields, showGMTips, isGuidedGame } = useWorldPermissions();
 
   useListenToCurrentLocation(locationId);
 
@@ -249,7 +249,7 @@ export function OpenLocation(props: OpenLocationProps) {
                   oracleTableId={"classic/oracles/place/location"}
                 />
               </Grid>
-              {!isSinglePlayer && showGMFields && (
+              {isGuidedGame && showGMFields && (
                 <Grid
                   item
                   xs={12}
@@ -271,7 +271,7 @@ export function OpenLocation(props: OpenLocationProps) {
                   />
                 </Grid>
               )}
-              {isSinglePlayer && (
+              {!isGuidedGame && (
                 <BondsSection
                   isStarforged={false}
                   hasConnection={false}
@@ -300,7 +300,7 @@ export function OpenLocation(props: OpenLocationProps) {
               </Grid>
             </>
           )}
-          {!isSinglePlayer && (
+          {isGuidedGame && (
             <>
               {showGMTips && (
                 <>

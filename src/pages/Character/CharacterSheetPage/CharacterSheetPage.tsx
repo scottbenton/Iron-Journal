@@ -77,6 +77,7 @@ export function CharacterSheetPage() {
       <PageHeader />
       <PageContent
         viewHeight
+        hiddenHeader
         isPaper
         sx={(theme) => ({
           bgcolor:

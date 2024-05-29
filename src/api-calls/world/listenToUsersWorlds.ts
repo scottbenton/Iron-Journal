@@ -1,6 +1,6 @@
-import { World } from "types/World.type";
+import { World } from "api-calls/world/_world.type";
 import { decodeWorld, getWorldCollection } from "./_getRef";
-import { onSnapshot, query, where } from "firebase/firestore";
+import { onSnapshot, or, query, where } from "firebase/firestore";
 
 export function listenToUsersWorlds(
   uid: string,
@@ -12,8 +12,12 @@ export function listenToUsersWorlds(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onError: (error: any) => void
 ) {
+  const filter = or(
+    where("ownerIds", "array-contains", uid ?? ""),
+    where("campaignGuides", "array-contains", uid ?? "")
+  );
   return onSnapshot(
-    query(getWorldCollection(), where("ownerIds", "array-contains", uid ?? "")),
+    query(getWorldCollection(), filter),
     (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === "removed") {

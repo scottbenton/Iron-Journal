@@ -21,6 +21,7 @@ import { useListenToOracleSettings } from "stores/settings/useListenToOracleSett
 import { useListenToAccessibilitySettings } from "stores/accessibilitySettings/useListenToAccessibilitySettings";
 import { useListenToHomebrew } from "stores/homebrew/useListenToHomebrew";
 import { HOMEBREW_ROUTES, homebrewPaths } from "pages/Homebrew/routes";
+import { useSyncCampaignWorldPermissions } from "stores/campaign/useSyncCampaignWorldPermissions";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -132,6 +133,8 @@ export function Router() {
   useListenToWorlds();
   useListenToOracleSettings();
   useListenToHomebrew();
+
+  useSyncCampaignWorldPermissions();
 
   return <RouterProvider router={router} />;
 }

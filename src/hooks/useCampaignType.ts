@@ -49,8 +49,7 @@ export function useCampaignType(): {
     showGuideTips = false;
     showGuidedPlayerView = false;
     hasMultipleCharacters = false;
-  }
-  if (hasCampaign) {
+  } else if (hasCampaign) {
     if (!campaignType || campaignType === CampaignType.Guided) {
       if (isCampaignGM) {
         type = CampaignType.Guided;
@@ -87,10 +86,6 @@ export function useCampaignType(): {
       hasMultipleCharacters = true;
     }
   }
-  console.debug("Campaign Type:", type);
-  console.debug("Show Guid Tips:", showGuideTips);
-  console.debug("Show Guided Player View:", showGuidedPlayerView);
-  console.debug("Has Multiple Characters:", hasMultipleCharacters);
   return {
     campaignType: type,
     showGuideTips,

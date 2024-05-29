@@ -15,7 +15,6 @@ import { CAMPAIGN_ROUTES, constructCampaignSheetPath } from "../../routes";
 import { useStore } from "stores/store";
 import { CampaignType } from "api-calls/campaign/_campaign.type";
 import { CampaignTypeChooser } from "components/features/campaigns/CampaignTypeChooser";
-import { useNewCampaignType } from "hooks/featureFlags/useNewCampaginType";
 
 export interface CreateCampaignDialogProps {
   open: boolean;
@@ -30,8 +29,6 @@ export function CreateCampaignDialog(props: CreateCampaignDialogProps) {
   const [loading, setLoading] = useState(false);
   const [label, setLabel] = useState<string>("");
   const [type, setType] = useState<CampaignType>(CampaignType.Guided);
-
-  const usingCampaignType = useNewCampaignType();
 
   const handleCreate = () => {
     setLoading(true);
@@ -57,18 +54,14 @@ export function CreateCampaignDialog(props: CreateCampaignDialogProps) {
           onChange={(evt) => setLabel(evt.target.value)}
           sx={{ mt: 1 }}
         />
-        {usingCampaignType && (
-          <>
-            <Typography
-              variant={"subtitle1"}
-              display={"block"}
-              sx={{ mt: 2, mb: 1 }}
-            >
-              Campaign Type
-            </Typography>
-            <CampaignTypeChooser type={type} onChange={setType} />
-          </>
-        )}
+        <Typography
+          variant={"subtitle1"}
+          display={"block"}
+          sx={{ mt: 2, mb: 1 }}
+        >
+          Campaign Type
+        </Typography>
+        <CampaignTypeChooser type={type} onChange={setType} />
       </DialogContent>
       <DialogActions>
         <Button

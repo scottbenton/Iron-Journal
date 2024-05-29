@@ -120,7 +120,6 @@ export function CharacterCard(props: CharacterCardProps) {
                 ? updateCharacterInitiative
                 : undefined
             }
-            variant={"outlined"}
           />
         </Box>
         <Box display={"flex"} px={2} flexWrap={"wrap"}>

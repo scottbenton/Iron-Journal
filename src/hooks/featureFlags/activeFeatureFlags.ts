@@ -19,9 +19,4 @@ export const activeFeatureFlags: {
     label: "Show an extra theme for Iron Fellowship",
     gameSystems: [GAME_SYSTEMS.IRONSWORN],
   },
-  {
-    testId: "new-campaign-type",
-    label:
-      "Allow for campaigns to have types, allowing for different features based on Solo, Co-op, or Guided play",
-  },
 ];

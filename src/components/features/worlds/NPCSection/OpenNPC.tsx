@@ -117,7 +117,7 @@ export function OpenNPC(props: OpenNPCProps) {
   const confirm = useConfirm();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { showGMFields, showGMTips, isSinglePlayer } = useWorldPermissions();
+  const { showGMFields, showGMTips, isGuidedGame } = useWorldPermissions();
 
   useListenToCurrentNPC(npcId);
 
@@ -559,7 +559,7 @@ export function OpenNPC(props: OpenNPCProps) {
                     />
                   </Grid>
                 )}
-                {showGMFields && !isSinglePlayer && (
+                {showGMFields && isGuidedGame && (
                   <Grid
                     item
                     xs={12}
@@ -581,7 +581,7 @@ export function OpenNPC(props: OpenNPCProps) {
                     />
                   </Grid>
                 )}
-                {isSinglePlayer && (
+                {!isGuidedGame && (
                   <BondsSection
                     isStarforged={isStarforged}
                     onBondToggle={
@@ -642,7 +642,7 @@ export function OpenNPC(props: OpenNPCProps) {
                 </Grid>
               </>
             )}
-            {!isSinglePlayer && (
+            {isGuidedGame && (
               <>
                 {showGMTips && (
                   <>

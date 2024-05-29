@@ -34,7 +34,7 @@ export interface OpenLoreProps {
 export function OpenLore(props: OpenLoreProps) {
   const { worldId, loreId, lore, closeLore, tagList } = props;
 
-  const { isSinglePlayer, showGMFields, showGMTips } = useWorldPermissions();
+  const { showGMFields, showGMTips, isGuidedGame } = useWorldPermissions();
 
   useListenToCurrentLoreDocument(loreId);
 
@@ -178,7 +178,7 @@ export function OpenLore(props: OpenLoreProps) {
                   </Grid>
                 </>
               )}
-              {!isSinglePlayer && (
+              {isGuidedGame && (
                 <Grid
                   item
                   xs={12}
@@ -211,7 +211,7 @@ export function OpenLore(props: OpenLoreProps) {
               </Grid>
             </>
           )}
-          {!isSinglePlayer && (
+          {isGuidedGame && (
             <>
               {showGMTips && (
                 <>

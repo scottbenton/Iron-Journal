@@ -4,17 +4,17 @@ import { SectionHeading } from "components/shared/SectionHeading";
 import { useCampaignType } from "hooks/useCampaignType";
 import { useStore } from "stores/store";
 import { UserCard } from "./UserCard";
-import { useSnackbar } from "providers/SnackbarProvider";
-import { useMemo, useState } from "react";
-import {
-  CAMPAIGN_ROUTES,
-  constructCampaignSheetPath,
-} from "pages/Campaign/routes";
+import { useState } from "react";
 import { CharacterCard } from "./CharacterCard";
 import { AddCharacterDialog } from "pages/Campaign/CampaignSheetPage/components/AddCharacterDialog";
 import { SharedAssetSection } from "./SharedAssetSection";
 
-export function CharacterTab() {
+export interface CharacterTabProps {
+  openInviteDialog: () => void;
+}
+
+export function CharacterTab(props: CharacterTabProps) {
+  const { openInviteDialog } = props;
   const { campaignType } = useCampaignType();
 
   const users = useStore(
@@ -30,26 +30,6 @@ export function CharacterTab() {
 
   const [addCharacterDialogOpen, setAddCharacterDialogOpen] =
     useState<boolean>(false);
-
-  const { success } = useSnackbar();
-
-  const joinLink = useMemo(() => {
-    return (
-      window.location.origin +
-      constructCampaignSheetPath(campaignId, CAMPAIGN_ROUTES.JOIN)
-    );
-  }, [campaignId]);
-
-  const copyLinkToClipboard = () => {
-    navigator.clipboard
-      .writeText(joinLink)
-      .then(() => {
-        success("Copied Link to Clipboard");
-      })
-      .catch((e) => {
-        console.error(e);
-      });
-  };
 
   return (
     <>
@@ -91,7 +71,7 @@ export function CharacterTab() {
                 <Button
                   variant={"outlined"}
                   color={"inherit"}
-                  onClick={copyLinkToClipboard}
+                  onClick={openInviteDialog}
                 >
                   Invite Players
                 </Button>

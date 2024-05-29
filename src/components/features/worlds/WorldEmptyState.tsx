@@ -7,7 +7,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { World } from "types/World.type";
+import { World } from "api-calls/world/_world.type";
 import { EmptyState } from "../../shared/EmptyState/EmptyState";
 import { useStore } from "stores/store";
 import { useGameSystem } from "hooks/useGameSystem";
@@ -48,7 +48,6 @@ export function WorldEmptyState(props: WorldEmptyStateProps) {
   const handleWorldCreate = () => {
     createWorld()
       .then((worldId) => {
-        console.debug(campaignId, characterId, worldId);
         if (campaignId) {
           updateCampaign({ worldId }).catch(() => {});
         } else if (characterId) {

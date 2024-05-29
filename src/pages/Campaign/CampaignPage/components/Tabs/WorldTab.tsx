@@ -82,7 +82,7 @@ export function WorldTab() {
               </Button>
             </Box>
           )}
-          <WorldSheet canEdit={!showGuidedPlayerView} />
+          <WorldSheet canEdit={!showGuidedPlayerView} hideCampaignHints />
         </Container>
       )}
       {worldId && !world && <LinearProgress />}

@@ -4,12 +4,13 @@ import { PropsWithChildren } from "react";
 export interface PageContentProps extends PropsWithChildren {
   isPaper?: boolean;
   viewHeight?: boolean;
+  hiddenHeader?: boolean;
   maxWidth?: false | Breakpoint;
   sx?: SxProps<Theme>;
 }
 
 export function PageContent(props: PageContentProps) {
-  const { children, isPaper, viewHeight, maxWidth, sx } = props;
+  const { children, isPaper, viewHeight, hiddenHeader, maxWidth, sx } = props;
 
   return (
     <Container
@@ -34,8 +35,8 @@ export function PageContent(props: PageContentProps) {
                 flexDirection: "column",
                 height: "100vh",
               },
-              mt: -4,
-              borderRadius: 0,
+              mt: hiddenHeader ? -4 : 0,
+              borderRadius: hiddenHeader ? 0 : undefined,
             })
           : {},
         ...(Array.isArray(sx) ? sx : [sx]),

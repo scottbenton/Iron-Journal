@@ -8,7 +8,9 @@ import {
   useTheme,
 } from "@mui/material";
 import IronFellowshipLogo from "assets/iron-fellowship-logo.svg?react";
+import HinterlandsLogo from "assets/hinterlands-logo.svg?react";
 import CrewLinkLogo from "assets/crew-link-logo.svg?react";
+import SunderedIslesLogo from "assets/sundered-isles-crew-link-logo.svg?react";
 
 import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
@@ -16,13 +18,22 @@ import { useAppName } from "hooks/useAppName";
 import { LinkComponent } from "../../LinkComponent";
 import { SettingsMenu } from "./SettingsMenu";
 import { AppsMenu } from "./AppsMenu";
+import { useNewSunderedIslesTheme } from "hooks/featureFlags/useNewSunderedIslesTheme";
+import { useNewHinterlandsTheme } from "hooks/featureFlags/useNewHinterlandsTheme";
 
 export function TopNav() {
   const isLightTheme = useTheme().palette.mode === "light";
 
+  const showSunderedIslesTheme = useNewSunderedIslesTheme();
+  const showHinterlandsTheme = useNewHinterlandsTheme();
+
   const Logo = useGameSystemValue({
-    [GAME_SYSTEMS.IRONSWORN]: IronFellowshipLogo,
-    [GAME_SYSTEMS.STARFORGED]: CrewLinkLogo,
+    [GAME_SYSTEMS.IRONSWORN]: showHinterlandsTheme
+      ? HinterlandsLogo
+      : IronFellowshipLogo,
+    [GAME_SYSTEMS.STARFORGED]: showSunderedIslesTheme
+      ? SunderedIslesLogo
+      : CrewLinkLogo,
   });
 
   const title = useAppName();

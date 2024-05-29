@@ -1,9 +1,7 @@
 import { useStore } from "stores/store";
 import { useSyncStore } from "./hooks/useSyncStore";
 import { useEffect, useState } from "react";
-import { Button, LinearProgress } from "@mui/material";
-import { useNewCampaignType } from "hooks/featureFlags/useNewCampaginType";
-import { CampaignSheetPage } from "../CampaignSheetPage/CampaignSheetPage";
+import { Button, LinearProgress, Stack } from "@mui/material";
 import { PageContent, PageHeader } from "components/shared/Layout";
 import { EmptyState } from "components/shared/EmptyState";
 import { LinkComponent } from "components/shared/LinkComponent";
@@ -11,12 +9,14 @@ import { CAMPAIGN_ROUTES, constructCampaignPath } from "../routes";
 import { Head } from "providers/HeadProvider/Head";
 import { SectionWithSidebar } from "components/shared/Layout/SectionWithSidebar";
 import { Sidebar } from "pages/Character/CharacterSheetPage/components/Sidebar";
-import { CampaignHeader } from "./components/CampaignHeader";
 import { useCampaignType } from "hooks/useCampaignType";
 import { CampaignContent } from "./components/CampaignContent";
 import { CampaignType } from "api-calls/campaign/_campaign.type";
+import { CampaignSettingsMenu } from "./components/CampaignSettingsMenu";
+import { CampaignMoveOracleButtons } from "./components/CampaignMoveOracleButtons";
+import { InviteUsersDialog } from "./components/InviteUsersDialog";
 
-function CampaignPageInner() {
+export function CampaignPage() {
   useSyncStore();
 
   const loading = useStore((store) => store.campaigns.loading);
@@ -37,6 +37,9 @@ function CampaignPageInner() {
       clearTimeout(timeout);
     };
   }, []);
+
+  const [inviteUsersDialogOpen, setInviteUsersDialogOpen] =
+    useState<boolean>(false);
 
   if (loading || (!isCampaignLoaded && syncLoading)) {
     return <LinearProgress />;
@@ -67,42 +70,54 @@ function CampaignPageInner() {
     );
   }
 
+  const showMovesAndOracles = !(
+    campaignType === CampaignType.Solo || showGuidedPlayerView
+  );
+
   return (
     <>
       <Head
         title={campaignName ?? ""}
         description={`Campaign ${campaignName ?? ""}`}
       />
-      <PageHeader />
+      <PageHeader
+        label={campaignName ?? ""}
+        actions={
+          <Stack direction={"row"} flexWrap={"wrap"} spacing={1}>
+            {campaignType !== CampaignType.Solo && (
+              <Button
+                variant={"contained"}
+                onClick={() => setInviteUsersDialogOpen(true)}
+              >
+                Invite Players
+              </Button>
+            )}
+            <CampaignSettingsMenu />
+          </Stack>
+        }
+      />
       <PageContent
         viewHeight
         isPaper
         sx={{
-          pb: { xs: 0, md: 2 },
+          pb: { xs: 14, md: 2 },
+          pt: { xs: 0, md: 2 },
         }}
       >
-        <CampaignHeader />
         <SectionWithSidebar
-          sx={{ mt: 2 }}
-          sidebar={
-            !(campaignType === CampaignType.Solo || showGuidedPlayerView) && (
-              <Sidebar />
-            )
+          sidebar={showMovesAndOracles && <Sidebar />}
+          mainContent={
+            <CampaignContent
+              openInviteDialog={() => setInviteUsersDialogOpen(true)}
+            />
           }
-          mainContent={<CampaignContent />}
         />
+        <CampaignMoveOracleButtons showFabs={showMovesAndOracles} />
       </PageContent>
+      <InviteUsersDialog
+        open={inviteUsersDialogOpen}
+        onClose={() => setInviteUsersDialogOpen(false)}
+      />
     </>
   );
-}
-
-// Temporary wrapper REMOVE WHEN removing beta test
-export function CampaignPage() {
-  const usingNewCampaignPage = useNewCampaignType();
-
-  if (usingNewCampaignPage) {
-    return <CampaignPageInner />;
-  } else {
-    return <CampaignSheetPage />;
-  }
 }

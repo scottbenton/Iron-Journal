@@ -1,4 +1,4 @@
-import { Truth, World } from "types/World.type";
+import { Truth, World } from "api-calls/world/_world.type";
 import { LocationsSlice } from "./locations/locations.slice.type";
 import { NPCsSlice } from "./npcs/npcs.slice.type";
 import { LoreSlice } from "./lore/lore.slice.type";

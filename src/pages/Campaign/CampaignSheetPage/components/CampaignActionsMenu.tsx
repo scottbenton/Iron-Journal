@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { CAMPAIGN_ROUTES, constructCampaignPath } from "pages/Campaign/routes";
 import { useStore } from "stores/store";
 import { ChooseCampaignTypeDialog } from "./ChooseCampaignTypeDialog";
-import { useNewCampaignType } from "hooks/featureFlags/useNewCampaginType";
 
 export interface CampaignActionsMenuProps {
   campaign: CampaignDocument;
@@ -18,7 +17,6 @@ export function CampaignActionsMenu(props: CampaignActionsMenuProps) {
   const { gmIds } = campaign;
 
   const uid = useStore((store) => store.auth.uid);
-  const usingCampaignType = useNewCampaignType();
 
   const confirm = useConfirm();
   const navigate = useNavigate();
@@ -121,11 +119,6 @@ export function CampaignActionsMenu(props: CampaignActionsMenuProps) {
         {campaign.users.length > 1 && (
           <MenuItem onClick={() => handleLeaveCampaign()}>
             Leave Campaign
-          </MenuItem>
-        )}
-        {usingCampaignType && (isGm || campaign.users.length === 1) && (
-          <MenuItem onClick={() => setCampaignTypeDialogOpen(true)}>
-            Change Campaign Type
           </MenuItem>
         )}
         {(isGm || campaign.users.length === 1) && (

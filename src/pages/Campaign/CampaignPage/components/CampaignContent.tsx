@@ -29,7 +29,12 @@ enum CampaignTabs {
   Lore = "lore",
 }
 
-export function CampaignContent() {
+export interface CampaignContentProps {
+  openInviteDialog: () => void;
+}
+
+export function CampaignContent(props: CampaignContentProps) {
+  const { openInviteDialog } = props;
   const { showGuidedPlayerView, campaignType } = useCampaignType();
 
   const isStarforged = useGameSystem().gameSystem === GAME_SYSTEMS.STARFORGED;
@@ -51,18 +56,22 @@ export function CampaignContent() {
     <Card
       variant={"outlined"}
       sx={{
-        borderRadius: { xs: 0, md: 1 },
         borderWidth: { xs: 0, md: 1 },
         borderTopWidth: { xs: 1 },
         mx: { xs: -2, sm: -3, md: 0 },
         height: "100%",
         display: "flex",
         flexDirection: "column",
+        overflow: "hidden",
       }}
     >
       <StyledTabs
         value={selectedTab}
         onChange={(evt, value) => handleTabChange(value)}
+        sx={(theme) => ({
+          borderTopRightRadius: theme.shape.borderRadius,
+          borderTopLeftRadius: theme.shape.borderRadius,
+        })}
       >
         <StyledTab label="Characters" value={CampaignTabs.Characters} />
         <StyledTab label="Tracks" value={CampaignTabs.Tracks} />
@@ -79,7 +88,7 @@ export function CampaignContent() {
         <StyledTab label="Lore" value={CampaignTabs.Lore} />
       </StyledTabs>
       <ContainedTabPanel isVisible={selectedTab === CampaignTabs.Characters}>
-        <CharacterTab />
+        <CharacterTab openInviteDialog={openInviteDialog} />
       </ContainedTabPanel>
       <ContainedTabPanel isVisible={selectedTab === CampaignTabs.Tracks}>
         <TracksTab />

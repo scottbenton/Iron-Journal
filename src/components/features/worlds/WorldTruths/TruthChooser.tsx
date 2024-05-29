@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useStore } from "stores/store";
-import { Truth } from "types/World.type";
+import { Truth } from "api-calls/world/_world.type";
 import { useState } from "react";
 import CheckIcon from "@mui/icons-material/CheckCircle";
 import { Datasworn } from "@datasworn/core";

@@ -1,6 +1,10 @@
+import { CampaignType } from "api-calls/campaign/_campaign.type";
+import { useCampaignType } from "hooks/useCampaignType";
 import { useStore } from "stores/store";
 
 export function useWorldPermissions() {
+  const { showGuideTips, campaignType } = useCampaignType();
+
   const isOnCharacterSheet = useStore(
     (store) => !!store.characters.currentCharacter.currentCharacter
   );
@@ -18,10 +22,13 @@ export function useWorldPermissions() {
     store.worlds.currentWorld.currentWorld?.ownerIds.includes(store.auth.uid)
   );
 
-  const showGMTips =
-    !isSinglePlayer && (isGM || (isWorldOwner && !isOnCharacterSheet));
   const showGMFields =
     isSinglePlayer || isGM || (isWorldOwner && !isOnCharacterSheet);
 
-  return { showGMFields, showGMTips, isSinglePlayer };
+  return {
+    showGMFields,
+    showGMTips: showGuideTips,
+    isGuidedGame: campaignType === CampaignType.Guided,
+    isSinglePlayer,
+  };
 }
