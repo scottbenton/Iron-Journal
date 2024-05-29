@@ -74,8 +74,7 @@ export function useCampaignType(): {
       showGuidedPlayerView = false;
       hasMultipleCharacters = campaignHasMultipleCharacters;
     }
-  }
-  if (hasWorld) {
+  } else if (hasWorld) {
     if (isWorldOwner) {
       type = CampaignType.Guided;
       showGuideTips = true;

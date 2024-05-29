@@ -10,7 +10,13 @@ import { useUpdateQueryStringValueWithoutNavigation } from "hooks/useUpdateQuery
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
-import { CharacterTab } from "./Tabs";
+import { CharacterTab, NotesTab, TracksTab, WorldTab } from "./Tabs";
+import { SectorSection } from "components/features/worlds/SectorSection";
+import { LocationsSection } from "components/features/worlds/Locations";
+import { useStore } from "stores/store";
+import { CampaignType } from "api-calls/campaign/_campaign.type";
+import { NPCSection } from "components/features/worlds/NPCSection";
+import { LoreSection } from "components/features/worlds/Lore";
 
 enum CampaignTabs {
   Characters = "characters",
@@ -24,7 +30,7 @@ enum CampaignTabs {
 }
 
 export function CampaignContent() {
-  const { showGuidedPlayerView } = useCampaignType();
+  const { showGuidedPlayerView, campaignType } = useCampaignType();
 
   const isStarforged = useGameSystem().gameSystem === GAME_SYSTEMS.STARFORGED;
 
@@ -36,6 +42,10 @@ export function CampaignContent() {
   const handleTabChange = (tab: CampaignTabs) => {
     setSelectedTab(tab);
   };
+
+  const hasWorld = useStore(
+    (store) => !!store.campaigns.currentCampaign.currentCampaign?.worldId
+  );
 
   return (
     <Card
@@ -70,6 +80,50 @@ export function CampaignContent() {
       </StyledTabs>
       <ContainedTabPanel isVisible={selectedTab === CampaignTabs.Characters}>
         <CharacterTab />
+      </ContainedTabPanel>
+      <ContainedTabPanel isVisible={selectedTab === CampaignTabs.Tracks}>
+        <TracksTab />
+      </ContainedTabPanel>
+      <ContainedTabPanel isVisible={selectedTab === CampaignTabs.Notes}>
+        <NotesTab />
+      </ContainedTabPanel>
+      <ContainedTabPanel isVisible={selectedTab === CampaignTabs.World}>
+        <WorldTab />
+      </ContainedTabPanel>
+      {isStarforged ? (
+        <ContainedTabPanel
+          isVisible={selectedTab === CampaignTabs.Sectors}
+          greyBackground={hasWorld}
+        >
+          <SectorSection
+            showHiddenTag={
+              campaignType === CampaignType.Guided && !showGuidedPlayerView
+            }
+            openNPCTab={() => setSelectedTab(CampaignTabs.NPCs)}
+          />
+        </ContainedTabPanel>
+      ) : (
+        <ContainedTabPanel
+          isVisible={selectedTab === CampaignTabs.Locations}
+          greyBackground={hasWorld}
+        >
+          <LocationsSection
+            showHiddenTag
+            openNPCTab={() => setSelectedTab(CampaignTabs.NPCs)}
+          />
+        </ContainedTabPanel>
+      )}
+      <ContainedTabPanel
+        isVisible={selectedTab === CampaignTabs.NPCs}
+        greyBackground={hasWorld}
+      >
+        <NPCSection showHiddenTag />
+      </ContainedTabPanel>
+      <ContainedTabPanel
+        isVisible={selectedTab === CampaignTabs.Lore}
+        greyBackground={hasWorld}
+      >
+        <LoreSection showHiddenTag />
       </ContainedTabPanel>
     </Card>
   );

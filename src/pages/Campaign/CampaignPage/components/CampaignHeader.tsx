@@ -5,7 +5,8 @@ import { useCampaignType } from "hooks/useCampaignType";
 import { useIsMobile } from "hooks/useIsMobile";
 import { CharacterHeaderMoveOracleButtons } from "pages/Character/CharacterSheetPage/components/CharacterHeaderMoveOracleButtons";
 import { useStore } from "stores/store";
-import { HeaderSettingsButton } from "./HeaderSettingsButton";
+import { CampaignSettingsMenu } from "./CampaignSettingsMenu";
+
 export function CampaignHeader() {
   const theme = useTheme();
   const isMobile = useIsMobile();
@@ -38,7 +39,7 @@ export function CampaignHeader() {
         >
           {campaignName}
         </Typography>
-        <HeaderSettingsButton />
+        <CampaignSettingsMenu />
       </Box>
     </StickyHeader>
   );

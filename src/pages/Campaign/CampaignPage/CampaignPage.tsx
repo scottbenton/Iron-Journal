@@ -14,6 +14,7 @@ import { Sidebar } from "pages/Character/CharacterSheetPage/components/Sidebar";
 import { CampaignHeader } from "./components/CampaignHeader";
 import { useCampaignType } from "hooks/useCampaignType";
 import { CampaignContent } from "./components/CampaignContent";
+import { CampaignType } from "api-calls/campaign/_campaign.type";
 
 function CampaignPageInner() {
   useSyncStore();
@@ -25,9 +26,8 @@ function CampaignPageInner() {
   const isCampaignLoaded = useStore(
     (store) => !!store.campaigns.currentCampaign.currentCampaign
   );
-  const { showGuidedPlayerView } = useCampaignType();
+  const { showGuidedPlayerView, campaignType } = useCampaignType();
   const [syncLoading, setSyncLoading] = useState(true);
-
   useEffect(() => {
     const timeout = setTimeout(() => {
       setSyncLoading(false);
@@ -84,7 +84,11 @@ function CampaignPageInner() {
         <CampaignHeader />
         <SectionWithSidebar
           sx={{ mt: 2 }}
-          sidebar={!showGuidedPlayerView && <Sidebar />}
+          sidebar={
+            !(campaignType === CampaignType.Solo || showGuidedPlayerView) && (
+              <Sidebar />
+            )
+          }
           mainContent={<CampaignContent />}
         />
       </PageContent>

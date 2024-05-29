@@ -99,7 +99,7 @@ export function WorldEmptyState(props: WorldEmptyStateProps) {
           title={"No World Found"}
           message={
             showGuidedPlayerView
-              ? "No world found. Your GM can add a world to the campaign in the GM Screen."
+              ? "No world found. Only your GM can add a world to this campaign."
               : `Worlds allow you to share ${
                   isStarforged ? "sectors" : "locations"
                 }, npcs, lore, and world truths across different campaigns and characters. ${
@@ -107,7 +107,8 @@ export function WorldEmptyState(props: WorldEmptyStateProps) {
                 }`
           }
           callToAction={
-            isOnWorldTab && (
+            isOnWorldTab &&
+            !showGuidedPlayerView && (
               <Button
                 variant={"contained"}
                 color={"primary"}

@@ -11,6 +11,8 @@ export interface SectionWithSidebarProps {
 export function SectionWithSidebar(props: SectionWithSidebarProps) {
   const { sidebar, sidebarWidth = 324, mainContent, sx } = props;
 
+  const actualWidth = sidebar ? sidebarWidth : 0;
+
   return (
     <Box
       display={"flex"}
@@ -28,7 +30,7 @@ export function SectionWithSidebar(props: SectionWithSidebarProps) {
         <Box
           sx={{
             height: "100%",
-            width: sidebarWidth,
+            width: actualWidth,
             display: { xs: "none", md: "block" },
           }}
         >
@@ -40,9 +42,9 @@ export function SectionWithSidebar(props: SectionWithSidebarProps) {
           maxWidth: "100%",
           flexGrow: 1,
           [theme.breakpoints.up("md")]: {
-            pl: 2,
+            pl: sidebar ? 2 : 0,
             height: "100%",
-            maxWidth: `calc(100% - ${sidebarWidth}px)`,
+            maxWidth: `calc(100% - ${actualWidth}px)`,
             width: "100%",
           },
         })}
