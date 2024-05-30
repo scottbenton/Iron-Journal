@@ -23,6 +23,7 @@
 - Fixed "replaced" oracle tables not showing children
 - Fixed "replaced" move tables showing up twice
 - Fixed adds being removed from the move dialogs
+- Fixed homebrew collections not being removed from characters when deleted
 
 ## 3.0.0
 
