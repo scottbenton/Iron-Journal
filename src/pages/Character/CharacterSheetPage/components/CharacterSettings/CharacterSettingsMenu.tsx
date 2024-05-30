@@ -23,6 +23,7 @@ import PortraitIcon from "@mui/icons-material/AccountCircle";
 import { ChangeNamePortraitDialog } from "./ChangeNamePortraitDialog";
 import StatIcon from "@mui/icons-material/Numbers";
 import { UpdateStatDialog } from "./UpdateStatDialog";
+import { useCampaignType } from "hooks/useCampaignType";
 
 export interface CharacterSettingsMenuProps {
   open: boolean;
@@ -51,14 +52,8 @@ export function CharacterSettingsMenu(props: CharacterSettingsMenuProps) {
   const characterName = useStore(
     (store) => store.characters.currentCharacter.currentCharacter?.name ?? ""
   );
-  const characterCampaignId = useStore(
-    (store) => store.characters.currentCharacter.currentCharacter?.campaignId
-  );
-  const isGM = useStore((store) =>
-    (store.campaigns.currentCampaign.currentCampaign?.gmIds ?? []).includes(
-      store.auth.uid
-    )
-  );
+
+  const { showGuidedPlayerView } = useCampaignType();
 
   const deleteCharacter = useStore((store) => store.characters.deleteCharacter);
   const handleDeleteCharacter = (characterId: string) => {
@@ -130,7 +125,7 @@ export function CharacterSettingsMenu(props: CharacterSettingsMenuProps) {
           </ListItemIcon>
           <ListItemText>Update Stats</ListItemText>
         </MenuItem>
-        {(!characterCampaignId || isGM) && (
+        {!showGuidedPlayerView && (
           <MenuItem
             onClick={() => {
               setExpansionSelectorDialogOpen(true);

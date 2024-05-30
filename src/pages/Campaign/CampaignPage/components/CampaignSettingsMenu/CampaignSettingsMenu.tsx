@@ -1,5 +1,6 @@
 import {
   IconButton,
+  ListItemIcon,
   ListItemText,
   ListSubheader,
   Menu,
@@ -15,6 +16,12 @@ import { CAMPAIGN_ROUTES, constructCampaignPath } from "pages/Campaign/routes";
 import { useStore } from "stores/store";
 import { useCampaignType } from "hooks/useCampaignType";
 import { CampaignType } from "api-calls/campaign/_campaign.type";
+import HomebrewIcon from "@mui/icons-material/PlaylistAdd";
+import { ExpansionSelectorDialog } from "components/features/charactersAndCampaigns/ExpansionSelector/ExpansionSelectorDialog";
+import StepDownIcon from "@mui/icons-material/PersonRemove";
+import LeaveIcon from "@mui/icons-material/Logout";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export function CampaignSettingsMenu() {
   const confirm = useConfirm();
@@ -25,6 +32,9 @@ export function CampaignSettingsMenu() {
   const [anchorElement, setAnchorElement] = useState<HTMLButtonElement | null>(
     null
   );
+
+  const [expansionSelectorDialogOpen, setExpansionSelectorDialogOpen] =
+    useState(false);
 
   const [isEditCampaignOpen, setIsEditCampaignOpen] = useState(false);
   const handleClose = () => setAnchorElement(null);
@@ -121,7 +131,23 @@ export function CampaignSettingsMenu() {
               setIsEditCampaignOpen(true);
             }}
           >
+            <ListItemIcon>
+              <EditIcon fontSize={"small"} />
+            </ListItemIcon>
             <ListItemText>Edit Campaign</ListItemText>
+          </MenuItem>
+        )}
+        {!showGuidedPlayerView && (
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              setExpansionSelectorDialogOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <HomebrewIcon fontSize={"small"} />
+            </ListItemIcon>
+            <ListItemText>Expansions & Homebrew</ListItemText>
           </MenuItem>
         )}
         {campaignType !== CampaignType.Solo && (
@@ -131,6 +157,9 @@ export function CampaignSettingsMenu() {
               handleLeaveCampaign();
             }}
           >
+            <ListItemIcon>
+              <LeaveIcon fontSize={"small"} />
+            </ListItemIcon>
             <ListItemText>Leave Campaign</ListItemText>
           </MenuItem>
         )}
@@ -140,6 +169,10 @@ export function CampaignSettingsMenu() {
             handleDeleteCampaign();
           }}
         >
+          <ListItemIcon>
+            <DeleteIcon fontSize={"small"} />
+          </ListItemIcon>
+
           <ListItemText>Delete Campaign</ListItemText>
         </MenuItem>
         {isGuide && campaignType === CampaignType.Guided && (
@@ -149,6 +182,9 @@ export function CampaignSettingsMenu() {
               removeSelfAsGuide();
             }}
           >
+            <ListItemIcon>
+              <StepDownIcon fontSize={"small"} />
+            </ListItemIcon>
             <ListItemText>Step Down as Guide</ListItemText>
           </MenuItem>
         )}
@@ -156,6 +192,10 @@ export function CampaignSettingsMenu() {
       <EditCampaign
         open={isEditCampaignOpen}
         onClose={() => setIsEditCampaignOpen(false)}
+      />
+      <ExpansionSelectorDialog
+        open={expansionSelectorDialogOpen}
+        onClose={() => setExpansionSelectorDialogOpen(false)}
       />
     </>
   );
