@@ -2,7 +2,7 @@ import { Box, SxProps } from "@mui/material";
 import { ReactNode } from "react";
 
 export interface SectionWithSidebarProps {
-  sidebar: ReactNode;
+  sidebar?: ReactNode;
   sidebarWidth?: number;
   mainContent: ReactNode;
   sx?: SxProps;
@@ -10,6 +10,8 @@ export interface SectionWithSidebarProps {
 
 export function SectionWithSidebar(props: SectionWithSidebarProps) {
   const { sidebar, sidebarWidth = 324, mainContent, sx } = props;
+
+  const actualWidth = sidebar ? sidebarWidth : 0;
 
   return (
     <Box
@@ -24,23 +26,25 @@ export function SectionWithSidebar(props: SectionWithSidebarProps) {
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
-      <Box
-        sx={{
-          height: "100%",
-          width: sidebarWidth,
-          display: { xs: "none", md: "block" },
-        }}
-      >
-        {sidebar}
-      </Box>
+      {sidebar && (
+        <Box
+          sx={{
+            height: "100%",
+            width: actualWidth,
+            display: { xs: "none", md: "block" },
+          }}
+        >
+          {sidebar}
+        </Box>
+      )}
       <Box
         sx={(theme) => ({
           maxWidth: "100%",
           flexGrow: 1,
           [theme.breakpoints.up("md")]: {
-            pl: 2,
+            pl: sidebar ? 2 : 0,
             height: "100%",
-            maxWidth: `calc(100% - ${sidebarWidth}px)`,
+            maxWidth: `calc(100% - ${actualWidth}px)`,
             width: "100%",
           },
         })}

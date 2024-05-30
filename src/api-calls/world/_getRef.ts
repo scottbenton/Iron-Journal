@@ -6,8 +6,7 @@ import {
   doc,
   DocumentReference,
 } from "firebase/firestore";
-import { World } from "types/World.type";
-import { WorldDocument } from "./_world.type";
+import { WorldDocument, World } from "./_world.type";
 
 export function constructWorldsPath() {
   return `/worlds`;
@@ -46,11 +45,16 @@ export function encodeWorld(world: World): WorldDocument {
 }
 
 export function decodeWorld(encodedWorld: WorldDocument): World {
-  const { worldDescription, ...remainingWorld } = encodedWorld;
+  const { worldDescription, ownerIds, campaignGuides, ...remainingWorld } =
+    encodedWorld;
+
+  const newOwnerIds = [...ownerIds, ...(campaignGuides ?? [])];
 
   const world: World = {
     ...remainingWorld,
+    ownerIds: newOwnerIds,
     worldDescription: worldDescription?.toUint8Array(),
+    campaignGuides,
   };
 
   return world;

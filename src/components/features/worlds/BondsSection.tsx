@@ -1,4 +1,5 @@
 import {
+  Card,
   Checkbox,
   Chip,
   FormControlLabel,
@@ -9,23 +10,27 @@ import {
 import { useSnackbar } from "providers/SnackbarProvider";
 import { ProgressTrack } from "../ProgressTrack";
 import { Difficulty, TrackTypes } from "types/Track.type";
+import { useStore } from "stores/store";
+import { NPC } from "types/NPCs.type";
+import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
 
 export interface BondsSectionProps {
   isStarforged: boolean;
   difficulty?: Difficulty;
 
-  bondedCharacters?: string[];
   isBonded: boolean;
   bondProgress?: number;
   onBondToggle?: (bonded: boolean) => void;
   updateBondProgressValue?: (value: number) => void;
 
-  connectedCharacters?: string[];
   hasConnection: boolean;
   onConnectionToggle?: (connected: boolean) => void;
 
   disableToggle?: boolean;
   inheritedBondName?: string;
+
+  npc?: NPC;
+  location?: LocationWithGMProperties;
 }
 
 export function BondsSection(props: BondsSectionProps) {
@@ -34,18 +39,37 @@ export function BondsSection(props: BondsSectionProps) {
     difficulty,
     isBonded,
     onBondToggle,
-    bondedCharacters,
     updateBondProgressValue,
     bondProgress,
-    connectedCharacters,
     hasConnection,
     onConnectionToggle,
 
     disableToggle,
     inheritedBondName,
+    npc,
+    location,
   } = props;
 
   const { info } = useSnackbar();
+
+  const npcLocationBonds = location?.characterBonds ?? {};
+  const npcBonds = npc?.characterBonds ?? {};
+  const npcConnections = npc?.characterConnections ?? {};
+
+  const currentCampaignCharacters = useStore(
+    (store) => store.campaigns.currentCampaign.characters.characterMap
+  );
+  const bondedCharacterNames = Object.keys(currentCampaignCharacters)
+    .filter(
+      (characterId) => npcLocationBonds[characterId] || npcBonds[characterId]
+    )
+    .map((characterId) => currentCampaignCharacters[characterId]?.name ?? "");
+
+  const connectedCharacterIds = Object.keys(currentCampaignCharacters).filter(
+    (characterId) =>
+      npcConnections[characterId] &&
+      !(npcBonds[characterId] || npcLocationBonds[characterId])
+  );
 
   return (
     <>
@@ -94,6 +118,7 @@ export function BondsSection(props: BondsSectionProps) {
         </Grid>
       )}
       {!isBonded &&
+        hasConnection &&
         updateBondProgressValue &&
         bondProgress !== undefined &&
         isStarforged && (
@@ -109,30 +134,41 @@ export function BondsSection(props: BondsSectionProps) {
             />
           </Grid>
         )}
-      {bondedCharacters && bondedCharacters.length > 0 && (
+      {bondedCharacterNames && bondedCharacterNames.length > 0 && (
         <Grid item xs={12}>
           <Typography variant={"caption"} color={"textSecondary"}>
             Bonded Characters
           </Typography>
           <Stack direction={"row"} spacing={1} flexWrap={"wrap"}>
-            {bondedCharacters.map((characterName, index) => (
+            {bondedCharacterNames.map((characterName, index) => (
               <Chip key={index} variant={"outlined"} label={characterName} />
             ))}
           </Stack>
         </Grid>
       )}
-      {connectedCharacters &&
-        connectedCharacters.length > 0 &&
+      {connectedCharacterIds &&
+        connectedCharacterIds.length > 0 &&
         isStarforged && (
           <Grid item xs={12}>
-            <Typography variant={"caption"} color={"textSecondary"}>
-              Connected Characters
-            </Typography>
-            <Stack direction={"row"} spacing={1} flexWrap={"wrap"}>
-              {connectedCharacters.map((characterName, index) => (
-                <Chip key={index} variant={"outlined"} label={characterName} />
-              ))}
-            </Stack>
+            <Card variant="outlined" sx={{ p: 2, pt: 1 }}>
+              <Typography variant={"caption"} color={"textSecondary"}>
+                Connected Characters
+              </Typography>
+              <Stack spacing={2} flexWrap={"wrap"} mt={1}>
+                {connectedCharacterIds.map((characterId) => (
+                  <ProgressTrack
+                    key={characterId}
+                    label={`${currentCampaignCharacters[characterId].name} Bond Progress`}
+                    max={40}
+                    value={npc?.characterBondProgress?.[characterId] ?? 0}
+                    difficulty={difficulty}
+                    trackType={TrackTypes.BondProgress}
+                    hideDifficultyLabel
+                    hideRollButton
+                  />
+                ))}
+              </Stack>
+            </Card>
           </Grid>
         )}
     </>

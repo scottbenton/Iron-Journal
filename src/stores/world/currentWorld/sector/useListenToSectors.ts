@@ -24,7 +24,7 @@ export function useListenToSectors() {
   const resetStoreNotes = useStore(
     (store) => store.worlds.currentWorld.currentWorldSectors.resetStoreNotes
   );
-  const { isSinglePlayer, showGMFields } = useWorldPermissions();
+  const { isGuidedGame, showGMFields } = useWorldPermissions();
 
   useEffect(() => {
     let unsubscribe: Unsubscribe;
@@ -44,7 +44,7 @@ export function useListenToSectors() {
       if (showGMFields) {
         unsubscribes.push(listenToSectorNotes(openSectorId, true));
       }
-      if (!isSinglePlayer) {
+      if (!isGuidedGame) {
         unsubscribes.push(listenToSectorNotes(openSectorId, false));
       }
     }
@@ -55,7 +55,7 @@ export function useListenToSectors() {
   }, [
     openSectorId,
     showGMFields,
-    isSinglePlayer,
+    isGuidedGame,
     listenToSectorNotes,
     resetStoreNotes,
   ]);

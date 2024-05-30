@@ -8,12 +8,15 @@
 - Added asset clock and counter controls working for assets that use them (ex: Snub Fighter Ability #3, or Marked Ability #2).
 - Added scene challenges to Crew Link
 - Added a new Hinterlands theme
+- Added types to campaigns
 
 ### Changes
 
 - Re-added missing roll buttons for assets in the move dialog
 - Made tensions clocks available in Iron Fellowship
 - You can now enter other species into the NPC species box. They will use the default Ironlander name oracles (Ironsworn)
+- Guides can now view their player's bond progress (Starforged)
+- Bond progress is now only visible when you have a connection with a character (Starforged)
 
 ### Bug Fixes
 

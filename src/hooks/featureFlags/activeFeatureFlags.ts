@@ -14,4 +14,9 @@ export const activeFeatureFlags: {
     label: "Show potential theme for Sundered Isles Crew Link",
     gameSystems: [GAME_SYSTEMS.STARFORGED],
   },
+  {
+    testId: "new-hinterlands-theme",
+    label: "Show an extra theme for Iron Fellowship",
+    gameSystems: [GAME_SYSTEMS.IRONSWORN],
+  },
 ];

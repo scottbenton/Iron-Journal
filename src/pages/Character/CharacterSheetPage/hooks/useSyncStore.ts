@@ -57,7 +57,7 @@ export function useSyncStore() {
   useEffect(() => {
     setCurrentCampaignId(campaignId ?? undefined);
     return () => {
-      setCurrentCampaignId(campaignId ?? undefined);
+      setCurrentCampaignId(undefined);
     };
   }, [campaignId, setCurrentCampaignId]);
 

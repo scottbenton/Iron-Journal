@@ -195,7 +195,7 @@ export function OpenSector(props: OpenSectorProps) {
       .catch(() => {});
   };
 
-  const { showGMFields, showGMTips, isSinglePlayer } = useWorldPermissions();
+  const { showGMFields, showGMTips, isGuidedGame } = useWorldPermissions();
   const notes = useStore(
     (store) => store.worlds.currentWorld.currentWorldSectors.openSectorNotes
   );
@@ -291,7 +291,7 @@ export function OpenSector(props: OpenSectorProps) {
               />
             </Grid>
           )}
-          {showGMFields && !isSinglePlayer && (
+          {showGMFields && isGuidedGame && (
             <Grid item xs={12} md={6}>
               <FormControlLabel
                 control={
@@ -367,7 +367,7 @@ export function OpenSector(props: OpenSectorProps) {
                 />
               </Grid>
             )}
-            {!isSinglePlayer && (
+            {isGuidedGame && (
               <>
                 {showGMTips && (
                   <NotesSectionHeader

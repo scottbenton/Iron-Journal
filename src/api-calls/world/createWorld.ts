@@ -1,5 +1,5 @@
 import { addDoc } from "firebase/firestore";
-import { World } from "types/World.type";
+import { World } from "api-calls/world/_world.type";
 import { encodeWorld, getWorldCollection } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
 

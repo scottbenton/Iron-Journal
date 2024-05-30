@@ -20,6 +20,7 @@ import { SectorSection } from "components/features/worlds/SectorSection";
 import { EmptyState } from "components/shared/EmptyState";
 import { LinkComponent } from "components/shared/LinkComponent";
 import { useUpdateQueryStringValueWithoutNavigation } from "hooks/useUpdateQueryStringValueWithoutNavigation";
+import { useWorldPermissions } from "components/features/worlds/useWorldPermissions";
 
 enum TABS {
   DETAILS = "details",
@@ -31,6 +32,8 @@ enum TABS {
 
 export function WorldSheetPage() {
   useSyncStore();
+
+  const { showGMFields } = useWorldPermissions();
 
   const showSectorsInsteadOfLocations =
     useGameSystem().gameSystem === GAME_SYSTEMS.STARFORGED;
@@ -128,14 +131,16 @@ export function WorldSheetPage() {
       <PageHeader
         label={world.name}
         actions={
-          <Button
-            color={"inherit"}
-            variant={"outlined"}
-            onClick={() => handleDeleteClick()}
-            endIcon={<DeleteIcon />}
-          >
-            Delete World
-          </Button>
+          showGMFields && (
+            <Button
+              color={"inherit"}
+              variant={"outlined"}
+              onClick={() => handleDeleteClick()}
+              endIcon={<DeleteIcon />}
+            >
+              Delete World
+            </Button>
+          )
         }
       />
       <PageContent isPaper>

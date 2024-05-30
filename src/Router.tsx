@@ -7,10 +7,15 @@ import {
   RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
+  redirect,
 } from "react-router-dom";
 import { ErrorRoute } from "components/shared/ErrorRoute";
 import { CHARACTER_ROUTES, characterPaths } from "pages/Character/routes";
-import { CAMPAIGN_ROUTES, campaignPaths } from "pages/Campaign/routes";
+import {
+  CAMPAIGN_ROUTES,
+  campaignPaths,
+  constructCampaignSheetPath,
+} from "pages/Campaign/routes";
 import { WORLD_ROUTES, worldPaths } from "pages/World/routes";
 import { HeadProvider } from "providers/HeadProvider";
 import { useListenToCharacters } from "stores/character/useListenToCharacters";
@@ -21,6 +26,7 @@ import { useListenToOracleSettings } from "stores/settings/useListenToOracleSett
 import { useListenToAccessibilitySettings } from "stores/accessibilitySettings/useListenToAccessibilitySettings";
 import { useListenToHomebrew } from "stores/homebrew/useListenToHomebrew";
 import { HOMEBREW_ROUTES, homebrewPaths } from "pages/Homebrew/routes";
+import { useSyncCampaignWorldPermissions } from "stores/campaign/useSyncCampaignWorldPermissions";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -65,11 +71,16 @@ const router = createBrowserRouter(
             />
             <Route
               path={campaignPaths[CAMPAIGN_ROUTES.SHEET]}
-              lazy={() => import("pages/Campaign/CampaignSheetPage")}
+              lazy={() => import("pages/Campaign/CampaignPage")}
             />
             <Route
               path={campaignPaths[CAMPAIGN_ROUTES.GM_SCREEN]}
-              lazy={() => import("pages/Campaign/CampaignGMScreenPage")}
+              loader={({ params }) => {
+                const campaignId = params.campaignId ?? "";
+                return redirect(
+                  constructCampaignSheetPath(campaignId, CAMPAIGN_ROUTES.SHEET)
+                );
+              }}
             />
             <Route
               path={campaignPaths[CAMPAIGN_ROUTES.JOIN]}
@@ -132,6 +143,8 @@ export function Router() {
   useListenToWorlds();
   useListenToOracleSettings();
   useListenToHomebrew();
+
+  useSyncCampaignWorldPermissions();
 
   return <RouterProvider router={router} />;
 }

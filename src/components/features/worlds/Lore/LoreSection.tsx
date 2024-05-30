@@ -72,9 +72,7 @@ export function LoreSection(props: LoreSectionProps) {
   const { filteredLoreIds, sortedLoreIds } = useFilterLore(lore, search);
 
   if (!worldId) {
-    return (
-      <WorldEmptyState isMultiplayer={!isSinglePlayer} isGM={isWorldOwner} />
-    );
+    return <WorldEmptyState />;
   }
 
   const openLore = openLoreId && lore[openLoreId];

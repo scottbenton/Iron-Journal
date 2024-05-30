@@ -6,6 +6,7 @@ import { listenToWorld } from "api-calls/world/listenToWorld";
 import { createWorld } from "api-calls/world/createWorld";
 import { createCurrentWorldSlice } from "./currentWorld/currentWorld.slice";
 import { deleteWorld } from "api-calls/world/deleteWorld";
+import { updateWorldGuide } from "api-calls/world/updateWorldGuide";
 
 export const createWorldSlice: CreateSliceType<WorldSlice> = (...params) => {
   const [set, getState] = params;
@@ -89,6 +90,13 @@ export const createWorldSlice: CreateSliceType<WorldSlice> = (...params) => {
     },
     deleteWorld: (worldId) => {
       return deleteWorld(worldId);
+    },
+    updateWorldGuide(worldId, guideId, shouldRemove) {
+      return updateWorldGuide({
+        worldId,
+        guideId,
+        shouldRemove,
+      });
     },
   };
 };

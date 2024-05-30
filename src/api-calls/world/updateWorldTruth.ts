@@ -1,7 +1,7 @@
 import { updateDoc } from "firebase/firestore";
 import { getWorldDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
-import { Truth } from "types/World.type";
+import { Truth } from "api-calls/world/_world.type";
 
 export const updateWorldTruth = createApiFunction<
   { worldId: string; truthKey: string; truth: Truth },

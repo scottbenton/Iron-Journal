@@ -171,12 +171,12 @@ export function HomePage() {
               component={"h2"}
               fontFamily={(theme) => theme.fontFamilyTitle}
             >
-              GM Tools
+              Guide Tools
             </Typography>
             <Typography color={"textSecondary"} maxWidth={"50ch"}>
-              Our GM screen has everything you need to run your game. Change
+              Our Guide screen has everything you need to run your game. Change
               progress tracks, consult the oracle, reference moves, take notes,
-              and more on our GM screen.
+              and more on our Guide screen.
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -213,7 +213,7 @@ export function HomePage() {
             </Typography>
             <Typography color={"textSecondary"} maxWidth={"50ch"}>
               Share your world truths, NPCs, locations, and lore between
-              different singleplayer characters and campaigns you are GMing.
+              different solo characters, co-op campaigns, or guided campaigns.
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>

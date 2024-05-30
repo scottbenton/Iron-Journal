@@ -74,9 +74,7 @@ export function LocationsSection(props: LocationsSectionProps) {
   );
 
   if (!worldId) {
-    return (
-      <WorldEmptyState isMultiplayer={!isSinglePlayer} isGM={isWorldOwner} />
-    );
+    return <WorldEmptyState />;
   }
 
   const openLocation = openLocationId && locations[openLocationId];

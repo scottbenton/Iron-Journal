@@ -20,6 +20,7 @@ import { useGameSystem } from "hooks/useGameSystem";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { useUpdateQueryStringValueWithoutNavigation } from "hooks/useUpdateQueryStringValueWithoutNavigation";
 import { useGameSystemValue } from "hooks/useGameSystemValue";
+import { useCampaignType } from "hooks/useCampaignType";
 
 enum TABS {
   MOVES = "moves",
@@ -61,10 +62,6 @@ export function TabsSection() {
     (store) => !!store.characters.currentCharacter.currentCharacter?.campaignId
   );
 
-  const isWorldOwner = useStore((store) =>
-    store.worlds.currentWorld.currentWorld?.ownerIds.includes(store.auth.uid)
-  );
-
   const worldExists = useStore(
     (store) => !!store.worlds.currentWorld.currentWorld
   );
@@ -77,6 +74,8 @@ export function TabsSection() {
       setSelectedTab(TABS.ASSETS);
     }
   }, [selectedTab, isMobile]);
+
+  const { showGuideTips } = useCampaignType();
 
   return (
     <Card
@@ -127,7 +126,7 @@ export function TabsSection() {
           isVisible={selectedTab === TABS.SECTORS}
         >
           <SectorSection
-            showHiddenTag={isWorldOwner && isInCampaign}
+            showHiddenTag={showGuideTips}
             openNPCTab={() => setSelectedTab(TABS.NPCS)}
           />
         </ContainedTabPanel>
@@ -138,7 +137,7 @@ export function TabsSection() {
         >
           <LocationsSection
             isSinglePlayer={!isInCampaign}
-            showHiddenTag={isWorldOwner && isInCampaign}
+            showHiddenTag={showGuideTips}
             openNPCTab={() => setSelectedTab(TABS.NPCS)}
           />
         </ContainedTabPanel>
@@ -149,7 +148,7 @@ export function TabsSection() {
       >
         <NPCSection
           isSinglePlayer={!isInCampaign}
-          showHiddenTag={isWorldOwner && isInCampaign}
+          showHiddenTag={showGuideTips}
         />
       </ContainedTabPanel>
       <ContainedTabPanel
@@ -158,7 +157,7 @@ export function TabsSection() {
       >
         <LoreSection
           isSinglePlayer={!isInCampaign}
-          showHiddenTag={isWorldOwner && isInCampaign}
+          showHiddenTag={showGuideTips}
         />
       </ContainedTabPanel>
       <ContainedTabPanel isVisible={selectedTab === TABS.IMPACTS}>

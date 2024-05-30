@@ -77,7 +77,7 @@ export function CampaignSelectPage() {
             showImage
             title={"No Campaigns Found"}
             message={
-              "Campaigns allow you to share tracks, worlds, and more between GMs and players"
+              "Campaigns allow you to share tracks, worlds, and more between guides and players"
             }
             callToAction={
               <Button

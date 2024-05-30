@@ -1,5 +1,5 @@
 import { Unsubscribe } from "firebase/firestore";
-import { World } from "types/World.type";
+import { World } from "api-calls/world/_world.type";
 import { CurrentWorldSlice } from "./currentWorld/currentWorld.slice.type";
 
 export interface WorldSliceData {
@@ -19,6 +19,11 @@ export interface WorldSliceActions {
 
   createWorld: () => Promise<string>;
   deleteWorld: (worldId: string) => Promise<void>;
+  updateWorldGuide: (
+    worldId: string,
+    guideId: string,
+    shouldRemove?: boolean
+  ) => Promise<void>;
 }
 
 export type WorldSlice = WorldSliceData & WorldSliceActions;

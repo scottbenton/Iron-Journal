@@ -16,21 +16,14 @@ import { OpenSector } from "./OpenSector";
 import HiddenIcon from "@mui/icons-material/VisibilityOff";
 
 export interface SectorSectionProps {
-  isSinglePlayer?: boolean;
   showHiddenTag?: boolean;
   openNPCTab: () => void;
 }
 
 export function SectorSection(props: SectorSectionProps) {
-  const { isSinglePlayer, showHiddenTag, openNPCTab } = props;
+  const { showHiddenTag, openNPCTab } = props;
 
   const worldId = useStore((store) => store.worlds.currentWorld.currentWorldId);
-  const isWorldOwner = useStore(
-    (store) =>
-      store.worlds.currentWorld.currentWorld?.ownerIds?.includes(
-        store.auth.uid
-      ) ?? false
-  );
 
   const sectors = useStore(
     (store) => store.worlds.currentWorld.currentWorldSectors.sectors
@@ -65,9 +58,7 @@ export function SectorSection(props: SectorSectionProps) {
       });
   };
   if (!worldId) {
-    return (
-      <WorldEmptyState isMultiplayer={!isSinglePlayer} isGM={isWorldOwner} />
-    );
+    return <WorldEmptyState />;
   }
 
   if (openSectorId) {

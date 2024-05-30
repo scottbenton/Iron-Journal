@@ -3,6 +3,7 @@ import { LinkComponent } from "components/shared/LinkComponent";
 import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import IronFellowshipLogo from "assets/iron-fellowship-logo.svg?react";
+import HinterlandsLogo from "assets/hinterlands-logo.svg?react";
 import CrewLinkLogo from "assets/crew-link-logo.svg?react";
 import SunderedIslesLogo from "assets/sundered-isles-crew-link-logo.svg?react";
 import { useAppName } from "hooks/useAppName";
@@ -24,14 +25,18 @@ import { useState } from "react";
 import { NavRailFlyouts } from "./NavRailFlyouts";
 import { AppsMenu } from "./AppsMenu";
 import { useNewSunderedIslesTheme } from "hooks/featureFlags/useNewSunderedIslesTheme";
+import { useNewHinterlandsTheme } from "hooks/featureFlags/useNewHinterlandsTheme";
 
 export const NAV_RAIL_WIDTH = 80;
 
 export function NavRail() {
   const showSunderedIslesTheme = useNewSunderedIslesTheme();
+  const showHinterlandsTheme = useNewHinterlandsTheme();
 
   const Logo = useGameSystemValue({
-    [GAME_SYSTEMS.IRONSWORN]: IronFellowshipLogo,
+    [GAME_SYSTEMS.IRONSWORN]: showHinterlandsTheme
+      ? HinterlandsLogo
+      : IronFellowshipLogo,
     [GAME_SYSTEMS.STARFORGED]: showSunderedIslesTheme
       ? SunderedIslesLogo
       : CrewLinkLogo,

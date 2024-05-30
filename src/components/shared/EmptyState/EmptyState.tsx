@@ -1,5 +1,6 @@
 import { Box, SxProps, Typography } from "@mui/material";
 import { getPublicAssetPath } from "functions/getPublicAssetPath";
+import { useNewHinterlandsTheme } from "hooks/featureFlags/useNewHinterlandsTheme";
 
 export interface EmptyStateProps {
   showImage?: boolean;
@@ -13,7 +14,10 @@ export interface EmptyStateProps {
 export function EmptyState(props: EmptyStateProps) {
   const { showImage, title, message, callToAction, leftAlign, sx } = props;
 
-  const imageSrc = getPublicAssetPath("empty-state.svg");
+  const usingHinterlandsTheme = useNewHinterlandsTheme();
+  const imageSrc = getPublicAssetPath(
+    usingHinterlandsTheme ? "HinterlandsEmptyState.svg" : "empty-state.svg"
+  );
 
   return (
     <Box
@@ -25,7 +29,7 @@ export function EmptyState(props: EmptyStateProps) {
     >
       {showImage && (
         <Box
-          width={200}
+          width={usingHinterlandsTheme ? 300 : 200}
           height={200}
           sx={{
             backgroundSize: "contain",

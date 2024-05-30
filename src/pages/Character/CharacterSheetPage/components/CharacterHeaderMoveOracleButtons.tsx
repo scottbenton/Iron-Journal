@@ -6,7 +6,13 @@ import MovesIcon from "@mui/icons-material/DirectionsRun";
 import { OracleIcon } from "assets/OracleIcon";
 import { useStore } from "stores/store";
 
-export function CharacterHeaderMoveOracleButtons() {
+export interface MoveOracleButtonProps {
+  disableTopMargin?: boolean;
+}
+
+export function CharacterHeaderMoveOracleButtons(props: MoveOracleButtonProps) {
+  const { disableTopMargin } = props;
+
   const [isMoveSidebarOpen, setIsMoveSidebarOpen] = useState(false);
   const closeMoveSidebar = useCallback(() => {
     setIsMoveSidebarOpen(false);
@@ -38,7 +44,7 @@ export function CharacterHeaderMoveOracleButtons() {
           sm: "flex-start",
         }}
         gap={2}
-        mt={-4}
+        mt={disableTopMargin ? 0 : -4}
       >
         <Fab
           variant={"extended"}

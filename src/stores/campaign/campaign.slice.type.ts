@@ -1,5 +1,8 @@
 import { Unsubscribe } from "firebase/firestore";
-import { CampaignDocument } from "api-calls/campaign/_campaign.type";
+import {
+  CampaignDocument,
+  CampaignType,
+} from "api-calls/campaign/_campaign.type";
 import { CurrentCampaignSlice } from "./currentCampaign/currentCampaign.slice.type";
 
 export interface CampaignSliceData {
@@ -11,7 +14,10 @@ export interface CampaignSliceData {
 export interface CampaignSliceActions {
   subscribe: (uid?: string) => Unsubscribe | undefined;
 
-  createCampaign: (campaignName: string) => Promise<string>;
+  createCampaign: (
+    campaignName: string,
+    campaignType: CampaignType
+  ) => Promise<string>;
   getCampaign: (campaignId: string) => Promise<CampaignDocument>;
   addUserToCampaign: (uid: string, campaignId: string) => Promise<void>;
 }

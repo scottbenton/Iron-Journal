@@ -4,6 +4,12 @@ export const ironswornPink = {
   dark: "#ff4d79",
 };
 
+export const hinterlandsGreen = {
+  light: "#059669",
+  main: "#047857",
+  dark: "#065f46",
+};
+
 export const ironswornGrey = {
   [50]: "#fafafa",
   [100]: "#f4f4f6",

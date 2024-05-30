@@ -7,17 +7,14 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { constructWorldSheetPath } from "pages/World/routes";
-import { useNavigate } from "react-router-dom";
-import { World } from "types/World.type";
+import { World } from "api-calls/world/_world.type";
 import { EmptyState } from "../../shared/EmptyState/EmptyState";
 import { useStore } from "stores/store";
 import { useGameSystem } from "hooks/useGameSystem";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
+import { useCampaignType } from "hooks/useCampaignType";
 
 export interface WorldEmptyStateProps {
-  isGM?: boolean;
-  isMultiplayer?: boolean;
   worldsToChooseFrom?: World[];
   onChooseWorld?: (index: number) => void;
   worldUpdateLoading?: boolean;
@@ -26,21 +23,36 @@ export interface WorldEmptyStateProps {
 
 export function WorldEmptyState(props: WorldEmptyStateProps) {
   const {
-    isGM,
-    isMultiplayer,
     worldsToChooseFrom,
     onChooseWorld,
     worldUpdateLoading,
     isOnWorldTab,
   } = props;
 
-  const navigate = useNavigate();
+  const characterId = useStore(
+    (store) => store.characters.currentCharacter.currentCharacterId
+  );
+  const updateCharacter = useStore(
+    (store) => store.characters.currentCharacter.updateCurrentCharacter
+  );
+  const campaignId = useStore(
+    (store) => store.campaigns.currentCampaign.currentCampaignId
+  );
+  const updateCampaign = useStore(
+    (store) => store.campaigns.currentCampaign.updateCampaign
+  );
+
+  const { showGuidedPlayerView } = useCampaignType();
 
   const createWorld = useStore((store) => store.worlds.createWorld);
   const handleWorldCreate = () => {
     createWorld()
       .then((worldId) => {
-        navigate(constructWorldSheetPath(worldId));
+        if (campaignId) {
+          updateCampaign({ worldId }).catch(() => {});
+        } else if (characterId) {
+          updateCharacter({ worldId }).catch(() => {});
+        }
       })
       .catch(() => {});
   };
@@ -83,24 +95,19 @@ export function WorldEmptyState(props: WorldEmptyStateProps) {
       ) : (
         <EmptyState
           showImage
-          title={"No Worlds Found"}
+          title={"No World Found"}
           message={
-            isMultiplayer && !isGM
-              ? "No world found. Your GM can add a world to the campaign in the GM Screen."
+            showGuidedPlayerView
+              ? "No world found. Only your guide can add a world to this campaign."
               : `Worlds allow you to share ${
                   isStarforged ? "sectors" : "locations"
                 }, npcs, lore, and world truths across different campaigns and characters. ${
-                  !isOnWorldTab
-                    ? `You can add a world from the world tab ${
-                        isMultiplayer
-                          ? "on the GM screen"
-                          : "in your character sheet"
-                      }.`
-                    : ""
+                  !isOnWorldTab ? `You can add a world from the world tab.` : ""
                 }`
           }
           callToAction={
-            isOnWorldTab && (
+            isOnWorldTab &&
+            !showGuidedPlayerView && (
               <Button
                 variant={"contained"}
                 color={"primary"}

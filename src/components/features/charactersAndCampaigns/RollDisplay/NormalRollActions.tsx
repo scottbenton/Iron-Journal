@@ -16,6 +16,7 @@ import { convertRollToClipboard } from "./clipboardFormatter";
 import { DieRerollDialog } from "./DieRerollDialog";
 import { ROLL_RESULT, ROLL_TYPE, Roll } from "types/DieRolls.type";
 import { useStore } from "stores/store";
+import { useCampaignType } from "hooks/useCampaignType";
 
 export interface NormalRollActionsProps {
   rollId: string;
@@ -51,21 +52,15 @@ export function NormalRollActions(props: NormalRollActionsProps) {
   const characterId = useStore(
     (store) => store.characters.currentCharacter.currentCharacterId
   );
-  const campaignId = useStore(
-    (store) => store.campaigns.currentCampaign.currentCampaignId
-  );
   const momentum = useStore(
     (store) => store.characters.currentCharacter.currentCharacter?.momentum ?? 0
   );
   const momentumResetValue = useStore(
     (store) => store.characters.currentCharacter.momentumResetValue
   );
-  const isGM = useStore(
-    (store) =>
-      store.campaigns.currentCampaign.currentCampaign?.gmIds?.includes(
-        store.auth.uid
-      ) ?? false
-  );
+
+  const { showGuidedPlayerView } = useCampaignType();
+
   const removeLog = useStore((store) => store.gameLog.removeRoll);
 
   const updateRoll = useStore((store) => store.gameLog.updateRoll);
@@ -216,7 +211,7 @@ export function NormalRollActions(props: NormalRollActionsProps) {
                 <ListItemText>Burn Momentum</ListItemText>
               </MenuItem>
             )}
-          {(!campaignId || isGM) && (
+          {!showGuidedPlayerView && (
             <MenuItem
               onClick={(evt) => {
                 evt.stopPropagation();

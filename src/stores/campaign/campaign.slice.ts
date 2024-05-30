@@ -68,10 +68,10 @@ export const createCampaignSlice: CreateSliceType<CampaignSlice> = (
       }
     },
 
-    createCampaign: (campaignName) => {
+    createCampaign: (campaignName, campaignType) => {
       const uid = getState().auth.uid;
 
-      return createCampaign({ uid, campaignName });
+      return createCampaign({ uid, campaignName, campaignType });
     },
     getCampaign: (campaignId) => {
       const campaign = getState().campaigns.campaignMap[campaignId];

@@ -18,7 +18,6 @@ import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import { useRef } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useConfirm } from "material-ui-confirm";
-import { SectionHeading } from "components/shared/SectionHeading";
 import { RtcRichTextEditor } from "components/shared/RichTextEditor/RtcRichTextEditor";
 import { NPCDocumentWithGMProperties } from "stores/world/currentWorld/npcs/npcs.slice.type";
 import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
@@ -33,6 +32,7 @@ import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { Sector } from "types/Sector.type";
 import { Difficulty } from "types/Track.type";
+import { GuideAndPlayerHeader, GuideOnlyHeader } from "../common";
 
 const defaultNPCSpeciesOptions: {
   enum: DefaultNPCSpecies;
@@ -117,7 +117,7 @@ export function OpenNPC(props: OpenNPCProps) {
   const confirm = useConfirm();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { showGMFields, showGMTips, isSinglePlayer } = useWorldPermissions();
+  const { showGMFields, showGMTips, isGuidedGame } = useWorldPermissions();
 
   useListenToCurrentNPC(npcId);
 
@@ -177,7 +177,7 @@ export function OpenNPC(props: OpenNPCProps) {
     : undefined;
   const npcLocationBonds = npcLocation?.characterBonds ?? {};
   const npcBonds = npc.characterBonds ?? {};
-  const npcConnections = npc.characterConnections ?? {};
+
   const isCharacterBondedToLocation =
     npcLocationBonds[currentCharacterId ?? ""] ?? false;
   const isCharacterBondedToNPC = npcBonds[currentCharacterId ?? ""] ?? false;
@@ -195,19 +195,6 @@ export function OpenNPC(props: OpenNPCProps) {
     (store) =>
       store.worlds.currentWorld.currentWorldNPCs.updateNPCCharacterConnection
   );
-
-  const currentCampaignCharacters = useStore(
-    (store) => store.campaigns.currentCampaign.characters.characterMap
-  );
-  const bondedCharacterNames = Object.keys(currentCampaignCharacters)
-    .filter(
-      (characterId) => npcLocationBonds[characterId] || npcBonds[characterId]
-    )
-    .map((characterId) => currentCampaignCharacters[characterId]?.name ?? "");
-
-  const connectedCharacterNames = Object.keys(currentCampaignCharacters)
-    .filter((characterId) => npcConnections[characterId])
-    .map((characterId) => currentCampaignCharacters[characterId]?.name ?? "");
 
   const theme = useTheme();
   const isLg = useMediaQuery(theme.breakpoints.up("lg"));
@@ -457,17 +444,9 @@ export function OpenNPC(props: OpenNPCProps) {
             {showGMFields && (
               <>
                 {showGMTips && (
-                  <>
-                    <Grid item xs={12}>
-                      <SectionHeading label={"GM Only"} breakContainer />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Alert severity={"info"}>
-                        Information in this section will not be shared with your
-                        players.
-                      </Alert>
-                    </Grid>
-                  </>
+                  <Grid item xs={12}>
+                    <GuideOnlyHeader breakContainer />
+                  </Grid>
                 )}
                 {!isStarforged && (
                   <Grid item xs={12} sm={6}>
@@ -559,7 +538,7 @@ export function OpenNPC(props: OpenNPCProps) {
                     />
                   </Grid>
                 )}
-                {showGMFields && !isSinglePlayer && (
+                {showGMFields && isGuidedGame && (
                   <Grid
                     item
                     xs={12}
@@ -581,8 +560,10 @@ export function OpenNPC(props: OpenNPCProps) {
                     />
                   </Grid>
                 )}
-                {isSinglePlayer && (
+                {!isGuidedGame && (
                   <BondsSection
+                    npc={npc}
+                    location={npcLocation}
                     isStarforged={isStarforged}
                     onBondToggle={
                       currentCharacterId
@@ -623,7 +604,6 @@ export function OpenNPC(props: OpenNPCProps) {
                             ).catch(() => {})
                         : undefined
                     }
-                    bondedCharacters={bondedCharacterNames}
                     inheritedBondName={
                       isCharacterBondedToLocation
                         ? npcLocation?.name
@@ -642,25 +622,12 @@ export function OpenNPC(props: OpenNPCProps) {
                 </Grid>
               </>
             )}
-            {!isSinglePlayer && (
+            {isGuidedGame && (
               <>
                 {showGMTips && (
-                  <>
-                    <Grid item xs={12}>
-                      <SectionHeading
-                        label={"GM & Player Notes"}
-                        breakContainer
-                      />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                      <Alert severity={"info"}>
-                        Notes in this section will only be visible to gms &
-                        players in campaigns. Notes for singleplayer games
-                        should go in the above section.
-                      </Alert>
-                    </Grid>
-                  </>
+                  <Grid item xs={12}>
+                    <GuideAndPlayerHeader breakContainer />
+                  </Grid>
                 )}
                 <BondsSection
                   isStarforged={isStarforged}
@@ -703,11 +670,11 @@ export function OpenNPC(props: OpenNPCProps) {
                           ).catch(() => {})
                       : undefined
                   }
-                  bondedCharacters={bondedCharacterNames}
                   inheritedBondName={
                     isCharacterBondedToLocation ? npcLocation?.name : undefined
                   }
-                  connectedCharacters={connectedCharacterNames}
+                  npc={npc}
+                  location={npcLocation}
                 />
                 {!npc.sharedWithPlayers && (
                   <Grid item xs={12}>
