@@ -2,7 +2,7 @@ import { Grid } from "@mui/material";
 import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import { useStore } from "stores/store";
 import { StarforgedLocationDerelict } from "api-calls/world/sectors/sectorLocations/_sectorLocations.type";
-import { GMSectionHeader } from "../../GMSectionHeader";
+import { GuideOnlyHeader } from "../../common";
 
 export interface DerelictContentProps {
   locationId: string;
@@ -38,7 +38,7 @@ export function DerelictContent(props: DerelictContentProps) {
 
       {showGMFields && (
         <>
-          {showGMTips ? <GMSectionHeader /> : <Grid item xs={0} sm={6} />}
+          {showGMTips ? <GuideOnlyHeader /> : <Grid item xs={0} sm={6} />}
           <Grid item xs={12} sm={6}>
             <DebouncedOracleInput
               label={"Location"}

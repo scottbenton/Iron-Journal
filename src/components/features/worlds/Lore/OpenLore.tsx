@@ -10,7 +10,6 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useConfirm } from "material-ui-confirm";
-import { SectionHeading } from "components/shared/SectionHeading";
 import { RtcRichTextEditor } from "components/shared/RichTextEditor/RtcRichTextEditor";
 import { LoreTagsAutocomplete } from "./LoreTagsAutocomplete";
 import { useStore } from "stores/store";
@@ -22,6 +21,7 @@ import { ImageBanner } from "../ImageBanner";
 import AddPhotoIcon from "@mui/icons-material/AddPhotoAlternate";
 import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
 import { useSnackbar } from "providers/SnackbarProvider";
+import { GuideAndPlayerHeader, GuideOnlyHeader } from "../common";
 
 export interface OpenLoreProps {
   worldId: string;
@@ -166,17 +166,9 @@ export function OpenLore(props: OpenLoreProps) {
           {showGMFields && (
             <>
               {showGMTips && (
-                <>
-                  <Grid item xs={12}>
-                    <SectionHeading label={"GM Only"} breakContainer />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Alert severity={"info"}>
-                      Information in this section will not be shared with your
-                      players.
-                    </Alert>
-                  </Grid>
-                </>
+                <Grid item xs={12}>
+                  <GuideOnlyHeader breakContainer />
+                </Grid>
               )}
               {isGuidedGame && (
                 <Grid
@@ -214,21 +206,9 @@ export function OpenLore(props: OpenLoreProps) {
           {isGuidedGame && (
             <>
               {showGMTips && (
-                <>
-                  <Grid item xs={12}>
-                    <SectionHeading
-                      label={"GM & Player Notes"}
-                      breakContainer
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Alert severity={"info"}>
-                      Notes in this section will only be visible to gms &
-                      players in campaigns. Notes for singleplayer games should
-                      go in the above section.
-                    </Alert>
-                  </Grid>
-                </>
+                <Grid item xs={12}>
+                  <GuideAndPlayerHeader breakContainer />
+                </Grid>
               )}
               {!lore.sharedWithPlayers && (
                 <Grid item xs={12}>

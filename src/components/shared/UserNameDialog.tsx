@@ -84,7 +84,7 @@ export function UserNameDialog(props: UserNameDialogProps) {
       <DialogContent>
         <Stack spacing={2}>
           <Typography>
-            Usernames will be displayed to other players and GMs in campaigns.
+            Usernames will be displayed to other players in campaigns.
           </Typography>
           <TextField
             label={"Username"}

@@ -43,6 +43,7 @@ export function WorldCard(props: WorldCardProps) {
             {world.name}
           </Typography>
           <Typography color={"textSecondary"}>
+            Editors:{" "}
             {worldOwnerString ? worldOwnerString : <Skeleton width={"12ch"} />}
           </Typography>
         </Box>

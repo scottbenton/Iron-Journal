@@ -34,12 +34,6 @@ export function CharacterHeader() {
   const campaignId = useStore(
     (store) => store.characters.currentCharacter.currentCharacter?.campaignId
   );
-  const isGM = useStore(
-    (store) =>
-      store.campaigns.currentCampaign.currentCampaign?.gmIds?.includes(
-        store.auth.uid
-      ) ?? false
-  );
 
   const theme = useTheme();
   const isMobile = useIsMobile();
@@ -80,27 +74,13 @@ export function CharacterHeader() {
                 <Chip
                   size={"small"}
                   color={"primary"}
-                  variant={"outlined"}
+                  variant={"filled"}
                   icon={<LinkIcon />}
                   label="Campaign"
                   component={Link}
                   to={constructCampaignSheetPath(
                     campaignId,
                     CAMPAIGN_ROUTES.SHEET
-                  )}
-                  clickable
-                />
-              )}
-              {campaignId && isGM && (
-                <Chip
-                  size={"small"}
-                  color={"primary"}
-                  icon={<LinkIcon />}
-                  label={"GM Screen"}
-                  component={Link}
-                  to={constructCampaignSheetPath(
-                    campaignId,
-                    CAMPAIGN_ROUTES.GM_SCREEN
                   )}
                   clickable
                 />

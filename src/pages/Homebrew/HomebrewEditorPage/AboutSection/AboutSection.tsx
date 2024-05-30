@@ -160,10 +160,10 @@ export function AboutSection(props: AboutSectionProps) {
         {isEditor && (
           <Grid item xs={12}>
             <Alert severity={"info"}>
-              Players and GMs in the campaigns you run will automatically be
+              Players and Guides in the campaigns you run will automatically be
               able to view enabled homebrew content within their character
-              sheets and GM screens, but will not be able to edit content unless
-              you invite them as an editor.
+              sheets and Guide screens, but will not be able to edit content
+              unless you invite them as an editor.
             </Alert>
           </Grid>
         )}

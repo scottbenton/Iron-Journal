@@ -18,7 +18,6 @@ import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import { useRef } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useConfirm } from "material-ui-confirm";
-import { SectionHeading } from "components/shared/SectionHeading";
 import { RtcRichTextEditor } from "components/shared/RichTextEditor/RtcRichTextEditor";
 import { NPCDocumentWithGMProperties } from "stores/world/currentWorld/npcs/npcs.slice.type";
 import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
@@ -33,6 +32,7 @@ import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { Sector } from "types/Sector.type";
 import { Difficulty } from "types/Track.type";
+import { GuideAndPlayerHeader, GuideOnlyHeader } from "../common";
 
 const defaultNPCSpeciesOptions: {
   enum: DefaultNPCSpecies;
@@ -457,17 +457,9 @@ export function OpenNPC(props: OpenNPCProps) {
             {showGMFields && (
               <>
                 {showGMTips && (
-                  <>
-                    <Grid item xs={12}>
-                      <SectionHeading label={"GM Only"} breakContainer />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Alert severity={"info"}>
-                        Information in this section will not be shared with your
-                        players.
-                      </Alert>
-                    </Grid>
-                  </>
+                  <Grid item xs={12}>
+                    <GuideOnlyHeader breakContainer />
+                  </Grid>
                 )}
                 {!isStarforged && (
                   <Grid item xs={12} sm={6}>
@@ -645,22 +637,9 @@ export function OpenNPC(props: OpenNPCProps) {
             {isGuidedGame && (
               <>
                 {showGMTips && (
-                  <>
-                    <Grid item xs={12}>
-                      <SectionHeading
-                        label={"GM & Player Notes"}
-                        breakContainer
-                      />
-                    </Grid>
-
-                    <Grid item xs={12}>
-                      <Alert severity={"info"}>
-                        Notes in this section will only be visible to gms &
-                        players in campaigns. Notes for singleplayer games
-                        should go in the above section.
-                      </Alert>
-                    </Grid>
-                  </>
+                  <Grid item xs={12}>
+                    <GuideAndPlayerHeader breakContainer />
+                  </Grid>
                 )}
                 <BondsSection
                   isStarforged={isStarforged}

@@ -2,7 +2,7 @@ import { Grid, MenuItem, TextField } from "@mui/material";
 import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import { useStore } from "stores/store";
 import { StarforgedLocationPlanet } from "api-calls/world/sectors/sectorLocations/_sectorLocations.type";
-import { GMSectionHeader } from "../../GMSectionHeader";
+import { GuideOnlyHeader } from "../../common";
 
 export interface PlanetContentProps {
   locationId: string;
@@ -84,7 +84,7 @@ export function PlanetContent(props: PlanetContentProps) {
       </Grid>
       {showGMFields && (
         <>
-          {showGMTips && <GMSectionHeader />}
+          {showGMTips && <GuideOnlyHeader />}
           <Grid item xs={12}>
             <DebouncedOracleInput
               label={"Feature"}

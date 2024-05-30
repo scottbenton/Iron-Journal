@@ -47,7 +47,8 @@ export function CampaignCard(props: CampaignCard) {
             {campaign.name}
           </Typography>
           <Typography color={"textSecondary"} component={"p"}>
-            {(!campaign.gmIds || campaign.gmIds.length === 0) && "No GM Found"}
+            {(!campaign.gmIds || campaign.gmIds.length === 0) &&
+              "No Guide Found"}
             {gmNameString}
           </Typography>
         </Box>

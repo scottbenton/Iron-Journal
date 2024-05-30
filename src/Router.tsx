@@ -7,10 +7,15 @@ import {
   RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
+  redirect,
 } from "react-router-dom";
 import { ErrorRoute } from "components/shared/ErrorRoute";
 import { CHARACTER_ROUTES, characterPaths } from "pages/Character/routes";
-import { CAMPAIGN_ROUTES, campaignPaths } from "pages/Campaign/routes";
+import {
+  CAMPAIGN_ROUTES,
+  campaignPaths,
+  constructCampaignSheetPath,
+} from "pages/Campaign/routes";
 import { WORLD_ROUTES, worldPaths } from "pages/World/routes";
 import { HeadProvider } from "providers/HeadProvider";
 import { useListenToCharacters } from "stores/character/useListenToCharacters";
@@ -70,7 +75,12 @@ const router = createBrowserRouter(
             />
             <Route
               path={campaignPaths[CAMPAIGN_ROUTES.GM_SCREEN]}
-              lazy={() => import("pages/Campaign/CampaignGMScreenPage")}
+              loader={({ params }) => {
+                const campaignId = params.campaignId ?? "";
+                return redirect(
+                  constructCampaignSheetPath(campaignId, CAMPAIGN_ROUTES.SHEET)
+                );
+              }}
             />
             <Route
               path={campaignPaths[CAMPAIGN_ROUTES.JOIN]}

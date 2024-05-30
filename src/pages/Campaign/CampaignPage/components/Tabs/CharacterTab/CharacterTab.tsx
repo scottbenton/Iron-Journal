@@ -6,7 +6,7 @@ import { useStore } from "stores/store";
 import { UserCard } from "./UserCard";
 import { useState } from "react";
 import { CharacterCard } from "./CharacterCard";
-import { AddCharacterDialog } from "pages/Campaign/CampaignSheetPage/components/AddCharacterDialog";
+import { AddCharacterDialog } from "./AddCharacterDialog";
 import { SharedAssetSection } from "./SharedAssetSection";
 
 export interface CharacterTabProps {
