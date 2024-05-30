@@ -13,7 +13,7 @@ export function useWorldPermissions() {
   );
 
   return {
-    showGMFields: showGuidedPlayerView,
+    showGMFields: !showGuidedPlayerView,
     showGMTips: showGuideTips,
     isGuidedGame: campaignType === CampaignType.Guided,
     isSinglePlayer,
