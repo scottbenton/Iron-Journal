@@ -163,18 +163,20 @@ export function CampaignSettingsMenu() {
             <ListItemText>Leave Campaign</ListItemText>
           </MenuItem>
         )}
-        <MenuItem
-          onClick={() => {
-            handleClose();
-            handleDeleteCampaign();
-          }}
-        >
-          <ListItemIcon>
-            <DeleteIcon fontSize={"small"} />
-          </ListItemIcon>
+        {!showGuidedPlayerView && (
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              handleDeleteCampaign();
+            }}
+          >
+            <ListItemIcon>
+              <DeleteIcon fontSize={"small"} />
+            </ListItemIcon>
 
-          <ListItemText>Delete Campaign</ListItemText>
-        </MenuItem>
+            <ListItemText>Delete Campaign</ListItemText>
+          </MenuItem>
+        )}
         {isGuide && campaignType === CampaignType.Guided && (
           <MenuItem
             onClick={() => {
