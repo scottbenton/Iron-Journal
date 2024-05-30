@@ -15,6 +15,8 @@
 - Re-added missing roll buttons for assets in the move dialog
 - Made tensions clocks available in Iron Fellowship
 - You can now enter other species into the NPC species box. They will use the default Ironlander name oracles (Ironsworn)
+- Guides can now view their player's bond progress (Starforged)
+- Bond progress is now only visible when you have a connection with a character (Starforged)
 
 ### Bug Fixes
 

@@ -177,7 +177,7 @@ export function OpenNPC(props: OpenNPCProps) {
     : undefined;
   const npcLocationBonds = npcLocation?.characterBonds ?? {};
   const npcBonds = npc.characterBonds ?? {};
-  const npcConnections = npc.characterConnections ?? {};
+
   const isCharacterBondedToLocation =
     npcLocationBonds[currentCharacterId ?? ""] ?? false;
   const isCharacterBondedToNPC = npcBonds[currentCharacterId ?? ""] ?? false;
@@ -195,19 +195,6 @@ export function OpenNPC(props: OpenNPCProps) {
     (store) =>
       store.worlds.currentWorld.currentWorldNPCs.updateNPCCharacterConnection
   );
-
-  const currentCampaignCharacters = useStore(
-    (store) => store.campaigns.currentCampaign.characters.characterMap
-  );
-  const bondedCharacterNames = Object.keys(currentCampaignCharacters)
-    .filter(
-      (characterId) => npcLocationBonds[characterId] || npcBonds[characterId]
-    )
-    .map((characterId) => currentCampaignCharacters[characterId]?.name ?? "");
-
-  const connectedCharacterNames = Object.keys(currentCampaignCharacters)
-    .filter((characterId) => npcConnections[characterId])
-    .map((characterId) => currentCampaignCharacters[characterId]?.name ?? "");
 
   const theme = useTheme();
   const isLg = useMediaQuery(theme.breakpoints.up("lg"));
@@ -575,6 +562,8 @@ export function OpenNPC(props: OpenNPCProps) {
                 )}
                 {!isGuidedGame && (
                   <BondsSection
+                    npc={npc}
+                    location={npcLocation}
                     isStarforged={isStarforged}
                     onBondToggle={
                       currentCharacterId
@@ -615,7 +604,6 @@ export function OpenNPC(props: OpenNPCProps) {
                             ).catch(() => {})
                         : undefined
                     }
-                    bondedCharacters={bondedCharacterNames}
                     inheritedBondName={
                       isCharacterBondedToLocation
                         ? npcLocation?.name
@@ -682,11 +670,11 @@ export function OpenNPC(props: OpenNPCProps) {
                           ).catch(() => {})
                       : undefined
                   }
-                  bondedCharacters={bondedCharacterNames}
                   inheritedBondName={
                     isCharacterBondedToLocation ? npcLocation?.name : undefined
                   }
-                  connectedCharacters={connectedCharacterNames}
+                  npc={npc}
+                  location={npcLocation}
                 />
                 {!npc.sharedWithPlayers && (
                   <Grid item xs={12}>

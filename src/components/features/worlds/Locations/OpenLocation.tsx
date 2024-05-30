@@ -91,13 +91,6 @@ export function OpenLocation(props: OpenLocationProps) {
         .updateLocationCharacterBond
   );
 
-  const currentCampaignCharacters = useStore(
-    (store) => store.campaigns.currentCampaign.characters.characterMap
-  );
-  const bondedCharacterNames = Object.keys(currentCampaignCharacters)
-    .filter((characterId) => location.characterBonds?.[characterId])
-    .map((characterId) => currentCampaignCharacters[characterId]?.name ?? "");
-
   const handleLocationDelete = () => {
     confirm({
       title: `Delete ${location.name}`,
@@ -280,7 +273,6 @@ export function OpenLocation(props: OpenLocationProps) {
                       : undefined
                   }
                   isBonded={singleplayerBond}
-                  bondedCharacters={bondedCharacterNames}
                 />
               )}
               <Grid item xs={12}>
@@ -315,7 +307,6 @@ export function OpenLocation(props: OpenLocationProps) {
                     : undefined
                 }
                 isBonded={singleplayerBond}
-                bondedCharacters={bondedCharacterNames}
               />
               {!location.sharedWithPlayers && (
                 <Grid item xs={12}>

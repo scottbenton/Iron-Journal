@@ -26,6 +26,10 @@ export function CampaignPage() {
   const isCampaignLoaded = useStore(
     (store) => !!store.campaigns.currentCampaign.currentCampaign
   );
+  const hasGuide =
+    useStore(
+      (store) => store.campaigns.currentCampaign.currentCampaign?.gmIds ?? []
+    ).length > 0;
   const { showGuidedPlayerView, campaignType } = useCampaignType();
   const [syncLoading, setSyncLoading] = useState(true);
   useEffect(() => {
@@ -40,6 +44,11 @@ export function CampaignPage() {
 
   const [inviteUsersDialogOpen, setInviteUsersDialogOpen] =
     useState<boolean>(false);
+
+  const uid = useStore((store) => store.auth.uid);
+  const updateCampaignGuide = useStore(
+    (store) => store.campaigns.currentCampaign.updateCampaignGM
+  );
 
   if (loading || (!isCampaignLoaded && syncLoading)) {
     return <LinearProgress />;
@@ -90,6 +99,15 @@ export function CampaignPage() {
                 onClick={() => setInviteUsersDialogOpen(true)}
               >
                 Invite Players
+              </Button>
+            )}
+            {campaignType === CampaignType.Guided && !hasGuide && (
+              <Button
+                variant={"outlined"}
+                color={"inherit"}
+                onClick={() => updateCampaignGuide(uid)}
+              >
+                Mark self as Guide
               </Button>
             )}
             <CampaignSettingsMenu />
