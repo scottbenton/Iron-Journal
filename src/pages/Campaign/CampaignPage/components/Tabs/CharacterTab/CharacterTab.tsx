@@ -80,7 +80,7 @@ export function CharacterTab(props: CharacterTabProps) {
             <Container maxWidth={false}>
               <Grid container spacing={2}>
                 {(users ?? []).map((userId) => (
-                  <Grid item xs={12} sm={6} md={4} key={userId}>
+                  <Grid item xs={12} sm={6} lg={4} key={userId}>
                     <UserCard uid={userId} />
                   </Grid>
                 ))}
