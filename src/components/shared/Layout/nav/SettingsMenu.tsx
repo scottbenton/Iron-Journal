@@ -34,6 +34,7 @@ import { UserNameDialog } from "components/shared/UserNameDialog";
 import UsernameIcon from "@mui/icons-material/AccountCircle";
 import TokenIcon from "@mui/icons-material/Contacts";
 import { CustomTokenDialog } from "./CustomTokenDialog/CustomTokenDialog";
+import { activeFeatureFlags } from "hooks/featureFlags/activeFeatureFlags";
 
 export function SettingsMenu() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -128,17 +129,19 @@ export function SettingsMenu() {
             <ListItemText>Accessibility Settings</ListItemText>
           </MenuItem>
         )}
-        <MenuItem
-          onClick={() => {
-            setMenuOpen(false);
-            setBetaTestsOpen(true);
-          }}
-        >
-          <ListItemIcon>
-            <TestsIcon />
-          </ListItemIcon>
-          <ListItemText>Beta Tests</ListItemText>
-        </MenuItem>
+        {activeFeatureFlags.length > 0 && (
+          <MenuItem
+            onClick={() => {
+              setMenuOpen(false);
+              setBetaTestsOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <TestsIcon />
+            </ListItemIcon>
+            <ListItemText>Beta Tests</ListItemText>
+          </MenuItem>
+        )}
         <MenuItem
           onClick={() => {
             setMenuOpen(false);

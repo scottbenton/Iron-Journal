@@ -3,21 +3,25 @@ import { sunsetTheme } from "./sunsetTheme";
 import { hinterlandsTheme } from "./hinterlandsTheme";
 import { sharedStatusColors, baseFontFamilies } from "./constants";
 import { green } from "@mui/material/colors";
-import { starlightTheme } from "./starlightTheme";
-import { seaFoamTheme } from "./seaFoamTheme";
+import { eidolonTheme } from "./eidolonTheme";
+import { myriadTheme } from "./myriadTheme";
 import { ThemeConfig, ThemeType, Themes } from "./theme.types";
 
 export const themes: Record<Themes, ThemeConfig> = {
   [Themes.Sunset]: sunsetTheme,
   [Themes.Hinterlands]: hinterlandsTheme,
-  [Themes.Starlight]: starlightTheme,
-  [Themes.SeaFoam]: seaFoamTheme,
+  [Themes.Eidolon]: eidolonTheme,
+  [Themes.Myriad]: myriadTheme,
 };
 
 export function getTheme(theme: Themes, type: ThemeType): Theme {
-  const config = themes[theme];
+  let config = themes[theme];
+  if (!config) {
+    config = themes[Themes.Sunset];
+  }
   return createTheme({
     palette: {
+      mode: type === ThemeType.Light ? "light" : "dark",
       primary: config.palette.primary,
       secondary: green,
       darkGrey: config.configs[type].darkGrey,

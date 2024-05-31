@@ -1,20 +1,20 @@
 import { ThemeConfig, ThemeType } from "./theme.types";
-import { SeaFoamDivider } from "./backgrounds/SeaFoamDivider";
-import { blueGray, seafoam } from "./constants";
-import { SeaFoamEmptyState } from "./emptyStates/SeaFoamEmptyState";
+import { MyriadDivider } from "./backgrounds/MyriadDivider";
+import { blueGray, myriadTeal } from "./constants";
+import { MyriadEmptyState } from "./emptyStates/MyriadEmptyState";
 
-export const seaFoamTheme: ThemeConfig = {
-  name: "Sea Foam",
-  iconPath: "/theme/sea-foam.svg",
-  emptyStateImage: <SeaFoamEmptyState />,
+export const myriadTheme: ThemeConfig = {
+  name: "Myriad",
+  iconPath: "/theme/myriad.svg",
+  emptyStateImage: <MyriadEmptyState />,
   palette: {
-    primary: seafoam,
+    primary: myriadTeal,
     grey: blueGray,
   },
-  borderRadius: 4,
+  borderRadius: 8,
   background: {
     type: "separator",
-    node: <SeaFoamDivider />,
+    node: <MyriadDivider />,
   },
   configs: {
     [ThemeType.Light]: {

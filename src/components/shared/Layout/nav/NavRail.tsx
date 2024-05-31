@@ -24,7 +24,6 @@ export const NAV_RAIL_WIDTH = 80;
 
 export function NavRail() {
   const iconPath = useThemeValue("iconPath") as string;
-  console.debug(iconPath);
   const authStatus = useStore((store) => store.auth.status);
 
   const title = useAppName();

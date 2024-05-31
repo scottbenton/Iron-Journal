@@ -1,4 +1,5 @@
 import { Nullable } from "api-calls/helpers.type";
+import { Themes } from "providers/ThemeProvider/themes/theme.types";
 
 export type StatsMap = Record<string, number>;
 
@@ -55,4 +56,6 @@ export interface CharacterDocument {
   customTracks?: {
     [trackName: string]: number;
   };
+
+  theme?: Themes;
 }

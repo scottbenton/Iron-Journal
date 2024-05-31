@@ -7,7 +7,7 @@ import {
   LinearProgress,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { CharacterList } from "../../components/features/characters/CharacterList/CharacterList";
+import { CharacterList } from "../../components/features/characters/CharacterList";
 import { EmptyState } from "../../components/shared/EmptyState/EmptyState";
 import AddCharacterIcon from "@mui/icons-material/PersonAdd";
 import { CHARACTER_ROUTES, constructCharacterPath } from "./routes";

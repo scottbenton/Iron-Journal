@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-export function StarlightEmptyState() {
+export function EidolonEmptyState() {
   return (
     <Box
       width={200}
@@ -9,7 +9,7 @@ export function StarlightEmptyState() {
         backgroundSize: "contain",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        backgroundImage: `url(/theme/starlight-empty-state.svg)`,
+        backgroundImage: `url(/theme/eidolon-empty-state.svg)`,
       }}
     />
   );

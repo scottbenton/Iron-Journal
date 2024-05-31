@@ -1,9 +1,6 @@
 import { Box, Container, Stack, Typography, useTheme } from "@mui/material";
-import { getPublicAssetPath } from "functions/getPublicAssetPath";
-import { useNewSunderedIslesTheme } from "hooks/featureFlags/useNewSunderedIslesTheme";
-import { useGameSystemValue } from "hooks/useGameSystemValue";
+import { useThemeValue } from "providers/ThemeProvider/useThemeValue";
 import React, { PropsWithChildren } from "react";
-import { GAME_SYSTEMS } from "types/GameSystems.type";
 
 export interface PageHeaderProps extends PropsWithChildren {
   label?: string | React.ReactNode;
@@ -11,25 +8,19 @@ export interface PageHeaderProps extends PropsWithChildren {
   actions?: React.ReactNode;
 }
 
-const sunderedIslesBorder =
-  "data:image/svg+xml;utf8,<svg viewBox='0 0 1200  123' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M0 90L50 84C100 79 200 68 300 46C400 24 500 -9 600 2C700 13 800 68 900 90C1000 112 1100 101 1150 96L1200 90V123H1150C1100 123 1000 123 900 123C800 123 700 123 600 123C500 123 400 123 300 123C200 123 100 123 50 123H0V90Z' fill='%23e5e7eb'/></svg>";
 export function PageHeader(props: PageHeaderProps) {
   const { label, subLabel, actions, children } = props;
 
   const isEmpty = !label && !subLabel && !actions && !children;
 
   const isLightTheme = useTheme().palette.mode === "light";
-  const showNewSunderedIslesTheme = useNewSunderedIslesTheme();
 
-  const isIronsworn = useGameSystemValue({
-    [GAME_SYSTEMS.IRONSWORN]: true,
-    [GAME_SYSTEMS.STARFORGED]: false,
-  });
-
-  const borderUrl =
-    !isIronsworn && showNewSunderedIslesTheme
-      ? sunderedIslesBorder
-      : getPublicAssetPath("border.svg");
+  const background = useThemeValue("background") as
+    | {
+        type: "background" | "separator";
+        node: React.ReactNode;
+      }
+    | undefined;
 
   return (
     <>
@@ -41,7 +32,7 @@ export function PageHeader(props: PageHeaderProps) {
           mb: isEmpty ? -8 : -4,
           // width: "100vw",
           backgroundColor:
-            isLightTheme && (isIronsworn || showNewSunderedIslesTheme)
+            isLightTheme && background?.type === "separator"
               ? theme.palette.darkGrey.main
               : undefined,
           position: "relative",
@@ -104,23 +95,7 @@ export function PageHeader(props: PageHeaderProps) {
             width: "100%",
           }}
         >
-          <Box
-            sx={(theme) => ({
-              backgroundImage:
-                isLightTheme && (isIronsworn || showNewSunderedIslesTheme)
-                  ? `url("${borderUrl}")`
-                  : undefined,
-              backgroundColor:
-                showNewSunderedIslesTheme && theme.palette.mode === "light"
-                  ? "darkGrey.main"
-                  : undefined,
-              height: theme.spacing(showNewSunderedIslesTheme ? 2 : 8),
-              backgroundRepeat: "repeat-x",
-              backgroundSize: "contain",
-              backgroundPositionX: "center",
-              minWidth: isIronsworn ? 1000 : 500,
-            })}
-          />
+          {background?.type === "separator" ? <>{background.node}</> : null}
         </Box>
       </Box>
     </>

@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.2.0
+
+### New Features
+
+- Themes can now be set per-campaign, and are no longer restricted to Ironsworn or Starforged.
+
+### Changes
+
+### Bug Fixes
+
 ## 3.1.0
 
 ### New Features

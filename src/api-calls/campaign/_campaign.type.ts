@@ -1,3 +1,4 @@
+import { Themes } from "providers/ThemeProvider/themes/theme.types";
 import { LegacyTrack } from "types/LegacyTrack.type";
 
 export enum CampaignType {
@@ -16,5 +17,6 @@ export interface CampaignDocument {
   customTracks?: Record<string, number>;
   conditionMeters?: Record<string, number>;
   specialTracks?: Record<string, LegacyTrack>;
-  type?: CampaignType; // Todo - perhaps run a migration to set this so that we can remove the optional
+  type?: CampaignType;
+  theme?: Themes;
 }

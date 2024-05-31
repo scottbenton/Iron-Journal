@@ -10,8 +10,8 @@ export function ThemeProvider(props: PropsWithChildren) {
   const { children } = props;
 
   const defaultTheme = useGameSystemValue({
-    [GAME_SYSTEMS.IRONSWORN]: Themes.Hinterlands,
-    [GAME_SYSTEMS.STARFORGED]: Themes.SeaFoam,
+    [GAME_SYSTEMS.IRONSWORN]: Themes.Sunset,
+    [GAME_SYSTEMS.STARFORGED]: Themes.Eidolon,
   });
   const [theme, setTheme] = useState<Themes>(defaultTheme);
   const [currentThemeType, setCurrentThemeType] = useState<ThemeType>(

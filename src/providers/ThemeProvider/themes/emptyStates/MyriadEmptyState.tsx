@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-export function SeaFoamEmptyState() {
+export function MyriadEmptyState() {
   return (
     <Box
       width={200}
@@ -9,7 +9,7 @@ export function SeaFoamEmptyState() {
         backgroundSize: "contain",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        backgroundImage: `url(/theme/sea-foam-empty-state.svg)`,
+        backgroundImage: `url(/theme/myriad-empty-state.svg)`,
       }}
     />
   );

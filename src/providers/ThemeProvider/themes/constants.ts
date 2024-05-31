@@ -1,26 +1,26 @@
 import { Color, PaletteColorOptions } from "@mui/material";
 
 // Primary Colors
-export const sunset: PaletteColorOptions = {
+export const sunsetPink: PaletteColorOptions = {
   light: "#ff8093",
   main: "#ff6584",
   dark: "#ff4d79",
 };
-export const hinterlands: PaletteColorOptions = {
+export const hinterlandsGreen: PaletteColorOptions = {
   light: "#059669",
   main: "#047857",
   dark: "#065f46",
 };
-export const starlight: PaletteColorOptions = {
+export const eidolonGold: PaletteColorOptions = {
   light: "#eab308",
   main: "#ca8a04",
   dark: "#a16207",
 };
-export const seafoam: PaletteColorOptions = {
-  light: "#5eead4",
-  main: "#2dd4bf",
-  dark: "#14b8a6",
-  contrastText: "#134e4a",
+export const myriadTeal: PaletteColorOptions = {
+  light: "#2dd4bf",
+  main: "#14b8a6",
+  dark: "#0d9488",
+  contrastText: "#042f2e",
 };
 
 // Grays

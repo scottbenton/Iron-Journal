@@ -1,22 +1,22 @@
 import { HexboxUnchecked } from "assets/HexboxUnchecked";
 import { ThemeConfig, ThemeType } from "./theme.types";
-import { StarlightBackground } from "./backgrounds/StarlightBackground";
-import { slate, starlight } from "./constants";
-import { StarlightEmptyState } from "./emptyStates/StarlightEmptyState";
+import { EidolonBackground } from "./backgrounds/EidolonBackground";
+import { slate, eidolonGold } from "./constants";
+import { EidolonEmptyState } from "./emptyStates/EidolonEmptyState";
 import { HexboxChecked } from "assets/HexboxChecked";
 
-export const starlightTheme: ThemeConfig = {
-  name: "Starlight",
-  iconPath: "/theme/starlight.svg",
-  emptyStateImage: <StarlightEmptyState />,
+export const eidolonTheme: ThemeConfig = {
+  name: "Eidolon",
+  iconPath: "/theme/eidolon.svg",
+  emptyStateImage: <EidolonEmptyState />,
   palette: {
-    primary: starlight,
+    primary: eidolonGold,
     grey: slate,
   },
   borderRadius: 8,
   background: {
     type: "background",
-    node: <StarlightBackground />,
+    node: <EidolonBackground />,
   },
   configs: {
     [ThemeType.Light]: {

@@ -1,6 +1,6 @@
 import { ThemeConfig, ThemeType } from "./theme.types";
 import { IronswornDivider } from "./backgrounds/IronswornDivider";
-import { hinterlands, stone } from "./constants";
+import { hinterlandsGreen, stone } from "./constants";
 import { HinterlandsEmptyState } from "./emptyStates/HinterlandsEmptyState";
 
 export const hinterlandsTheme: ThemeConfig = {
@@ -8,7 +8,7 @@ export const hinterlandsTheme: ThemeConfig = {
   iconPath: "/theme/hinterlands.svg",
   emptyStateImage: <HinterlandsEmptyState />,
   palette: {
-    primary: hinterlands,
+    primary: hinterlandsGreen,
     grey: stone,
   },
   borderRadius: 4,

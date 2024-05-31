@@ -1,6 +1,6 @@
 import { ThemeConfig, ThemeType } from "./theme.types";
 import { IronswornDivider } from "./backgrounds/IronswornDivider";
-import { stone, sunset } from "./constants";
+import { stone, sunsetPink } from "./constants";
 import { SunsetEmptyState } from "./emptyStates/SunsetEmptyState";
 
 export const sunsetTheme: ThemeConfig = {
@@ -8,7 +8,7 @@ export const sunsetTheme: ThemeConfig = {
   iconPath: "/theme/sunset.svg",
   emptyStateImage: <SunsetEmptyState />,
   palette: {
-    primary: sunset,
+    primary: sunsetPink,
     grey: stone,
   },
   borderRadius: 4,

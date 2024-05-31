@@ -32,7 +32,7 @@ VITE_CREW_LINK_FIREBASE_APPID=
 
 # Default values for the environment.
 VITE_TITLE="Starforged Crew Link"
-VITE_FAVICON_PATH=/crew-link-logo.svg
+VITE_FAVICON_PATH=/theme/eidolon.svg
 VITE_OPENGRAPH_PATH=/assets/starforged/opengraph-default.png
 ```
 

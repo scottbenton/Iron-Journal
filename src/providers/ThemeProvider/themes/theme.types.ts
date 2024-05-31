@@ -8,8 +8,8 @@ export enum ThemeType {
 export enum Themes {
   Sunset = "sunset",
   Hinterlands = "hinterlands",
-  Starlight = "starlight",
-  SeaFoam = "seaFoam",
+  Eidolon = "eidolon",
+  Myriad = "myriad",
 }
 
 export interface ThemeConfig {
