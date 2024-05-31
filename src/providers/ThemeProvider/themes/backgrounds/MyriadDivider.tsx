@@ -11,7 +11,7 @@ export function MyriadDivider() {
         backgroundImage: isLightTheme
           ? `url(/theme/myriad-border.svg)`
           : undefined,
-        height: theme.spacing(4),
+        height: theme.spacing(2),
         backgroundColor: isLightTheme ? "darkGrey.main" : undefined,
         backgroundRepeat: "repeat-x",
         backgroundSize: "contain",
