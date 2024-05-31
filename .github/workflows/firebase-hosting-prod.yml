@@ -27,7 +27,7 @@ jobs:
       VITE_POSTHOG_KEY: "${{secrets.POSTHOG_KEY}}"
       VITE_POSTHOG_HOST: "${{secrets.POSTHOG_HOST}}"
       VITE_TITLE: "Iron Fellowship"
-      VITE_FAVICON_PATH: "/iron-fellowship-logo.svg"
+      VITE_FAVICON_PATH: "/theme/sunset.svg"
       VITE_OPENGRAPH_PATH: "/assets/ironsworn/opengraph-default.png"
     steps:
       - uses: actions/checkout@v2
@@ -90,7 +90,7 @@ jobs:
       VITE_POSTHOG_KEY: "${{secrets.POSTHOG_KEY}}"
       VITE_POSTHOG_HOST: "${{secrets.POSTHOG_HOST}}"
       VITE_TITLE: "Crew Link for Starforged"
-      VITE_FAVICON_PATH: "/crew-link-logo.svg"
+      VITE_FAVICON_PATH: "/theme/eidolon.svg"
       VITE_OPENGRAPH_PATH: "/assets/starforged/opengraph-default.png"
     steps:
       - uses: actions/checkout@v2

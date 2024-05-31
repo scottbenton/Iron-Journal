@@ -1,6 +1,6 @@
 import { Box, SxProps, Typography } from "@mui/material";
-import { getPublicAssetPath } from "functions/getPublicAssetPath";
-import { useNewHinterlandsTheme } from "hooks/featureFlags/useNewHinterlandsTheme";
+import { useThemeValue } from "providers/ThemeProvider/useThemeValue";
+import { ReactNode } from "react";
 
 export interface EmptyStateProps {
   showImage?: boolean;
@@ -14,10 +14,7 @@ export interface EmptyStateProps {
 export function EmptyState(props: EmptyStateProps) {
   const { showImage, title, message, callToAction, leftAlign, sx } = props;
 
-  const usingHinterlandsTheme = useNewHinterlandsTheme();
-  const imageSrc = getPublicAssetPath(
-    usingHinterlandsTheme ? "HinterlandsEmptyState.svg" : "empty-state.svg"
-  );
+  const emptyStateImage = useThemeValue("emptyStateImage") as ReactNode;
 
   return (
     <Box
@@ -27,18 +24,7 @@ export function EmptyState(props: EmptyStateProps) {
       mt={showImage ? 8 : 2}
       sx={sx}
     >
-      {showImage && (
-        <Box
-          width={usingHinterlandsTheme ? 300 : 200}
-          height={200}
-          sx={{
-            backgroundSize: "contain",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundImage: `url(${imageSrc})`,
-          }}
-        />
-      )}
+      {showImage && emptyStateImage}
       <Box
         maxWidth={"48ch"}
         display={"flex"}

@@ -13,7 +13,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useToggleTheme } from "providers/ThemeProvider";
 import LightThemeIcon from "@mui/icons-material/LightMode";
 import DarkThemeIcon from "@mui/icons-material/DarkMode";
-import { THEME_TYPE } from "providers/ThemeProvider/themes";
+import { ThemeType } from "providers/ThemeProvider/themes/theme.types";
 import { useGameSystem } from "hooks/useGameSystem";
 import { getIsLocalEnvironment } from "functions/getGameSystem";
 import SystemIcon from "@mui/icons-material/Casino";
@@ -34,6 +34,7 @@ import { UserNameDialog } from "components/shared/UserNameDialog";
 import UsernameIcon from "@mui/icons-material/AccountCircle";
 import TokenIcon from "@mui/icons-material/Contacts";
 import { CustomTokenDialog } from "./CustomTokenDialog/CustomTokenDialog";
+import { activeFeatureFlags } from "hooks/featureFlags/activeFeatureFlags";
 
 export function SettingsMenu() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -128,17 +129,19 @@ export function SettingsMenu() {
             <ListItemText>Accessibility Settings</ListItemText>
           </MenuItem>
         )}
-        <MenuItem
-          onClick={() => {
-            setMenuOpen(false);
-            setBetaTestsOpen(true);
-          }}
-        >
-          <ListItemIcon>
-            <TestsIcon />
-          </ListItemIcon>
-          <ListItemText>Beta Tests</ListItemText>
-        </MenuItem>
+        {activeFeatureFlags.length > 0 && (
+          <MenuItem
+            onClick={() => {
+              setMenuOpen(false);
+              setBetaTestsOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <TestsIcon />
+            </ListItemIcon>
+            <ListItemText>Beta Tests</ListItemText>
+          </MenuItem>
+        )}
         <MenuItem
           onClick={() => {
             setMenuOpen(false);
@@ -146,14 +149,14 @@ export function SettingsMenu() {
           }}
         >
           <ListItemIcon>
-            {themeType === THEME_TYPE.LIGHT ? (
+            {themeType === ThemeType.Light ? (
               <DarkThemeIcon />
             ) : (
               <LightThemeIcon />
             )}
           </ListItemIcon>
           <ListItemText>
-            {themeType === THEME_TYPE.LIGHT ? "Dark Mode" : "Light Mode"}
+            {themeType === ThemeType.Light ? "Dark Mode" : "Light Mode"}
           </ListItemText>
         </MenuItem>
         {isLoggedIn && (

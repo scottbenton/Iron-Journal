@@ -1,6 +1,7 @@
 import { appDetails } from "config/appDetails.config";
 import { getPublicAssetPath } from "functions/getPublicAssetPath";
 import { useGameSystemValue } from "hooks/useGameSystemValue";
+import { useThemeValue } from "providers/ThemeProvider/useThemeValue";
 import { PropsWithChildren } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
@@ -13,13 +14,15 @@ export function HeadProvider(props: PropsWithChildren) {
 
   const details = useGameSystemValue(appDetails);
 
+  const icon = useThemeValue("iconPath") as string;
+
   return (
     <HelmetProvider>
       <Helmet>
         <title>{details.title}</title>
         <meta property="og:site_name" content={details.title} />
         <meta property="og:title" content={details.title} />
-        <link rel="icon" type="image/svg+xml" href={details.icon} />
+        <link rel="icon" type="image/svg+xml" href={icon} />
         <meta property="og:description" content={details.description} />
         <meta property="og:url" content={url} />
         <meta property="og:type" content="website" />

@@ -15,6 +15,7 @@ import { useListenToSectorLocations } from "stores/world/currentWorld/sector/sec
 import { useListenToSharedAssets } from "stores/campaign/currentCampaign/sharedAssets/useListenToSharedAssets";
 import { useListenToLogs } from "stores/gameLog/useListenToLogs";
 import { useListenToHomebrewContent } from "stores/homebrew/useListenToHomebrewContent";
+import { useSyncTheme } from "providers/ThemeProvider/useSyncTheme";
 
 export function useSyncStore() {
   const { campaignId } = useParams();
@@ -51,4 +52,6 @@ export function useSyncStore() {
   useListenToLogs();
 
   useListenToHomebrewContent(expansionIds ?? []);
+
+  useSyncTheme();
 }

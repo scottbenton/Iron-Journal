@@ -29,14 +29,14 @@ export function AppsMenu() {
     shouldHide?: boolean;
   }[] = [
     {
-      iconLink: "/iron-fellowship-logo.svg",
+      iconLink: "/theme/sunset.svg",
       label: "Iron Fellowship",
       description: `The Ironsworn version of ${appName}`,
       link: "https://iron-fellowship.scottbenton.dev",
       shouldHide: gameSystem === GAME_SYSTEMS.IRONSWORN,
     },
     {
-      iconLink: "/crew-link-logo.svg",
+      iconLink: "/theme/eidolon.svg",
       label: "Crew Link",
       description: `The Starforged version of ${appName}`,
       link: "https://starforged-crew-link.scottbenton.dev",
@@ -74,7 +74,7 @@ export function AppsMenu() {
         placement={isMobile ? "bottom" : "right"}
       >
         <IconButton
-          aria-describedby='apps-menu'
+          aria-describedby="apps-menu"
           color={"inherit"}
           ref={appsMenuParent}
           onClick={() => setAppsMenuOpen(true)}

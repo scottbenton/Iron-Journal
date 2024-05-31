@@ -22,6 +22,8 @@ import StepDownIcon from "@mui/icons-material/PersonRemove";
 import LeaveIcon from "@mui/icons-material/Logout";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ThemeIcon from "@mui/icons-material/ColorLens";
+import { ThemeChooserDialog } from "components/shared/Layout/ThemeChooserDialog";
 
 export function CampaignSettingsMenu() {
   const confirm = useConfirm();
@@ -35,6 +37,7 @@ export function CampaignSettingsMenu() {
 
   const [expansionSelectorDialogOpen, setExpansionSelectorDialogOpen] =
     useState(false);
+  const [themeDialogOpen, setThemeDialogOpen] = useState(false);
 
   const [isEditCampaignOpen, setIsEditCampaignOpen] = useState(false);
   const handleClose = () => setAnchorElement(null);
@@ -150,6 +153,19 @@ export function CampaignSettingsMenu() {
             <ListItemText>Expansions & Homebrew</ListItemText>
           </MenuItem>
         )}
+        {!showGuidedPlayerView && (
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              setThemeDialogOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <ThemeIcon />
+            </ListItemIcon>
+            <ListItemText>Change Theme</ListItemText>
+          </MenuItem>
+        )}
         {campaignType !== CampaignType.Solo && (
           <MenuItem
             onClick={() => {
@@ -198,6 +214,10 @@ export function CampaignSettingsMenu() {
       <ExpansionSelectorDialog
         open={expansionSelectorDialogOpen}
         onClose={() => setExpansionSelectorDialogOpen(false)}
+      />
+      <ThemeChooserDialog
+        open={themeDialogOpen}
+        onClose={() => setThemeDialogOpen(false)}
       />
     </>
   );

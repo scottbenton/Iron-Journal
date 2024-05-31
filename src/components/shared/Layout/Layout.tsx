@@ -12,11 +12,8 @@ import { BottomNav } from "./nav/BottomNav";
 import { NavRail } from "./nav/NavRail";
 import { TopNav } from "./nav/TopNav";
 import { LayoutPathListener } from "./LayoutPathListener";
-import { StarforgedStarBackground } from "./StarforgedStarBackground";
-import { useGameSystem } from "hooks/useGameSystem";
-import { GAME_SYSTEMS } from "types/GameSystems.type";
-import { useNewSunderedIslesTheme } from "hooks/featureFlags/useNewSunderedIslesTheme";
 import { UpdateDialog } from "./UpdateDialog";
+import { useThemeValue } from "providers/ThemeProvider/useThemeValue";
 
 export function Layout() {
   useSyncFeatureFlags();
@@ -28,10 +25,12 @@ export function Layout() {
     (store) => store.auth.closeUserNameDialog
   );
 
-  const { gameSystem } = useGameSystem();
-  const showNewSunderedIslesTheme = useNewSunderedIslesTheme();
-  const showStarforgedTheming =
-    gameSystem === GAME_SYSTEMS.STARFORGED && !showNewSunderedIslesTheme;
+  const background = useThemeValue("background") as
+    | {
+        type: "background" | "separator";
+        node: React.ReactNode;
+      }
+    | undefined;
 
   if (state === AUTH_STATE.LOADING) {
     return <LinearProgress color={"primary"} />;
@@ -43,12 +42,18 @@ export function Layout() {
       display={"flex"}
       flexDirection={"column"}
       sx={(theme) => ({
-        backgroundColor: showStarforgedTheming
-          ? undefined
-          : theme.palette.background.default,
+        backgroundColor:
+          background?.type === "background"
+            ? undefined
+            : theme.palette.background.default,
       })}
     >
-      {showStarforgedTheming && <StarforgedStarBackground />}
+      {background?.type === "background" && background?.node ? (
+        <>{background.node}</>
+      ) : (
+        <></>
+      )}
+      {/* {showStarforgedTheming && <StarforgedStarBackground />} */}
       <Box
         display={"flex"}
         flexDirection={{ xs: "column", sm: "row" }}

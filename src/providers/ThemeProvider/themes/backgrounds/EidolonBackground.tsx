@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useEffect, useRef } from "react";
 
-export function StarforgedStarBackground() {
+export function EidolonBackground() {
   const densityRatio = 0.25;
   const sizeLimit = 4;
   const defaultAlpha = 0.5;

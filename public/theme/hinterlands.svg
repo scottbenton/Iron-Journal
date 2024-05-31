@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="120"
+   height="120"
+   version="1.1"
+   viewBox="0 0 120 120"
+   id="svg5659"
+   sodipodi:docname="hinterlands-logo.svg"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs5663" />
+  <sodipodi:namedview
+     id="namedview5661"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="4.2367481"
+     inkscape:cx="56.411189"
+     inkscape:cy="73.405355"
+     inkscape:window-width="1920"
+     inkscape:window-height="1043"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g5657" />
+  <g
+     transform="matrix(1.2073 0 0 1.2073 -12.439 -9.8678)"
+     stroke-width="0"
+     id="g5657">
+    <g
+       style="fill:#047857"
+       id="g9227"
+       transform="matrix(0.07765261,0,0,0.07765261,22.727575,95.14437)" />
+    <g
+       id="g11352"
+       transform="translate(2.6841307)">
+      <g
+         style="fill:#047857;fill-opacity:1"
+         id="g9740"
+         transform="matrix(0.09318314,0,0,0.09318314,-0.58034024,92.302304)">
+        <path
+           d="M 558,-80 H 402 V -240 H 120 l 160,-240 h -80 l 280,-400 280,400 h -80 l 160,240 H 558 Z"
+           id="path9731"
+           style="fill:#047857;fill-opacity:1" />
+      </g>
+      <g
+         style="fill:#059669;fill-opacity:1"
+         id="g9740-7"
+         transform="matrix(0.09318314,0,0,0.09318314,25.757921,100.85901)">
+        <path
+           d="M 558,-80 H 402 V -240 H 120 l 160,-240 h -80 l 280,-400 280,400 h -80 l 160,240 H 558 Z"
+           id="path9731-5"
+           style="fill:#059669;fill-opacity:1" />
+      </g>
+    </g>
+    <path
+       id="path11023"
+       style="fill:#10b981;fill-opacity:1;stroke:none;stroke-width:16;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 45.507812 91.316406 C 40.989014 91.239971 35.818615 91.519231 32.085938 92.568359 C 24.620582 94.666617 21.960355 96.844652 15.367188 99.945312 C 10.639679 102.16858 4.6705494 102.01983 1.6425781 101.75977 C 5.4542141 112.40682 15.578477 120 27.568359 120 L 92.431641 120 C 102.59966 120 111.42413 114.53468 116.20312 106.38477 C 109.05202 104.72217 98.743425 103.00843 96.123047 102.28125 C 92.302311 101.22096 75.723283 99.610809 70.4375 98.414062 C 65.151717 97.217317 57.259755 92.952595 55.015625 92.201172 C 53.89356 91.82546 50.026611 91.392841 45.507812 91.316406 z "
+       transform="matrix(0.82829454,0,0,0.82829454,10.303156,8.1734449)" />
+  </g>
+</svg>

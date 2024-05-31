@@ -24,6 +24,8 @@ import { ChangeNamePortraitDialog } from "./ChangeNamePortraitDialog";
 import StatIcon from "@mui/icons-material/Numbers";
 import { UpdateStatDialog } from "./UpdateStatDialog";
 import { useCampaignType } from "hooks/useCampaignType";
+import ThemeIcon from "@mui/icons-material/ColorLens";
+import { ThemeChooserDialog } from "components/shared/Layout/ThemeChooserDialog";
 
 export interface CharacterSettingsMenuProps {
   open: boolean;
@@ -40,6 +42,7 @@ export function CharacterSettingsMenu(props: CharacterSettingsMenuProps) {
 
   const [expansionSelectorDialogOpen, setExpansionSelectorDialogOpen] =
     useState(false);
+  const [themeDialogOpen, setThemeDialogOpen] = useState(false);
 
   const [changeNamePortraitDialogOpen, setChangeNamePortraitDialogOpen] =
     useState(false);
@@ -138,6 +141,19 @@ export function CharacterSettingsMenu(props: CharacterSettingsMenuProps) {
             <ListItemText>Expansions & Homebrew</ListItemText>
           </MenuItem>
         )}
+        {!showGuidedPlayerView && (
+          <MenuItem
+            onClick={() => {
+              onClose();
+              setThemeDialogOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <ThemeIcon />
+            </ListItemIcon>
+            <ListItemText>Change Theme</ListItemText>
+          </MenuItem>
+        )}
         <MenuItem
           onClick={() => {
             onClose();
@@ -172,6 +188,10 @@ export function CharacterSettingsMenu(props: CharacterSettingsMenuProps) {
       <UpdateStatDialog
         open={updateStatDialogOpen}
         onClose={() => setUpdateStatDialogOpen(false)}
+      />
+      <ThemeChooserDialog
+        open={themeDialogOpen}
+        onClose={() => setThemeDialogOpen(false)}
       />
     </>
   );

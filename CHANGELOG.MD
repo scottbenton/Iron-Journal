@@ -1,5 +1,21 @@
 # Changelog
 
+## 3.2.0
+
+### New Features
+
+- Themes can now be set per-campaign, and are no longer restricted to Iron Fellowship or Crew Link.
+
+### Changes
+
+- Renamed themes
+  - The default pink Iron Fellowship theme is now called Sunset
+  - The green Iron Fellowship theme is now called Hinterlands
+  - The default gold Crew Link theme is now called Eidolon
+  - The teal Crew Link theme is now called Myriad
+
+### Bug Fixes
+
 ## 3.1.0
 
 ### New Features
