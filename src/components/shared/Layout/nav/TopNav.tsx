@@ -57,7 +57,7 @@ export function TopNav() {
               fontFamily={(theme) => theme.fontFamilyTitle}
               variant={"h5"}
               component={"p"}
-              ml={2}
+              ml={1}
             >
               {title}
             </Typography>
