@@ -22,10 +22,12 @@ export function TracksSection() {
         type={TrackTypes.Journey}
         typeLabel={isStarforged ? "Expedition" : "Journey"}
       />
-      <ProgressTrackSection
-        type={TrackTypes.SceneChallenge}
-        typeLabel={"Scene Challenge"}
-      />
+      {isStarforged && (
+        <ProgressTrackSection
+          type={TrackTypes.SceneChallenge}
+          typeLabel={"Scene Challenge"}
+        />
+      )}
       <ClockSection />
     </Stack>
   );

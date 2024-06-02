@@ -23,11 +23,18 @@ export interface ClockProps {
   onValueChange?: (value: number) => void;
   onSelectedOracleChange?: (oracleKey: AskTheOracle) => void;
   onComplete?: () => void;
+  handleDelete?: () => void;
 }
 
 export function Clock(props: ClockProps) {
-  const { clock, onEdit, onValueChange, onSelectedOracleChange, onComplete } =
-    props;
+  const {
+    clock,
+    onEdit,
+    onValueChange,
+    onSelectedOracleChange,
+    onComplete,
+    handleDelete,
+  } = props;
 
   const { askTheOracle } = useSystemOracles();
 
@@ -48,6 +55,24 @@ export function Clock(props: ClockProps) {
       })
         .then(() => {
           onComplete();
+        })
+        .catch(() => {});
+    }
+  };
+
+  const handleDeleteClick = () => {
+    if (handleDelete) {
+      confirm({
+        title: "Delete Clock",
+        description: "Are you sure you want to delete this clock?",
+        confirmationText: "Delete",
+        confirmationButtonProps: {
+          variant: "contained",
+          color: "primary",
+        },
+      })
+        .then(() => {
+          handleDelete();
         })
         .catch(() => {});
     }
@@ -180,6 +205,11 @@ export function Clock(props: ClockProps) {
           endIcon={<CheckIcon />}
         >
           Complete Clock
+        </Button>
+      )}
+      {handleDelete && clock.status === TrackStatus.Completed && (
+        <Button color={"error"} sx={{ mt: 1 }} onClick={handleDeleteClick}>
+          Delete Permanently
         </Button>
       )}
     </Box>

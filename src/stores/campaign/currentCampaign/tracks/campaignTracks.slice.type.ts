@@ -29,6 +29,7 @@ export interface CampaignTracksSliceActions {
 
   addTrack: (track: Track) => Promise<void>;
   updateTrack: (trackId: string, track: Partial<Track>) => Promise<void>;
+  deleteTrack: (trackId: string) => Promise<void>;
 
   updateCharacterTrack: (
     characterId: string,

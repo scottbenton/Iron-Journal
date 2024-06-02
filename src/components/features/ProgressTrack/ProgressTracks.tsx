@@ -66,7 +66,7 @@ export function ProgressTracks(props: ProgressTracksProps) {
     ? updateCampaignProgressTrack
     : updateCharacterProgressTrack;
 
-  const deleteProgressTrack = (trackId: string) => {
+  const completeProgressTrack = (trackId: string) => {
     updateProgressTrack(trackId, { status: TrackStatus.Completed }).catch(
       () => {}
     );
@@ -82,6 +82,17 @@ export function ProgressTracks(props: ProgressTracksProps) {
   ) => {
     updateProgressTrack(trackId, { segmentsFilled }).catch(() => {});
   };
+
+  const deleteCampaignProgressTrack = useStore(
+    (store) => store.campaigns.currentCampaign.tracks.deleteTrack
+  );
+  const deleteCharacterProgressTrack = useStore(
+    (store) => store.characters.currentCharacter.tracks.deleteTrack
+  );
+
+  const deleteProgressTrack = isCampaign
+    ? deleteCampaignProgressTrack
+    : deleteCharacterProgressTrack;
 
   return (
     <>
@@ -112,15 +123,18 @@ export function ProgressTracks(props: ProgressTracksProps) {
                   ? undefined
                   : (value) => updateProgressTrackValue(trackId, value)
               }
-              onDelete={
+              onComplete={
                 readOnly || isCompleted
                   ? undefined
-                  : () => deleteProgressTrack(trackId)
+                  : () => completeProgressTrack(trackId)
               }
               onEdit={
                 readOnly || isCompleted
                   ? undefined
                   : () => setCurrentlyEditingTrackId(trackId)
+              }
+              onDelete={
+                readOnly ? undefined : () => deleteProgressTrack(trackId)
               }
               hideRollButton={readOnly || isCompleted}
               {...(trackType === TrackTypes.SceneChallenge

@@ -51,6 +51,17 @@ export function Clocks(props: ClocksProps) {
     ? updateCampaignClock
     : updateCharacterClock;
 
+  const deleteCharacterClock = useStore(
+    (store) => store.characters.currentCharacter.tracks.deleteTrack
+  );
+  const deleteCampaignClock = useStore(
+    (store) => store.campaigns.currentCampaign.tracks.deleteTrack
+  );
+
+  const deleteClock = isCampaignSection
+    ? deleteCampaignClock
+    : deleteCharacterClock;
+
   return (
     <>
       {sortedClockIds.length > 0 ? (
@@ -101,6 +112,7 @@ export function Clocks(props: ClocksProps) {
                   ? undefined
                   : (value) => updateClock(clockId, { value }).catch(() => {})
               }
+              handleDelete={() => deleteClock(clockId).catch(() => {})}
             />
           ))}
         </Stack>
