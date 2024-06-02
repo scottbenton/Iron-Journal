@@ -3,10 +3,9 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Button,
   Card,
-  IconButton,
   Stack,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import { StatComponent } from "components/features/characters/StatComponent";
@@ -23,7 +22,6 @@ import {
   CharacterDocument,
   InitiativeStatus,
 } from "api-calls/character/_character.type";
-import OpenIcon from "@mui/icons-material/OpenInNew";
 import { LinkComponent } from "components/shared/LinkComponent";
 import { constructCharacterSheetPath } from "pages/Character/routes";
 import { useCampaignType } from "hooks/useCampaignType";
@@ -69,6 +67,10 @@ export function CharacterCard(props: CharacterCardProps) {
     updateCharacter(characterId, { initiativeStatus }).catch(() => {});
   };
 
+  const removeCharacterFromCampaign = useStore(
+    (store) => store.campaigns.currentCampaign.removeCharacter
+  );
+
   return (
     <Card variant={"outlined"}>
       <Box>
@@ -101,16 +103,6 @@ export function CharacterCard(props: CharacterCardProps) {
               </Typography>
             </Box>
           </Box>
-          {uid === currentUserUid && (
-            <Tooltip title={"Open Character Sheet"}>
-              <IconButton
-                LinkComponent={LinkComponent}
-                href={constructCharacterSheetPath(characterId)}
-              >
-                <OpenIcon />
-              </IconButton>
-            </Tooltip>
-          )}
         </Box>
         <Box px={2}>
           <InitiativeStatusChip
@@ -154,7 +146,10 @@ export function CharacterCard(props: CharacterCardProps) {
             sx={{ mr: 1, mt: 1 }}
           />
         </Box>
-        <Accordion>
+        <Accordion
+          variant={"outlined"}
+          sx={{ borderLeftWidth: 0, borderRightWidth: 0 }}
+        >
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             Assets
           </AccordionSummary>
@@ -170,7 +165,10 @@ export function CharacterCard(props: CharacterCardProps) {
             </Stack>
           </AccordionDetails>
         </Accordion>
-        <Accordion>
+        <Accordion
+          variant="outlined"
+          sx={{ borderLeftWidth: 0, borderRightWidth: 0 }}
+        >
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             {trackLabel}
           </AccordionSummary>
@@ -178,6 +176,27 @@ export function CharacterCard(props: CharacterCardProps) {
             <TrackComponent characterId={characterId} />
           </AccordionDetails>
         </Accordion>
+        <Box display={"flex"} justifyContent={"flex-end"} p={1}>
+          <Stack direction={"row"} spacing={1} flexWrap={"wrap"}>
+            {(uid === currentUserUid || !showGuidedPlayerView) && (
+              <Button
+                color={"error"}
+                onClick={() => removeCharacterFromCampaign(uid, characterId)}
+              >
+                Remove Character
+              </Button>
+            )}
+            {uid === currentUserUid && (
+              <Button
+                color={"inherit"}
+                LinkComponent={LinkComponent}
+                href={constructCharacterSheetPath(characterId)}
+              >
+                Open Sheet
+              </Button>
+            )}
+          </Stack>
+        </Box>
       </Box>
     </Card>
   );
