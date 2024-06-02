@@ -13,6 +13,8 @@
   - The green Iron Fellowship theme is now called Hinterlands
   - The default gold Crew Link theme is now called Eidolon
   - The teal Crew Link theme is now called Myriad
+- Clocks now use the "Likely" oracle by default
+- Clocks now progress by two ticks when a match is rolled on the oracle die.
 
 ### Bug Fixes
 

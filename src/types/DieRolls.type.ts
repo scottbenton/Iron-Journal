@@ -42,6 +42,7 @@ export interface OracleTableRoll extends BaseRoll {
   result: string;
   oracleCategoryName?: string;
   oracleId?: string;
+  match?: boolean;
 }
 
 export interface TrackProgressRoll extends BaseRoll {
@@ -60,6 +61,7 @@ export interface ClockProgressionRoll extends BaseRoll {
   oracleTitle: string;
   result: string;
   oracleId?: string;
+  match?: boolean;
 }
 
 export type Roll =

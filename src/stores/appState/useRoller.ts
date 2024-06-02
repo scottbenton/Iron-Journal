@@ -272,14 +272,19 @@ export function useRoller() {
 
       if (!result) return undefined;
 
+      const resultRoll = Array.isArray(result.roll)
+        ? result.roll[0]
+        : result.roll;
+
       const clockRoll: ClockProgressionRoll = {
         type: ROLL_TYPE.CLOCK_PROGRESSION,
-        roll: Array.isArray(result.roll) ? result.roll[0] : result.roll,
+        roll: resultRoll,
         result: result.result,
         oracleTitle: result.rollLabel,
         oracleId: oracleId,
         rollLabel: clockTitle,
         timestamp: new Date(),
+        match: checkIfMatch(resultRoll),
         characterId,
         uid,
         gmsOnly: false,
@@ -314,7 +319,7 @@ export function useRoller() {
         );
       }
 
-      return result.result === "Yes";
+      return clockRoll;
     },
     [
       announce,
@@ -334,4 +339,9 @@ export function useRoller() {
     rollTrackProgress,
     rollOracleTable,
   };
+}
+
+// A bit hacky, check if the last two digits of the number are equal to each other.
+function checkIfMatch(num: number) {
+  return num % 10 === Math.floor(num / 10) % 10;
 }
