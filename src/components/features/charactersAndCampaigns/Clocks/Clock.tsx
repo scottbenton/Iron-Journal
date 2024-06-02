@@ -23,11 +23,18 @@ export interface ClockProps {
   onValueChange?: (value: number) => void;
   onSelectedOracleChange?: (oracleKey: AskTheOracle) => void;
   onComplete?: () => void;
+  handleDelete?: () => void;
 }
 
 export function Clock(props: ClockProps) {
-  const { clock, onEdit, onValueChange, onSelectedOracleChange, onComplete } =
-    props;
+  const {
+    clock,
+    onEdit,
+    onValueChange,
+    onSelectedOracleChange,
+    onComplete,
+    handleDelete,
+  } = props;
 
   const { askTheOracle } = useSystemOracles();
 
@@ -53,15 +60,40 @@ export function Clock(props: ClockProps) {
     }
   };
 
+  const handleDeleteClick = () => {
+    if (handleDelete) {
+      confirm({
+        title: "Delete Clock",
+        description: "Are you sure you want to delete this clock?",
+        confirmationText: "Delete",
+        confirmationButtonProps: {
+          variant: "contained",
+          color: "primary",
+        },
+      })
+        .then(() => {
+          handleDelete();
+        })
+        .catch(() => {});
+    }
+  };
+
   const handleProgressionRoll = () => {
     if (onValueChange) {
       const result = rollClockProgression(
         clock.label,
-        askTheOracle[clock.oracleKey ?? AskTheOracle.FiftyFifty]
+        askTheOracle[clock.oracleKey ?? AskTheOracle.Likely]
       );
 
-      if (result && clock.value < clock.segments) {
-        onValueChange(clock.value + 1);
+      if (
+        result?.result.toLocaleLowerCase() === "yes" &&
+        clock.value < clock.segments
+      ) {
+        if (result.match) {
+          onValueChange(clock.value + 2);
+        } else {
+          onValueChange(clock.value + 1);
+        }
       }
     }
   };
@@ -123,7 +155,7 @@ export function Clock(props: ClockProps) {
           <TextField
             label={"Roll Progress"}
             select
-            value={clock.oracleKey ?? AskTheOracle.FiftyFifty}
+            value={clock.oracleKey ?? AskTheOracle.Likely}
             onChange={(evt) =>
               onSelectedOracleChange &&
               onSelectedOracleChange(evt.target.value as AskTheOracle)
@@ -173,6 +205,11 @@ export function Clock(props: ClockProps) {
           endIcon={<CheckIcon />}
         >
           Complete Clock
+        </Button>
+      )}
+      {handleDelete && clock.status === TrackStatus.Completed && (
+        <Button color={"error"} sx={{ mt: 1 }} onClick={handleDeleteClick}>
+          Delete Permanently
         </Button>
       )}
     </Box>

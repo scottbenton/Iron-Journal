@@ -131,7 +131,10 @@ export function RollDisplay(props: RollDisplayProps) {
             />
             <RollContainer>
               <RollValues d10Results={roll.roll} isExpanded={isExpanded} />
-              <RollResult markdown={roll.result} />
+              <RollResult
+                markdown={roll.result}
+                extras={roll.match ? ["Match"] : undefined}
+              />
             </RollContainer>
           </>
         )}

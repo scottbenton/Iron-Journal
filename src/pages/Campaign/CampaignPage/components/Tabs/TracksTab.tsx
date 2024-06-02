@@ -111,7 +111,7 @@ export function TracksTab() {
                               value,
                             })
                           }
-                          onDelete={() =>
+                          onComplete={() =>
                             updateCharacterProgressTrack(characterId, trackId, {
                               status: TrackStatus.Completed,
                             })

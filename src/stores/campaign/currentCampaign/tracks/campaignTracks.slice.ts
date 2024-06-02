@@ -5,6 +5,7 @@ import { listenToProgressTracks } from "api-calls/tracks/listenToProgressTracks"
 import { TrackStatus } from "types/Track.type";
 import { addProgressTrack } from "api-calls/tracks/addProgressTrack";
 import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
+import { removeProgressTrack } from "api-calls/tracks/removeProgressTrack";
 
 export const createCampaignTracksSlice: CreateSliceType<CampaignTracksSlice> = (
   set,
@@ -52,6 +53,10 @@ export const createCampaignTracksSlice: CreateSliceType<CampaignTracksSlice> = (
   updateTrack: (trackId, track) => {
     const campaignId = getState().campaigns.currentCampaign.currentCampaignId;
     return updateProgressTrack({ campaignId, trackId, track });
+  },
+  deleteTrack: (trackId) => {
+    const campaignId = getState().campaigns.currentCampaign.currentCampaignId;
+    return removeProgressTrack({ campaignId, id: trackId });
   },
 
   updateCharacterTrack: (characterId, trackId, track) => {

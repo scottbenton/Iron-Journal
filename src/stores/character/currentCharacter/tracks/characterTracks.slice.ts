@@ -5,6 +5,7 @@ import { listenToProgressTracks } from "api-calls/tracks/listenToProgressTracks"
 import { TrackStatus } from "types/Track.type";
 import { addProgressTrack } from "api-calls/tracks/addProgressTrack";
 import { updateProgressTrack } from "api-calls/tracks/updateProgressTrack";
+import { removeProgressTrack } from "api-calls/tracks/removeProgressTrack";
 
 export const createCharacterTracksSlice: CreateSliceType<
   CharacterTracksSlice
@@ -53,6 +54,11 @@ export const createCharacterTracksSlice: CreateSliceType<
     const characterId =
       getState().characters.currentCharacter.currentCharacterId;
     return updateProgressTrack({ characterId, trackId, track });
+  },
+  deleteTrack: (trackId) => {
+    const characterId =
+      getState().characters.currentCharacter.currentCharacterId;
+    return removeProgressTrack({ characterId, id: trackId });
   },
 
   setLoadCompletedTracks: () => {
