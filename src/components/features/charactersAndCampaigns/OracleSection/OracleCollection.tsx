@@ -68,33 +68,8 @@ export function OracleCollection(props: OracleCollectionProps) {
       }
     });
 
-    oracleIds.sort((o1, o2) => {
-      const oracle1 = oracles[o1];
-      const oracle2 = oracles[o2];
-      if (oracle1 && oracle2) {
-        return oracle1.name.localeCompare(oracle2.name);
-      }
-      return 0;
-    });
-
-    subCollectionIds.sort((c1, c2) => {
-      const sc1 = collections[c1];
-      const sc2 = collections[c2];
-      if (sc1 && sc2) {
-        if (sc1.oracle_type !== sc2.oracle_type) {
-          if (sc1.oracle_type === "tables") {
-            return 1;
-          } else if (sc2.oracle_type === "tables") {
-            return -1;
-          }
-        }
-        return sc1.name.localeCompare(sc2.name);
-      }
-      return 0;
-    });
-
     return { oracleIds, subCollectionIds };
-  }, [contents, subCollections, collections, oracles, enhancingCollectionIds]);
+  }, [contents, subCollections, collections, enhancingCollectionIds]);
 
   if (
     visibleCollections[collectionId] === CATEGORY_VISIBILITY.HIDDEN ||

@@ -2,8 +2,8 @@ import { Box, Card } from "@mui/material";
 import { MovesSection } from "components/features/charactersAndCampaigns/MovesSection";
 import { OracleSection } from "components/features/charactersAndCampaigns/OracleSection";
 import { DarkStyledTabs, DarkStyledTab } from "components/shared/StyledTabs";
+import { useCampaignType } from "hooks/useCampaignType";
 import { useState } from "react";
-import { useStore } from "stores/store";
 
 enum SIDEBAR_TABS {
   MOVES = "moves",
@@ -13,18 +13,7 @@ enum SIDEBAR_TABS {
 export function Sidebar() {
   const [currentTab, setCurrentTab] = useState(SIDEBAR_TABS.MOVES);
 
-  const shouldShowOracles = useStore((store) => {
-    const currentCharacter = store.characters.currentCharacter.currentCharacter;
-
-    if (currentCharacter) {
-      return currentCharacter.campaignId
-        ? store.campaigns.currentCampaign.currentCampaign?.gmIds?.includes(
-            store.auth.uid
-          ) ?? false
-        : true;
-    }
-    return true;
-  });
+  const shouldShowOracles = !useCampaignType().showGuidedPlayerView;
 
   return (
     <>
