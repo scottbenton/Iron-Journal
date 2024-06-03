@@ -26,6 +26,8 @@ import { UpdateStatDialog } from "./UpdateStatDialog";
 import { useCampaignType } from "hooks/useCampaignType";
 import ThemeIcon from "@mui/icons-material/ColorLens";
 import { ThemeChooserDialog } from "components/shared/Layout/ThemeChooserDialog";
+import LayoutIcon from "@mui/icons-material/ViewComfy";
+import { LayoutChooserDialog } from "components/shared/Layout/LayoutChooserDialog";
 
 export interface CharacterSettingsMenuProps {
   open: boolean;
@@ -43,6 +45,7 @@ export function CharacterSettingsMenu(props: CharacterSettingsMenuProps) {
   const [expansionSelectorDialogOpen, setExpansionSelectorDialogOpen] =
     useState(false);
   const [themeDialogOpen, setThemeDialogOpen] = useState(false);
+  const [layoutDialogOpen, setLayoutDialogOpen] = useState(false);
 
   const [changeNamePortraitDialogOpen, setChangeNamePortraitDialogOpen] =
     useState(false);
@@ -157,6 +160,17 @@ export function CharacterSettingsMenu(props: CharacterSettingsMenuProps) {
         <MenuItem
           onClick={() => {
             onClose();
+            setLayoutDialogOpen(true);
+          }}
+        >
+          <ListItemIcon>
+            <LayoutIcon />
+          </ListItemIcon>
+          <ListItemText>Change Layout</ListItemText>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            onClose();
             handleDeleteCharacter(characterId ?? "");
           }}
         >
@@ -192,6 +206,10 @@ export function CharacterSettingsMenu(props: CharacterSettingsMenuProps) {
       <ThemeChooserDialog
         open={themeDialogOpen}
         onClose={() => setThemeDialogOpen(false)}
+      />
+      <LayoutChooserDialog
+        open={layoutDialogOpen}
+        onClose={() => setLayoutDialogOpen(false)}
       />
     </>
   );

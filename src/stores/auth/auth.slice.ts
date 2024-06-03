@@ -7,6 +7,7 @@ import { UserDocument } from "api-calls/user/_user.type";
 import { clearAnalyticsUser, setAnalyticsUser } from "lib/analytics.lib";
 import { updateUserDoc } from "api-calls/user/updateUserDoc";
 import { markUpdatesAsRead } from "api-calls/user/markUpdatesAsRead";
+import { listenToUserDoc } from "api-calls/user/listenToUserDoc";
 
 export const createAuthSlice: CreateSliceType<AuthSlice> = (set, getState) => ({
   ...defaultAuthSlice,
@@ -57,6 +58,14 @@ export const createAuthSlice: CreateSliceType<AuthSlice> = (set, getState) => ({
     );
   },
 
+  subscribeToUser: (uid) => {
+    return listenToUserDoc(uid, (user) => {
+      set((state) => {
+        state.auth.userDoc = user;
+      });
+    });
+  },
+
   closeUserNameDialog: () => {
     set((state) => {
       state.auth.userNameDialogOpen = false;
@@ -67,5 +76,10 @@ export const createAuthSlice: CreateSliceType<AuthSlice> = (set, getState) => ({
     const uid = getState().auth.uid;
 
     markUpdatesAsRead({ uid, updateIds }).catch(() => {});
+  },
+  updateUserDoc: (doc) => {
+    const uid = getState().auth.uid;
+
+    updateUserDoc({ uid, user: doc }).catch(() => {});
   },
 });

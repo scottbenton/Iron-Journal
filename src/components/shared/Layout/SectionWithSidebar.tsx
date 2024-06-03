@@ -1,21 +1,38 @@
 import { Box, SxProps } from "@mui/material";
 import { ReactNode } from "react";
+import { useStore } from "stores/store";
+import { ReferenceSidebarLocation } from "types/Layouts.type";
 
 export interface SectionWithSidebarProps {
   sidebar?: ReactNode;
   sidebarWidth?: number;
   mainContent: ReactNode;
   sx?: SxProps;
+  respectUserSetting?: boolean;
 }
 
 export function SectionWithSidebar(props: SectionWithSidebarProps) {
-  const { sidebar, sidebarWidth = 324, mainContent, sx } = props;
+  const {
+    sidebar,
+    sidebarWidth = 324,
+    mainContent,
+    sx,
+    respectUserSetting,
+  } = props;
+
+  const renderOnLeft = useStore((store) =>
+    respectUserSetting
+      ? store.auth.userDoc?.layout?.referenceSidebarLocation !==
+        ReferenceSidebarLocation.Right
+      : true
+  );
 
   const actualWidth = sidebar ? sidebarWidth : 0;
 
   return (
     <Box
       display={"flex"}
+      flexDirection={renderOnLeft ? "row" : "row-reverse"}
       sx={[
         (theme) => ({
           [theme.breakpoints.up("md")]: {
@@ -42,7 +59,8 @@ export function SectionWithSidebar(props: SectionWithSidebarProps) {
           maxWidth: "100%",
           flexGrow: 1,
           [theme.breakpoints.up("md")]: {
-            pl: sidebar ? 2 : 0,
+            pl: sidebar && renderOnLeft ? 2 : 0,
+            pr: sidebar && !renderOnLeft ? 2 : 0,
             height: "100%",
             maxWidth: `calc(100% - ${actualWidth}px)`,
             width: "100%",

@@ -24,6 +24,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ThemeIcon from "@mui/icons-material/ColorLens";
 import { ThemeChooserDialog } from "components/shared/Layout/ThemeChooserDialog";
+import LayoutIcon from "@mui/icons-material/ViewComfy";
+import { LayoutChooserDialog } from "components/shared/Layout/LayoutChooserDialog";
 
 export function CampaignSettingsMenu() {
   const confirm = useConfirm();
@@ -38,6 +40,7 @@ export function CampaignSettingsMenu() {
   const [expansionSelectorDialogOpen, setExpansionSelectorDialogOpen] =
     useState(false);
   const [themeDialogOpen, setThemeDialogOpen] = useState(false);
+  const [layoutDialogOpen, setLayoutDialogOpen] = useState(false);
 
   const [isEditCampaignOpen, setIsEditCampaignOpen] = useState(false);
   const handleClose = () => setAnchorElement(null);
@@ -166,6 +169,19 @@ export function CampaignSettingsMenu() {
             <ListItemText>Change Theme</ListItemText>
           </MenuItem>
         )}
+        {!showGuidedPlayerView && campaignType !== CampaignType.Solo && (
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              setLayoutDialogOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <LayoutIcon />
+            </ListItemIcon>
+            <ListItemText>Change Layout</ListItemText>
+          </MenuItem>
+        )}
         {campaignType !== CampaignType.Solo && (
           <MenuItem
             onClick={() => {
@@ -218,6 +234,10 @@ export function CampaignSettingsMenu() {
       <ThemeChooserDialog
         open={themeDialogOpen}
         onClose={() => setThemeDialogOpen(false)}
+      />
+      <LayoutChooserDialog
+        open={layoutDialogOpen}
+        onClose={() => setLayoutDialogOpen(false)}
       />
     </>
   );

@@ -90,6 +90,7 @@ export function CharacterSheetPage() {
         <CharacterHeader />
         {!isMobile ? (
           <SectionWithSidebar
+            respectUserSetting
             sx={{ mt: 2 }}
             sidebar={<Sidebar />}
             mainContent={

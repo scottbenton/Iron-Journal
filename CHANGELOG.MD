@@ -5,6 +5,7 @@
 ### New Features
 
 - Themes can now be set per-campaign, and are no longer restricted to Iron Fellowship or Crew Link.
+- Added layout settings - users can now choose to have the move and oracle reference sidebar on the right-hand side instead of the left
 
 ### Changes
 
