@@ -1,15 +1,15 @@
-import { setDoc } from "firebase/firestore";
+import { UpdateData, updateDoc } from "firebase/firestore";
 import { getUsersDoc } from "./_getRef";
 import { UserDocument } from "api-calls/user/_user.type";
 import { createApiFunction } from "api-calls/createApiFunction";
 
 export const updateUserDoc = createApiFunction<
-  { uid: string; user: UserDocument },
+  { uid: string; user: UpdateData<UserDocument> },
   void
 >((params) => {
   const { uid, user } = params;
   return new Promise((resolve, reject) => {
-    setDoc(getUsersDoc(uid), user, { merge: true })
+    updateDoc(getUsersDoc(uid), user)
       .then(() => {
         resolve();
       })

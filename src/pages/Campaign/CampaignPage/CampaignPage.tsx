@@ -123,6 +123,7 @@ export function CampaignPage() {
         }}
       >
         <SectionWithSidebar
+          respectUserSetting
           sidebar={showMovesAndOracles && <Sidebar />}
           mainContent={
             <CampaignContent

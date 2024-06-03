@@ -1,4 +1,6 @@
+import { UserDocument } from "api-calls/user/_user.type";
 import { Unsubscribe, User } from "firebase/auth";
+import { UpdateData } from "firebase/firestore";
 
 export enum AUTH_STATE {
   LOADING,
@@ -11,12 +13,15 @@ export interface AuthSliceData {
   uid: string;
   status: AUTH_STATE;
   userNameDialogOpen: boolean;
+  userDoc?: UserDocument;
 }
 
 export interface AuthSliceActions {
   subscribe: () => Unsubscribe;
+  subscribeToUser: (uid: string) => Unsubscribe;
   closeUserNameDialog: () => void;
   markUpdatesAsRead: (updateIds: string[]) => void;
+  updateUserDoc: (doc: UpdateData<UserDocument>) => void;
 }
 
 export type AuthSlice = AuthSliceData & AuthSliceActions;
