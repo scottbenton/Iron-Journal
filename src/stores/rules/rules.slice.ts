@@ -77,7 +77,10 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
             expansionOracles =
               store.homebrew.collections[expansionId]?.dataswornOracles ?? {};
           }
-          const expansionOracleMaps = parseOraclesIntoMaps(expansionOracles);
+          const expansionOracleMaps = parseOraclesIntoMaps(
+            expansionOracles,
+            !defaultExpansions[expansionId]
+          );
 
           allOraclesMap = {
             ...allOraclesMap,
@@ -156,7 +159,10 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
             expansionMoveCategories =
               store.homebrew.collections[expansionId]?.dataswornMoves ?? {};
           }
-          const expansionMoveMaps = parseMovesIntoMaps(expansionMoveCategories);
+          const expansionMoveMaps = parseMovesIntoMaps(
+            expansionMoveCategories,
+            !defaultExpansions[expansionId]
+          );
 
           moveCategoryMap = {
             ...moveCategoryMap,

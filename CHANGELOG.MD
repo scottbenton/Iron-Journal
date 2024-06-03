@@ -20,6 +20,8 @@
 
 ### Bug Fixes
 
+- Fixed base game oracles and moves getting sorted alphabetically, when only homebrew content should be sorted in that manner.
+
 ## 3.1.0
 
 ### New Features

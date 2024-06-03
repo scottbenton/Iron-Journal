@@ -4,7 +4,7 @@ import { MoveDrawer } from "components/features/charactersAndCampaigns/MoveDrawe
 import { useCallback, useState } from "react";
 import MovesIcon from "@mui/icons-material/DirectionsRun";
 import { OracleIcon } from "assets/OracleIcon";
-import { useStore } from "stores/store";
+import { useCampaignType } from "hooks/useCampaignType";
 
 export interface MoveOracleButtonProps {
   disableTopMargin?: boolean;
@@ -22,18 +22,7 @@ export function CharacterHeaderMoveOracleButtons(props: MoveOracleButtonProps) {
     setIsOracleSidebarOpen(false);
   }, []);
 
-  const shouldShowOracles = useStore((store) => {
-    const currentCharacter = store.characters.currentCharacter.currentCharacter;
-
-    if (currentCharacter) {
-      return currentCharacter.campaignId
-        ? store.campaigns.currentCampaign.currentCampaign?.gmIds?.includes(
-            store.auth.uid
-          ) ?? false
-        : true;
-    }
-    return true;
-  });
+  const shouldShowOracles = !useCampaignType().showGuidedPlayerView;
 
   return (
     <>
