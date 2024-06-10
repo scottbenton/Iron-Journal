@@ -1,56 +1,44 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardActionArea,
-  Grid,
-  Hidden,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Typography,
-} from "@mui/material";
-import AddLocationIcon from "@mui/icons-material/AddLocation";
-import { OpenLocation } from "./OpenLocation";
-import { useFilterLocations } from "./useFilterLocations";
-import AddPhotoIcon from "@mui/icons-material/Photo";
-import { WorldEmptyState } from "components/features/worlds/WorldEmptyState";
-import HiddenIcon from "@mui/icons-material/VisibilityOff";
-import { FilterBar } from "components/features/worlds/FilterBar";
 import { useStore } from "stores/store";
+import { FilterBar } from "../FilterBar";
+import { Box, Button, Grid } from "@mui/material";
+import AddLocationIcon from "@mui/icons-material/AddLocation";
 import { useState } from "react";
+import { useFilterLocations } from "./useFilterLocations";
+import { WorldEmptyState } from "../WorldEmptyState";
+import { LocationCard } from "./LocationCard";
+import { LocationsSidebar } from "./LocationsSidebar";
+import { useWorldPermissions } from "../useWorldPermissions";
+import { OpenLocation } from "./OpenLocation";
 
 export interface LocationsSectionProps {
-  isSinglePlayer?: boolean;
   showHiddenTag?: boolean;
   openNPCTab: () => void;
 }
 
 export function LocationsSection(props: LocationsSectionProps) {
-  const { isSinglePlayer, showHiddenTag, openNPCTab } = props;
+  const { openNPCTab, showHiddenTag } = props;
 
-  const isWorldOwner = useStore(
-    (store) =>
-      store.worlds.currentWorld.currentWorld?.ownerIds.includes(
-        store.auth.uid
-      ) ?? false
-  );
+  const { showGMTips } = useWorldPermissions();
+
+  const shouldShowHiddenTag = showGMTips && showHiddenTag;
+
   const worldId = useStore((store) => store.worlds.currentWorld.currentWorldId);
   const locations = useStore(
     (store) => store.worlds.currentWorld.currentWorldLocations.locationMap
   );
-  const openLocationId = useStore(
-    (store) => store.worlds.currentWorld.currentWorldLocations.openLocationId
-  );
-  const setOpenLocationId = useStore(
-    (store) => store.worlds.currentWorld.currentWorldLocations.setOpenLocationId
-  );
+
   const search = useStore(
     (store) => store.worlds.currentWorld.currentWorldLocations.locationSearch
   );
   const setSearch = useStore(
     (store) => store.worlds.currentWorld.currentWorldLocations.setLocationSearch
+  );
+
+  const openLocationId = useStore(
+    (store) => store.worlds.currentWorld.currentWorldLocations.openLocationId
+  );
+  const setOpenLocationId = useStore(
+    (store) => store.worlds.currentWorld.currentWorldLocations.setOpenLocationId
   );
 
   const [createLocationLoading, setCreateLocationLoading] = useState(false);
@@ -67,7 +55,6 @@ export function LocationsSection(props: LocationsSectionProps) {
       .catch(() => {})
       .finally(() => setCreateLocationLoading(false));
   };
-
   const { filteredLocationIds, sortedLocationIds } = useFilterLocations(
     locations,
     search
@@ -87,38 +74,19 @@ export function LocationsSection(props: LocationsSectionProps) {
         maxHeight={"100%"}
         height={"100%"}
       >
-        <Hidden smDown>
-          <Box overflow={"auto"} flexGrow={1} minWidth={200} maxWidth={400}>
-            <List>
-              {sortedLocationIds.map((locationId) => (
-                <ListItem key={locationId} disablePadding>
-                  <ListItemButton
-                    onClick={() => setOpenLocationId(locationId)}
-                    selected={locationId === openLocationId}
-                  >
-                    <ListItemText
-                      primary={locations[locationId].name}
-                      secondary={
-                        !isSinglePlayer &&
-                        isWorldOwner &&
-                        (!locations[locationId].sharedWithPlayers
-                          ? "Hidden"
-                          : "Shared")
-                      }
-                    />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          </Box>
-        </Hidden>
-
+        <LocationsSidebar
+          locationIds={sortedLocationIds}
+          locations={locations}
+          openLocationId={openLocationId}
+          setOpenLocationId={setOpenLocationId}
+          showHiddenText={shouldShowHiddenTag ?? false}
+        />
         <OpenLocation
           worldId={worldId}
-          location={openLocation}
           locationId={openLocationId}
+          location={openLocation}
           closeLocation={() => setOpenLocationId(undefined)}
-          showHiddenTag={showHiddenTag}
+          showHiddenTag={shouldShowHiddenTag}
           openNPCTab={openNPCTab}
         />
       </Box>
@@ -154,56 +122,12 @@ export function LocationsSection(props: LocationsSectionProps) {
         {filteredLocationIds.map((locationId) =>
           locations[locationId] ? (
             <Grid item xs={12} md={6} lg={4} key={locationId}>
-              <Card variant={"outlined"}>
-                <CardActionArea onClick={() => setOpenLocationId(locationId)}>
-                  <Box
-                    sx={(theme) => ({
-                      aspectRatio: "16/9",
-                      maxWidth: "100%",
-                      height: "100%",
-                      width: "100%",
-                      overflow: "hidden",
-                      backgroundImage: `url("${locations[locationId].imageUrl}")`,
-                      backgroundColor:
-                        theme.palette.mode === "light"
-                          ? theme.palette.grey[300]
-                          : theme.palette.grey[700],
-                      backgroundSize: "cover",
-                      backgroundPosition: "center center",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    })}
-                  >
-                    {!locations[locationId].imageUrl && (
-                      <AddPhotoIcon
-                        sx={(theme) => ({
-                          width: 30,
-                          height: 30,
-                          color:
-                            theme.palette.mode === "light"
-                              ? theme.palette.grey[500]
-                              : theme.palette.grey[300],
-                        })}
-                      />
-                    )}
-                  </Box>
-                  <Box
-                    p={2}
-                    flexGrow={1}
-                    display={"flex"}
-                    alignItems={"flex-start"}
-                    justifyContent={"space-between"}
-                  >
-                    <Box>
-                      <Typography>{locations[locationId].name}</Typography>
-                    </Box>
-
-                    {!locations[locationId].sharedWithPlayers &&
-                      showHiddenTag && <HiddenIcon color={"action"} />}
-                  </Box>
-                </CardActionArea>
-              </Card>
+              <LocationCard
+                key={locationId}
+                location={locations[locationId]}
+                openLocation={() => setOpenLocationId(locationId)}
+                showHiddenTag={shouldShowHiddenTag}
+              />
             </Grid>
           ) : null
         )}

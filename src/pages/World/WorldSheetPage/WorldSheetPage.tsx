@@ -4,7 +4,7 @@ import { useConfirm } from "material-ui-confirm";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSyncStore } from "./hooks/useSyncStore";
 import { useEffect, useState } from "react";
-import { LocationsSection } from "components/features/worlds/Locations";
+import { LocationsSection as LocationsSectionOld } from "components/features/worlds/LocationsOld";
 import { BreakContainer } from "components/shared/BreakContainer";
 import { WORLD_ROUTES, constructWorldPath } from "../routes";
 import { PageContent, PageHeader } from "components/shared/Layout";
@@ -21,6 +21,8 @@ import { EmptyState } from "components/shared/EmptyState";
 import { LinkComponent } from "components/shared/LinkComponent";
 import { useUpdateQueryStringValueWithoutNavigation } from "hooks/useUpdateQueryStringValueWithoutNavigation";
 import { useWorldPermissions } from "components/features/worlds/useWorldPermissions";
+import { useNewLocations } from "hooks/featureFlags/useNewLocations";
+import { LocationsSection } from "components/features/worlds/Locations";
 
 enum TABS {
   DETAILS = "details",
@@ -32,6 +34,8 @@ enum TABS {
 
 export function WorldSheetPage() {
   useSyncStore();
+
+  const usingNewLocations = useNewLocations();
 
   const { showGMFields } = useWorldPermissions();
 
@@ -175,10 +179,17 @@ export function WorldSheetPage() {
               flexGrow: 1,
             })}
           >
-            <LocationsSection
-              showHiddenTag
-              openNPCTab={() => setSelectedTab(TABS.NPCS)}
-            />
+            {usingNewLocations ? (
+              <LocationsSection
+                showHiddenTag
+                openNPCTab={() => setSelectedTab(TABS.NPCS)}
+              />
+            ) : (
+              <LocationsSectionOld
+                showHiddenTag
+                openNPCTab={() => setSelectedTab(TABS.NPCS)}
+              />
+            )}
           </BreakContainer>
         )}
         {selectedTab === TABS.SECTORS && showSectorsInsteadOfLocations && (

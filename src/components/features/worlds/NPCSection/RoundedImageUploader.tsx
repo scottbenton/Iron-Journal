@@ -21,14 +21,21 @@ export interface RoundedImageUploaderProps {
   handleFileUpload: (file: File) => void;
   handleUploadClick: () => void;
   removeImage: () => Promise<void>;
+  squared?: boolean;
 }
 
 const RoundedImageUploaderComponent = (
   props: RoundedImageUploaderProps,
   ref: ForwardedRef<HTMLInputElement>
 ) => {
-  const { src, title, handleFileUpload, handleUploadClick, removeImage } =
-    props;
+  const {
+    src,
+    title,
+    handleFileUpload,
+    handleUploadClick,
+    removeImage,
+    squared,
+  } = props;
 
   const { error } = useSnackbar();
 
@@ -58,21 +65,12 @@ const RoundedImageUploaderComponent = (
       <Box
         component={ButtonBase}
         sx={(theme) => ({
-          backgroundImage: `url("${src}")`,
-          backgroundColor:
-            (src && isHovering) || theme.palette.mode === "dark"
-              ? theme.palette.grey[700]
-              : theme.palette.grey[300],
           color: src
             ? theme.palette.common.white
             : theme.palette.mode === "light"
             ? theme.palette.grey[500]
             : theme.palette.grey[300],
-          backgroundBlendMode: src && isHovering ? "overlay" : "initial",
-
-          borderRadius: "50%",
-          backgroundSize: "cover",
-          backgroundPosition: "center top",
+          borderRadius: !squared ? "50%" : 1,
           border: `4px solid ${theme.palette.background.paper}`,
           width: isLg ? 150 : 100,
           height: isLg ? 150 : 100,
@@ -85,22 +83,46 @@ const RoundedImageUploaderComponent = (
           justifyContent: "center",
           overflow: "hidden",
 
-          "&:focus-visible": {
+          bgcolor: "background.paper",
+          "&:focus-visible>#image": {
             backgroundColor:
               theme.palette.mode === "light"
                 ? theme.palette.grey[400]
                 : theme.palette.grey[800],
           },
           "&>.MuiTouchRipple-root": {
-            borderRadius: "50%",
+            borderRadius: !squared ? "50%" : 1,
           },
         })}
         onClick={() => (!src ? handleUploadClick() : setIsFullScreen(true))}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
-        {!src && <AddPhotoIcon />}
-        {src && isHovering && <FullscreenIcon color={"inherit"} />}
+        <Box
+          id={"image"}
+          sx={(theme) => ({
+            position: "absolute",
+            backgroundColor:
+              (src && isHovering) || theme.palette.mode === "dark"
+                ? theme.palette.grey[700]
+                : theme.palette.grey[300],
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: `url("${src}")`,
+            backgroundBlendMode: src && isHovering ? "overlay" : "initial",
+            backgroundSize: "cover",
+            backgroundPosition: "center top",
+
+            borderRadius: squared ? 1 : "50%",
+          })}
+        />
+
+        {!src && <AddPhotoIcon sx={{ position: "relative" }} />}
+        {src && isHovering && (
+          <FullscreenIcon color={"inherit"} sx={{ position: "relative" }} />
+        )}
       </Box>
       <input
         type="file"
@@ -130,7 +152,14 @@ const RoundedImageUploaderComponent = (
         >
           {title}
         </DialogTitleWithCloseButton>
-        <img src={src} alt="NPC image" />
+        <img
+          src={src}
+          alt="NPC image"
+          style={{
+            borderRadius: squared ? "50%" : theme.shape.borderRadius + "px",
+            overflow: "hidden",
+          }}
+        />
       </Dialog>
     </>
   );

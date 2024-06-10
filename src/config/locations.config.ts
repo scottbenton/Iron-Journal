@@ -1,0 +1,74 @@
+import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
+
+interface BaseFieldConfig {
+  key: string;
+  type: "oracle";
+}
+
+interface OracleFieldConfig extends BaseFieldConfig {
+  key: string;
+  label: string;
+  type: "oracle";
+  oracleId?: string;
+}
+
+export interface NameConfig {
+  oracleIds: (string | string[])[];
+  joinOracles?: boolean;
+}
+
+export type FieldConfig = OracleFieldConfig;
+
+interface ILocationConfig {
+  name?:
+    | NameConfig
+    | ((location: LocationWithGMProperties) => NameConfig | undefined);
+  sharedFields?:
+    | FieldConfig[]
+    | ((location: LocationWithGMProperties) => FieldConfig[]);
+  gmFields?:
+    | FieldConfig[]
+    | ((location: LocationWithGMProperties) => FieldConfig[]);
+  showBasicBond?: boolean;
+  locationTypeOverrides?: Record<string, ILocationConfig>;
+}
+
+export const locationConfigs: Record<string, ILocationConfig | undefined> = {
+  ironlands: {
+    name: {
+      oracleIds: [
+        "classic/oracles/settlement/name/landscape_feature",
+        "classic/oracles/settlement/name/manmade_edifice",
+        "classic/oracles/settlement/name/creature",
+        "classic/oracles/settlement/name/historical_event",
+        "classic/oracles/settlement/name/old_world_language",
+        "classic/oracles/settlement/name/environmental_aspect",
+        [
+          "classic/oracles/settlement/quick_name/prefix",
+          "classic/oracles/settlement/quick_name/suffix",
+        ],
+      ],
+    },
+    gmFields: [
+      {
+        key: "descriptor",
+        label: "Description",
+        type: "oracle",
+        oracleId: "classic/oracles/place/descriptor",
+      },
+      {
+        key: "trouble",
+        label: "Trouble",
+        type: "oracle",
+        oracleId: "classic/oracles/settlement/trouble",
+      },
+      {
+        key: "locationFeatures",
+        label: "Location Features",
+        type: "oracle",
+        oracleId: "classic/oracles/place/location",
+      },
+    ],
+    showBasicBond: true,
+  },
+};

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { AssetsSection } from "../Tabs/AssetsSection";
 import { NotesSection } from "../Tabs/NotesSection";
 import { WorldSection } from "../Tabs/WorldSection";
+import { LocationsSection as LocationsSectionOld } from "components/features/worlds/LocationsOld";
 import { LocationsSection } from "components/features/worlds/Locations";
 import { CharacterSection } from "../Tabs/CharacterSection";
 import { useSearchParams } from "react-router-dom";
@@ -21,6 +22,7 @@ import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { useUpdateQueryStringValueWithoutNavigation } from "hooks/useUpdateQueryStringValueWithoutNavigation";
 import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { useCampaignType } from "hooks/useCampaignType";
+import { useNewLocations } from "hooks/featureFlags/useNewLocations";
 
 enum TABS {
   MOVES = "moves",
@@ -37,6 +39,7 @@ enum TABS {
 }
 
 export function TabsSection() {
+  const usingNewLocations = useNewLocations();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -135,11 +138,17 @@ export function TabsSection() {
           isVisible={selectedTab === TABS.LOCATIONS}
           greyBackground={worldExists}
         >
-          <LocationsSection
-            isSinglePlayer={!isInCampaign}
-            showHiddenTag={showGuideTips}
-            openNPCTab={() => setSelectedTab(TABS.NPCS)}
-          />
+          {usingNewLocations ? (
+            <LocationsSection
+              showHiddenTag
+              openNPCTab={() => setSelectedTab(TABS.NPCS)}
+            />
+          ) : (
+            <LocationsSectionOld
+              showHiddenTag
+              openNPCTab={() => setSelectedTab(TABS.NPCS)}
+            />
+          )}
         </ContainedTabPanel>
       )}
       <ContainedTabPanel

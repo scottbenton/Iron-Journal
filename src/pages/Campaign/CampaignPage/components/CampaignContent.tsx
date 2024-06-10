@@ -12,10 +12,12 @@ import { useSearchParams } from "react-router-dom";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { CharacterTab, NotesTab, TracksTab, WorldTab } from "./Tabs";
 import { SectorSection } from "components/features/worlds/SectorSection";
-import { LocationsSection } from "components/features/worlds/Locations";
+import { LocationsSection as LocationsSectionOld } from "components/features/worlds/LocationsOld";
 import { useStore } from "stores/store";
 import { NPCSection } from "components/features/worlds/NPCSection";
 import { LoreSection } from "components/features/worlds/Lore";
+import { useNewLocations } from "hooks/featureFlags/useNewLocations";
+import { LocationsSection } from "components/features/worlds/Locations";
 
 enum CampaignTabs {
   Characters = "characters",
@@ -33,6 +35,8 @@ export interface CampaignContentProps {
 }
 
 export function CampaignContent(props: CampaignContentProps) {
+  const usingNewLocations = useNewLocations();
+
   const { openInviteDialog } = props;
   const { showGuidedPlayerView, showGuideTips } = useCampaignType();
 
@@ -113,10 +117,17 @@ export function CampaignContent(props: CampaignContentProps) {
           isVisible={selectedTab === CampaignTabs.Locations}
           greyBackground={hasWorld}
         >
-          <LocationsSection
-            showHiddenTag={showGuideTips}
-            openNPCTab={() => setSelectedTab(CampaignTabs.NPCs)}
-          />
+          {usingNewLocations ? (
+            <LocationsSection
+              showHiddenTag
+              openNPCTab={() => setSelectedTab(CampaignTabs.NPCs)}
+            />
+          ) : (
+            <LocationsSectionOld
+              showHiddenTag
+              openNPCTab={() => setSelectedTab(CampaignTabs.NPCs)}
+            />
+          )}
         </ContainedTabPanel>
       )}
       <ContainedTabPanel
