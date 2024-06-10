@@ -20,6 +20,13 @@ export function UserCard(props: UserCardProps) {
 
   const { campaignType, showGuidedPlayerView } = useCampaignType();
 
+  const updateGuide = useStore(
+    (store) => store.campaigns.currentCampaign.updateCampaignGM
+  );
+  const removeUser = useStore(
+    (store) => store.campaigns.currentCampaign.removePlayerFromCampaign
+  );
+
   return (
     <Card variant={"outlined"} sx={{ height: "100%" }}>
       <Box display={"flex"} alignItems={"center"} p={2}>
@@ -38,8 +45,12 @@ export function UserCard(props: UserCardProps) {
         !gmIds.includes(uid) &&
         !showGuidedPlayerView && (
           <Stack direction={"row"} spacing={1} justifyContent={"flex-end"}>
-            <Button color={"error"}>Remove</Button>
-            <Button color={"inherit"}>Make Guide</Button>
+            <Button color={"error"} onClick={() => removeUser(uid)}>
+              Remove
+            </Button>
+            <Button color={"inherit"} onClick={() => updateGuide(uid)}>
+              Make Guide
+            </Button>
           </Stack>
         )}
     </Card>
