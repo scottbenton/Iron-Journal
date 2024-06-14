@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import { NPCItem } from "components/features/worlds/NPCSection/NPCItem";
+import { NPCCard } from "components/features/worlds/NPCSection/NPCCard";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { useStore } from "stores/store";
 
@@ -38,7 +38,7 @@ export function LocationNPCs(props: LocationNPCProps) {
       </Grid>
       {filteredNPCs.map((npcId) => (
         <Grid key={npcId} item xs={12} lg={6} xl={4}>
-          <NPCItem
+          <NPCCard
             npc={npcs[npcId]}
             locations={locations}
             sectors={{}}

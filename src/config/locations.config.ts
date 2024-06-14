@@ -66,8 +66,8 @@ export const locationConfigs: Record<string, ILocationConfig | undefined> = {
     ],
     showBasicBond: true,
     defaultIcon: {
-      key: "GiVikingLonghouse",
-      color: IconColors.Brown,
+      key: "GiCompass",
+      color: IconColors.White,
     },
   },
 };

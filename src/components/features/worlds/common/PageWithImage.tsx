@@ -43,7 +43,6 @@ export function PageWithImage(props: PropsWithChildren<PageWithImageProps>) {
   return (
     <>
       <Box
-        overflow={"auto"}
         flexGrow={1}
         height={"100%"}
         display={"flex"}
