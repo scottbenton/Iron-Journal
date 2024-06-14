@@ -1,4 +1,4 @@
-import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
+import { IconColors, RequiredIconDefinition } from "types/Icon.type";
 
 interface BaseFieldConfig {
   key: string;
@@ -20,17 +20,12 @@ export interface NameConfig {
 export type FieldConfig = OracleFieldConfig;
 
 interface ILocationConfig {
-  name?:
-    | NameConfig
-    | ((location: LocationWithGMProperties) => NameConfig | undefined);
-  sharedFields?:
-    | FieldConfig[]
-    | ((location: LocationWithGMProperties) => FieldConfig[]);
-  gmFields?:
-    | FieldConfig[]
-    | ((location: LocationWithGMProperties) => FieldConfig[]);
+  name?: NameConfig;
+  sharedFields?: FieldConfig[];
+  gmFields?: FieldConfig[];
   showBasicBond?: boolean;
-  locationTypeOverrides?: Record<string, ILocationConfig>;
+  locationTypeOverrides?: Record<string, Partial<ILocationConfig>>;
+  defaultIcon: RequiredIconDefinition;
 }
 
 export const locationConfigs: Record<string, ILocationConfig | undefined> = {
@@ -70,5 +65,9 @@ export const locationConfigs: Record<string, ILocationConfig | undefined> = {
       },
     ],
     showBasicBond: true,
+    defaultIcon: {
+      key: "GiVikingLonghouse",
+      color: IconColors.Brown,
+    },
   },
 };

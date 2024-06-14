@@ -109,7 +109,7 @@ export function LocationsSection(props: LocationsSectionProps) {
             Add Location
           </Button>
         }
-        searchPlaceholder={"Search by name"}
+        searchPlaceholder={"Search by name or type"}
       />
 
       <Grid

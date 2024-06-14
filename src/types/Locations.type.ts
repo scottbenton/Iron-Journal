@@ -1,7 +1,11 @@
+import { IconDefinition } from "./Icon.type";
+
 export interface Location {
   name: string;
 
   imageFilenames?: string[];
+  icon?: IconDefinition;
+
   sharedWithPlayers?: boolean;
   // Ironsworn only
   characterBonds?: Record<string, boolean>;

@@ -1,7 +1,9 @@
-import { Box, Card, CardActionArea, Typography } from "@mui/material";
-import PhotoIcon from "@mui/icons-material/Photo";
-import HiddenIcon from "@mui/icons-material/VisibilityOff";
 import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
+import { locationConfigs } from "config/locations.config";
+import { useGameSystemValue } from "hooks/useGameSystemValue";
+import { GAME_SYSTEMS } from "types/GameSystems.type";
+import { IconColors } from "types/Icon.type";
+import { CardWithImage } from "../common/CardWithImage";
 
 export interface LocationCardProps {
   location: LocationWithGMProperties;
@@ -12,92 +14,44 @@ export interface LocationCardProps {
 export function LocationCard(props: LocationCardProps) {
   const { location, openLocation, showHiddenTag } = props;
 
+  // Todo - replace with world type from datasworn once released
+  const settingId = useGameSystemValue({
+    [GAME_SYSTEMS.IRONSWORN]: "ironlands",
+    [GAME_SYSTEMS.STARFORGED]: "forge",
+  });
+  let settingConfig = { ...locationConfigs[settingId] };
+  if (location.type && settingConfig.locationTypeOverrides?.[location.type]) {
+    settingConfig = {
+      ...settingConfig,
+      ...settingConfig.locationTypeOverrides[location.type],
+    };
+  }
+
+  const defaultIcon = settingConfig.defaultIcon;
+  let icon = {
+    key: "GiCompass",
+    color: IconColors.White,
+  };
+  if (defaultIcon) {
+    icon = defaultIcon;
+  }
+  if (location.icon) {
+    if (location.icon.color) {
+      icon.color = location.icon.color;
+    }
+    if (location.icon.key) {
+      icon.key = location.icon.key;
+    }
+  }
+
   return (
-    <Card variant={"outlined"} sx={{ overflow: "visible" }}>
-      <CardActionArea
-        onClick={() => openLocation()}
-        sx={(theme) => ({
-          p: 2,
-          "& #portrait": {
-            marginTop: -3,
-            marginLeft: -1,
-            transitionProperty: "margin-top margin-bottom",
-            transitionDuration: `${theme.transitions.duration.shorter}ms`,
-            transitionTimingFunction: theme.transitions.easing.easeInOut,
-          },
-          "&:hover, &:focus-visible": {
-            "& #portrait": {
-              marginTop: -1.5,
-              marginBottom: -1.5,
-            },
-          },
-        })}
-      >
-        <Box display={"flex"} alignItems={"start"}>
-          <Box
-            id={"portrait"}
-            sx={(theme) => ({
-              marginRight: 2,
-              width: 80,
-              height: 80,
-              flexShrink: 0,
-              borderRadius: `${theme.shape.borderRadius}px`,
-              backgroundColor:
-                theme.palette.mode === "light"
-                  ? theme.palette.grey[300]
-                  : theme.palette.grey[700],
-              backgroundImage: `url(${location.imageUrl})`,
-              backgroundPosition: "center top",
-              backgroundSize: "cover",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: theme.shadows[3],
-            })}
-          >
-            {!location.imageUrl && (
-              <PhotoIcon
-                sx={(theme) => ({
-                  color:
-                    theme.palette.mode === "light"
-                      ? theme.palette.grey[500]
-                      : theme.palette.grey[300],
-                })}
-              />
-            )}
-          </Box>
-          <Box
-            display={"flex"}
-            alignItems={"flex-start"}
-            justifyContent={"space-between"}
-            flexGrow={1}
-            overflow={"hidden"}
-          >
-            <Box overflow={"hidden"}>
-              {location.type && (
-                <Typography
-                  whiteSpace={"nowrap"}
-                  overflow={"hidden"}
-                  variant={"overline"}
-                  textOverflow={"ellipsis"}
-                >
-                  {location.type}
-                </Typography>
-              )}
-              <Typography
-                whiteSpace={"nowrap"}
-                overflow={"hidden"}
-                textOverflow={"ellipsis"}
-              >
-                {location.name}
-              </Typography>
-            </Box>
-            {!location.sharedWithPlayers && showHiddenTag && (
-              <HiddenIcon color={"action"} />
-            )}
-          </Box>
-        </Box>
-      </CardActionArea>
-    </Card>
+    <CardWithImage
+      name={location.name}
+      type={location.type}
+      imageUrl={location.imageUrl}
+      icon={icon}
+      showHiddenTag={showHiddenTag && !location.sharedWithPlayers}
+      handleClick={openLocation}
+    />
   );
 }

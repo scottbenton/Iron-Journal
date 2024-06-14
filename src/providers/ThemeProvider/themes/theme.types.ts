@@ -59,6 +59,7 @@ declare module "@mui/material/styles" {
   interface TypeBackground {
     paperInlay: TypeBackground["default"];
     paperInlayDarker: TypeBackground["default"];
+    mapBackground: TypeBackground["default"];
   }
 }
 declare module "@mui/material/Button" {

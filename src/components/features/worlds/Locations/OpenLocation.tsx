@@ -8,7 +8,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { ChangeEvent, useRef } from "react";
 import { useConfirm } from "material-ui-confirm";
 import { RtcRichTextEditor } from "components/shared/RichTextEditor/RtcRichTextEditor";
 import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
@@ -17,7 +16,6 @@ import { useListenToCurrentLocation } from "stores/world/currentWorld/locations/
 import { BondsSection } from "components/features/worlds/BondsSection";
 import { LocationNPCs } from "./LocationNPCs";
 import { useWorldPermissions } from "../useWorldPermissions";
-import AddPhotoIcon from "@mui/icons-material/AddPhotoAlternate";
 import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
 import { useSnackbar } from "providers/SnackbarProvider";
 import { GuideAndPlayerHeader, GuideOnlyHeader } from "../common";
@@ -29,9 +27,9 @@ import {
   locationConfigs,
 } from "config/locations.config";
 import { LocationField } from "./LocationField";
-import { ImageBoxHeader } from "../common/ImageBoxHeader";
-import { ImageBoxHeaderBackground } from "../common/ImageBoxHeaderBackground";
 import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
+import { PageWithImage } from "../common/PageWithImage";
+import { IconColors, IconDefinition } from "types/Icon.type";
 
 export interface OpenLocationProps {
   worldId: string;
@@ -63,7 +61,7 @@ export function OpenLocation(props: OpenLocationProps) {
   if (location.type && settingConfig.locationTypeOverrides?.[location.type]) {
     settingConfig = {
       ...settingConfig,
-      ...settingConfig.locationTypeOverrides[location.type],
+      ...settingConfig?.locationTypeOverrides[location.type],
     };
   }
   useListenToCurrentLocation(locationId);
@@ -108,27 +106,9 @@ export function OpenLocation(props: OpenLocationProps) {
         .updateLocationCharacterBond
   );
 
-  let nameConfig: NameConfig | undefined = undefined;
-  let sharedFieldConfig: FieldConfig[] = [];
-  let gmFieldConfig: FieldConfig[] = [];
-
-  if (settingConfig?.name) {
-    if (typeof settingConfig.name === "function") {
-      nameConfig = settingConfig.name(location);
-    } else {
-      nameConfig = settingConfig.name;
-    }
-  }
-  if (settingConfig?.sharedFields) {
-    sharedFieldConfig = Array.isArray(settingConfig.sharedFields)
-      ? settingConfig.sharedFields
-      : settingConfig.sharedFields(location);
-  }
-  if (settingConfig?.gmFields) {
-    gmFieldConfig = Array.isArray(settingConfig.gmFields)
-      ? settingConfig.gmFields
-      : settingConfig.gmFields(location);
-  }
+  const nameConfig: NameConfig | undefined = settingConfig.name;
+  const sharedFieldConfig: FieldConfig[] = settingConfig.sharedFields ?? [];
+  const gmFieldConfig: FieldConfig[] = settingConfig.gmFields ?? [];
 
   const handleLocationDelete = () => {
     confirm({
@@ -151,99 +131,77 @@ export function OpenLocation(props: OpenLocationProps) {
       .catch(() => {});
   };
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const onFileUpload = (evt: ChangeEvent<HTMLInputElement>) => {
-    const files = evt.target.files;
-    const file = files?.[0];
+  const onFileUpload = (file: File) => {
     if (file) {
-      if (files[0].size > MAX_FILE_SIZE) {
+      if (file.size > MAX_FILE_SIZE) {
         error(
           `File is too large. The max file size is ${MAX_FILE_SIZE_LABEL}.`
         );
-        evt.target.value = "";
         return;
       }
       uploadLocationImage(locationId, file).catch(() => {});
     }
   };
 
-  return (
-    <Box
-      overflow={"auto"}
-      flexGrow={1}
-      height={"100%"}
-      display={"flex"}
-      flexDirection={"column"}
-    >
-      <ImageBoxHeaderBackground />
-      <Box
-        sx={(theme) => ({
-          bgcolor: theme.palette.background.paper,
-          borderTop: `1px solid ${theme.palette.divider}`,
-          borderLeft: `1px solid ${theme.palette.divider}`,
-          zIndex: 1,
-          position: "relative",
-          flexGrow: 1,
-        })}
-      >
-        <ImageBoxHeader
-          name={location.name}
-          imageUrl={location.imageUrl}
-          uploadImage={(file) =>
-            uploadLocationImage(locationId, file).catch(() => {})
-          }
-          removeImage={() => removeLocationImage(locationId)}
-          nameInput={
-            <DebouncedOracleInput
-              label={"Name"}
-              variant={"outlined"}
-              color={"primary"}
-              oracleTableId={nameConfig?.oracleIds}
-              joinOracleTables={nameConfig?.joinOracles}
-              initialValue={location.name}
-              updateValue={(newName) =>
-                updateLocation(locationId, { name: newName }).catch(() => {})
-              }
-              fullWidth={true}
-              sx={{
-                mt: 1,
-              }}
-            />
-          }
-          actions={
-            <>
-              <Tooltip title={"Upload Image"}>
-                <IconButton onClick={() => fileInputRef?.current?.click()}>
-                  <AddPhotoIcon />
-                </IconButton>
-              </Tooltip>
-              {showGMFields && (
-                <Tooltip title={"Delete"}>
-                  <IconButton onClick={() => handleLocationDelete()}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
-              )}
-            </>
-          }
-          closeItem={() => closeLocation()}
-        />
-        <input
-          type="file"
-          accept={"image/*"}
-          hidden
-          ref={fileInputRef}
-          onChange={onFileUpload}
-        />
+  const defaultIcon = settingConfig.defaultIcon;
+  const icon: IconDefinition = {
+    key: "GiCompass",
+    color: IconColors.White,
+    ...defaultIcon,
+    ...location.icon,
+  };
 
-        <Box
-          sx={(theme) => ({
+  return (
+    <PageWithImage
+      imageUrl={location.imageUrl}
+      icon={icon}
+      actions={
+        <>
+          {showGMFields && (
+            <Tooltip title={"Delete"}>
+              <IconButton onClick={() => handleLocationDelete()}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </>
+      }
+      name={location.name}
+      nameInput={
+        <DebouncedOracleInput
+          label={"Name"}
+          variant={"outlined"}
+          color={"primary"}
+          oracleTableId={nameConfig?.oracleIds}
+          joinOracleTables={nameConfig?.joinOracles}
+          initialValue={location.name}
+          updateValue={(newName) =>
+            updateLocation(locationId, { name: newName }).catch(() => {})
+          }
+          fullWidth={true}
+          sx={{
             mt: 1,
-            px: 3,
-            [theme.breakpoints.down("sm")]: { px: 2 },
-          })}
-        >
+          }}
+        />
+      }
+      handleImageUpload={onFileUpload}
+      handleIconSelection={(icon) => {
+        if (location.imageUrl) {
+          removeLocationImage(locationId).catch(() => {});
+        }
+        updateLocation(locationId, { icon }).catch(() => {});
+      }}
+      handleImageRemove={() => removeLocationImage(locationId)}
+      handlePageClose={closeLocation}
+    >
+      <Box
+        overflow={"auto"}
+        flexGrow={1}
+        height={"100%"}
+        display={"flex"}
+        flexDirection={"column"}
+      >
+        <Box mt={1}>
           <Grid container spacing={2} sx={{ mb: 2 }}>
             {sharedFieldConfig.map((field) => (
               <Grid item xs={12} md={6} key={field.key}>
@@ -377,6 +335,6 @@ export function OpenLocation(props: OpenLocationProps) {
           </Grid>
         </Box>
       </Box>
-    </Box>
+    </PageWithImage>
   );
 }
