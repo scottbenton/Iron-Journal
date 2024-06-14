@@ -73,6 +73,7 @@ export function LocationsSection(props: LocationsSectionProps) {
         alignItems={"stretch"}
         maxHeight={"100%"}
         height={"100%"}
+        width={"100%"}
       >
         <LocationsSidebar
           locationIds={sortedLocationIds}

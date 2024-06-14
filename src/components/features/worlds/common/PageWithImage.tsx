@@ -45,9 +45,9 @@ export function PageWithImage(props: PropsWithChildren<PageWithImageProps>) {
       <Box
         flexGrow={1}
         height={"100%"}
-        width={"100%"}
         display={"flex"}
         flexDirection={"column"}
+        overflow={"auto"}
       >
         {imageUrl && <ImageOutlineBackground />}
 
