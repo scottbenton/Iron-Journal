@@ -116,7 +116,7 @@ export function CardWithImage(props: CardWithImageProps) {
                   variant={"body2"}
                   color={"textSecondary"}
                 >
-                  {name}
+                  {secondaryText}
                 </Typography>
               ) : (
                 secondaryText
