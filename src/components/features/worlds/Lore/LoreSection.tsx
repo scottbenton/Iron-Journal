@@ -13,7 +13,7 @@ import { OpenLore } from "./OpenLore";
 import { useFilterLore } from "./useFilterLore";
 import { WorldEmptyState } from "components/features/worlds/WorldEmptyState";
 import { FilterBar } from "components/features/worlds/FilterBar";
-import { LoreItem } from "./LoreItem";
+import { LoreCard } from "./LoreCard";
 import { useStore } from "stores/store";
 import { useState } from "react";
 
@@ -147,7 +147,7 @@ export function LoreSection(props: LoreSectionProps) {
       >
         {filteredLoreIds.map((loreId) => (
           <Grid item xs={12} md={6} lg={4} key={loreId}>
-            <LoreItem
+            <LoreCard
               lore={lore[loreId]}
               openLore={() => setOpenLoreId(loreId)}
               showHiddenTag={showHiddenTag}

@@ -29,7 +29,8 @@ import {
 import { LocationField } from "./LocationField";
 import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import { PageWithImage } from "../common/PageWithImage";
-import { IconColors, IconDefinition } from "types/Icon.type";
+import { IconColors } from "types/Icon.type";
+import { mergeIcons } from "components/shared/GameIcons/mergeIcons";
 
 export interface OpenLocationProps {
   worldId: string;
@@ -143,13 +144,14 @@ export function OpenLocation(props: OpenLocationProps) {
     }
   };
 
-  const defaultIcon = settingConfig.defaultIcon;
-  const icon: IconDefinition = {
-    key: "GiCompass",
-    color: IconColors.White,
-    ...defaultIcon,
-    ...location.icon,
-  };
+  const icon = mergeIcons(
+    {
+      key: "GiCompass",
+      color: IconColors.White,
+    },
+    settingConfig.defaultIcon,
+    location.icon
+  );
 
   return (
     <PageWithImage

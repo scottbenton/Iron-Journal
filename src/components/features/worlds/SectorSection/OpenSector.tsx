@@ -20,7 +20,7 @@ import { SectorLocationDialog } from "./SectorLocationDialog";
 import { useWorldPermissions } from "../useWorldPermissions";
 import { RtcRichTextEditor } from "components/shared/RichTextEditor";
 import { NotesSectionHeader } from "../NotesSectionHeader";
-import { NPCItem } from "../NPCSection/NPCItem";
+import { NPCCard } from "../NPCSection/NPCCard";
 import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useConfirm } from "material-ui-confirm";
@@ -341,7 +341,7 @@ export function OpenSector(props: OpenSectorProps) {
           <Grid container spacing={2} sx={{ mt: 0, px: 2, pb: 2 }}>
             {filteredNPCIds.map((npcId) => (
               <Grid item xs={12} md={6} key={npcId}>
-                <NPCItem
+                <NPCCard
                   npc={npcs[npcId]}
                   locations={{}}
                   sectors={{}}

@@ -4,6 +4,7 @@ import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { IconColors } from "types/Icon.type";
 import { CardWithImage } from "../common/CardWithImage";
+import { mergeIcons } from "components/shared/GameIcons/mergeIcons";
 
 export interface LocationCardProps {
   location: LocationWithGMProperties;
@@ -27,22 +28,11 @@ export function LocationCard(props: LocationCardProps) {
     };
   }
 
-  const defaultIcon = settingConfig.defaultIcon;
-  let icon = {
-    key: "GiCompass",
-    color: IconColors.White,
-  };
-  if (defaultIcon) {
-    icon = defaultIcon;
-  }
-  if (location.icon) {
-    if (location.icon.color) {
-      icon.color = location.icon.color;
-    }
-    if (location.icon.key) {
-      icon.key = location.icon.key;
-    }
-  }
+  const icon = mergeIcons(
+    { key: "GiCompass", color: IconColors.White },
+    settingConfig.defaultIcon,
+    location.icon
+  );
 
   return (
     <CardWithImage

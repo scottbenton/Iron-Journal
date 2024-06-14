@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { NPC, DefaultNPCSpecies } from "types/NPCs.type";
 import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
-import { ChangeEvent, useRef } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useConfirm } from "material-ui-confirm";
 import { RtcRichTextEditor } from "components/shared/RichTextEditor/RtcRichTextEditor";
@@ -21,17 +20,17 @@ import { LocationWithGMProperties } from "stores/world/currentWorld/locations/lo
 import { useListenToCurrentNPC } from "stores/world/currentWorld/npcs/useListenToCurrentNPC";
 import { useStore } from "stores/store";
 import { BondsSection } from "components/features/worlds/BondsSection";
-import AddPhotoIcon from "@mui/icons-material/AddPhotoAlternate";
 import { useWorldPermissions } from "../useWorldPermissions";
 import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { Sector } from "types/Sector.type";
 import { Difficulty } from "types/Track.type";
 import { GuideAndPlayerHeader, GuideOnlyHeader } from "../common";
-import { ImageBoxHeaderBackground } from "../common/ImageBoxHeaderBackground";
-import { ImageBoxHeader } from "../common/ImageBoxHeader";
 import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
 import { useSnackbar } from "providers/SnackbarProvider";
+import { mergeIcons } from "components/shared/GameIcons/mergeIcons";
+import { IconColors } from "types/Icon.type";
+import { PageWithImage } from "../common/PageWithImage";
 
 const defaultNPCSpeciesOptions: {
   enum: DefaultNPCSpecies;
@@ -224,96 +223,76 @@ export function OpenNPC(props: OpenNPCProps) {
   });
 
   const { error } = useSnackbar();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const onFileUpload = (evt: ChangeEvent<HTMLInputElement>) => {
-    const files = evt.target.files;
-    const file = files?.[0];
+
+  const onFileUpload = (file: File) => {
     if (file) {
-      if (files[0].size > MAX_FILE_SIZE) {
+      if (file.size > MAX_FILE_SIZE) {
         error(
           `File is too large. The max file size is ${MAX_FILE_SIZE_LABEL}.`
         );
-        evt.target.value = "";
         return;
       }
       uploadNPCImage(npcId, file).catch(() => {});
     }
   };
 
+  const icon = mergeIcons(
+    { key: "GiPerson", color: IconColors.White },
+    undefined,
+    npc.icon
+  );
+
   return (
-    <Box
-      overflow={"auto"}
-      flexGrow={1}
-      height={"100%"}
-      display={"flex"}
-      flexDirection={"column"}
-    >
-      <ImageBoxHeaderBackground rounded />
-      <Box
-        sx={(theme) => ({
-          bgcolor: theme.palette.background.paper,
-          borderTop: `1px solid ${theme.palette.divider}`,
-          borderLeft: `1px solid ${theme.palette.divider}`,
-          zIndex: 1,
-          position: "relative",
-          flexGrow: 1,
-        })}
-      >
-        <ImageBoxHeader
-          rounded
-          name={npc.name}
-          imageUrl={npc.imageUrl}
-          uploadImage={(file) => uploadNPCImage(npcId, file).catch(() => {})}
-          removeImage={() => removeNPCImage(npcId)}
-          nameInput={
-            <DebouncedOracleInput
-              label={"Name"}
-              variant={"outlined"}
-              color={"primary"}
-              oracleTableId={npcNameOracles}
-              joinOracleTables={isStarforged}
-              initialValue={npc.name}
-              updateValue={(newName) =>
-                updateNPC(npcId, { name: newName }).catch(() => {})
-              }
-              fullWidth={true}
-              sx={{
-                mt: 1,
-              }}
-            />
+    <PageWithImage
+      name={npc.name}
+      imageUrl={npc.imageUrl}
+      icon={icon}
+      actions={
+        <>
+          {showGMFields && (
+            <Tooltip title={"Delete"}>
+              <IconButton onClick={() => handleNPCDelete()}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </>
+      }
+      nameInput={
+        <DebouncedOracleInput
+          label={"Name"}
+          variant={"outlined"}
+          color={"primary"}
+          oracleTableId={npcNameOracles}
+          joinOracleTables={isStarforged}
+          initialValue={npc.name}
+          updateValue={(newName) =>
+            updateNPC(npcId, { name: newName }).catch(() => {})
           }
-          actions={
-            <>
-              <Tooltip title={"Upload Image"}>
-                <IconButton onClick={() => fileInputRef?.current?.click()}>
-                  <AddPhotoIcon />
-                </IconButton>
-              </Tooltip>
-              {showGMFields && (
-                <Tooltip title={"Delete"}>
-                  <IconButton onClick={() => handleNPCDelete()}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
-              )}
-            </>
-          }
-          closeItem={() => closeNPC()}
-        />
-        <input
-          type="file"
-          accept={"image/*"}
-          hidden
-          ref={fileInputRef}
-          onChange={onFileUpload}
-        />
-        <Box
-          sx={(theme) => ({
+          fullWidth={true}
+          sx={{
             mt: 1,
-            px: 3,
-            [theme.breakpoints.down("sm")]: { px: 2 },
-          })}
-        >
+          }}
+        />
+      }
+      handleImageUpload={onFileUpload}
+      handleIconSelection={(icon) => {
+        if (npc.imageUrl) {
+          removeNPCImage(npcId).catch(() => {});
+        }
+        updateNPC(npcId, { icon }).catch(() => {});
+      }}
+      handleImageRemove={() => removeNPCImage(npcId).catch(() => {})}
+      handlePageClose={closeNPC}
+    >
+      <Box
+        overflow={"auto"}
+        flexGrow={1}
+        height={"100%"}
+        display={"flex"}
+        flexDirection={"column"}
+      >
+        <Box mt={1}>
           <Grid container spacing={2} sx={{ mb: 2 }}>
             <Grid item xs={12} sm={6}>
               <DebouncedOracleInput
@@ -368,7 +347,9 @@ export function OpenNPC(props: OpenNPCProps) {
                   )}
                   value={getSpeciesLabelFromEnum(npc.species)}
                   onChange={(evt, value) =>
-                    handleUpdateNPC({ species: getSpeciesEnumFromLabel(value) })
+                    handleUpdateNPC({
+                      species: getSpeciesEnumFromLabel(value),
+                    })
                   }
                   renderInput={(params) => (
                     <TextField {...params} label={"Species"} fullWidth />
@@ -497,9 +478,9 @@ export function OpenNPC(props: OpenNPCProps) {
                       label={"Revealed Aspect"}
                       initialValue={npc?.gmProperties?.revealedAspect ?? ""}
                       updateValue={(revealedAspect) =>
-                        updateNPCGMProperties(npcId, { revealedAspect }).catch(
-                          () => {}
-                        )
+                        updateNPCGMProperties(npcId, {
+                          revealedAspect,
+                        }).catch(() => {})
                       }
                       oracleTableId={
                         "starforged/oracles/characters/revealed_aspect"
@@ -669,6 +650,6 @@ export function OpenNPC(props: OpenNPCProps) {
           </Grid>
         </Box>
       </Box>
-    </Box>
+    </PageWithImage>
   );
 }
