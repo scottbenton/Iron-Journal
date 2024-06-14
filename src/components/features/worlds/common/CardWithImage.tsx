@@ -1,37 +1,37 @@
 import { Box, Card, CardActionArea, Typography } from "@mui/material";
 import PhotoIcon from "@mui/icons-material/Photo";
 import HiddenIcon from "@mui/icons-material/VisibilityOff";
-import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
-import { NPCDocumentWithGMProperties } from "stores/world/currentWorld/npcs/npcs.slice.type";
-import { Sector } from "types/Sector.type";
-import { useGameSystem } from "hooks/useGameSystem";
-import { GAME_SYSTEMS } from "types/GameSystems.type";
+import { GameIcon } from "components/shared/GameIcons/GameIcon";
+import { RequiredIconDefinition } from "types/Icon.type";
+import { ReactNode } from "react";
 
-export interface NPCItemProps {
-  npc: NPCDocumentWithGMProperties;
-  locations: { [key: string]: LocationWithGMProperties };
-  sectors: { [key: string]: Sector };
-  openNPC: () => void;
+export interface CardWithImageProps {
+  name: string;
+  type?: string;
+  secondaryText?: string | ReactNode;
+
+  imageUrl?: string;
+  icon?: RequiredIconDefinition;
+
   showHiddenTag?: boolean;
+  handleClick: () => void;
 }
 
-export function NPCItem(props: NPCItemProps) {
-  const { npc, locations, sectors, openNPC, showHiddenTag } = props;
-
-  const showSectors = useGameSystem().gameSystem === GAME_SYSTEMS.STARFORGED;
-
-  const npcLocation = showSectors
-    ? npc.lastSectorId
-      ? sectors[npc.lastSectorId]
-      : undefined
-    : npc.lastLocationId
-    ? locations[npc.lastLocationId]
-    : undefined;
+export function CardWithImage(props: CardWithImageProps) {
+  const {
+    name,
+    secondaryText,
+    type,
+    imageUrl,
+    icon,
+    showHiddenTag,
+    handleClick,
+  } = props;
 
   return (
     <Card variant={"outlined"} sx={{ overflow: "visible" }}>
       <CardActionArea
-        onClick={() => openNPC()}
+        onClick={handleClick}
         sx={(theme) => ({
           p: 2,
           "& #portrait": {
@@ -53,16 +53,13 @@ export function NPCItem(props: NPCItemProps) {
           <Box
             id={"portrait"}
             sx={(theme) => ({
-              marginRight: 1,
+              marginRight: 2,
               width: 80,
               height: 80,
               flexShrink: 0,
               borderRadius: `${theme.shape.borderRadius}px`,
-              backgroundColor:
-                theme.palette.mode === "light"
-                  ? theme.palette.grey[300]
-                  : theme.palette.grey[700],
-              backgroundImage: `url(${npc.imageUrl})`,
+              backgroundColor: theme.palette.background.mapBackground,
+              backgroundImage: `url(${imageUrl})`,
               backgroundPosition: "center top",
               backgroundSize: "cover",
               display: "flex",
@@ -71,13 +68,17 @@ export function NPCItem(props: NPCItemProps) {
               boxShadow: theme.shadows[3],
             })}
           >
-            {!npc.imageUrl && (
+            {!imageUrl && icon && (
+              <GameIcon
+                iconName={icon.key}
+                iconColor={icon.color}
+                sx={{ fontSize: 48 }}
+              />
+            )}
+            {!imageUrl && !icon && (
               <PhotoIcon
                 sx={(theme) => ({
-                  color:
-                    theme.palette.mode === "light"
-                      ? theme.palette.grey[500]
-                      : theme.palette.grey[300],
+                  color: theme.palette.grey[400],
                 })}
               />
             )}
@@ -90,30 +91,38 @@ export function NPCItem(props: NPCItemProps) {
             overflow={"hidden"}
           >
             <Box overflow={"hidden"}>
+              {type && (
+                <Typography
+                  whiteSpace={"nowrap"}
+                  overflow={"hidden"}
+                  variant={"overline"}
+                  textOverflow={"ellipsis"}
+                >
+                  {type}
+                </Typography>
+              )}
               <Typography
                 whiteSpace={"nowrap"}
                 overflow={"hidden"}
                 textOverflow={"ellipsis"}
               >
-                {npc.name}
+                {name}
               </Typography>
-
-              {npcLocation && (
+              {typeof secondaryText === "string" ? (
                 <Typography
-                  variant={"caption"}
-                  color={"textSecondary"}
                   whiteSpace={"nowrap"}
                   overflow={"hidden"}
                   textOverflow={"ellipsis"}
-                  component={"p"}
+                  variant={"body2"}
+                  color={"textSecondary"}
                 >
-                  {npcLocation.name}
+                  {name}
                 </Typography>
+              ) : (
+                secondaryText
               )}
             </Box>
-            {!npc.sharedWithPlayers && showHiddenTag && (
-              <HiddenIcon color={"action"} />
-            )}
+            {showHiddenTag && <HiddenIcon color={"action"} />}
           </Box>
         </Box>
       </CardActionArea>

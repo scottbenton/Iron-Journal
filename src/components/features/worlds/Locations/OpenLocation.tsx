@@ -8,9 +8,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { ChangeEvent, useRef } from "react";
 import { useConfirm } from "material-ui-confirm";
-import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import { RtcRichTextEditor } from "components/shared/RichTextEditor/RtcRichTextEditor";
 import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
 import { useStore } from "stores/store";
@@ -18,12 +16,21 @@ import { useListenToCurrentLocation } from "stores/world/currentWorld/locations/
 import { BondsSection } from "components/features/worlds/BondsSection";
 import { LocationNPCs } from "./LocationNPCs";
 import { useWorldPermissions } from "../useWorldPermissions";
-import { ItemHeader } from "../ItemHeader";
-import AddPhotoIcon from "@mui/icons-material/AddPhotoAlternate";
-import { ImageBanner } from "../ImageBanner";
 import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
 import { useSnackbar } from "providers/SnackbarProvider";
 import { GuideAndPlayerHeader, GuideOnlyHeader } from "../common";
+import { useGameSystemValue } from "hooks/useGameSystemValue";
+import { GAME_SYSTEMS } from "types/GameSystems.type";
+import {
+  FieldConfig,
+  NameConfig,
+  locationConfigs,
+} from "config/locations.config";
+import { LocationField } from "./LocationField";
+import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
+import { PageWithImage } from "../common/PageWithImage";
+import { IconColors } from "types/Icon.type";
+import { mergeIcons } from "components/shared/GameIcons/mergeIcons";
 
 export interface OpenLocationProps {
   worldId: string;
@@ -46,6 +53,18 @@ export function OpenLocation(props: OpenLocationProps) {
 
   const { showGMFields, showGMTips, isGuidedGame } = useWorldPermissions();
 
+  // Todo - replace with world type from datasworn once released
+  const settingId = useGameSystemValue({
+    [GAME_SYSTEMS.IRONSWORN]: "ironlands",
+    [GAME_SYSTEMS.STARFORGED]: "forge",
+  });
+  let settingConfig = { ...locationConfigs[settingId] };
+  if (location.type && settingConfig.locationTypeOverrides?.[location.type]) {
+    settingConfig = {
+      ...settingConfig,
+      ...settingConfig?.locationTypeOverrides[location.type],
+    };
+  }
   useListenToCurrentLocation(locationId);
 
   const { error } = useSnackbar();
@@ -54,10 +73,7 @@ export function OpenLocation(props: OpenLocationProps) {
   const updateLocation = useStore(
     (store) => store.worlds.currentWorld.currentWorldLocations.updateLocation
   );
-  const updateLocationGMProperties = useStore(
-    (store) =>
-      store.worlds.currentWorld.currentWorldLocations.updateLocationGMProperties
-  );
+
   const updateLocationGMNotes = useStore(
     (store) =>
       store.worlds.currentWorld.currentWorldLocations.updateLocationGMNotes
@@ -91,6 +107,10 @@ export function OpenLocation(props: OpenLocationProps) {
         .updateLocationCharacterBond
   );
 
+  const nameConfig: NameConfig | undefined = settingConfig.name;
+  const sharedFieldConfig: FieldConfig[] = settingConfig.sharedFields ?? [];
+  const gmFieldConfig: FieldConfig[] = settingConfig.gmFields ?? [];
+
   const handleLocationDelete = () => {
     confirm({
       title: `Delete ${location.name}`,
@@ -112,230 +132,205 @@ export function OpenLocation(props: OpenLocationProps) {
       .catch(() => {});
   };
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const onFileUpload = (evt: ChangeEvent<HTMLInputElement>) => {
-    const files = evt.target.files;
-    const file = files?.[0];
+  const onFileUpload = (file: File) => {
     if (file) {
-      if (files[0].size > MAX_FILE_SIZE) {
+      if (file.size > MAX_FILE_SIZE) {
         error(
           `File is too large. The max file size is ${MAX_FILE_SIZE_LABEL}.`
         );
-        evt.target.value = "";
         return;
       }
       uploadLocationImage(locationId, file).catch(() => {});
     }
   };
 
+  const icon = mergeIcons(
+    {
+      key: "GiCompass",
+      color: IconColors.White,
+    },
+    settingConfig.defaultIcon,
+    location.icon
+  );
+
   return (
-    <Box
-      overflow={"auto"}
-      bgcolor={(theme) => theme.palette.background.paper}
-      borderLeft={(theme) => `1px solid ${theme.palette.divider}`}
-      width={"100%"}
-    >
-      <input
-        type="file"
-        accept={"image/*"}
-        hidden
-        ref={fileInputRef}
-        onChange={onFileUpload}
-      />
-      <ImageBanner
-        title={location.name}
-        src={location.imageUrl}
-        removeImage={() => removeLocationImage(locationId)}
-      />
-      <ItemHeader
-        itemName={location.name}
-        updateName={(newName) =>
-          updateLocation(locationId, { name: newName }).catch(() => {})
-        }
-        nameOracleIds={[
-          "classic/oracles/settlement/name/landscape_feature",
-          "classic/oracles/settlement/name/manmade_edifice",
-          "classic/oracles/settlement/name/creature",
-          "classic/oracles/settlement/name/historical_event",
-          "classic/oracles/settlement/name/old_world_language",
-          "classic/oracles/settlement/name/environmental_aspect",
-          [
-            "classic/oracles/settlement/quick_name/prefix",
-            "classic/oracles/settlement/quick_name/suffix",
-          ],
-        ]}
-        actions={
-          <>
-            <Tooltip title={"Upload Image"}>
-              <IconButton onClick={() => fileInputRef?.current?.click()}>
-                <AddPhotoIcon />
+    <PageWithImage
+      imageUrl={location.imageUrl}
+      icon={icon}
+      actions={
+        <>
+          {showGMFields && (
+            <Tooltip title={"Delete"}>
+              <IconButton onClick={() => handleLocationDelete()}>
+                <DeleteIcon />
               </IconButton>
             </Tooltip>
-            {showGMFields && (
-              <Tooltip title={"Delete"}>
-                <IconButton onClick={() => handleLocationDelete()}>
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
-            )}
-          </>
-        }
-        closeItem={closeLocation}
-      />
-      <Box
-        sx={(theme) => ({
-          mt: 1,
-          px: 3,
-          [theme.breakpoints.down("sm")]: { px: 2 },
-        })}
-      >
-        <Grid container spacing={2} sx={{ mb: 2 }}>
-          {showGMFields && (
-            <>
-              {showGMTips && (
-                <>
-                  <Grid item xs={12}>
-                    <GuideOnlyHeader breakContainer />
-                  </Grid>
-                </>
-              )}
-              <Grid item xs={12} md={6}>
-                <DebouncedOracleInput
-                  label={"Description"}
-                  initialValue={location?.gmProperties?.descriptor ?? ""}
-                  updateValue={(descriptor) =>
-                    updateLocationGMProperties(locationId, {
-                      descriptor,
-                    }).catch(() => {})
-                  }
-                  oracleTableId="classic/oracles/place/descriptor"
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <DebouncedOracleInput
-                  label={"Trouble"}
-                  initialValue={location?.gmProperties?.trouble ?? ""}
-                  updateValue={(trouble) => {
-                    updateLocationGMProperties(locationId, { trouble }).catch(
-                      () => {}
-                    );
-                  }}
-                  oracleTableId={"classic/oracles/settlement/trouble"}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <DebouncedOracleInput
-                  label={"Location Features"}
-                  initialValue={location?.gmProperties?.locationFeatures ?? ""}
-                  updateValue={(locationFeatures) => {
-                    updateLocationGMProperties(locationId, {
-                      locationFeatures,
-                    }).catch(() => {});
-                  }}
-                  oracleTableId={"classic/oracles/place/location"}
-                />
-              </Grid>
-              {isGuidedGame && showGMFields && (
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  sx={{ alignItems: "center", display: "flex" }}
-                >
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={location.sharedWithPlayers ?? false}
-                        onChange={(evt, value) =>
-                          updateLocation(locationId, {
-                            sharedWithPlayers: value,
-                          }).catch(() => {})
-                        }
-                      />
-                    }
-                    label="Visible to Players"
-                  />
-                </Grid>
-              )}
-              {!isGuidedGame && (
-                <BondsSection
-                  isStarforged={false}
-                  hasConnection={false}
-                  onBondToggle={
-                    currentCharacterId
-                      ? (bonded) =>
-                          updateLocationCharacterBond(
-                            locationId,
-                            currentCharacterId,
-                            bonded
-                          ).catch(() => {})
-                      : undefined
-                  }
-                  isBonded={singleplayerBond}
-                />
-              )}
-              <Grid item xs={12}>
-                <RtcRichTextEditor
-                  id={locationId}
-                  roomPrefix={`iron-fellowship-${worldId}-location-gmnotes-`}
-                  documentPassword={worldId}
-                  onSave={updateLocationGMNotes}
-                  initialValue={location.gmProperties?.gmNotes}
-                />
-              </Grid>
-            </>
           )}
-          {isGuidedGame && (
-            <>
-              {showGMTips && (
-                <Grid item xs={12}>
-                  <GuideAndPlayerHeader breakContainer />
-                </Grid>
-              )}
-              <BondsSection
-                isStarforged={false}
-                hasConnection={false}
-                onBondToggle={
-                  currentCharacterId
-                    ? (bonded) =>
-                        updateLocationCharacterBond(
-                          locationId,
-                          currentCharacterId,
-                          bonded
-                        ).catch(() => {})
-                    : undefined
-                }
-                isBonded={singleplayerBond}
-              />
-              {!location.sharedWithPlayers && (
-                <Grid item xs={12}>
-                  <Alert severity="warning">
-                    These notes are not yet visible to players because this
-                    location is hidden from them.
-                  </Alert>
-                </Grid>
-              )}
-              <Grid item xs={12}>
-                {(location.notes || location.notes === null) && (
-                  <RtcRichTextEditor
-                    id={locationId}
-                    roomPrefix={`iron-fellowship-${worldId}-location-`}
-                    documentPassword={worldId}
-                    onSave={updateLocationNotes}
-                    initialValue={location.notes || undefined}
+        </>
+      }
+      name={location.name}
+      nameInput={
+        <DebouncedOracleInput
+          label={"Name"}
+          variant={"outlined"}
+          color={"primary"}
+          oracleTableId={nameConfig?.oracleIds}
+          joinOracleTables={nameConfig?.joinOracles}
+          initialValue={location.name}
+          updateValue={(newName) =>
+            updateLocation(locationId, { name: newName }).catch(() => {})
+          }
+          fullWidth={true}
+          sx={{
+            mt: 1,
+          }}
+        />
+      }
+      handleImageUpload={onFileUpload}
+      handleIconSelection={(icon) => {
+        if (location.imageUrl) {
+          removeLocationImage(locationId).catch(() => {});
+        }
+        updateLocation(locationId, { icon }).catch(() => {});
+      }}
+      handleImageRemove={() => removeLocationImage(locationId)}
+      handlePageClose={closeLocation}
+    >
+      <Box display={"flex"} flexDirection={"column"}>
+        <Box mt={1}>
+          <Grid container spacing={2} sx={{ mb: 2 }}>
+            {sharedFieldConfig.map((field) => (
+              <Grid item xs={12} md={6} key={field.key}>
+                <LocationField
+                  locationId={locationId}
+                  location={location}
+                  field={field}
+                  isGMField={false}
+                />
+              </Grid>
+            ))}
+            {showGMFields && (
+              <>
+                {showGMTips && (
+                  <>
+                    <Grid item xs={12}>
+                      <GuideOnlyHeader breakContainer />
+                    </Grid>
+                  </>
+                )}
+                {gmFieldConfig.map((field) => (
+                  <Grid item xs={12} md={6} key={field.key}>
+                    <LocationField
+                      locationId={locationId}
+                      location={location}
+                      field={field}
+                      isGMField
+                    />
+                  </Grid>
+                ))}
+                {isGuidedGame && showGMFields && (
+                  <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    sx={{ alignItems: "center", display: "flex" }}
+                  >
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={location.sharedWithPlayers ?? false}
+                          onChange={(evt, value) =>
+                            updateLocation(locationId, {
+                              sharedWithPlayers: value,
+                            }).catch(() => {})
+                          }
+                        />
+                      }
+                      label="Visible to Players"
+                    />
+                  </Grid>
+                )}
+                {!isGuidedGame && settingConfig.showBasicBond && (
+                  <BondsSection
+                    isStarforged={false}
+                    hasConnection={false}
+                    onBondToggle={
+                      currentCharacterId
+                        ? (bonded) =>
+                            updateLocationCharacterBond(
+                              locationId,
+                              currentCharacterId,
+                              bonded
+                            ).catch(() => {})
+                        : undefined
+                    }
+                    isBonded={singleplayerBond}
                   />
                 )}
-              </Grid>
-            </>
-          )}
-          <LocationNPCs
-            locationId={locationId}
-            showHiddenTag={showHiddenTag}
-            openNPCTab={openNPCTab}
-          />
-        </Grid>
+                <Grid item xs={12}>
+                  <RtcRichTextEditor
+                    id={locationId}
+                    roomPrefix={`iron-fellowship-${worldId}-location-gmnotes-`}
+                    documentPassword={worldId}
+                    onSave={updateLocationGMNotes}
+                    initialValue={location.gmProperties?.gmNotes}
+                  />
+                </Grid>
+              </>
+            )}
+            {isGuidedGame && (
+              <>
+                {showGMTips && (
+                  <Grid item xs={12}>
+                    <GuideAndPlayerHeader breakContainer />
+                  </Grid>
+                )}
+                {settingConfig.showBasicBond && (
+                  <BondsSection
+                    isStarforged={false}
+                    hasConnection={false}
+                    onBondToggle={
+                      currentCharacterId
+                        ? (bonded) =>
+                            updateLocationCharacterBond(
+                              locationId,
+                              currentCharacterId,
+                              bonded
+                            ).catch(() => {})
+                        : undefined
+                    }
+                    isBonded={singleplayerBond}
+                  />
+                )}
+                {!location.sharedWithPlayers && (
+                  <Grid item xs={12}>
+                    <Alert severity="warning">
+                      These notes are not yet visible to players because this
+                      location is hidden from them.
+                    </Alert>
+                  </Grid>
+                )}
+                <Grid item xs={12}>
+                  {(location.notes || location.notes === null) && (
+                    <RtcRichTextEditor
+                      id={locationId}
+                      roomPrefix={`iron-fellowship-${worldId}-location-`}
+                      documentPassword={worldId}
+                      onSave={updateLocationNotes}
+                      initialValue={location.notes || undefined}
+                    />
+                  )}
+                </Grid>
+              </>
+            )}
+            <LocationNPCs
+              locationId={locationId}
+              showHiddenTag={showHiddenTag}
+              openNPCTab={openNPCTab}
+            />
+          </Grid>
+        </Box>
       </Box>
-    </Box>
+    </PageWithImage>
   );
 }

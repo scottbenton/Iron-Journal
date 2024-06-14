@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.3.0
+
+### New Features
+
+- Locations, lore, and NPCs can now use Icons from game-icons.net instead of uploading images.
+
+### Changes
+
+- Redesigned locations, lore, and npc sections slightly to accommodate new icons
+
+### Bug Fixes
+
 ## 3.2.0
 
 ### New Features

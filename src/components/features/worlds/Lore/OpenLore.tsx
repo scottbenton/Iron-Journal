@@ -8,20 +8,20 @@ import {
   Tooltip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useConfirm } from "material-ui-confirm";
 import { RtcRichTextEditor } from "components/shared/RichTextEditor/RtcRichTextEditor";
 import { LoreTagsAutocomplete } from "./LoreTagsAutocomplete";
 import { useStore } from "stores/store";
 import { LoreDocumentWithGMProperties } from "stores/world/currentWorld/lore/lore.slice.type";
 import { useListenToCurrentLoreDocument } from "stores/world/currentWorld/lore/useListenToCurrentLoreDocument";
-import { ItemHeader } from "../ItemHeader";
 import { useWorldPermissions } from "../useWorldPermissions";
-import { ImageBanner } from "../ImageBanner";
-import AddPhotoIcon from "@mui/icons-material/AddPhotoAlternate";
 import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
 import { useSnackbar } from "providers/SnackbarProvider";
 import { GuideAndPlayerHeader, GuideOnlyHeader } from "../common";
+import { mergeIcons } from "components/shared/GameIcons/mergeIcons";
+import { IconColors } from "types/Icon.type";
+import { PageWithImage } from "../common/PageWithImage";
+import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 
 export interface OpenLoreProps {
   worldId: string;
@@ -40,13 +40,6 @@ export function OpenLore(props: OpenLoreProps) {
 
   const { error } = useSnackbar();
   const confirm = useConfirm();
-
-  const [loreName, setLoreName] = useState<string>(lore.name);
-
-  const initialLoreName = lore.name;
-  useEffect(() => {
-    setLoreName(initialLoreName);
-  }, [initialLoreName]);
 
   const updateLore = useStore(
     (store) => store.worlds.currentWorld.currentWorldLore.updateLore
@@ -88,151 +81,152 @@ export function OpenLore(props: OpenLoreProps) {
       .catch(() => {});
   };
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const onFileUpload = (evt: ChangeEvent<HTMLInputElement>) => {
-    const files = evt.target.files;
-    const file = files?.[0];
+  const onFileUpload = (file: File) => {
     if (file) {
-      if (files[0].size > MAX_FILE_SIZE) {
+      if (file.size > MAX_FILE_SIZE) {
         error(
           `File is too large. The max file size is ${MAX_FILE_SIZE_LABEL}.`
         );
-        evt.target.value = "";
         return;
       }
       uploadLoreImage(loreId, file).catch(() => {});
     }
   };
 
-  return (
-    <Box
-      overflow={"auto"}
-      bgcolor={(theme) => theme.palette.background.paper}
-      width={"100%"}
-      sx={(theme) => ({ borderLeft: `1px solid ${theme.palette.divider}` })}
-    >
-      <input
-        type="file"
-        accept={"image/*"}
-        hidden
-        ref={fileInputRef}
-        onChange={onFileUpload}
-      />
-      <ImageBanner
-        title={lore.name}
-        src={lore.imageUrl}
-        removeImage={() => removeLoreImage(loreId)}
-      />
+  const icon = mergeIcons(
+    {
+      key: "GiBookmarklet",
+      color: IconColors.White,
+    },
+    undefined,
+    lore.icon
+  );
 
-      <ItemHeader
-        itemName={loreName}
-        updateName={(name) => updateLore(loreId, { name }).catch(() => {})}
-        closeItem={closeLore}
-        actions={
-          <>
-            <Tooltip title={"Upload Image"}>
-              <IconButton onClick={() => fileInputRef?.current?.click()}>
-                <AddPhotoIcon />
+  return (
+    <PageWithImage
+      imageUrl={lore.imageUrl}
+      icon={icon}
+      actions={
+        <>
+          {showGMFields && (
+            <Tooltip title={"Delete"}>
+              <IconButton onClick={() => handleLoreDelete()}>
+                <DeleteIcon />
               </IconButton>
             </Tooltip>
-            {showGMFields && (
-              <Tooltip title={"Delete Document"}>
-                <IconButton onClick={() => handleLoreDelete()}>
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
-            )}
-          </>
-        }
-      />
-      <Box
-        sx={(theme) => ({
-          mt: 1,
-          px: 3,
-          [theme.breakpoints.down("sm")]: { px: 2 },
-        })}
-      >
-        <Grid container spacing={2} sx={{ mb: 2 }}>
-          <Grid item xs={12} lg={6}>
-            <LoreTagsAutocomplete
-              tagList={tagList}
-              tags={lore.tags}
-              updateTags={(tags) =>
-                updateLore(loreId, { tags }).catch(() => {})
-              }
-            />
-          </Grid>
-          {showGMFields && (
-            <>
-              {showGMTips && (
-                <Grid item xs={12}>
-                  <GuideOnlyHeader breakContainer />
-                </Grid>
-              )}
-              {isGuidedGame && (
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  sx={{ alignItems: "center", display: "flex" }}
-                >
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={lore.sharedWithPlayers ?? false}
-                        onChange={(evt, value) =>
-                          updateLore(loreId, {
-                            sharedWithPlayers: value,
-                          }).catch(() => {})
-                        }
-                      />
-                    }
-                    label="Visible to Players"
-                  />
-                </Grid>
-              )}
-              <Grid item xs={12}>
-                <RtcRichTextEditor
-                  id={loreId}
-                  roomPrefix={`iron-fellowship-${worldId}-lore-gmnotes-`}
-                  documentPassword={worldId}
-                  onSave={updateLoreGMNotes}
-                  initialValue={lore.gmProperties?.gmNotes}
-                />
-              </Grid>
-            </>
           )}
-          {isGuidedGame && (
-            <>
-              {showGMTips && (
+        </>
+      }
+      name={lore.name}
+      nameInput={
+        <DebouncedOracleInput
+          oracleTableId={""}
+          label={"Name"}
+          variant={"outlined"}
+          color={"primary"}
+          initialValue={lore.name}
+          updateValue={(newName) =>
+            updateLore(loreId, { name: newName }).catch(() => {})
+          }
+          fullWidth={true}
+          sx={{
+            mt: 1,
+          }}
+        />
+      }
+      handleImageUpload={onFileUpload}
+      handleIconSelection={(icon) => {
+        if (lore.imageUrl) {
+          removeLoreImage(loreId).catch(() => {});
+        }
+        updateLore(loreId, { icon }).catch(() => {});
+      }}
+      handleImageRemove={() => removeLoreImage(loreId)}
+      handlePageClose={closeLore}
+    >
+      <Box display={"flex"} flexDirection={"column"}>
+        <Box mt={1}>
+          <Grid container spacing={2} sx={{ mb: 2 }}>
+            <Grid item xs={12} lg={6}>
+              <LoreTagsAutocomplete
+                tagList={tagList}
+                tags={lore.tags}
+                updateTags={(tags) =>
+                  updateLore(loreId, { tags }).catch(() => {})
+                }
+              />
+            </Grid>
+            {showGMFields && (
+              <>
+                {showGMTips && (
+                  <Grid item xs={12}>
+                    <GuideOnlyHeader breakContainer />
+                  </Grid>
+                )}
+                {isGuidedGame && (
+                  <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    sx={{ alignItems: "center", display: "flex" }}
+                  >
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={lore.sharedWithPlayers ?? false}
+                          onChange={(evt, value) =>
+                            updateLore(loreId, {
+                              sharedWithPlayers: value,
+                            }).catch(() => {})
+                          }
+                        />
+                      }
+                      label="Visible to Players"
+                    />
+                  </Grid>
+                )}
                 <Grid item xs={12}>
-                  <GuideAndPlayerHeader breakContainer />
-                </Grid>
-              )}
-              {!lore.sharedWithPlayers && (
-                <Grid item xs={12}>
-                  <Alert severity="warning">
-                    These notes are not yet visible to players because this
-                    location is hidden from them.
-                  </Alert>
-                </Grid>
-              )}
-              <Grid item xs={12}>
-                {(lore.notes || lore.notes === null) && (
                   <RtcRichTextEditor
                     id={loreId}
-                    roomPrefix={`iron-fellowship-${worldId}-lore-`}
+                    roomPrefix={`iron-fellowship-${worldId}-lore-gmnotes-`}
                     documentPassword={worldId}
-                    onSave={updateLoreNotes}
-                    initialValue={lore.notes || undefined}
+                    onSave={updateLoreGMNotes}
+                    initialValue={lore.gmProperties?.gmNotes}
                   />
+                </Grid>
+              </>
+            )}
+            {isGuidedGame && (
+              <>
+                {showGMTips && (
+                  <Grid item xs={12}>
+                    <GuideAndPlayerHeader breakContainer />
+                  </Grid>
                 )}
-              </Grid>
-            </>
-          )}
-        </Grid>
+                {!lore.sharedWithPlayers && (
+                  <Grid item xs={12}>
+                    <Alert severity="warning">
+                      These notes are not yet visible to players because this
+                      location is hidden from them.
+                    </Alert>
+                  </Grid>
+                )}
+                <Grid item xs={12}>
+                  {(lore.notes || lore.notes === null) && (
+                    <RtcRichTextEditor
+                      id={loreId}
+                      roomPrefix={`iron-fellowship-${worldId}-lore-`}
+                      documentPassword={worldId}
+                      onSave={updateLoreNotes}
+                      initialValue={lore.notes || undefined}
+                    />
+                  )}
+                </Grid>
+              </>
+            )}
+          </Grid>
+        </Box>
       </Box>
-    </Box>
+    </PageWithImage>
   );
 }

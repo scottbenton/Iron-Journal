@@ -12,10 +12,10 @@ import { useSearchParams } from "react-router-dom";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { CharacterTab, NotesTab, TracksTab, WorldTab } from "./Tabs";
 import { SectorSection } from "components/features/worlds/SectorSection";
-import { LocationsSection } from "components/features/worlds/Locations";
 import { useStore } from "stores/store";
 import { NPCSection } from "components/features/worlds/NPCSection";
 import { LoreSection } from "components/features/worlds/Lore";
+import { LocationsSection } from "components/features/worlds/Locations";
 
 enum CampaignTabs {
   Characters = "characters",
@@ -114,7 +114,7 @@ export function CampaignContent(props: CampaignContentProps) {
           greyBackground={hasWorld}
         >
           <LocationsSection
-            showHiddenTag={showGuideTips}
+            showHiddenTag
             openNPCTab={() => setSelectedTab(CampaignTabs.NPCs)}
           />
         </ContainedTabPanel>

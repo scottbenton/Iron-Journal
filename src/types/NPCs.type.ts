@@ -1,3 +1,4 @@
+import { IconDefinition } from "./Icon.type";
 import { Difficulty } from "./Track.type";
 
 export enum DefaultNPCSpecies {
@@ -11,12 +12,16 @@ export enum DefaultNPCSpecies {
 
 export interface NPC {
   name: string;
+
+  imageFilenames?: string[];
+  icon?: IconDefinition;
+
+  sharedWithPlayers?: boolean;
+
   pronouns?: string;
   species?: string | null; // Ironsworn only
   lastLocationId?: string; // Ironsworn only
   lastSectorId?: string; // Starforged only
-  imageFilenames?: string[];
-  sharedWithPlayers?: boolean;
   characterConnections?: { [characterId: string]: boolean }; // Starforged only
   characterBonds?: { [characterId: string]: boolean };
   characterBondProgress?: { [characterId: string]: number }; // Starforged only

@@ -25,7 +25,13 @@ export function getTheme(theme: Themes, type: ThemeType): Theme {
       primary: config.palette.primary,
       secondary: green,
       darkGrey: config.configs[type].darkGrey,
-      background: config.configs[type].background,
+      background: {
+        ...config.configs[type].background,
+        mapBackground:
+          type === ThemeType.Light
+            ? config.palette.grey[900]
+            : config.configs[type].background.default,
+      },
       divider: config.palette.grey[type === ThemeType.Light ? 300 : 600],
       grey: config.palette.grey,
       ...sharedStatusColors,

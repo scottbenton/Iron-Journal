@@ -4,7 +4,6 @@ import { useConfirm } from "material-ui-confirm";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSyncStore } from "./hooks/useSyncStore";
 import { useEffect, useState } from "react";
-import { LocationsSection } from "components/features/worlds/Locations";
 import { BreakContainer } from "components/shared/BreakContainer";
 import { WORLD_ROUTES, constructWorldPath } from "../routes";
 import { PageContent, PageHeader } from "components/shared/Layout";
@@ -21,6 +20,7 @@ import { EmptyState } from "components/shared/EmptyState";
 import { LinkComponent } from "components/shared/LinkComponent";
 import { useUpdateQueryStringValueWithoutNavigation } from "hooks/useUpdateQueryStringValueWithoutNavigation";
 import { useWorldPermissions } from "components/features/worlds/useWorldPermissions";
+import { LocationsSection } from "components/features/worlds/Locations";
 
 enum TABS {
   DETAILS = "details",

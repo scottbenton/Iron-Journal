@@ -136,8 +136,7 @@ export function TabsSection() {
           greyBackground={worldExists}
         >
           <LocationsSection
-            isSinglePlayer={!isInCampaign}
-            showHiddenTag={showGuideTips}
+            showHiddenTag
             openNPCTab={() => setSelectedTab(TABS.NPCS)}
           />
         </ContainedTabPanel>

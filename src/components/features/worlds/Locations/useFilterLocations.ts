@@ -22,10 +22,14 @@ export function useFilterLocations(
 
   const filteredLocationIds = useMemo(
     () =>
-      sortedLocationIds.filter((locationId) =>
-        locations[locationId].name
-          .toLowerCase()
-          .includes(debouncedSearch.toLowerCase())
+      sortedLocationIds.filter(
+        (locationId) =>
+          locations[locationId].name
+            .toLowerCase()
+            .includes(debouncedSearch.toLowerCase()) ||
+          locations[locationId].type
+            ?.toLocaleLowerCase()
+            ?.includes(debouncedSearch.toLocaleLowerCase())
       ),
     [sortedLocationIds, locations, debouncedSearch]
   );

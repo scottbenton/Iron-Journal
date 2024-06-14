@@ -83,10 +83,8 @@ export function Editor(props: EditorProps) {
 
             p: editable || !outlined ? 2 : 0,
 
-            "&>*": {
-              maxWidth: "100%",
-              width: "65ch",
-            },
+            width: "65ch",
+            mx: !outlined ? "auto" : undefined,
 
             "&:focus": {
               outline: "none",
