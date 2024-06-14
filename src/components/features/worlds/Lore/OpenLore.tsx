@@ -144,13 +144,7 @@ export function OpenLore(props: OpenLoreProps) {
       handleImageRemove={() => removeLoreImage(loreId)}
       handlePageClose={closeLore}
     >
-      <Box
-        overflow={"auto"}
-        flexGrow={1}
-        height={"100%"}
-        display={"flex"}
-        flexDirection={"column"}
-      >
+      <Box display={"flex"} flexDirection={"column"}>
         <Box mt={1}>
           <Grid container spacing={2} sx={{ mb: 2 }}>
             <Grid item xs={12} lg={6}>

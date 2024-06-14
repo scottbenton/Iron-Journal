@@ -285,13 +285,7 @@ export function OpenNPC(props: OpenNPCProps) {
       handleImageRemove={() => removeNPCImage(npcId).catch(() => {})}
       handlePageClose={closeNPC}
     >
-      <Box
-        overflow={"auto"}
-        flexGrow={1}
-        height={"100%"}
-        display={"flex"}
-        flexDirection={"column"}
-      >
+      <Box display={"flex"} flexDirection={"column"}>
         <Box mt={1}>
           <Grid container spacing={2} sx={{ mb: 2 }}>
             <Grid item xs={12} sm={6}>
