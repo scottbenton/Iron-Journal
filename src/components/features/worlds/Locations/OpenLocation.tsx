@@ -1,10 +1,12 @@
 import {
   Alert,
+  Autocomplete,
   Box,
   Checkbox,
   FormControlLabel,
   Grid,
   IconButton,
+  TextField,
   Tooltip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -23,6 +25,7 @@ import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import {
   FieldConfig,
+  ILocationConfig,
   NameConfig,
   locationConfigs,
 } from "config/locations.config";
@@ -31,6 +34,8 @@ import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import { PageWithImage } from "../common/PageWithImage";
 import { IconColors } from "types/Icon.type";
 import { mergeIcons } from "components/shared/GameIcons/mergeIcons";
+import MapIcon from "@mui/icons-material/Map";
+import { LocationMap } from "./LocationMap";
 
 export interface OpenLocationProps {
   worldId: string;
@@ -50,7 +55,7 @@ export function OpenLocation(props: OpenLocationProps) {
     showHiddenTag,
     openNPCTab,
   } = props;
-
+  console.debug(location.type);
   const { showGMFields, showGMTips, isGuidedGame } = useWorldPermissions();
 
   // Todo - replace with world type from datasworn once released
@@ -58,11 +63,17 @@ export function OpenLocation(props: OpenLocationProps) {
     [GAME_SYSTEMS.IRONSWORN]: "ironlands",
     [GAME_SYSTEMS.STARFORGED]: "forge",
   });
-  let settingConfig = { ...locationConfigs[settingId] };
+  let settingConfig: ILocationConfig = {
+    ...locationConfigs[settingId],
+    defaultIcon: {
+      key: "GiCompass",
+      color: IconColors.White,
+    },
+  };
   if (location.type && settingConfig.locationTypeOverrides?.[location.type]) {
     settingConfig = {
       ...settingConfig,
-      ...settingConfig?.locationTypeOverrides[location.type],
+      ...settingConfig?.locationTypeOverrides[location.type]?.config,
     };
   }
   useListenToCurrentLocation(locationId);
@@ -153,6 +164,8 @@ export function OpenLocation(props: OpenLocationProps) {
     location.icon
   );
 
+  console.debug(locationId);
+
   return (
     <PageWithImage
       imageUrl={location.imageUrl}
@@ -160,11 +173,33 @@ export function OpenLocation(props: OpenLocationProps) {
       actions={
         <>
           {showGMFields && (
-            <Tooltip title={"Delete"}>
-              <IconButton onClick={() => handleLocationDelete()}>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
+            <>
+              <Tooltip title={`Toggle Map ${location.showMap ? "Off" : "On"}`}>
+                <IconButton
+                  onClick={() => {
+                    updateLocation(locationId, {
+                      showMap: !location.showMap,
+                    }).catch(() => {});
+                  }}
+                  sx={{
+                    bgcolor: location.showMap ? "darkGrey.main" : undefined,
+                    color: location.showMap
+                      ? "darkGrey.contrastText"
+                      : undefined,
+                    "&:hover": {
+                      bgcolor: location.showMap ? "darkGrey.dark" : undefined,
+                    },
+                  }}
+                >
+                  <MapIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={"Delete"}>
+                <IconButton onClick={() => handleLocationDelete()}>
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            </>
           )}
         </>
       }
@@ -198,7 +233,31 @@ export function OpenLocation(props: OpenLocationProps) {
     >
       <Box display={"flex"} flexDirection={"column"}>
         <Box mt={1}>
+          {location.showMap && (
+            <Box sx={{ mx: { xs: -2, md: -3 }, mb: 2 }}>
+              <LocationMap locationId={locationId} map={location.map} />
+            </Box>
+          )}
           <Grid container spacing={2} sx={{ mb: 2 }}>
+            <Grid item xs={12} sm={6}>
+              <Autocomplete
+                freeSolo
+                autoSelect
+                options={Object.values(
+                  settingConfig.locationTypeOverrides ?? {}
+                ).map((config) => config.label)}
+                value={getLabelFromTypeKey(settingConfig, location.type)}
+                onChange={(evt, value) => {
+                  console.debug(value);
+                  updateLocation(locationId, {
+                    type: getTypeKeyFromLabel(settingConfig, value),
+                  });
+                }}
+                renderInput={(params) => (
+                  <TextField {...params} label={"Location Type"} fullWidth />
+                )}
+              />
+            </Grid>
             {sharedFieldConfig.map((field) => (
               <Grid item xs={12} md={6} key={field.key}>
                 <LocationField
@@ -209,6 +268,7 @@ export function OpenLocation(props: OpenLocationProps) {
                 />
               </Grid>
             ))}
+
             {showGMFields && (
               <>
                 {showGMTips && (
@@ -334,3 +394,29 @@ export function OpenLocation(props: OpenLocationProps) {
     </PageWithImage>
   );
 }
+
+const getTypeKeyFromLabel = (
+  config: ILocationConfig | undefined,
+  label: string | undefined | null
+): string => {
+  const overrides = config?.locationTypeOverrides;
+  if (!overrides || !label) {
+    return label ?? "";
+  }
+  const matchingOption = Object.keys(overrides).find(
+    (optionKey) => overrides[optionKey].label === label
+  );
+  return matchingOption ?? label;
+};
+
+const getLabelFromTypeKey = (
+  config: ILocationConfig | undefined,
+  key: string | null | undefined
+): string => {
+  const overrides = config?.locationTypeOverrides;
+  if (!overrides || !key) {
+    return key ?? "";
+  }
+
+  return overrides[key]?.label ?? key;
+};

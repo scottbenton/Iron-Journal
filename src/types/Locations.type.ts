@@ -1,7 +1,34 @@
 import { IconDefinition } from "./Icon.type";
 
+export enum MapEntryType {
+  Path = "path",
+  Location = "location",
+}
+
+export interface BaseMapEntry {
+  type: MapEntryType;
+}
+export interface MapEntryLocation extends BaseMapEntry {
+  type: MapEntryType.Location;
+  locationIds: string[];
+}
+
+export interface MapEntryPath extends BaseMapEntry {
+  type: MapEntryType.Path;
+}
+
+export type MapEntry = MapEntryLocation | MapEntryPath;
+
+export interface LocationMap {
+  [row: number]: {
+    [col: number]: MapEntry | null;
+  };
+}
+
 export interface Location {
   name: string;
+
+  parentLocationId?: string | null;
 
   imageFilenames?: string[];
   icon?: IconDefinition;
@@ -13,7 +40,8 @@ export interface Location {
   // New Fields - locations 2.0
   type?: string;
   fields?: Record<string, string>;
-  map?: Record<number, Record<number, string>>;
+  map?: LocationMap;
+  showMap?: boolean;
 
   updatedDate: Date;
   createdDate: Date;

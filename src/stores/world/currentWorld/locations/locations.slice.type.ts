@@ -1,4 +1,4 @@
-import { Unsubscribe } from "firebase/firestore";
+import { Unsubscribe, UpdateData } from "firebase/firestore";
 import { GMLocation, Location } from "types/Locations.type";
 
 export type LocationWithGMProperties = Location & {
@@ -21,10 +21,11 @@ export interface LocationsSliceActions {
   setLocationSearch: (search: string) => void;
 
   createLocation: () => Promise<string>;
+  createSpecificLocation: (location: Location) => Promise<string>;
   deleteLocation: (locationId: string) => Promise<void>;
   updateLocation: (
     locationId: string,
-    location: Partial<Location>
+    location: UpdateData<Location>
   ) => Promise<void>;
   updateLocationGMNotes: (
     locationId: string,

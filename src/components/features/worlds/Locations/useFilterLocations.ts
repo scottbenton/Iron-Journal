@@ -24,12 +24,13 @@ export function useFilterLocations(
     () =>
       sortedLocationIds.filter(
         (locationId) =>
-          locations[locationId].name
+          !locations[locationId].parentLocationId &&
+          (locations[locationId].name
             .toLowerCase()
             .includes(debouncedSearch.toLowerCase()) ||
-          locations[locationId].type
-            ?.toLocaleLowerCase()
-            ?.includes(debouncedSearch.toLocaleLowerCase())
+            locations[locationId].type
+              ?.toLocaleLowerCase()
+              ?.includes(debouncedSearch.toLocaleLowerCase()))
       ),
     [sortedLocationIds, locations, debouncedSearch]
   );

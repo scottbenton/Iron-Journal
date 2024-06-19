@@ -1,4 +1,4 @@
-import { updateDoc } from "firebase/firestore";
+import { UpdateData, updateDoc } from "firebase/firestore";
 import { Location } from "types/Locations.type";
 import { convertToDatabase, getLocationDoc } from "./_getRef";
 import { createApiFunction } from "api-calls/createApiFunction";
@@ -6,7 +6,7 @@ import { createApiFunction } from "api-calls/createApiFunction";
 interface LocationParams {
   worldId: string;
   locationId: string;
-  location: Partial<Location>;
+  location: UpdateData<Location>;
 }
 
 export const updateLocation = createApiFunction<LocationParams, void>(

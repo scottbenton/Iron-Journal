@@ -24,7 +24,7 @@ export function LocationCard(props: LocationCardProps) {
   if (location.type && settingConfig.locationTypeOverrides?.[location.type]) {
     settingConfig = {
       ...settingConfig,
-      ...settingConfig.locationTypeOverrides[location.type],
+      ...settingConfig.locationTypeOverrides[location.type].config,
     };
   }
 

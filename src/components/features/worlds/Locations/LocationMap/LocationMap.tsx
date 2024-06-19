@@ -1,0 +1,329 @@
+import {
+  Box,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemText,
+  Menu,
+} from "@mui/material";
+import { LocationHexagon, LocationHexagonProps } from "./LocationHexagon";
+import {
+  LocationMap as ILocationMap,
+  MapEntryType,
+} from "types/Locations.type";
+import { useStore } from "stores/store";
+import { useState } from "react";
+import { MapTool, MapTools } from "./MapTools.enum";
+import { MapToolChooser } from "./MapToolChooser";
+import { arrayUnion } from "firebase/firestore";
+import { LocationItemAvatar } from "./LocationItemAvatar";
+
+export interface LocationMapProps {
+  locationId: string;
+  map?: ILocationMap;
+}
+
+export function LocationMap(props: LocationMapProps) {
+  const { locationId, map = {} } = props;
+
+  const rows = 13;
+  const cols = 18;
+  const s = 20;
+
+  // Calculate SVG dimensions
+  const width: number = cols * s * Math.sqrt(3) + (s * Math.sqrt(3)) / 2; // Updated
+  const height: number = rows * 1.5 * s + s / 2 + 1; // Updated
+
+  const verticalSpacing: number = 1.5 * s; // Updated
+  const horizontalSpacing: number = s * Math.sqrt(3); // Updated
+  const offsetX: number = (s * Math.sqrt(3)) / 2; // New offset for vertical positioning
+
+  const locationMap = useStore(
+    (store) => store.worlds.currentWorld.currentWorldLocations.locationMap
+  );
+  const createLocation = useStore(
+    (store) =>
+      store.worlds.currentWorld.currentWorldLocations.createSpecificLocation
+  );
+  const updateLocation = useStore(
+    (store) => store.worlds.currentWorld.currentWorldLocations.updateLocation
+  );
+  const setOpenLocationId = useStore(
+    (store) => store.worlds.currentWorld.currentWorldLocations.setOpenLocationId
+  );
+
+  const [mapTool, setMapTool] = useState<MapTool>();
+
+  const [multiLocationChooserState, setMultiLocationChooserState] = useState<{
+    open: boolean;
+    locationIds: string[];
+    parentCell?: SVGPolygonElement;
+  }>({
+    open: false,
+    locationIds: [],
+  });
+
+  const handleHexClick = (
+    row: number,
+    col: number,
+    cellType: MapEntryType | undefined,
+    locationIds: string[] | undefined,
+    cellRef: SVGPolygonElement
+  ) => {
+    if (mapTool?.type === MapTools.AddPath) {
+      const currentCell = map[row]?.[col];
+      if (currentCell?.type !== MapEntryType.Location) {
+        updateLocation(locationId, {
+          [`map.${row}.${col}`]:
+            currentCell?.type === MapEntryType.Path
+              ? null
+              : {
+                  type: MapEntryType.Path,
+                },
+        });
+      }
+    } else if (mapTool?.type === MapTools.AddLocation) {
+      const type = mapTool.locationType;
+      createLocation({
+        name: "New Location",
+        parentLocationId: locationId,
+        type: type,
+        updatedDate: new Date(),
+        createdDate: new Date(),
+      })
+        .then((id) => {
+          updateLocation(locationId, {
+            [`map.${row}.${col}.type`]: MapEntryType.Location,
+            [`map.${row}.${col}.locationIds`]: arrayUnion(id),
+          }).catch(() => {});
+        })
+        .catch(() => {});
+      setMapTool(undefined);
+    } else if (!mapTool && locationIds) {
+      const filteredLocationIds = locationIds.filter((locationId) => {
+        return locationMap[locationId];
+      });
+      if (filteredLocationIds.length === 1) {
+        console.debug();
+        setOpenLocationId(locationIds[0]);
+      } else if (filteredLocationIds.length > 1) {
+        setMultiLocationChooserState({
+          open: true,
+          locationIds,
+          parentCell: cellRef,
+        });
+      }
+    }
+  };
+
+  return (
+    <Box
+      width={"100%"}
+      overflow={"hidden"}
+      sx={{
+        bgcolor: "background.mapBackground",
+        color: "#fff",
+        p: { xs: 2, md: 3 },
+        overflowX: "auto",
+      }}
+    >
+      <Box
+        sx={(theme) => ({
+          width: "100%",
+          color: "#fff",
+          "&>svg": {
+            display: "flex",
+            marginX: "auto",
+          },
+
+          "& .hexagon": {
+            cursor: "pointer",
+            fill: theme.palette.grey[900],
+            fillOpacity: "0%",
+            color: theme.palette.grey[600],
+            "&:hover": {
+              fill: theme.palette.grey[200],
+              fillOpacity: "20%",
+            },
+          },
+          "& .path-line": {
+            color: theme.palette.grey[300],
+            background: "none",
+            pointerEvents: "none",
+            height: 0,
+            overflow: "visible",
+          },
+        })}
+      >
+        <svg
+          width={width}
+          height={height}
+          style={{ minWidth: width, minHeight: height }}
+        >
+          {new Array(rows).fill(0).map((_, row) => {
+            return new Array(cols - (row % 2 === 1 ? 1 : 0))
+              .fill(0)
+              .map((_, col) => {
+                const x: number =
+                  col * horizontalSpacing + (row % 2 === 1 ? offsetX : 0) + s; // Offset every other row
+                const y: number = row * verticalSpacing + s; // Start with one hexagon's height
+
+                const mapEntry = map[row]?.[col];
+
+                let pathConnections: LocationHexagonProps["pathConnections"] =
+                  undefined;
+
+                if (mapEntry?.type === MapEntryType.Path) {
+                  pathConnections = getConnections(map, row, col);
+                }
+
+                const locationIds =
+                  mapEntry?.type === MapEntryType.Location
+                    ? mapEntry.locationIds
+                    : [];
+                const locations =
+                  mapEntry?.type === MapEntryType.Location
+                    ? mapEntry.locationIds
+                        .filter((locationId) => locationMap[locationId])
+                        .map((locationId) => {
+                          return locationMap[locationId];
+                        })
+                    : [];
+
+                return (
+                  <LocationHexagon
+                    key={`${x}-${y}`}
+                    x={x}
+                    y={y}
+                    size={s}
+                    locations={locations}
+                    isPath={mapEntry?.type === MapEntryType.Path}
+                    pathConnections={pathConnections}
+                    onClick={(cell) =>
+                      handleHexClick(
+                        row,
+                        col,
+                        mapEntry?.type,
+                        locationIds,
+                        cell
+                      )
+                    }
+                  />
+                );
+              });
+          })}
+          {new Array(rows).fill(0).map((r, row) => {
+            return new Array(cols - (row % 2 === 1 ? 1 : 0))
+              .fill(0)
+              .map((c, col) => {
+                const x: number =
+                  col * horizontalSpacing + (row % 2 === 1 ? offsetX : 0) + s; // Offset every other row
+                const y: number = row * verticalSpacing + s; // Start with one hexagon's height
+
+                let locationIds: string[] = [];
+                const hex = map[row]?.[col];
+                if (hex?.type === MapEntryType.Location) {
+                  locationIds = hex.locationIds;
+                }
+
+                let name: string | undefined = undefined;
+
+                if (locationIds.length === 1) {
+                  name = locationMap[locationIds[0]]?.name;
+                } else if (locationIds.length > 1) {
+                  name = `${locationIds.length} Locations`;
+                }
+
+                if (name) {
+                  return (
+                    <text
+                      key={`${x}-${y}`}
+                      x={x}
+                      y={y - (s * 3) / 4} // Position the label below the hexagon
+                      fontSize={(s * 3) / 4} // Adjust font size based on hexagon size
+                      textAnchor="middle" // Center the text
+                      fill={"#fff"}
+                    >
+                      {name}
+                    </text>
+                  );
+                } else {
+                  return null;
+                }
+              });
+          })}
+        </svg>
+        <Menu
+          open={multiLocationChooserState.open}
+          anchorEl={multiLocationChooserState.parentCell}
+          onClose={() =>
+            setMultiLocationChooserState((prev) => ({ ...prev, open: false }))
+          }
+        >
+          {multiLocationChooserState.locationIds.map((locationId) => {
+            const location = locationMap[locationId];
+            if (!location) return null;
+            return (
+              <ListItem
+                key={locationId}
+                onClick={() => {
+                  setOpenLocationId(locationId);
+                  setMultiLocationChooserState({
+                    open: false,
+                    locationIds: [],
+                  });
+                }}
+                disablePadding
+              >
+                <ListItemButton onClick={() => setOpenLocationId(locationId)}>
+                  <ListItemAvatar>
+                    <LocationItemAvatar location={location} />
+                  </ListItemAvatar>
+                  <ListItemText>{location.name}</ListItemText>
+                </ListItemButton>
+              </ListItem>
+            );
+          })}
+        </Menu>
+      </Box>
+      <MapToolChooser currentTool={mapTool} setCurrentTool={setMapTool} />
+    </Box>
+  );
+}
+
+const getConnections = (mapItems: ILocationMap, row: number, col: number) => {
+  const isEvenRow = row % 2 === 0;
+
+  // Default connections
+  const connections: LocationHexagonProps["pathConnections"] = {
+    topLeft: false,
+    topRight: false,
+    left: false,
+    right: false,
+    bottomLeft: false,
+    bottomRight: false,
+  };
+
+  // Check if there is a hexagon in the given direction
+  const hasHexagon = (r: number, c: number): boolean => {
+    return !!mapItems[r]?.[c]?.type;
+  };
+
+  if (isEvenRow) {
+    connections.topLeft = hasHexagon(row - 1, col - 1);
+    connections.topRight = hasHexagon(row - 1, col);
+    connections.left = hasHexagon(row, col - 1);
+    connections.right = hasHexagon(row, col + 1);
+    connections.bottomLeft = hasHexagon(row + 1, col - 1);
+    connections.bottomRight = hasHexagon(row + 1, col);
+  } else {
+    connections.topLeft = hasHexagon(row - 1, col);
+    connections.topRight = hasHexagon(row - 1, col + 1);
+    connections.left = hasHexagon(row, col - 1);
+    connections.right = hasHexagon(row, col + 1);
+    connections.bottomLeft = hasHexagon(row + 1, col);
+    connections.bottomRight = hasHexagon(row + 1, col + 1);
+  }
+
+  return connections;
+};

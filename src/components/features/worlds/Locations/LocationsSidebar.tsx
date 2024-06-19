@@ -1,12 +1,6 @@
-import {
-  Box,
-  Hidden,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
+import { Box, Hidden, List } from "@mui/material";
 import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
+import { LocationsSidebarItem } from "./LocationsSidebarItem";
 
 export interface LocationsSidebarProps {
   locationIds: string[];
@@ -25,27 +19,30 @@ export function LocationsSidebar(props: LocationsSidebarProps) {
     showHiddenText,
   } = props;
 
+  const locationParentMap: Record<string, string[]> = {};
+
+  locationIds.forEach((locationId) => {
+    const parentId = locations[locationId].parentLocationId ?? "root";
+    if (!locationParentMap[parentId]) {
+      locationParentMap[parentId] = [];
+    }
+    locationParentMap[parentId].push(locationId);
+  });
+
   return (
     <Hidden smDown>
       <Box overflow={"auto"} flexGrow={1} minWidth={200} maxWidth={400}>
         <List>
-          {locationIds.map((locationId) => (
-            <ListItem key={locationId} disablePadding>
-              <ListItemButton
-                onClick={() => setOpenLocationId(locationId)}
-                selected={locationId === openLocationId}
-              >
-                <ListItemText
-                  primary={locations[locationId].name}
-                  secondary={
-                    showHiddenText &&
-                    (!locations[locationId].sharedWithPlayers
-                      ? "Hidden"
-                      : "Shared")
-                  }
-                />
-              </ListItemButton>
-            </ListItem>
+          {locationParentMap["root"]?.map((locationId) => (
+            <LocationsSidebarItem
+              key={locationId}
+              locationId={locationId}
+              locationParentMap={locationParentMap}
+              locations={locations}
+              openLocationId={openLocationId}
+              setOpenLocationId={setOpenLocationId}
+              showHiddenText={showHiddenText}
+            />
           ))}
         </List>
       </Box>
