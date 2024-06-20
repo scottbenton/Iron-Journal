@@ -126,7 +126,7 @@ export function LocationsSection(props: LocationsSectionProps) {
               <LocationCard
                 key={locationId}
                 location={locations[locationId]}
-                openLocation={() => setOpenLocationId(locationId)}
+                onClick={() => setOpenLocationId(locationId)}
                 showHiddenTag={shouldShowHiddenTag}
               />
             </Grid>

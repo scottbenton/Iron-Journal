@@ -5,6 +5,7 @@ import {
   doc,
   DocumentReference,
   Timestamp,
+  UpdateData,
 } from "firebase/firestore";
 import { Location } from "types/Locations.type";
 import {
@@ -82,16 +83,16 @@ export function getPublicNotesLocationDoc(worldId: string, locationId: string) {
 }
 
 export function convertToDatabase(
-  location: Partial<Location>
-): Partial<LocationDocument> {
+  location: Location | UpdateData<Location>
+): UpdateData<LocationDocument> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { updatedDate, createdDate, ...restLocation } = location;
-  const newLocation: Partial<LocationDocument> = {
+  const newLocation: UpdateData<LocationDocument> = {
     updatedTimestamp: Timestamp.now(),
     ...restLocation,
   };
 
-  if (createdDate) {
+  if (createdDate && createdDate instanceof Date) {
     newLocation.createdTimestamp = Timestamp.fromDate(createdDate);
   }
 

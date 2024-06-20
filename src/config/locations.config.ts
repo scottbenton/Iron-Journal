@@ -19,12 +19,18 @@ export interface NameConfig {
 
 export type FieldConfig = OracleFieldConfig;
 
-interface ILocationConfig {
+export interface ILocationConfig {
   name?: NameConfig;
   sharedFields?: FieldConfig[];
   gmFields?: FieldConfig[];
   showBasicBond?: boolean;
-  locationTypeOverrides?: Record<string, Partial<ILocationConfig>>;
+  locationTypeOverrides?: Record<
+    string,
+    {
+      label: string;
+      config: ILocationConfig;
+    }
+  >;
   defaultIcon: RequiredIconDefinition;
 }
 
@@ -68,6 +74,44 @@ export const locationConfigs: Record<string, ILocationConfig | undefined> = {
     defaultIcon: {
       key: "GiCompass",
       color: IconColors.White,
+    },
+    locationTypeOverrides: {
+      settlement: {
+        label: "Settlement",
+        config: {
+          defaultIcon: {
+            key: "GiVikingLonghouse",
+            color: IconColors.Brown,
+          },
+        },
+      },
+      tower: {
+        label: "Tower",
+        config: {
+          defaultIcon: {
+            key: "GiStoneTower",
+            color: IconColors.Grey,
+          },
+        },
+      },
+      ruin: {
+        label: "Ruin",
+        config: {
+          defaultIcon: {
+            key: "GiBrokenWall",
+            color: IconColors.Grey,
+          },
+        },
+      },
+      camp: {
+        label: "Camp",
+        config: {
+          defaultIcon: {
+            key: "GiCampfire",
+            color: IconColors.Orange,
+          },
+        },
+      },
     },
   },
 };

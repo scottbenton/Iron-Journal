@@ -1,16 +1,23 @@
 import {
   Alert,
+  Autocomplete,
   Box,
   Checkbox,
   FormControlLabel,
   Grid,
   IconButton,
+  Tab,
+  Tabs,
+  TextField,
   Tooltip,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useConfirm } from "material-ui-confirm";
 import { RtcRichTextEditor } from "components/shared/RichTextEditor/RtcRichTextEditor";
-import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
+import {
+  LocationTab,
+  LocationWithGMProperties,
+} from "stores/world/currentWorld/locations/locations.slice.type";
 import { useStore } from "stores/store";
 import { useListenToCurrentLocation } from "stores/world/currentWorld/locations/useListenToCurrentLocation";
 import { BondsSection } from "components/features/worlds/BondsSection";
@@ -23,6 +30,7 @@ import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import {
   FieldConfig,
+  ILocationConfig,
   NameConfig,
   locationConfigs,
 } from "config/locations.config";
@@ -31,6 +39,10 @@ import { DebouncedOracleInput } from "components/shared/DebouncedOracleInput";
 import { PageWithImage } from "../common/PageWithImage";
 import { IconColors } from "types/Icon.type";
 import { mergeIcons } from "components/shared/GameIcons/mergeIcons";
+import MapIcon from "@mui/icons-material/Map";
+import { LocationMap } from "./LocationMap";
+import { SubLocations } from "./SubLocations";
+import { useNewMaps } from "hooks/featureFlags/useNewMaps";
 
 export interface OpenLocationProps {
   worldId: string;
@@ -50,7 +62,6 @@ export function OpenLocation(props: OpenLocationProps) {
     showHiddenTag,
     openNPCTab,
   } = props;
-
   const { showGMFields, showGMTips, isGuidedGame } = useWorldPermissions();
 
   // Todo - replace with world type from datasworn once released
@@ -58,11 +69,17 @@ export function OpenLocation(props: OpenLocationProps) {
     [GAME_SYSTEMS.IRONSWORN]: "ironlands",
     [GAME_SYSTEMS.STARFORGED]: "forge",
   });
-  let settingConfig = { ...locationConfigs[settingId] };
+  let settingConfig: ILocationConfig = {
+    ...locationConfigs[settingId],
+    defaultIcon: {
+      key: "GiCompass",
+      color: IconColors.White,
+    },
+  };
   if (location.type && settingConfig.locationTypeOverrides?.[location.type]) {
     settingConfig = {
       ...settingConfig,
-      ...settingConfig?.locationTypeOverrides[location.type],
+      ...settingConfig?.locationTypeOverrides[location.type]?.config,
     };
   }
   useListenToCurrentLocation(locationId);
@@ -105,6 +122,13 @@ export function OpenLocation(props: OpenLocationProps) {
     (store) =>
       store.worlds.currentWorld.currentWorldLocations
         .updateLocationCharacterBond
+  );
+
+  const currentTab = useStore(
+    (store) => store.worlds.currentWorld.currentWorldLocations.openTab
+  );
+  const setCurrentTab = useStore(
+    (store) => store.worlds.currentWorld.currentWorldLocations.setLocationTab
   );
 
   const nameConfig: NameConfig | undefined = settingConfig.name;
@@ -153,6 +177,8 @@ export function OpenLocation(props: OpenLocationProps) {
     location.icon
   );
 
+  const showNewMaps = useNewMaps();
+
   return (
     <PageWithImage
       imageUrl={location.imageUrl}
@@ -160,11 +186,37 @@ export function OpenLocation(props: OpenLocationProps) {
       actions={
         <>
           {showGMFields && (
-            <Tooltip title={"Delete"}>
-              <IconButton onClick={() => handleLocationDelete()}>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
+            <>
+              {showNewMaps && (
+                <Tooltip
+                  title={`Toggle Map ${location.showMap ? "Off" : "On"}`}
+                >
+                  <IconButton
+                    onClick={() => {
+                      updateLocation(locationId, {
+                        showMap: !location.showMap,
+                      }).catch(() => {});
+                    }}
+                    sx={{
+                      bgcolor: location.showMap ? "darkGrey.main" : undefined,
+                      color: location.showMap
+                        ? "darkGrey.contrastText"
+                        : undefined,
+                      "&:hover": {
+                        bgcolor: location.showMap ? "darkGrey.dark" : undefined,
+                      },
+                    }}
+                  >
+                    <MapIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
+              <Tooltip title={"Delete"}>
+                <IconButton onClick={() => handleLocationDelete()}>
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            </>
           )}
         </>
       }
@@ -198,139 +250,218 @@ export function OpenLocation(props: OpenLocationProps) {
     >
       <Box display={"flex"} flexDirection={"column"}>
         <Box mt={1}>
+          {location.showMap && showNewMaps && (
+            <Box sx={{ mx: { xs: -2, md: -3 } }}>
+              <LocationMap locationId={locationId} map={location.map} />
+            </Box>
+          )}
+
+          <Box sx={{ mx: { xs: -2, md: -3 } }}>
+            <Tabs
+              centered
+              indicatorColor="primary"
+              value={currentTab}
+              onChange={(_, tab) => setCurrentTab(tab)}
+            >
+              <Tab value={LocationTab.Notes} label={"Notes"} />
+              <Tab value={LocationTab.NPCs} label={"NPCs"} />
+              {showNewMaps && (
+                <Tab value={LocationTab.SubLocations} label={"Sub-Locations"} />
+              )}
+            </Tabs>
+          </Box>
           <Grid container spacing={2} sx={{ mb: 2 }}>
-            {sharedFieldConfig.map((field) => (
-              <Grid item xs={12} md={6} key={field.key}>
-                <LocationField
-                  locationId={locationId}
-                  location={location}
-                  field={field}
-                  isGMField={false}
-                />
-              </Grid>
-            ))}
-            {showGMFields && (
+            {currentTab === LocationTab.Notes && (
               <>
-                {showGMTips && (
-                  <>
-                    <Grid item xs={12}>
-                      <GuideOnlyHeader breakContainer />
-                    </Grid>
-                  </>
-                )}
-                {gmFieldConfig.map((field) => (
+                <Grid item xs={12} />
+                <Grid item xs={12} sm={6}>
+                  <Autocomplete
+                    freeSolo
+                    autoSelect
+                    options={Object.values(
+                      settingConfig.locationTypeOverrides ?? {}
+                    ).map((config) => config.label)}
+                    value={getLabelFromTypeKey(settingConfig, location.type)}
+                    onChange={(evt, value) => {
+                      updateLocation(locationId, {
+                        type: getTypeKeyFromLabel(settingConfig, value),
+                      });
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={"Location Type"}
+                        fullWidth
+                      />
+                    )}
+                  />
+                </Grid>
+                {sharedFieldConfig.map((field) => (
                   <Grid item xs={12} md={6} key={field.key}>
                     <LocationField
                       locationId={locationId}
                       location={location}
                       field={field}
-                      isGMField
+                      isGMField={false}
                     />
                   </Grid>
                 ))}
-                {isGuidedGame && showGMFields && (
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                    sx={{ alignItems: "center", display: "flex" }}
-                  >
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={location.sharedWithPlayers ?? false}
-                          onChange={(evt, value) =>
-                            updateLocation(locationId, {
-                              sharedWithPlayers: value,
-                            }).catch(() => {})
-                          }
+
+                {showGMFields && (
+                  <>
+                    {showGMTips && (
+                      <>
+                        <Grid item xs={12}>
+                          <GuideOnlyHeader breakContainer />
+                        </Grid>
+                      </>
+                    )}
+                    {gmFieldConfig.map((field) => (
+                      <Grid item xs={12} md={6} key={field.key}>
+                        <LocationField
+                          locationId={locationId}
+                          location={location}
+                          field={field}
+                          isGMField
                         />
-                      }
-                      label="Visible to Players"
-                    />
-                  </Grid>
+                      </Grid>
+                    ))}
+                    {isGuidedGame && showGMFields && (
+                      <Grid
+                        item
+                        xs={12}
+                        md={6}
+                        sx={{ alignItems: "center", display: "flex" }}
+                      >
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={location.sharedWithPlayers ?? false}
+                              onChange={(evt, value) =>
+                                updateLocation(locationId, {
+                                  sharedWithPlayers: value,
+                                }).catch(() => {})
+                              }
+                            />
+                          }
+                          label="Visible to Players"
+                        />
+                      </Grid>
+                    )}
+                    {!isGuidedGame && settingConfig.showBasicBond && (
+                      <BondsSection
+                        isStarforged={false}
+                        hasConnection={false}
+                        onBondToggle={
+                          currentCharacterId
+                            ? (bonded) =>
+                                updateLocationCharacterBond(
+                                  locationId,
+                                  currentCharacterId,
+                                  bonded
+                                ).catch(() => {})
+                            : undefined
+                        }
+                        isBonded={singleplayerBond}
+                      />
+                    )}
+                    <Grid item xs={12}>
+                      <RtcRichTextEditor
+                        id={locationId}
+                        roomPrefix={`iron-fellowship-${worldId}-location-gmnotes-`}
+                        documentPassword={worldId}
+                        onSave={updateLocationGMNotes}
+                        initialValue={location.gmProperties?.gmNotes}
+                      />
+                    </Grid>
+                  </>
                 )}
-                {!isGuidedGame && settingConfig.showBasicBond && (
-                  <BondsSection
-                    isStarforged={false}
-                    hasConnection={false}
-                    onBondToggle={
-                      currentCharacterId
-                        ? (bonded) =>
-                            updateLocationCharacterBond(
-                              locationId,
-                              currentCharacterId,
-                              bonded
-                            ).catch(() => {})
-                        : undefined
-                    }
-                    isBonded={singleplayerBond}
-                  />
+                {isGuidedGame && (
+                  <>
+                    {showGMTips && (
+                      <Grid item xs={12}>
+                        <GuideAndPlayerHeader breakContainer />
+                      </Grid>
+                    )}
+                    {settingConfig.showBasicBond && (
+                      <BondsSection
+                        isStarforged={false}
+                        hasConnection={false}
+                        onBondToggle={
+                          currentCharacterId
+                            ? (bonded) =>
+                                updateLocationCharacterBond(
+                                  locationId,
+                                  currentCharacterId,
+                                  bonded
+                                ).catch(() => {})
+                            : undefined
+                        }
+                        isBonded={singleplayerBond}
+                      />
+                    )}
+                    {!location.sharedWithPlayers && (
+                      <Grid item xs={12}>
+                        <Alert severity="warning">
+                          These notes are not yet visible to players because
+                          this location is hidden from them.
+                        </Alert>
+                      </Grid>
+                    )}
+                    <Grid item xs={12}>
+                      {(location.notes || location.notes === null) && (
+                        <RtcRichTextEditor
+                          id={locationId}
+                          roomPrefix={`iron-fellowship-${worldId}-location-`}
+                          documentPassword={worldId}
+                          onSave={updateLocationNotes}
+                          initialValue={location.notes || undefined}
+                        />
+                      )}
+                    </Grid>
+                  </>
                 )}
-                <Grid item xs={12}>
-                  <RtcRichTextEditor
-                    id={locationId}
-                    roomPrefix={`iron-fellowship-${worldId}-location-gmnotes-`}
-                    documentPassword={worldId}
-                    onSave={updateLocationGMNotes}
-                    initialValue={location.gmProperties?.gmNotes}
-                  />
-                </Grid>
               </>
             )}
-            {isGuidedGame && (
-              <>
-                {showGMTips && (
-                  <Grid item xs={12}>
-                    <GuideAndPlayerHeader breakContainer />
-                  </Grid>
-                )}
-                {settingConfig.showBasicBond && (
-                  <BondsSection
-                    isStarforged={false}
-                    hasConnection={false}
-                    onBondToggle={
-                      currentCharacterId
-                        ? (bonded) =>
-                            updateLocationCharacterBond(
-                              locationId,
-                              currentCharacterId,
-                              bonded
-                            ).catch(() => {})
-                        : undefined
-                    }
-                    isBonded={singleplayerBond}
-                  />
-                )}
-                {!location.sharedWithPlayers && (
-                  <Grid item xs={12}>
-                    <Alert severity="warning">
-                      These notes are not yet visible to players because this
-                      location is hidden from them.
-                    </Alert>
-                  </Grid>
-                )}
-                <Grid item xs={12}>
-                  {(location.notes || location.notes === null) && (
-                    <RtcRichTextEditor
-                      id={locationId}
-                      roomPrefix={`iron-fellowship-${worldId}-location-`}
-                      documentPassword={worldId}
-                      onSave={updateLocationNotes}
-                      initialValue={location.notes || undefined}
-                    />
-                  )}
-                </Grid>
-              </>
+            {currentTab === LocationTab.NPCs && (
+              <LocationNPCs
+                locationId={locationId}
+                showHiddenTag={showHiddenTag}
+                openNPCTab={openNPCTab}
+              />
             )}
-            <LocationNPCs
-              locationId={locationId}
-              showHiddenTag={showHiddenTag}
-              openNPCTab={openNPCTab}
-            />
+            {currentTab === LocationTab.SubLocations && (
+              <SubLocations locationId={locationId} />
+            )}
           </Grid>
         </Box>
       </Box>
     </PageWithImage>
   );
 }
+
+const getTypeKeyFromLabel = (
+  config: ILocationConfig | undefined,
+  label: string | undefined | null
+): string => {
+  const overrides = config?.locationTypeOverrides;
+  if (!overrides || !label) {
+    return label ?? "";
+  }
+  const matchingOption = Object.keys(overrides).find(
+    (optionKey) => overrides[optionKey].label === label
+  );
+  return matchingOption ?? label;
+};
+
+const getLabelFromTypeKey = (
+  config: ILocationConfig | undefined,
+  key: string | null | undefined
+): string => {
+  const overrides = config?.locationTypeOverrides;
+  if (!overrides || !key) {
+    return key ?? "";
+  }
+
+  return overrides[key]?.label ?? key;
+};

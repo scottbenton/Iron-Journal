@@ -1,5 +1,5 @@
 import { CreateSliceType } from "stores/store.type";
-import { LocationsSlice } from "./locations.slice.type";
+import { LocationTab, LocationsSlice } from "./locations.slice.type";
 import { defaultLocationsSlice } from "./locations.slice.default";
 import { listenToLocations } from "api-calls/world/locations/listenToLocations";
 import { createLocation } from "api-calls/world/locations/createLocation";
@@ -15,6 +15,7 @@ import { Unsubscribe } from "firebase/firestore";
 import { listenToLocationGMProperties } from "api-calls/world/locations/listenToLocationGMProperties";
 import { updateLocationCharacterBond } from "api-calls/world/locations/updateLocationCharacterBond";
 import { removeLocationImage } from "api-calls/world/locations/removeLocationImage";
+import { createSpecificLocation } from "api-calls/world/locations/createSpecificLocation";
 
 export const createLocationsSlice: CreateSliceType<LocationsSlice> = (
   set,
@@ -76,6 +77,13 @@ export const createLocationsSlice: CreateSliceType<LocationsSlice> = (
     set((store) => {
       store.worlds.currentWorld.currentWorldLocations.openLocationId =
         locationId;
+      store.worlds.currentWorld.currentWorldLocations.openTab =
+        LocationTab.Notes;
+    });
+  },
+  setLocationTab: (tab) => {
+    set((store) => {
+      store.worlds.currentWorld.currentWorldLocations.openTab = tab;
     });
   },
   setLocationSearch: (search) => {
@@ -90,6 +98,13 @@ export const createLocationsSlice: CreateSliceType<LocationsSlice> = (
       return new Promise((res, reject) => reject("No world found"));
     }
     return createLocation({ worldId });
+  },
+  createSpecificLocation: (location) => {
+    const worldId = getState().worlds.currentWorld.currentWorldId;
+    if (!worldId) {
+      return new Promise((res, reject) => reject("No world found"));
+    }
+    return createSpecificLocation({ worldId, location });
   },
   deleteLocation: (locationId) => {
     const currentWorld = getState().worlds.currentWorld;

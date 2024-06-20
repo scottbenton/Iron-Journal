@@ -8,12 +8,12 @@ import { mergeIcons } from "components/shared/GameIcons/mergeIcons";
 
 export interface LocationCardProps {
   location: LocationWithGMProperties;
-  openLocation: () => void;
+  onClick: () => void;
   showHiddenTag?: boolean;
 }
 
 export function LocationCard(props: LocationCardProps) {
-  const { location, openLocation, showHiddenTag } = props;
+  const { location, onClick: openLocation, showHiddenTag } = props;
 
   // Todo - replace with world type from datasworn once released
   const settingId = useGameSystemValue({
@@ -24,7 +24,7 @@ export function LocationCard(props: LocationCardProps) {
   if (location.type && settingConfig.locationTypeOverrides?.[location.type]) {
     settingConfig = {
       ...settingConfig,
-      ...settingConfig.locationTypeOverrides[location.type],
+      ...settingConfig.locationTypeOverrides[location.type].config,
     };
   }
 
