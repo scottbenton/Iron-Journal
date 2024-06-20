@@ -243,7 +243,11 @@ export function LocationMap(props: LocationMapProps) {
                 let locationIds: string[] = [];
                 const hex = map[row]?.[col];
                 if (hex?.type === MapEntryType.Location) {
-                  locationIds = hex.locationIds;
+                  locationIds = getValidLocations(
+                    locationId,
+                    locationMap,
+                    hex.locationIds
+                  );
                 }
 
                 let name: string | undefined = undefined;
