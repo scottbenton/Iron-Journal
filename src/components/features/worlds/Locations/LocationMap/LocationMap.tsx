@@ -9,14 +9,13 @@ import {
 import { LocationHexagon, LocationHexagonProps } from "./LocationHexagon";
 import {
   LocationMap as ILocationMap,
-  MapEntry,
   MapEntryType,
 } from "types/Locations.type";
 import { useStore } from "stores/store";
 import { useState } from "react";
 import { MapTool, MapTools } from "./MapTools.enum";
 import { MapToolChooser } from "./MapToolChooser";
-import { arrayRemove, arrayUnion } from "firebase/firestore";
+import { arrayUnion } from "firebase/firestore";
 import { LocationItemAvatar } from "./LocationItemAvatar";
 import { checkIsLocationCell, getValidLocations } from "./checkIsLocationCell";
 import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
@@ -53,6 +52,9 @@ export function LocationMap(props: LocationMapProps) {
   );
   const setOpenLocationId = useStore(
     (store) => store.worlds.currentWorld.currentWorldLocations.setOpenLocationId
+  );
+  const moveLocation = useStore(
+    (store) => store.worlds.currentWorld.currentWorldLocations.moveLocation
   );
 
   const [mapTool, setMapTool] = useState<MapTool>();
@@ -105,47 +107,17 @@ export function LocationMap(props: LocationMapProps) {
         .catch(() => {});
       setMapTool(undefined);
     } else if (mapTool?.type === MapTools.MoveLocation) {
-      const movingLocation = locationMap[mapTool.locationId];
-      // Remove the previous location from the map
-      const parentId = movingLocation.parentLocationId;
-      if (parentId) {
-        const parentLocation = locationMap[parentId];
-        if (parentLocation) {
-          const parentMap = parentLocation.map as Record<
-            string,
-            Record<string, MapEntry>
-          >;
-          if (parentMap) {
-            Object.keys(parentMap ?? {}).forEach((row) => {
-              Object.keys(parentMap[row]).forEach((col) => {
-                const entry = parentMap[row][col];
-                if (
-                  entry?.type === MapEntryType.Location &&
-                  entry.locationIds.includes(mapTool.locationId)
-                ) {
-                  updateLocation(parentId, {
-                    [`map.${row}.${col}.locationIds`]: arrayRemove(
-                      mapTool.locationId
-                    ),
-                  }).catch(() => {});
-                }
-              });
-            });
-          }
-        }
+      const locationToMove = locationMap[mapTool.locationId];
+      if (locationToMove) {
+        moveLocation(
+          mapTool.locationId,
+          locationToMove,
+          locationId,
+          row,
+          col
+        ).catch(() => {});
+        setMapTool(undefined);
       }
-      // Update the location with the new parent
-      updateLocation(mapTool.locationId, {
-        parentLocationId: locationId,
-      }).catch(() => {});
-
-      // Add the new location to the map
-      updateLocation(locationId, {
-        [`map.${row}.${col}.type`]: MapEntryType.Location,
-        [`map.${row}.${col}.locationIds`]: arrayUnion(mapTool.locationId),
-      }).catch(() => {});
-
-      setMapTool(undefined);
     } else if (!mapTool && locationIds) {
       const filteredLocationIds = getValidLocations(
         locationId,

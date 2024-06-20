@@ -11,11 +11,12 @@ import { updateLocationNotes } from "api-calls/world/locations/updateLocationNot
 import { uploadLocationImage } from "api-calls/world/locations/uploadLocationImage";
 import { listenToLocationNotes } from "api-calls/world/locations/listenToLocationNotes";
 import { reportApiError } from "lib/analytics.lib";
-import { Unsubscribe } from "firebase/firestore";
+import { Unsubscribe, arrayRemove, arrayUnion } from "firebase/firestore";
 import { listenToLocationGMProperties } from "api-calls/world/locations/listenToLocationGMProperties";
 import { updateLocationCharacterBond } from "api-calls/world/locations/updateLocationCharacterBond";
 import { removeLocationImage } from "api-calls/world/locations/removeLocationImage";
 import { createSpecificLocation } from "api-calls/world/locations/createSpecificLocation";
+import { MapEntry, MapEntryType } from "types/Locations.type";
 
 export const createLocationsSlice: CreateSliceType<LocationsSlice> = (
   set,
@@ -116,6 +117,57 @@ export const createLocationsSlice: CreateSliceType<LocationsSlice> = (
       return new Promise((res, reject) => reject("No world found"));
     }
     return deleteLocation({ worldId, locationId, imageFilename });
+  },
+  moveLocation: (locationId, location, parentId, row, col) => {
+    const worldId = getState().worlds.currentWorld.currentWorldId;
+    const updateLocation =
+      getState().worlds.currentWorld.currentWorldLocations.updateLocation;
+    if (!worldId) {
+      return new Promise((res, reject) => reject("No world found"));
+    }
+    // Remove the previous location from the map
+    const oldParentId = location.parentLocationId;
+    if (oldParentId) {
+      const parentLocation =
+        getState().worlds.currentWorld.currentWorldLocations.locationMap[
+          oldParentId
+        ];
+      if (parentLocation) {
+        const parentMap = parentLocation.map as Record<
+          string,
+          Record<string, MapEntry>
+        >;
+        if (parentMap) {
+          Object.keys(parentMap ?? {}).forEach((row) => {
+            Object.keys(parentMap[row]).forEach((col) => {
+              const entry = parentMap[row][col];
+              if (
+                entry?.type === MapEntryType.Location &&
+                entry.locationIds.includes(locationId)
+              ) {
+                updateLocation(oldParentId, {
+                  [`map.${row}.${col}.locationIds`]: arrayRemove(locationId),
+                }).catch(() => {});
+              }
+            });
+          });
+        }
+      }
+    }
+    // Update the location with the new parent
+    updateLocation(locationId, {
+      parentLocationId: parentId ?? null,
+    }).catch(() => {});
+
+    if (typeof row === "number" && typeof col === "number" && parentId) {
+      // Add the new location to the map
+      return updateLocation(parentId, {
+        [`map.${row}.${col}.type`]: MapEntryType.Location,
+        [`map.${row}.${col}.locationIds`]: arrayUnion(locationId),
+      });
+    } else {
+      return Promise.resolve();
+    }
   },
   updateLocation: (locationId, partialLocation) => {
     const worldId = getState().worlds.currentWorld.currentWorldId;

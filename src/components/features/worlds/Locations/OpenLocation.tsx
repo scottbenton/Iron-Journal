@@ -43,6 +43,9 @@ import MapIcon from "@mui/icons-material/Map";
 import { LocationMap } from "./LocationMap";
 import { SubLocations } from "./SubLocations";
 import { useNewMaps } from "hooks/featureFlags/useNewMaps";
+import MoveLocationIcon from "@mui/icons-material/ModeOfTravel";
+import { useState } from "react";
+import { MoveLocationDialog } from "./MoveLocationDialog";
 
 export interface OpenLocationProps {
   worldId: string;
@@ -179,6 +182,8 @@ export function OpenLocation(props: OpenLocationProps) {
 
   const showNewMaps = useNewMaps();
 
+  const [moveLocationDialogOpen, setMoveLocationDialogOpen] = useState(false);
+
   return (
     <PageWithImage
       imageUrl={location.imageUrl}
@@ -188,28 +193,37 @@ export function OpenLocation(props: OpenLocationProps) {
           {showGMFields && (
             <>
               {showNewMaps && (
-                <Tooltip
-                  title={`Toggle Map ${location.showMap ? "Off" : "On"}`}
-                >
-                  <IconButton
-                    onClick={() => {
-                      updateLocation(locationId, {
-                        showMap: !location.showMap,
-                      }).catch(() => {});
-                    }}
-                    sx={{
-                      bgcolor: location.showMap ? "darkGrey.main" : undefined,
-                      color: location.showMap
-                        ? "darkGrey.contrastText"
-                        : undefined,
-                      "&:hover": {
-                        bgcolor: location.showMap ? "darkGrey.dark" : undefined,
-                      },
-                    }}
+                <>
+                  <Tooltip title={"Move Location"}>
+                    <IconButton onClick={() => setMoveLocationDialogOpen(true)}>
+                      <MoveLocationIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip
+                    title={`Toggle Map ${location.showMap ? "Off" : "On"}`}
                   >
-                    <MapIcon />
-                  </IconButton>
-                </Tooltip>
+                    <IconButton
+                      onClick={() => {
+                        updateLocation(locationId, {
+                          showMap: !location.showMap,
+                        }).catch(() => {});
+                      }}
+                      sx={{
+                        bgcolor: location.showMap ? "darkGrey.main" : undefined,
+                        color: location.showMap
+                          ? "darkGrey.contrastText"
+                          : undefined,
+                        "&:hover": {
+                          bgcolor: location.showMap
+                            ? "darkGrey.dark"
+                            : undefined,
+                        },
+                      }}
+                    >
+                      <MapIcon />
+                    </IconButton>
+                  </Tooltip>
+                </>
               )}
               <Tooltip title={"Delete"}>
                 <IconButton onClick={() => handleLocationDelete()}>
@@ -436,6 +450,12 @@ export function OpenLocation(props: OpenLocationProps) {
           </Grid>
         </Box>
       </Box>
+      <MoveLocationDialog
+        open={moveLocationDialogOpen}
+        onClose={() => setMoveLocationDialogOpen(false)}
+        locationId={locationId}
+        location={location}
+      />
     </PageWithImage>
   );
 }

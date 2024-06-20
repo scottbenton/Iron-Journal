@@ -90,7 +90,7 @@ export function LocationsSidebarItem(props: LocationsSidebarItemProps) {
         </ListItemButton>
       </ListItem>
 
-      {isExpanded && (
+      {isExpanded && children.length > 0 && (
         <List
           sx={(theme) => ({
             ml: 1,
