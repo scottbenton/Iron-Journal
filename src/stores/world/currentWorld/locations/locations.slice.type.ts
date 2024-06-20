@@ -35,6 +35,13 @@ export interface LocationsSliceActions {
     locationId: string,
     location: UpdateData<Location>
   ) => Promise<void>;
+  moveLocation: (
+    locationId: string,
+    location: LocationWithGMProperties,
+    parentId: string | undefined,
+    row: number | undefined,
+    col: number | undefined
+  ) => Promise<void>;
   updateLocationGMNotes: (
     locationId: string,
     notes: Uint8Array,
