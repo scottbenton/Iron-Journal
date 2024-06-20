@@ -31,7 +31,7 @@ export function LocationsSidebar(props: LocationsSidebarProps) {
 
   return (
     <Hidden smDown>
-      <Box overflow={"auto"} flexGrow={1} minWidth={200} maxWidth={400}>
+      <Box overflow={"auto"} minWidth={200} maxWidth={400}>
         <List>
           {locationParentMap["root"]?.map((locationId) => (
             <LocationsSidebarItem

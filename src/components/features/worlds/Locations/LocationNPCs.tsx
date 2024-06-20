@@ -1,5 +1,6 @@
 import { Grid } from "@mui/material";
 import { NPCCard } from "components/features/worlds/NPCSection/NPCCard";
+import { EmptyState } from "components/shared/EmptyState";
 import { SectionHeading } from "components/shared/SectionHeading";
 import { useStore } from "stores/store";
 
@@ -28,7 +29,11 @@ export function LocationNPCs(props: LocationNPCProps) {
   );
 
   if (filteredNPCs.length <= 0) {
-    return null;
+    return (
+      <Grid item xs={12}>
+        <EmptyState message="No NPCs added to this location yet." />
+      </Grid>
+    );
   }
 
   return (

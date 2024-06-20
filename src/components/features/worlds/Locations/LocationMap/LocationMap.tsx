@@ -9,13 +9,14 @@ import {
 import { LocationHexagon, LocationHexagonProps } from "./LocationHexagon";
 import {
   LocationMap as ILocationMap,
+  MapEntry,
   MapEntryType,
 } from "types/Locations.type";
 import { useStore } from "stores/store";
 import { useState } from "react";
 import { MapTool, MapTools } from "./MapTools.enum";
 import { MapToolChooser } from "./MapToolChooser";
-import { arrayUnion } from "firebase/firestore";
+import { arrayRemove, arrayUnion } from "firebase/firestore";
 import { LocationItemAvatar } from "./LocationItemAvatar";
 
 export interface LocationMapProps {
@@ -70,6 +71,7 @@ export function LocationMap(props: LocationMapProps) {
     locationIds: string[] | undefined,
     cellRef: SVGPolygonElement
   ) => {
+    // TODO - check if location still exists when overwriting. If it doesn't, we can overwrite it no problem
     if (mapTool?.type === MapTools.AddPath) {
       const currentCell = map[row]?.[col];
       if (currentCell?.type !== MapEntryType.Location) {
@@ -98,6 +100,48 @@ export function LocationMap(props: LocationMapProps) {
           }).catch(() => {});
         })
         .catch(() => {});
+      setMapTool(undefined);
+    } else if (mapTool?.type === MapTools.MoveLocation) {
+      const movingLocation = locationMap[mapTool.locationId];
+      // Remove the previous location from the map
+      const parentId = movingLocation.parentLocationId;
+      if (parentId) {
+        const parentLocation = locationMap[parentId];
+        if (parentLocation) {
+          const parentMap = parentLocation.map as Record<
+            string,
+            Record<string, MapEntry>
+          >;
+          if (parentMap) {
+            Object.keys(parentMap ?? {}).forEach((row) => {
+              Object.keys(parentMap[row]).forEach((col) => {
+                const entry = parentMap[row][col];
+                if (
+                  entry?.type === MapEntryType.Location &&
+                  entry.locationIds.includes(mapTool.locationId)
+                ) {
+                  updateLocation(parentId, {
+                    [`map.${row}.${col}.locationIds`]: arrayRemove(
+                      mapTool.locationId
+                    ),
+                  }).catch(() => {});
+                }
+              });
+            });
+          }
+        }
+      }
+      // Update the location with the new parent
+      updateLocation(mapTool.locationId, {
+        parentLocationId: locationId,
+      }).catch(() => {});
+
+      // Add the new location to the map
+      updateLocation(locationId, {
+        [`map.${row}.${col}.type`]: MapEntryType.Location,
+        [`map.${row}.${col}.locationIds`]: arrayUnion(mapTool.locationId),
+      }).catch(() => {});
+
       setMapTool(undefined);
     } else if (!mapTool && locationIds) {
       const filteredLocationIds = locationIds.filter((locationId) => {
@@ -286,7 +330,12 @@ export function LocationMap(props: LocationMapProps) {
           })}
         </Menu>
       </Box>
-      <MapToolChooser currentTool={mapTool} setCurrentTool={setMapTool} />
+      <MapToolChooser
+        currentTool={mapTool}
+        setCurrentTool={setMapTool}
+        locations={locationMap}
+        currentLocationId={locationId}
+      />
     </Box>
   );
 }
