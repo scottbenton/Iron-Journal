@@ -1,4 +1,4 @@
-import { DialogContent, Stack } from "@mui/material";
+import { Box, DialogContent, Stack, Typography } from "@mui/material";
 import { LinkedDialogContentTitle } from "../LinkedDialogContentTitle";
 import { useStore } from "stores/store";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
@@ -48,16 +48,21 @@ export function MoveDialogContent(props: MoveDialogContentProps) {
         <MoveRollers move={move} />
         <MarkdownRenderer markdown={move.text} />
         {move.oracles && (
-          <Stack direction={"row"} flexWrap={"wrap"} spacing={2} mt={2}>
-            {move.oracles.map((oracleId) => (
-              <OracleButton
-                color={"inherit"}
-                variant={"outlined"}
-                key={oracleId}
-                oracleId={oracleId}
-              />
-            ))}
-          </Stack>
+          <Box mt={2}>
+            <Typography variant={"overline"}>
+              Roll Oracle{move.oracles.length > 1 ? "s" : ""}
+            </Typography>
+            <Stack direction={"row"} flexWrap={"wrap"} spacing={1}>
+              {move.oracles.map((oracleId) => (
+                <OracleButton
+                  color={"inherit"}
+                  variant={"outlined"}
+                  key={oracleId}
+                  oracleId={oracleId}
+                />
+              ))}
+            </Stack>
+          </Box>
         )}
       </DialogContent>
     </>

@@ -12,6 +12,8 @@
 
 ### Bug Fixes
 
+- Fixed oracle table not showing up for the "Delve the Depths" move
+
 ## 3.2.0
 
 ### New Features
