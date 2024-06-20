@@ -17,7 +17,6 @@ export function MoveDialogContent(props: MoveDialogContentProps) {
 
   const moves = useStore((store) => store.rules.moveMaps.moveMap);
   const move = moves[id];
-  console.debug(move);
   if (!move) {
     return (
       <>

@@ -153,7 +153,6 @@ export function LocationMap(props: LocationMapProps) {
         locationIds
       );
       if (filteredLocationIds.length === 1) {
-        console.debug();
         setOpenLocationId(locationIds[0]);
       } else if (filteredLocationIds.length > 1) {
         setMultiLocationChooserState({

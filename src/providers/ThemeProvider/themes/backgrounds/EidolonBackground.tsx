@@ -65,7 +65,7 @@ export function EidolonBackground() {
       sx={{
         position: "fixed",
         inset: 0,
-        bgcolor: "darkGrey.main",
+        bgcolor: "darkGrey.dark",
 
         zIndex: -1,
         height: "100vh",

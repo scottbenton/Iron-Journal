@@ -283,7 +283,6 @@ export function OpenLocation(props: OpenLocationProps) {
                     ).map((config) => config.label)}
                     value={getLabelFromTypeKey(settingConfig, location.type)}
                     onChange={(evt, value) => {
-                      console.debug(value);
                       updateLocation(locationId, {
                         type: getTypeKeyFromLabel(settingConfig, value),
                       });

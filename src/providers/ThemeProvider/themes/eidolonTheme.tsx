@@ -35,9 +35,9 @@ export const eidolonTheme: ThemeConfig = {
     },
     [ThemeType.Dark]: {
       darkGrey: {
-        light: slate[900],
-        main: slate[950],
-        dark: "#030712",
+        light: slate[800],
+        main: slate[900],
+        dark: slate[950],
         contrastText: "#fff",
       },
       background: {
