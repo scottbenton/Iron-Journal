@@ -54,7 +54,9 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
           ) {
             const content =
               typeof children === "string" ? children : (children[0] as string);
-            if (content.match(/^{{table:[^/]+\/oracles\/[^}]+}}$/)) {
+            if (
+              content.match(/^{{table:[^/]+(\/collections)?\/oracles\/[^}]+}}$/)
+            ) {
               const id = content.replace("{{table:", "").replace("}}", "");
               const oracle = newOracleMap[id];
               if (oracle) {
