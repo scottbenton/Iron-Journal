@@ -14,7 +14,10 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useConfirm } from "material-ui-confirm";
 import { RtcRichTextEditor } from "components/shared/RichTextEditor/RtcRichTextEditor";
-import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
+import {
+  LocationTab,
+  LocationWithGMProperties,
+} from "stores/world/currentWorld/locations/locations.slice.type";
 import { useStore } from "stores/store";
 import { useListenToCurrentLocation } from "stores/world/currentWorld/locations/useListenToCurrentLocation";
 import { BondsSection } from "components/features/worlds/BondsSection";
@@ -38,8 +41,8 @@ import { IconColors } from "types/Icon.type";
 import { mergeIcons } from "components/shared/GameIcons/mergeIcons";
 import MapIcon from "@mui/icons-material/Map";
 import { LocationMap } from "./LocationMap";
-import { useState } from "react";
 import { SubLocations } from "./SubLocations";
+import { useNewMaps } from "hooks/featureFlags/useNewMaps";
 
 export interface OpenLocationProps {
   worldId: string;
@@ -121,7 +124,12 @@ export function OpenLocation(props: OpenLocationProps) {
         .updateLocationCharacterBond
   );
 
-  const [currentTab, setCurrentTab] = useState("notes");
+  const currentTab = useStore(
+    (store) => store.worlds.currentWorld.currentWorldLocations.openTab
+  );
+  const setCurrentTab = useStore(
+    (store) => store.worlds.currentWorld.currentWorldLocations.setLocationTab
+  );
 
   const nameConfig: NameConfig | undefined = settingConfig.name;
   const sharedFieldConfig: FieldConfig[] = settingConfig.sharedFields ?? [];
@@ -169,6 +177,8 @@ export function OpenLocation(props: OpenLocationProps) {
     location.icon
   );
 
+  const showNewMaps = useNewMaps();
+
   return (
     <PageWithImage
       imageUrl={location.imageUrl}
@@ -177,26 +187,30 @@ export function OpenLocation(props: OpenLocationProps) {
         <>
           {showGMFields && (
             <>
-              <Tooltip title={`Toggle Map ${location.showMap ? "Off" : "On"}`}>
-                <IconButton
-                  onClick={() => {
-                    updateLocation(locationId, {
-                      showMap: !location.showMap,
-                    }).catch(() => {});
-                  }}
-                  sx={{
-                    bgcolor: location.showMap ? "darkGrey.main" : undefined,
-                    color: location.showMap
-                      ? "darkGrey.contrastText"
-                      : undefined,
-                    "&:hover": {
-                      bgcolor: location.showMap ? "darkGrey.dark" : undefined,
-                    },
-                  }}
+              {showNewMaps && (
+                <Tooltip
+                  title={`Toggle Map ${location.showMap ? "Off" : "On"}`}
                 >
-                  <MapIcon />
-                </IconButton>
-              </Tooltip>
+                  <IconButton
+                    onClick={() => {
+                      updateLocation(locationId, {
+                        showMap: !location.showMap,
+                      }).catch(() => {});
+                    }}
+                    sx={{
+                      bgcolor: location.showMap ? "darkGrey.main" : undefined,
+                      color: location.showMap
+                        ? "darkGrey.contrastText"
+                        : undefined,
+                      "&:hover": {
+                        bgcolor: location.showMap ? "darkGrey.dark" : undefined,
+                      },
+                    }}
+                  >
+                    <MapIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
               <Tooltip title={"Delete"}>
                 <IconButton onClick={() => handleLocationDelete()}>
                   <DeleteIcon />
@@ -236,27 +250,30 @@ export function OpenLocation(props: OpenLocationProps) {
     >
       <Box display={"flex"} flexDirection={"column"}>
         <Box mt={1}>
-          {location.showMap && (
+          {location.showMap && showNewMaps && (
             <Box sx={{ mx: { xs: -2, md: -3 } }}>
               <LocationMap locationId={locationId} map={location.map} />
             </Box>
           )}
 
-          <Box sx={{ mx: { xs: -2, md: -3 }, mb: 2 }}>
+          <Box sx={{ mx: { xs: -2, md: -3 } }}>
             <Tabs
               centered
               indicatorColor="primary"
               value={currentTab}
               onChange={(_, tab) => setCurrentTab(tab)}
             >
-              <Tab value={"notes"} label={"Notes"} />
-              <Tab value={"npcs"} label={"NPCs"} />
-              <Tab value={"sub-locations"} label={"Sub-Locations"} />
+              <Tab value={LocationTab.Notes} label={"Notes"} />
+              <Tab value={LocationTab.NPCs} label={"NPCs"} />
+              {showNewMaps && (
+                <Tab value={LocationTab.SubLocations} label={"Sub-Locations"} />
+              )}
             </Tabs>
           </Box>
           <Grid container spacing={2} sx={{ mb: 2 }}>
-            {currentTab === "notes" && (
+            {currentTab === LocationTab.Notes && (
               <>
+                <Grid item xs={12} />
                 <Grid item xs={12} sm={6}>
                   <Autocomplete
                     freeSolo
@@ -407,14 +424,14 @@ export function OpenLocation(props: OpenLocationProps) {
                 )}
               </>
             )}
-            {currentTab === "npcs" && (
+            {currentTab === LocationTab.NPCs && (
               <LocationNPCs
                 locationId={locationId}
                 showHiddenTag={showHiddenTag}
                 openNPCTab={openNPCTab}
               />
             )}
-            {currentTab === "sub-locations" && (
+            {currentTab === LocationTab.SubLocations && (
               <SubLocations locationId={locationId} />
             )}
           </Grid>

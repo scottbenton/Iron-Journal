@@ -18,6 +18,8 @@ import { MapTool, MapTools } from "./MapTools.enum";
 import { MapToolChooser } from "./MapToolChooser";
 import { arrayRemove, arrayUnion } from "firebase/firestore";
 import { LocationItemAvatar } from "./LocationItemAvatar";
+import { checkIsLocationCell, getValidLocations } from "./checkIsLocationCell";
+import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
 
 export interface LocationMapProps {
   locationId: string;
@@ -67,14 +69,15 @@ export function LocationMap(props: LocationMapProps) {
   const handleHexClick = (
     row: number,
     col: number,
-    cellType: MapEntryType | undefined,
     locationIds: string[] | undefined,
     cellRef: SVGPolygonElement
   ) => {
     // TODO - check if location still exists when overwriting. If it doesn't, we can overwrite it no problem
     if (mapTool?.type === MapTools.AddPath) {
       const currentCell = map[row]?.[col];
-      if (currentCell?.type !== MapEntryType.Location) {
+      if (
+        !checkIsLocationCell(currentCell ?? undefined, locationId, locationMap)
+      ) {
         updateLocation(locationId, {
           [`map.${row}.${col}`]:
             currentCell?.type === MapEntryType.Path
@@ -144,9 +147,11 @@ export function LocationMap(props: LocationMapProps) {
 
       setMapTool(undefined);
     } else if (!mapTool && locationIds) {
-      const filteredLocationIds = locationIds.filter((locationId) => {
-        return locationMap[locationId];
-      });
+      const filteredLocationIds = getValidLocations(
+        locationId,
+        locationMap,
+        locationIds
+      );
       if (filteredLocationIds.length === 1) {
         console.debug();
         setOpenLocationId(locationIds[0]);
@@ -218,7 +223,13 @@ export function LocationMap(props: LocationMapProps) {
                   undefined;
 
                 if (mapEntry?.type === MapEntryType.Path) {
-                  pathConnections = getConnections(map, row, col);
+                  pathConnections = getConnections(
+                    map,
+                    row,
+                    col,
+                    locationId,
+                    locationMap
+                  );
                 }
 
                 const locationIds =
@@ -244,13 +255,7 @@ export function LocationMap(props: LocationMapProps) {
                     isPath={mapEntry?.type === MapEntryType.Path}
                     pathConnections={pathConnections}
                     onClick={(cell) =>
-                      handleHexClick(
-                        row,
-                        col,
-                        mapEntry?.type,
-                        locationIds,
-                        cell
-                      )
+                      handleHexClick(row, col, locationIds, cell)
                     }
                   />
                 );
@@ -300,6 +305,8 @@ export function LocationMap(props: LocationMapProps) {
         <Menu
           open={multiLocationChooserState.open}
           anchorEl={multiLocationChooserState.parentCell}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          transformOrigin={{ vertical: "top", horizontal: "center" }}
           onClose={() =>
             setMultiLocationChooserState((prev) => ({ ...prev, open: false }))
           }
@@ -340,7 +347,13 @@ export function LocationMap(props: LocationMapProps) {
   );
 }
 
-const getConnections = (mapItems: ILocationMap, row: number, col: number) => {
+const getConnections = (
+  mapItems: ILocationMap,
+  row: number,
+  col: number,
+  locationId: string,
+  locations: Record<string, LocationWithGMProperties>
+) => {
   const isEvenRow = row % 2 === 0;
 
   // Default connections
@@ -355,6 +368,12 @@ const getConnections = (mapItems: ILocationMap, row: number, col: number) => {
 
   // Check if there is a hexagon in the given direction
   const hasHexagon = (r: number, c: number): boolean => {
+    const entry = mapItems[r]?.[c];
+    if (!entry) return false;
+
+    if (entry.type === MapEntryType.Path) return true;
+    else if (entry.type === MapEntryType.Location)
+      return checkIsLocationCell(entry, locationId, locations);
     return !!mapItems[r]?.[c]?.type;
   };
 

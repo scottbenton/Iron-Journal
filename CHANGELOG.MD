@@ -5,6 +5,9 @@
 ### New Features
 
 - Locations, lore, and NPCs can now use Icons from game-icons.net instead of uploading images.
+- Added toggleable maps to all locations.
+- Locations are now nestable.
+- Added types to locations, which determine a default icon for each location type, as well as allowing for specific fields to show up for specific types.
 
 ### Changes
 

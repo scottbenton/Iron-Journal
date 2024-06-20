@@ -85,12 +85,30 @@ export const locationConfigs: Record<string, ILocationConfig | undefined> = {
           },
         },
       },
-      testType: {
-        label: "Test Type",
+      tower: {
+        label: "Tower",
         config: {
           defaultIcon: {
-            key: "GiVineFlower",
-            color: IconColors.Red,
+            key: "GiStoneTower",
+            color: IconColors.Grey,
+          },
+        },
+      },
+      ruin: {
+        label: "Ruin",
+        config: {
+          defaultIcon: {
+            key: "GiBrokenWall",
+            color: IconColors.Grey,
+          },
+        },
+      },
+      camp: {
+        label: "Camp",
+        config: {
+          defaultIcon: {
+            key: "GiCampfire",
+            color: IconColors.Orange,
           },
         },
       },

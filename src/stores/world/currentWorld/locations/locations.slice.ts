@@ -1,5 +1,5 @@
 import { CreateSliceType } from "stores/store.type";
-import { LocationsSlice } from "./locations.slice.type";
+import { LocationTab, LocationsSlice } from "./locations.slice.type";
 import { defaultLocationsSlice } from "./locations.slice.default";
 import { listenToLocations } from "api-calls/world/locations/listenToLocations";
 import { createLocation } from "api-calls/world/locations/createLocation";
@@ -77,6 +77,13 @@ export const createLocationsSlice: CreateSliceType<LocationsSlice> = (
     set((store) => {
       store.worlds.currentWorld.currentWorldLocations.openLocationId =
         locationId;
+      store.worlds.currentWorld.currentWorldLocations.openTab =
+        LocationTab.Notes;
+    });
+  },
+  setLocationTab: (tab) => {
+    set((store) => {
+      store.worlds.currentWorld.currentWorldLocations.openTab = tab;
     });
   },
   setLocationSearch: (search) => {
