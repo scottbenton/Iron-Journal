@@ -5,13 +5,17 @@ import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { IconColors } from "types/Icon.type";
+import { MapEntry, MapEntryType } from "types/Locations.type";
+import { backgroundColors } from "./backgroundColors";
+import { getValidLocations } from "./checkIsLocationCell";
 
 export interface LocationHexagonProps {
   x: number;
   y: number;
   size: number;
-  locations?: LocationWithGMProperties[];
-  isPath?: boolean;
+  locationId: string;
+  locationMap: Record<string, LocationWithGMProperties>;
+  mapEntry?: MapEntry;
   pathConnections?: {
     topLeft?: boolean;
     topRight?: boolean;
@@ -24,10 +28,25 @@ export interface LocationHexagonProps {
 }
 
 export function LocationHexagon(props: LocationHexagonProps) {
-  const { x, y, size, locations, isPath, pathConnections, onClick } = props;
+  const {
+    x,
+    y,
+    size,
+    locationId,
+    mapEntry,
+    locationMap,
+    pathConnections,
+    onClick,
+  } = props;
+
+  const locationIds =
+    mapEntry?.type === MapEntryType.Location
+      ? getValidLocations(locationId, locationMap, mapEntry.locationIds)
+      : [];
+  const locations = locationIds.map((id) => locationMap[id]);
 
   const firstLocation =
-    (locations?.length ?? 0) > 0 ? locations?.[0] : undefined;
+    (locations.length ?? 0) > 0 ? locations?.[0] : undefined;
 
   const settingId = useGameSystemValue({
     [GAME_SYSTEMS.IRONSWORN]: "ironlands",
@@ -94,6 +113,14 @@ export function LocationHexagon(props: LocationHexagonProps) {
         </clipPath>
       </defs>
 
+      {mapEntry?.background?.color && (
+        <polygon
+          points={pointString}
+          fill={backgroundColors[mapEntry.background.color].color}
+          onClick={onClick ? (evt) => onClick(evt.currentTarget) : undefined}
+        />
+      )}
+
       {firstLocation &&
         (firstLocation.imageUrl ? (
           <image
@@ -128,12 +155,13 @@ export function LocationHexagon(props: LocationHexagonProps) {
       <polygon
         className={"hexagon"}
         points={pointString}
-        stroke={"currentcolor"}
+        stroke={mapEntry?.background?.color ? "#000" : "currentcolor"}
+        strokeOpacity={mapEntry?.background?.color ? "15%" : "100%"}
         fill={"transparent"}
         strokeWidth="1"
         onClick={onClick ? (evt) => onClick(evt.currentTarget) : undefined}
       />
-      {isPath &&
+      {mapEntry?.type === MapEntryType.Path &&
         (!pathConnections ||
           Object.keys(pathConnections).filter(
             (connection) =>
@@ -153,7 +181,7 @@ export function LocationHexagon(props: LocationHexagonProps) {
             }}
           />
         )}
-      {isPath &&
+      {mapEntry?.type === MapEntryType.Path &&
         pathConnections &&
         Object.keys(pathConnections)
           .filter(

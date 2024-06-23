@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   ListItem,
   ListItemAvatar,
   ListItemButton,
@@ -9,6 +10,7 @@ import {
 import { LocationHexagon, LocationHexagonProps } from "./LocationHexagon";
 import {
   LocationMap as ILocationMap,
+  MapEntryBackgroundColors,
   MapEntryType,
 } from "types/Locations.type";
 import { useStore } from "stores/store";
@@ -81,13 +83,9 @@ export function LocationMap(props: LocationMapProps) {
         !checkIsLocationCell(currentCell ?? undefined, locationId, locationMap)
       ) {
         updateLocation(locationId, {
-          [`map.${row}.${col}`]:
-            currentCell?.type === MapEntryType.Path
-              ? null
-              : {
-                  type: MapEntryType.Path,
-                },
-        });
+          [`map.${row}.${col}.type`]:
+            currentCell?.type === MapEntryType.Path ? null : MapEntryType.Path,
+        }).catch(() => {});
       }
     } else if (mapTool?.type === MapTools.AddLocation) {
       const type = mapTool.locationType;
@@ -118,6 +116,11 @@ export function LocationMap(props: LocationMapProps) {
         ).catch(() => {});
         setMapTool(undefined);
       }
+    } else if (mapTool?.type === MapTools.BackgroundPaint) {
+      const color = mapTool.color;
+      updateLocation(locationId, {
+        [`map.${row}.${col}.background.color`]: color,
+      }).catch(() => {});
     } else if (!mapTool && locationIds) {
       const filteredLocationIds = getValidLocations(
         locationId,
@@ -133,6 +136,33 @@ export function LocationMap(props: LocationMapProps) {
           parentCell: cellRef,
         });
       }
+    } else if (mapTool?.type === MapTools.BackgroundEraser) {
+      updateLocation(locationId, {
+        [`map.${row}.${col}.background`]: null,
+      }).catch(() => {});
+    }
+  };
+
+  const handleFillBackground = () => {
+    if (mapTool?.type === MapTools.BackgroundPaint) {
+      const color = mapTool.color;
+      const updates: Record<string, MapEntryBackgroundColors> = {};
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols - (row % 2 === 1 ? 1 : 0); col++) {
+          updates[`map.${row}.${col}.background.color`] = color;
+        }
+      }
+      updateLocation(locationId, updates).catch(() => {});
+      setMapTool(undefined);
+    } else if (mapTool?.type === MapTools.BackgroundEraser) {
+      const updates: Record<string, null> = {};
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols - (row % 2 === 1 ? 1 : 0); col++) {
+          updates[`map.${row}.${col}.background`] = null;
+        }
+      }
+      updateLocation(locationId, updates).catch(() => {});
+      setMapTool(undefined);
     }
   };
 
@@ -175,6 +205,22 @@ export function LocationMap(props: LocationMapProps) {
           },
         })}
       >
+        {(mapTool?.type === MapTools.BackgroundPaint ||
+          mapTool?.type === MapTools.BackgroundEraser) && (
+          <Box width={width} mb={1} color={"grey.300"} mx={"auto"}>
+            <Button
+              color={"inherit"}
+              size={"small"}
+              variant={"outlined"}
+              sx={{ ml: 1 }}
+              onClick={() => handleFillBackground()}
+            >
+              {mapTool?.type === MapTools.BackgroundPaint
+                ? "Fill Background"
+                : "Clear Background"}
+            </Button>
+          </Box>
+        )}
         <svg
           width={width}
           height={height}
@@ -207,23 +253,16 @@ export function LocationMap(props: LocationMapProps) {
                   mapEntry?.type === MapEntryType.Location
                     ? mapEntry.locationIds
                     : [];
-                const locations =
-                  mapEntry?.type === MapEntryType.Location
-                    ? mapEntry.locationIds
-                        .filter((locationId) => locationMap[locationId])
-                        .map((locationId) => {
-                          return locationMap[locationId];
-                        })
-                    : [];
 
                 return (
                   <LocationHexagon
+                    locationId={locationId}
                     key={`${x}-${y}`}
                     x={x}
                     y={y}
                     size={s}
-                    locations={locations}
-                    isPath={mapEntry?.type === MapEntryType.Path}
+                    locationMap={locationMap}
+                    mapEntry={mapEntry ?? undefined}
                     pathConnections={pathConnections}
                     onClick={(cell) =>
                       handleHexClick(row, col, locationIds, cell)
@@ -267,6 +306,10 @@ export function LocationMap(props: LocationMapProps) {
                       fontSize={(s * 3) / 4} // Adjust font size based on hexagon size
                       textAnchor="middle" // Center the text
                       fill={"#fff"}
+                      style={{
+                        background: "none",
+                        pointerEvents: "none",
+                      }}
                     >
                       {name}
                     </text>
