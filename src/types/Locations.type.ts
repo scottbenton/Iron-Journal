@@ -6,12 +6,11 @@ export enum MapEntryType {
 }
 
 export enum MapEntryBackgroundColors {
-  Grass = "grass", // #576e3b
-  Water = "water", // #4e656b
-  Rock = "rock", // #6f6e60
-  Sand = "sand", // #d2b374
-  Dirt = "dirt", // #674024
-  Volcanic = "volcanic", // #384042
+  Grass = "grass",
+  Water = "water",
+  Rock = "rock",
+  Sand = "sand",
+  Dirt = "dirt",
   TreeCover = "treeCover",
   Snow = "snow",
   Mesa = "mesa",

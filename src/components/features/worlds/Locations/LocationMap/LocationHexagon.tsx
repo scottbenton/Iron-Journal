@@ -116,7 +116,7 @@ export function LocationHexagon(props: LocationHexagonProps) {
       {mapEntry?.background?.color && (
         <polygon
           points={pointString}
-          fill={backgroundColors[mapEntry.background.color].color}
+          fill={backgroundColors[mapEntry.background.color]?.color}
           onClick={onClick ? (evt) => onClick(evt.currentTarget) : undefined}
         />
       )}

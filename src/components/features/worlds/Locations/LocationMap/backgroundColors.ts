@@ -27,10 +27,6 @@ export const backgroundColors: Record<
     color: "#533f28",
     label: "Dirt",
   },
-  [MapEntryBackgroundColors.Volcanic]: {
-    color: "#384042",
-    label: "Volcanic",
-  },
   [MapEntryBackgroundColors.TreeCover]: {
     color: "#3d532d",
     label: "Forest",
