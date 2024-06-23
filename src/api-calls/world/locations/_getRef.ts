@@ -82,8 +82,8 @@ export function getPublicNotesLocationDoc(worldId: string, locationId: string) {
   ) as DocumentReference<LocationNotesDocument>;
 }
 
-export function convertToDatabase(
-  location: Location | UpdateData<Location>
+export function convertUpdateDataToDatabase(
+  location: UpdateData<Location>
 ): UpdateData<LocationDocument> {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { updatedDate, createdDate, ...restLocation } = location;
@@ -95,6 +95,18 @@ export function convertToDatabase(
   if (createdDate && createdDate instanceof Date) {
     newLocation.createdTimestamp = Timestamp.fromDate(createdDate);
   }
+
+  return newLocation;
+}
+
+export function convertToDatabase(location: Location): LocationDocument {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { updatedDate, createdDate, ...restLocation } = location;
+  const newLocation: LocationDocument = {
+    updatedTimestamp: Timestamp.now(),
+    createdTimestamp: Timestamp.fromDate(createdDate),
+    ...restLocation,
+  };
 
   return newLocation;
 }
