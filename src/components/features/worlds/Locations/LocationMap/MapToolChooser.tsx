@@ -1,6 +1,11 @@
 import {
   Box,
   Card,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
   ToggleButton,
   ToggleButtonGroup,
   Tooltip,
@@ -15,9 +20,14 @@ import { ILocationConfig, locationConfigs } from "config/locations.config";
 import { IconColors } from "types/Icon.type";
 import { GameIcon } from "components/shared/GameIcons/GameIcon";
 import MoveIcon from "@mui/icons-material/OpenWith";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
 import { AddMoveLocationChooserDialog } from "./AddMoveLocationChooserDialog";
+import DefaultPaintIcon from "@mui/icons-material/Brush";
+import { BackgroundColorSelectorList } from "./BackgroundColorSelectorList";
+import EraseIcon from "@mui/icons-material/FormatColorReset";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { backgroundColors } from "./backgroundColors";
 
 export interface MapToolChooserProps {
   currentTool?: MapTool;
@@ -32,6 +42,10 @@ export function MapToolChooser(props: MapToolChooserProps) {
   const [addMoveLocationChooserOpen, setAddMoveLocationChooserOpen] =
     useState(false);
 
+  const [backgroundColorChooserOpen, setBackgroundColorChooserOpen] =
+    useState(false);
+  const backgroundColorButtonRef = useRef<HTMLButtonElement>(null);
+
   const getToolValue = () => {
     if (currentTool?.type === MapTools.AddPath) {
       return "_path";
@@ -39,10 +53,15 @@ export function MapToolChooser(props: MapToolChooserProps) {
       return currentTool.locationType ?? "_default";
     } else if (currentTool?.type === MapTools.MoveLocation) {
       return "_addOrMoveLocation";
+    } else if (
+      currentTool?.type === MapTools.BackgroundPaint ||
+      currentTool?.type === MapTools.BackgroundEraser
+    ) {
+      return "_paintBG";
     }
     return "";
   };
-  const handleToolSelection = (toolName: string) => {
+  const handleToolSelection = (toolName: string | null) => {
     if (toolName === "_path") {
       setCurrentTool({
         type: MapTools.AddPath,
@@ -53,12 +72,22 @@ export function MapToolChooser(props: MapToolChooserProps) {
         locationType: "",
       });
     } else if (toolName === "_addOrMoveLocation") {
+      setCurrentTool(undefined);
       setAddMoveLocationChooserOpen(true);
+    } else if (toolName === "_paintBG") {
+      setCurrentTool(undefined);
+      setBackgroundColorChooserOpen(true);
     } else if (toolName) {
       setCurrentTool({
         type: MapTools.AddLocation,
         locationType: toolName,
       });
+    } else if (
+      currentTool?.type === MapTools.BackgroundEraser ||
+      (currentTool?.type === MapTools.BackgroundPaint && toolName === null)
+    ) {
+      setCurrentTool(undefined);
+      setBackgroundColorChooserOpen(true);
     } else {
       setCurrentTool(undefined);
     }
@@ -113,6 +142,24 @@ export function MapToolChooser(props: MapToolChooserProps) {
               })}
             >
               <PathIcon sx={{ color: "#cbd5e1" }} />
+            </ToggleButton>
+          </Tooltip>
+          <Tooltip title={"Paint Background"}>
+            <ToggleButton
+              ref={backgroundColorButtonRef}
+              value={"_paintBG"}
+              sx={(theme) => ({
+                bgcolor:
+                  currentTool?.type === MapTools.BackgroundPaint ||
+                  currentTool?.type === MapTools.BackgroundEraser
+                    ? theme.palette.grey[
+                        theme.palette.mode === "dark" ? 700 : 600
+                      ]
+                    : undefined,
+              })}
+            >
+              <PaintIcon currentTool={currentTool} />
+              <ExpandMoreIcon fontSize={"small"} sx={{ color: "#fff" }} />
             </ToggleButton>
           </Tooltip>
           {Object.keys(locationTypeOverrides).map((key) => (
@@ -209,6 +256,56 @@ export function MapToolChooser(props: MapToolChooserProps) {
           setAddMoveLocationChooserOpen(false);
         }}
       />
+      <Menu
+        anchorEl={backgroundColorButtonRef.current}
+        open={backgroundColorChooserOpen}
+        onClose={() => setBackgroundColorChooserOpen(false)}
+      >
+        <BackgroundColorSelectorList
+          onSelect={(color) => {
+            setCurrentTool({
+              type: MapTools.BackgroundPaint,
+              color,
+            });
+            setBackgroundColorChooserOpen(false);
+          }}
+        />
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={() => {
+              setCurrentTool({ type: MapTools.BackgroundEraser });
+              setBackgroundColorChooserOpen(false);
+            }}
+          >
+            <ListItemIcon>
+              <EraseIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Erase"} />
+          </ListItemButton>
+        </ListItem>
+      </Menu>
     </>
   );
+}
+
+function PaintIcon(props: { currentTool?: MapTool }) {
+  const { currentTool } = props;
+
+  if (currentTool?.type === MapTools.BackgroundEraser) {
+    return <EraseIcon sx={{ color: "#fff" }} />;
+  }
+  if (currentTool?.type === MapTools.BackgroundPaint) {
+    return (
+      <Box
+        sx={{
+          bgcolor: backgroundColors[currentTool.color].color,
+          width: 20,
+          height: 20,
+          borderRadius: 999,
+          border: "1px solid #00000070",
+        }}
+      />
+    );
+  }
+  return <DefaultPaintIcon sx={{ color: "#fff" }} />;
 }

@@ -5,8 +5,22 @@ export enum MapEntryType {
   Location = "location",
 }
 
+export enum MapEntryBackgroundColors {
+  Grass = "grass",
+  Water = "water",
+  Rock = "rock",
+  Sand = "sand",
+  Dirt = "dirt",
+  TreeCover = "treeCover",
+  Snow = "snow",
+  Mesa = "mesa",
+}
+
 export interface BaseMapEntry {
-  type: MapEntryType;
+  type?: MapEntryType | null;
+  background?: {
+    color: MapEntryBackgroundColors;
+  };
 }
 export interface MapEntryLocation extends BaseMapEntry {
   type: MapEntryType.Location;
