@@ -28,6 +28,7 @@ import { BackgroundColorSelectorList } from "./BackgroundColorSelectorList";
 import EraseIcon from "@mui/icons-material/FormatColorReset";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { backgroundColors } from "./backgroundColors";
+import CursorIcon from "@mui/icons-material/TouchApp";
 
 export interface MapToolChooserProps {
   currentTool?: MapTool;
@@ -59,7 +60,7 @@ export function MapToolChooser(props: MapToolChooserProps) {
     ) {
       return "_paintBG";
     }
-    return "";
+    return "_cursor";
   };
   const handleToolSelection = (toolName: string | null) => {
     if (toolName === "_path") {
@@ -129,6 +130,21 @@ export function MapToolChooser(props: MapToolChooserProps) {
             },
           })}
         >
+          <Tooltip title={"Normal Cursor"}>
+            <ToggleButton
+              value={"_cursor"}
+              sx={(theme) => ({
+                bgcolor:
+                  currentTool?.type === undefined
+                    ? theme.palette.grey[
+                        theme.palette.mode === "dark" ? 700 : 600
+                      ]
+                    : undefined,
+              })}
+            >
+              <CursorIcon sx={{ color: "#fff" }} />
+            </ToggleButton>
+          </Tooltip>
           <Tooltip title={"Add Path"}>
             <ToggleButton
               value={"_path"}

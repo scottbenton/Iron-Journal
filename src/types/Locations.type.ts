@@ -14,6 +14,10 @@ export enum MapEntryBackgroundColors {
   TreeCover = "treeCover",
   Snow = "snow",
   Mesa = "mesa",
+  CherryBlossom = "cherry",
+  Magma = "magma",
+  Amethyst = "amethyst",
+  Basalt = "basalt",
 }
 
 export interface BaseMapEntry {
