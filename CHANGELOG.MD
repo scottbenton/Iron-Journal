@@ -17,6 +17,7 @@
 ### Bug Fixes
 
 - Fixed oracle table not showing up for the "Delve the Depths" move
+- Fixed co-op campaign permissions not reflecting properly in worlds
 
 ## 3.2.0
 
