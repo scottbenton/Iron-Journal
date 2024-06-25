@@ -9,6 +9,7 @@ import { ImageEditorDialog } from "./ImageEditorDialog";
 import { IconDefinition } from "types/Icon.type";
 
 export interface PageWithImageProps {
+  breadcrumbs?: React.ReactNode;
   imageUrl?: string;
   icon?: IconDefinition;
   actions?: React.ReactNode;
@@ -33,6 +34,7 @@ export function PageWithImage(props: PropsWithChildren<PageWithImageProps>) {
     handleImageRemove,
     handlePageClose,
     children,
+    breadcrumbs,
   } = props;
 
   const hasImage = !!imageUrl || !!icon;
@@ -49,14 +51,16 @@ export function PageWithImage(props: PropsWithChildren<PageWithImageProps>) {
         flexDirection={"column"}
         overflow={"auto"}
       >
+        {breadcrumbs}
         {imageUrl && <ImageOutlineBackground />}
 
         <Box
           sx={(theme) => ({
             bgcolor: theme.palette.background.paper,
-            borderTop: imageUrl
-              ? `1px solid ${theme.palette.divider}`
-              : undefined,
+            borderTop:
+              imageUrl || !!breadcrumbs
+                ? `1px solid ${theme.palette.divider}`
+                : undefined,
             borderLeft: `1px solid ${theme.palette.divider}`,
             zIndex: 1,
             position: "relative",

@@ -46,6 +46,7 @@ import { useNewMaps } from "hooks/featureFlags/useNewMaps";
 import MoveLocationIcon from "@mui/icons-material/ModeOfTravel";
 import { useState } from "react";
 import { MoveLocationDialog } from "./MoveLocationDialog";
+import { LocationBreadcrumbs } from "./LocationBreadcrumbs";
 
 export interface OpenLocationProps {
   worldId: string;
@@ -186,6 +187,7 @@ export function OpenLocation(props: OpenLocationProps) {
 
   return (
     <PageWithImage
+      breadcrumbs={<LocationBreadcrumbs locationId={locationId} />}
       imageUrl={location.imageUrl}
       icon={icon}
       actions={
