@@ -106,8 +106,7 @@ export function CampaignCard(props: CampaignCard) {
               whiteSpace={"nowrap"}
               overflow={"hidden"}
             >
-              Players: {playerNameString} asdklajweofgi jaspdofgiaoseifu
-              paoeiwjf l;askdjf oaiwejf
+              Players: {playerNameString}
             </Typography>
           )}
           {campaignType === CampaignType.Guided && (
