@@ -99,11 +99,11 @@ export function MapToolChooser(props: MapToolChooserProps) {
     [GAME_SYSTEMS.STARFORGED]: "forge",
   });
   const settingConfig: ILocationConfig = {
-    ...locationConfigs[settingId],
     defaultIcon: {
       key: "GiCompass",
       color: IconColors.White,
     },
+    ...locationConfigs[settingId],
   };
   const locationTypeOverrides = settingConfig.locationTypeOverrides ?? {};
 
@@ -178,29 +178,31 @@ export function MapToolChooser(props: MapToolChooserProps) {
               <ExpandMoreIcon fontSize={"small"} sx={{ color: "#fff" }} />
             </ToggleButton>
           </Tooltip>
-          {Object.keys(locationTypeOverrides).map((key) => (
-            <Tooltip title={locationTypeOverrides[key].label} key={key}>
-              <ToggleButton
-                value={key}
-                sx={(theme) => ({
-                  bgcolor:
-                    currentTool?.type === MapTools.AddLocation &&
-                    currentTool.locationType === key
-                      ? theme.palette.grey[
-                          theme.palette.mode === "dark" ? 700 : 600
-                        ]
-                      : undefined,
-                })}
-              >
-                <GameIcon
-                  iconColor={
-                    locationTypeOverrides[key].config.defaultIcon.color
-                  }
-                  iconName={locationTypeOverrides[key].config.defaultIcon.key}
-                />
-              </ToggleButton>
-            </Tooltip>
-          ))}
+          {Object.keys(locationTypeOverrides)
+            .filter((key) => !locationTypeOverrides[key].hideInTools)
+            .map((key) => (
+              <Tooltip title={locationTypeOverrides[key].label} key={key}>
+                <ToggleButton
+                  value={key}
+                  sx={(theme) => ({
+                    bgcolor:
+                      currentTool?.type === MapTools.AddLocation &&
+                      currentTool.locationType === key
+                        ? theme.palette.grey[
+                            theme.palette.mode === "dark" ? 700 : 600
+                          ]
+                        : undefined,
+                  })}
+                >
+                  <GameIcon
+                    iconColor={
+                      locationTypeOverrides[key].config.defaultIcon.color
+                    }
+                    iconName={locationTypeOverrides[key].config.defaultIcon.key}
+                  />
+                </ToggleButton>
+              </Tooltip>
+            ))}
           <Tooltip title={"Default Location"}>
             <ToggleButton
               value={"_default"}

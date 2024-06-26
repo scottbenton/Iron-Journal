@@ -1,4 +1,6 @@
 import {
+  Alert,
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -62,7 +64,7 @@ export function BetaTestsDialog(props: BetaTestsDialogProps) {
       </DialogTitleWithCloseButton>
       <DialogContent>
         {activeFeatureFlags.length === 0 ? (
-          <EmptyState message='There are no active beta tests at this time' />
+          <EmptyState message="There are no active beta tests at this time" />
         ) : testStates === undefined ? (
           <LinearProgress />
         ) : (
@@ -74,18 +76,23 @@ export function BetaTestsDialog(props: BetaTestsDialogProps) {
                   : true
               )
               .map((flagConfig) => (
-                <FormControlLabel
-                  key={flagConfig.testId}
-                  control={
-                    <Switch
-                      checked={testStates[flagConfig.testId] ?? false}
-                      onChange={(evt, checked) =>
-                        handleTestChange(flagConfig.testId, checked)
-                      }
-                    />
-                  }
-                  label={flagConfig.label}
-                />
+                <Box key={flagConfig.testId}>
+                  <FormControlLabel
+                    key={flagConfig.testId}
+                    control={
+                      <Switch
+                        checked={testStates[flagConfig.testId] ?? false}
+                        onChange={(evt, checked) =>
+                          handleTestChange(flagConfig.testId, checked)
+                        }
+                      />
+                    }
+                    label={flagConfig.label}
+                  />
+                  {flagConfig.warning && (
+                    <Alert severity="warning">{flagConfig.warning}</Alert>
+                  )}
+                </Box>
               ))}
           </Stack>
         )}

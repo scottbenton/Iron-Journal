@@ -93,8 +93,12 @@ export function RtcRichTextEditor(props: RtcRichTextEditorProps) {
       if (hasUnsavedChangesRef.current && newYDoc) {
         handleSave(id, newYDoc);
       }
-      newYDoc?.destroy();
-      newProvider?.destroy();
+      try {
+        newYDoc?.destroy();
+        newProvider?.destroy();
+      } catch (e) {
+        // Suppress error
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomPrefix, id, handleSave, documentPassword]);

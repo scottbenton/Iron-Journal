@@ -21,6 +21,10 @@ import { arrayUnion } from "firebase/firestore";
 import { LocationItemAvatar } from "./LocationItemAvatar";
 import { checkIsLocationCell, getValidLocations } from "./checkIsLocationCell";
 import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
+import { useGameSystemValue } from "hooks/useGameSystemValue";
+import { GAME_SYSTEMS } from "types/GameSystems.type";
+import { locationConfigs } from "config/locations.config";
+import { useRoller } from "stores/appState/useRoller";
 
 export interface LocationMapProps {
   locationId: string;
@@ -41,6 +45,12 @@ export function LocationMap(props: LocationMapProps) {
   const verticalSpacing: number = 1.5 * s; // Updated
   const horizontalSpacing: number = s * Math.sqrt(3); // Updated
   const offsetX: number = (s * Math.sqrt(3)) / 2; // New offset for vertical positioning
+
+  const settingId = useGameSystemValue({
+    [GAME_SYSTEMS.IRONSWORN]: "ironlands",
+    [GAME_SYSTEMS.STARFORGED]: "forge",
+  });
+  const settingConfig = locationConfigs[settingId];
 
   const locationMap = useStore(
     (store) => store.worlds.currentWorld.currentWorldLocations.locationMap
@@ -70,6 +80,8 @@ export function LocationMap(props: LocationMapProps) {
     locationIds: [],
   });
 
+  const { rollOracleTable } = useRoller();
+
   const handleHexClick = (
     row: number,
     col: number,
@@ -89,12 +101,17 @@ export function LocationMap(props: LocationMapProps) {
       }
     } else if (mapTool?.type === MapTools.AddLocation) {
       const type = mapTool.locationType;
+      const locationConfig = settingConfig?.locationTypeOverrides?.[type];
+      const configCreateLocation =
+        settingConfig?.locationTypeOverrides?.[type]?.config.createLocation;
       createLocation({
-        name: "New Location",
+        name: `${locationConfig ? locationConfig.label : "New Location"}`,
         parentLocationId: locationId,
+        sharedWithPlayers: true,
         type: type,
         updatedDate: new Date(),
         createdDate: new Date(),
+        ...(configCreateLocation ? configCreateLocation(rollOracleTable) : {}),
       })
         .then((id) => {
           updateLocation(locationId, {
@@ -179,7 +196,10 @@ export function LocationMap(props: LocationMapProps) {
     >
       <Box
         sx={(theme) => ({
-          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          minWidth: width,
           color: "#fff",
           "&>svg": {
             display: "flex",
@@ -207,7 +227,7 @@ export function LocationMap(props: LocationMapProps) {
       >
         {(mapTool?.type === MapTools.BackgroundPaint ||
           mapTool?.type === MapTools.BackgroundEraser) && (
-          <Box width={width} mb={1} color={"grey.300"} mx={"auto"}>
+          <Box mb={1} color={"grey.300"} mx={"auto"}>
             <Button
               color={"inherit"}
               size={"small"}
@@ -354,13 +374,13 @@ export function LocationMap(props: LocationMapProps) {
             );
           })}
         </Menu>
+        <MapToolChooser
+          currentTool={mapTool}
+          setCurrentTool={setMapTool}
+          locations={locationMap}
+          currentLocationId={locationId}
+        />
       </Box>
-      <MapToolChooser
-        currentTool={mapTool}
-        setCurrentTool={setMapTool}
-        locations={locationMap}
-        currentLocationId={locationId}
-      />
     </Box>
   );
 }

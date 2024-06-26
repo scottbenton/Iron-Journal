@@ -31,6 +31,7 @@ export function SubLocations(props: SubLocationsProps) {
     createLocation({
       parentLocationId: locationId,
       name: "New Location",
+      sharedWithPlayers: true,
       updatedDate: new Date(),
       createdDate: new Date(),
     })
@@ -55,8 +56,11 @@ export function SubLocations(props: SubLocationsProps) {
           }
         />
       </Grid>
+
       {filteredLocationIds.length === 0 && (
-        <EmptyState message="No sub-locations added to this location yet." />
+        <Grid item xs={12}>
+          <EmptyState message="No sub-locations added to this location yet." />
+        </Grid>
       )}
       {filteredLocationIds.map((locationId) => (
         <Grid key={locationId} item xs={12} sm={12} md={6}>
