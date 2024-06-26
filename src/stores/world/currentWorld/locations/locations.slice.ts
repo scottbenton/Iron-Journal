@@ -82,6 +82,23 @@ export const createLocationsSlice: CreateSliceType<LocationsSlice> = (
         LocationTab.Notes;
     });
   },
+  closeLocation: () => {
+    set((store) => {
+      const currentLocationId =
+        store.worlds.currentWorld.currentWorldLocations.openLocationId;
+      if (currentLocationId) {
+        const parentLocationId =
+          store.worlds.currentWorld.currentWorldLocations.locationMap[
+            currentLocationId
+          ]?.parentLocationId;
+        store.worlds.currentWorld.currentWorldLocations.openLocationId =
+          parentLocationId ?? undefined;
+      } else {
+        store.worlds.currentWorld.currentWorldLocations.openLocationId =
+          undefined;
+      }
+    });
+  },
   setLocationTab: (tab) => {
     set((store) => {
       store.worlds.currentWorld.currentWorldLocations.openTab = tab;

@@ -40,6 +40,9 @@ export function LocationsSection(props: LocationsSectionProps) {
   const setOpenLocationId = useStore(
     (store) => store.worlds.currentWorld.currentWorldLocations.setOpenLocationId
   );
+  const closeLocation = useStore(
+    (store) => store.worlds.currentWorld.currentWorldLocations.closeLocation
+  );
 
   const [createLocationLoading, setCreateLocationLoading] = useState(false);
   const createLocation = useStore(
@@ -86,7 +89,7 @@ export function LocationsSection(props: LocationsSectionProps) {
           worldId={worldId}
           locationId={openLocationId}
           location={openLocation}
-          closeLocation={() => setOpenLocationId(undefined)}
+          closeLocation={closeLocation}
           showHiddenTag={shouldShowHiddenTag}
           openNPCTab={openNPCTab}
         />

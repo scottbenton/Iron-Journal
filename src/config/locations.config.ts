@@ -1,8 +1,14 @@
-import { IconColors, RequiredIconDefinition } from "types/Icon.type";
+import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
+import { RequiredIconDefinition } from "types/Icon.type";
+import { ironlandsLocationConfig } from "./locations/ironlandsLocations";
+import { forgeLocations } from "./locations/forgeLocations";
+import { OracleTableRoll } from "types/DieRolls.type";
+import { Location } from "types/Locations.type";
 
 interface BaseFieldConfig {
   key: string;
-  type: "oracle";
+  type: "oracle" | "autocomplete" | "section-title";
+  fullWidth?: boolean;
 }
 
 interface OracleFieldConfig extends BaseFieldConfig {
@@ -12,15 +18,42 @@ interface OracleFieldConfig extends BaseFieldConfig {
   oracleId?: string;
 }
 
+interface AutocompleteFieldConfig extends BaseFieldConfig {
+  key: string;
+  label: string;
+  type: "autocomplete";
+  options: string[];
+}
+
+interface SectionTitleFieldConfig extends BaseFieldConfig {
+  type: "section-title";
+  label: string;
+}
+
 export interface NameConfig {
   oracleIds: (string | string[])[];
   joinOracles?: boolean;
 }
 
-export type FieldConfig = OracleFieldConfig;
+export type FieldConfigsWithoutFunctions =
+  | OracleFieldConfig
+  | AutocompleteFieldConfig
+  | SectionTitleFieldConfig;
+
+export type FieldConfig =
+  | FieldConfigsWithoutFunctions
+  | ((
+      locationId: string,
+      location: LocationWithGMProperties
+    ) => FieldConfigsWithoutFunctions);
 
 export interface ILocationConfig {
-  name?: NameConfig;
+  name?:
+    | NameConfig
+    | ((
+        locationId: string,
+        location: LocationWithGMProperties
+      ) => NameConfig | undefined);
   sharedFields?: FieldConfig[];
   gmFields?: FieldConfig[];
   showBasicBond?: boolean;
@@ -28,90 +61,21 @@ export interface ILocationConfig {
     string,
     {
       label: string;
+      hideInTools?: boolean;
       config: ILocationConfig;
     }
   >;
   defaultIcon: RequiredIconDefinition;
+  createLocation?: (
+    rollOracleTable: (
+      oracleId: string,
+      showSnackbar?: boolean,
+      gmsOnly?: boolean
+    ) => OracleTableRoll | undefined
+  ) => Partial<Location>;
 }
 
 export const locationConfigs: Record<string, ILocationConfig | undefined> = {
-  ironlands: {
-    name: {
-      oracleIds: [
-        "classic/oracles/settlement/name/landscape_feature",
-        "classic/oracles/settlement/name/manmade_edifice",
-        "classic/oracles/settlement/name/creature",
-        "classic/oracles/settlement/name/historical_event",
-        "classic/oracles/settlement/name/old_world_language",
-        "classic/oracles/settlement/name/environmental_aspect",
-        [
-          "classic/oracles/settlement/quick_name/prefix",
-          "classic/oracles/settlement/quick_name/suffix",
-        ],
-      ],
-    },
-    gmFields: [
-      {
-        key: "descriptor",
-        label: "Description",
-        type: "oracle",
-        oracleId: "classic/oracles/place/descriptor",
-      },
-      {
-        key: "trouble",
-        label: "Trouble",
-        type: "oracle",
-        oracleId: "classic/oracles/settlement/trouble",
-      },
-      {
-        key: "locationFeatures",
-        label: "Location Features",
-        type: "oracle",
-        oracleId: "classic/oracles/place/location",
-      },
-    ],
-    showBasicBond: true,
-    defaultIcon: {
-      key: "GiCompass",
-      color: IconColors.White,
-    },
-    locationTypeOverrides: {
-      settlement: {
-        label: "Settlement",
-        config: {
-          defaultIcon: {
-            key: "GiVikingLonghouse",
-            color: IconColors.Brown,
-          },
-        },
-      },
-      tower: {
-        label: "Tower",
-        config: {
-          defaultIcon: {
-            key: "GiStoneTower",
-            color: IconColors.Grey,
-          },
-        },
-      },
-      ruin: {
-        label: "Ruin",
-        config: {
-          defaultIcon: {
-            key: "GiBrokenWall",
-            color: IconColors.Grey,
-          },
-        },
-      },
-      camp: {
-        label: "Camp",
-        config: {
-          defaultIcon: {
-            key: "GiCampfire",
-            color: IconColors.Orange,
-          },
-        },
-      },
-    },
-  },
+  ironlands: ironlandsLocationConfig,
+  forge: forgeLocations,
 };

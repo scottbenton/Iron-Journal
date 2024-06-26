@@ -21,6 +21,7 @@ import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { useUpdateQueryStringValueWithoutNavigation } from "hooks/useUpdateQueryStringValueWithoutNavigation";
 import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { useCampaignType } from "hooks/useCampaignType";
+import { useNewMaps } from "hooks/featureFlags/useNewMaps";
 
 enum TABS {
   MOVES = "moves",
@@ -55,8 +56,9 @@ export function TabsSection() {
 
   useUpdateQueryStringValueWithoutNavigation("tab", selectedTab);
 
+  const showNewLocations = useNewMaps();
   const shouldShowSectors =
-    useGameSystem().gameSystem === GAME_SYSTEMS.STARFORGED;
+    useGameSystem().gameSystem === GAME_SYSTEMS.STARFORGED && !showNewLocations;
 
   const isInCampaign = useStore(
     (store) => !!store.characters.currentCharacter.currentCharacter?.campaignId

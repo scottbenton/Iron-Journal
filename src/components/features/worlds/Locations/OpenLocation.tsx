@@ -74,11 +74,11 @@ export function OpenLocation(props: OpenLocationProps) {
     [GAME_SYSTEMS.STARFORGED]: "forge",
   });
   let settingConfig: ILocationConfig = {
-    ...locationConfigs[settingId],
     defaultIcon: {
       key: "GiCompass",
       color: IconColors.White,
     },
+    ...locationConfigs[settingId],
   };
   if (location.type && settingConfig.locationTypeOverrides?.[location.type]) {
     settingConfig = {
@@ -135,7 +135,12 @@ export function OpenLocation(props: OpenLocationProps) {
     (store) => store.worlds.currentWorld.currentWorldLocations.setLocationTab
   );
 
-  const nameConfig: NameConfig | undefined = settingConfig.name;
+  let nameConfig: NameConfig | undefined = undefined;
+  if (typeof settingConfig.name === "function") {
+    nameConfig = settingConfig.name(locationId, location);
+  } else {
+    nameConfig = settingConfig.name;
+  }
   const sharedFieldConfig: FieldConfig[] = settingConfig.sharedFields ?? [];
   const gmFieldConfig: FieldConfig[] = settingConfig.gmFields ?? [];
 
@@ -312,15 +317,14 @@ export function OpenLocation(props: OpenLocationProps) {
                     )}
                   />
                 </Grid>
-                {sharedFieldConfig.map((field) => (
-                  <Grid item xs={12} md={6} key={field.key}>
-                    <LocationField
-                      locationId={locationId}
-                      location={location}
-                      field={field}
-                      isGMField={false}
-                    />
-                  </Grid>
+                {sharedFieldConfig.map((field, index) => (
+                  <LocationField
+                    key={index}
+                    locationId={locationId}
+                    location={location}
+                    field={field}
+                    isGMField={false}
+                  />
                 ))}
 
                 {showGMFields && (
@@ -332,15 +336,14 @@ export function OpenLocation(props: OpenLocationProps) {
                         </Grid>
                       </>
                     )}
-                    {gmFieldConfig.map((field) => (
-                      <Grid item xs={12} md={6} key={field.key}>
-                        <LocationField
-                          locationId={locationId}
-                          location={location}
-                          field={field}
-                          isGMField
-                        />
-                      </Grid>
+                    {gmFieldConfig.map((field, index) => (
+                      <LocationField
+                        key={index}
+                        locationId={locationId}
+                        location={location}
+                        field={field}
+                        isGMField
+                      />
                     ))}
                     {isGuidedGame && showGMFields && (
                       <Grid

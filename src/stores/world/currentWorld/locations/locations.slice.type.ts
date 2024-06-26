@@ -25,6 +25,7 @@ export interface LocationsSliceData {
 export interface LocationsSliceActions {
   subscribe: (worldId: string, worldOwnerIds: string[]) => Unsubscribe;
   setOpenLocationId: (locationId?: string) => void;
+  closeLocation: () => void;
   setLocationTab: (tab: LocationTab) => void;
   setLocationSearch: (search: string) => void;
 

@@ -19,6 +19,11 @@ export function LocationsSidebar(props: LocationsSidebarProps) {
     showHiddenText,
   } = props;
 
+  const currentLocationAncestors: string[] = getCurrentLocationAncestors(
+    openLocationId,
+    locations
+  );
+
   const locationParentMap: Record<string, string[]> = {};
 
   locationIds.forEach((locationId) => {
@@ -42,10 +47,24 @@ export function LocationsSidebar(props: LocationsSidebarProps) {
               openLocationId={openLocationId}
               setOpenLocationId={setOpenLocationId}
               showHiddenText={showHiddenText}
+              currentLocationAncestors={currentLocationAncestors}
             />
           ))}
         </List>
       </Box>
     </Hidden>
   );
+}
+
+function getCurrentLocationAncestors(
+  locationId: string,
+  locations: Record<string, LocationWithGMProperties>
+): string[] {
+  const currentLocationAncestors: string[] = [];
+  let currentLocation = locations[locationId];
+  while (currentLocation.parentLocationId) {
+    currentLocationAncestors.push(currentLocation.parentLocationId);
+    currentLocation = locations[currentLocation.parentLocationId];
+  }
+  return currentLocationAncestors;
 }
