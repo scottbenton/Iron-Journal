@@ -5,7 +5,7 @@ import {
   ListItemText,
   ToggleButton,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
 import ExpandMore from "@mui/icons-material/ChevronRight";
 
@@ -16,6 +16,7 @@ export interface LocationsSidebarItemProps {
   openLocationId: string;
   setOpenLocationId: (locationId: string) => void;
   showHiddenText: boolean;
+  currentLocationAncestors: string[];
 }
 
 export function LocationsSidebarItem(props: LocationsSidebarItemProps) {
@@ -26,9 +27,16 @@ export function LocationsSidebarItem(props: LocationsSidebarItemProps) {
     openLocationId,
     setOpenLocationId,
     showHiddenText,
+    currentLocationAncestors,
   } = props;
 
   const [isExpanded, setIsExpanded] = useState(false);
+
+  useEffect(() => {
+    if (currentLocationAncestors.includes(locationId)) {
+      setIsExpanded(true);
+    }
+  }, [locationId, currentLocationAncestors]);
 
   const children = locationParentMap[locationId] || [];
 
@@ -106,6 +114,7 @@ export function LocationsSidebarItem(props: LocationsSidebarItemProps) {
               openLocationId={openLocationId}
               setOpenLocationId={setOpenLocationId}
               showHiddenText={showHiddenText}
+              currentLocationAncestors={currentLocationAncestors}
             />
           ))}
         </List>
