@@ -21,6 +21,7 @@ import { LinkComponent } from "components/shared/LinkComponent";
 import { useUpdateQueryStringValueWithoutNavigation } from "hooks/useUpdateQueryStringValueWithoutNavigation";
 import { useWorldPermissions } from "components/features/worlds/useWorldPermissions";
 import { LocationsSection } from "components/features/worlds/Locations";
+import { useNewMaps } from "hooks/featureFlags/useNewMaps";
 
 enum TABS {
   DETAILS = "details",
@@ -35,8 +36,9 @@ export function WorldSheetPage() {
 
   const { showGMFields } = useWorldPermissions();
 
-  const showSectorsInsteadOfLocations =
-    useGameSystem().gameSystem === GAME_SYSTEMS.STARFORGED;
+  const showNewLocations = useNewMaps();
+  const shouldShowSectors =
+    useGameSystem().gameSystem === GAME_SYSTEMS.STARFORGED && !showNewLocations;
 
   const [searchParams] = useSearchParams();
   const [selectedTab, setSelectedTab] = useState<TABS>(
@@ -157,18 +159,17 @@ export function WorldSheetPage() {
             })}
           >
             <StyledTab value={TABS.DETAILS} label={"World Details"} />
-            {!showSectorsInsteadOfLocations && (
-              <StyledTab value={TABS.LOCATIONS} label={"Locations"} />
-            )}
-            {showSectorsInsteadOfLocations && (
+            {shouldShowSectors ? (
               <StyledTab value={TABS.SECTORS} label={"Sectors"} />
+            ) : (
+              <StyledTab value={TABS.LOCATIONS} label={"Locations"} />
             )}
             <StyledTab value={TABS.NPCS} label={"NPCs"} />
             <StyledTab value={TABS.LORE} label={"Lore"} />
           </StyledTabs>
         </BreakContainer>
         {selectedTab === TABS.DETAILS && <WorldSheet canEdit={canEdit} />}
-        {selectedTab === TABS.LOCATIONS && !showSectorsInsteadOfLocations && (
+        {selectedTab === TABS.LOCATIONS && !shouldShowSectors && (
           <BreakContainer
             sx={(theme) => ({
               backgroundColor: theme.palette.background.paperInlay,
@@ -181,7 +182,7 @@ export function WorldSheetPage() {
             />
           </BreakContainer>
         )}
-        {selectedTab === TABS.SECTORS && showSectorsInsteadOfLocations && (
+        {selectedTab === TABS.SECTORS && shouldShowSectors && (
           <BreakContainer
             sx={(theme) => ({
               backgroundColor: theme.palette.background.paperInlay,

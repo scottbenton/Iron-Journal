@@ -16,6 +16,7 @@ import { useStore } from "stores/store";
 import { NPCSection } from "components/features/worlds/NPCSection";
 import { LoreSection } from "components/features/worlds/Lore";
 import { LocationsSection } from "components/features/worlds/Locations";
+import { useNewMaps } from "hooks/featureFlags/useNewMaps";
 
 enum CampaignTabs {
   Characters = "characters",
@@ -36,7 +37,9 @@ export function CampaignContent(props: CampaignContentProps) {
   const { openInviteDialog } = props;
   const { showGuidedPlayerView, showGuideTips } = useCampaignType();
 
-  const isStarforged = useGameSystem().gameSystem === GAME_SYSTEMS.STARFORGED;
+  const showNewLocations = useNewMaps();
+  const shouldShowSectors =
+    useGameSystem().gameSystem === GAME_SYSTEMS.STARFORGED && !showNewLocations;
 
   const [searchParams] = useSearchParams();
   const [selectedTab, setSelectedTab] = useState<CampaignTabs>(
@@ -78,7 +81,7 @@ export function CampaignContent(props: CampaignContentProps) {
           <StyledTab label="Notes" value={CampaignTabs.Notes} />
         )}
         <StyledTab label="World" value={CampaignTabs.World} />
-        {isStarforged ? (
+        {shouldShowSectors ? (
           <StyledTab label="Sectors" value={CampaignTabs.Sectors} />
         ) : (
           <StyledTab label="Locations" value={CampaignTabs.Locations} />
@@ -98,7 +101,7 @@ export function CampaignContent(props: CampaignContentProps) {
       <ContainedTabPanel isVisible={selectedTab === CampaignTabs.World}>
         <WorldTab />
       </ContainedTabPanel>
-      {isStarforged ? (
+      {shouldShowSectors ? (
         <ContainedTabPanel
           isVisible={selectedTab === CampaignTabs.Sectors}
           greyBackground={hasWorld}
