@@ -99,6 +99,7 @@ export function LoreSection(props: LoreSectionProps) {
                       secondary={
                         !isSinglePlayer &&
                         isWorldOwner &&
+                        showHiddenTag &&
                         (!lore[loreId].sharedWithPlayers ? "Hidden" : "Shared")
                       }
                     />
