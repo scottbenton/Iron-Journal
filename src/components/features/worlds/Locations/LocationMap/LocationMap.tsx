@@ -145,11 +145,11 @@ export function LocationMap(props: LocationMapProps) {
         locationIds
       );
       if (filteredLocationIds.length === 1) {
-        setOpenLocationId(locationIds[0]);
+        setOpenLocationId(filteredLocationIds[0]);
       } else if (filteredLocationIds.length > 1) {
         setMultiLocationChooserState({
           open: true,
-          locationIds,
+          locationIds: filteredLocationIds,
           parentCell: cellRef,
         });
       }
