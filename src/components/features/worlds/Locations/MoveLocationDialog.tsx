@@ -35,8 +35,8 @@ export function MoveLocationDialog(props: MoveLocationDialogProps) {
     .sort((a, b) => {
       // Sort by parent location first. If no parent location exists, sort it to the top.
       // If the parent locations are the same, sort by name.
-      const aParent = locationMap[a].parentLocationId;
-      const bParent = locationMap[b].parentLocationId;
+      const aParent = locationMap[a]?.parentLocationId;
+      const bParent = locationMap[b]?.parentLocationId;
       if (aParent && bParent) {
         if (aParent < bParent) {
           return -1;

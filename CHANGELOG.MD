@@ -9,6 +9,7 @@
 - Locations are now nestable.
 - Added types to locations, which determine a default icon for each location type, as well as allowing for specific fields to show up for specific types.
 - Maps can be painted with background colors
+- Maps can now have images uploaded to use as backgrounds to the maps.
 
 ### Changes
 

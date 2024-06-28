@@ -15,6 +15,7 @@ import { ExampleSupplySection } from "./ExampleSupplySection";
 import { ExampleTrackSection } from "./ExampleTrackSection";
 import { Licensing } from "./Licensing";
 import { getPublicAssetPath } from "functions/getPublicAssetPath";
+import { useNewMaps } from "hooks/featureFlags/useNewMaps";
 
 export function HomePage() {
   const isLoggedIn = useStore((store) => !!store.auth.user);
@@ -24,6 +25,8 @@ export function HomePage() {
     [GAME_SYSTEMS.IRONSWORN]: "Ironsworn",
     [GAME_SYSTEMS.STARFORGED]: "Starforged",
   });
+
+  const showNewLocationScreenshots = useNewMaps();
 
   return (
     <>
@@ -148,7 +151,7 @@ export function HomePage() {
             <Box
               border={(theme) => `1px solid ${theme.palette.divider}`}
               component={"img"}
-              src={getPublicAssetPath("CampaignView.webp")}
+              src={getPublicAssetPath("CampaignPage.webp")}
               alt={`Screenshot of a campaign in ${appName}`}
               width={"100%"}
               borderRadius={(theme) => `${theme.shape.borderRadius}px`}
@@ -183,10 +186,8 @@ export function HomePage() {
             <Box
               border={(theme) => `1px solid ${theme.palette.divider}`}
               component={"img"}
-              src={getPublicAssetPath("GMScreen.webp")}
-              alt={
-                "Screenshot of a campaign in Iron Fellowship titled Land of Ten Thousand Gods with four characters added."
-              }
+              src={getPublicAssetPath("GMTools.webp")}
+              alt={`Screenshot of the Guide tools in a campaign in ${appName}, including moves, oracles, tracks, notes, and more.`}
               width={"100%"}
               borderRadius={(theme) => `${theme.shape.borderRadius}px`}
             />
@@ -220,10 +221,10 @@ export function HomePage() {
             <Box
               border={(theme) => `1px solid ${theme.palette.divider}`}
               component={"img"}
-              src={getPublicAssetPath("WorldSheet.webp")}
-              alt={
-                "Screenshot of a campaign in Iron Fellowship titled Land of Ten Thousand Gods with four characters added."
-              }
+              src={getPublicAssetPath(
+                showNewLocationScreenshots ? "World.webp" : "WorldSheet.webp"
+              )}
+              alt={`Screenshot of a world map in ${appName}.`}
               width={"100%"}
               borderRadius={(theme) => `${theme.shape.borderRadius}px`}
             />

@@ -24,7 +24,7 @@ export function useFilterLocations(
     () =>
       sortedLocationIds.filter(
         (locationId) =>
-          !locations[locationId].parentLocationId &&
+          !locations[locationId]?.parentLocationId &&
           (locations[locationId].name
             .toLowerCase()
             .includes(debouncedSearch.toLowerCase()) ||
