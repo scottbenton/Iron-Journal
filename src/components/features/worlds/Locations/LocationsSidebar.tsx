@@ -27,7 +27,7 @@ export function LocationsSidebar(props: LocationsSidebarProps) {
   const locationParentMap: Record<string, string[]> = {};
 
   locationIds.forEach((locationId) => {
-    const parentId = locations[locationId].parentLocationId ?? "root";
+    const parentId = locations[locationId]?.parentLocationId ?? "root";
     if (!locationParentMap[parentId]) {
       locationParentMap[parentId] = [];
     }
@@ -62,7 +62,7 @@ function getCurrentLocationAncestors(
 ): string[] {
   const currentLocationAncestors: string[] = [];
   let currentLocation = locations[locationId];
-  while (currentLocation.parentLocationId) {
+  while (currentLocation?.parentLocationId) {
     currentLocationAncestors.push(currentLocation.parentLocationId);
     currentLocation = locations[currentLocation.parentLocationId];
   }

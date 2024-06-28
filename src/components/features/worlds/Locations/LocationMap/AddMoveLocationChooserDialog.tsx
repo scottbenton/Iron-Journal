@@ -36,7 +36,7 @@ export function AddMoveLocationChooserDialog(
   const filteredLocationIds = Object.keys(locations).filter((locationId) => {
     const location = locations[locationId];
     return (
-      (showAll ? true : location.parentLocationId === currentLocationId) &&
+      (showAll ? true : location?.parentLocationId === currentLocationId) &&
       location.name.toLowerCase().includes(search.toLowerCase()) &&
       locationId !== currentLocationId
     );

@@ -24,7 +24,7 @@ export function SubLocations(props: SubLocationsProps) {
   );
 
   const filteredLocationIds = Object.keys(locations)
-    .filter((id) => locations[id].parentLocationId === locationId)
+    .filter((id) => locations[id]?.parentLocationId === locationId)
     .sort((a, b) => locations[a].name.localeCompare(locations[b].name));
 
   const handleCreateLocation = () => {
