@@ -244,7 +244,7 @@ export function LocationMap(props: LocationMapProps) {
         <svg
           width={width}
           height={height}
-          style={{ minWidth: width, minHeight: height }}
+          style={{ minWidth: width, minHeight: height, overflow: "visible" }}
         >
           {new Array(rows).fill(0).map((_, row) => {
             return new Array(cols - (row % 2 === 1 ? 1 : 0))

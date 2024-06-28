@@ -31,6 +31,7 @@ import { useSnackbar } from "providers/SnackbarProvider";
 import { mergeIcons } from "components/shared/GameIcons/mergeIcons";
 import { IconColors } from "types/Icon.type";
 import { PageWithImage } from "../common/PageWithImage";
+import { useNewMaps } from "hooks/featureFlags/useNewMaps";
 
 const defaultNPCSpeciesOptions: {
   enum: DefaultNPCSpecies;
@@ -116,6 +117,7 @@ export function OpenNPC(props: OpenNPCProps) {
 
   const { showGMFields, showGMTips, isGuidedGame } = useWorldPermissions();
 
+  const usingNewLocations = useNewMaps();
   useListenToCurrentNPC(npcId);
 
   const updateNPC = useStore(
@@ -351,8 +353,8 @@ export function OpenNPC(props: OpenNPCProps) {
                 />
               </Grid>
             )}
-            {!isStarforged && (
-              <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6}>
+              {!isStarforged || usingNewLocations ? (
                 <Autocomplete
                   options={Object.keys(locations)}
                   getOptionLabel={(locationId) =>
@@ -367,10 +369,7 @@ export function OpenNPC(props: OpenNPCProps) {
                     <TextField {...props} label={"Location"} fullWidth />
                   )}
                 />
-              </Grid>
-            )}
-            {isStarforged && (
-              <Grid item xs={12} sm={6}>
+              ) : (
                 <Autocomplete
                   options={Object.keys(sectors)}
                   getOptionLabel={(sectorId) => sectors[sectorId]?.name ?? ""}
@@ -383,8 +382,8 @@ export function OpenNPC(props: OpenNPCProps) {
                     <TextField {...props} label={"Sector"} fullWidth />
                   )}
                 />
-              </Grid>
-            )}
+              )}
+            </Grid>
             {showGMFields && (
               <>
                 {showGMTips && (
