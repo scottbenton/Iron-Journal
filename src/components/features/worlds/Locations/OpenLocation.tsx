@@ -273,7 +273,11 @@ export function OpenLocation(props: OpenLocationProps) {
         <Box mt={1}>
           {location.showMap && showNewMaps && (
             <Box sx={{ mx: { xs: -2, md: -3 } }}>
-              <LocationMap locationId={locationId} map={location.map} />
+              <LocationMap
+                locationId={locationId}
+                map={location.map}
+                backgroundImageUrl={location.mapBackgroundImageUrl}
+              />
             </Box>
           )}
 

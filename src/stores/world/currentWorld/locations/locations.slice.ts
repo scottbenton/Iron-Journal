@@ -17,6 +17,10 @@ import { updateLocationCharacterBond } from "api-calls/world/locations/updateLoc
 import { removeLocationImage } from "api-calls/world/locations/removeLocationImage";
 import { createSpecificLocation } from "api-calls/world/locations/createSpecificLocation";
 import { MapEntry, MapEntryType } from "types/Locations.type";
+import { uploadLocationMapBackgroundImage } from "api-calls/world/locations/uploadLocationMapBackgroundImage";
+import { removeLocationMapBackgroundImage } from "api-calls/world/locations/removeLocationMapBackgroundImage";
+import { getImageUrl } from "lib/storage.lib";
+import { constructLocationImagePath } from "api-calls/world/locations/_getRef";
 
 export const createLocationsSlice: CreateSliceType<LocationsSlice> = (
   set,
@@ -48,9 +52,18 @@ export const createLocationsSlice: CreateSliceType<LocationsSlice> = (
             (location.imageFilenames?.length ?? 0) > 0
               ? existingLocation?.imageUrl
               : undefined;
+          const mapBackgroundImageUrl = location.mapBackgroundImageFilename
+            ? existingLocation?.mapBackgroundImageUrl
+            : undefined;
           store.worlds.currentWorld.currentWorldLocations.locationMap[
             locationId
-          ] = { ...location, gmProperties, notes, imageUrl };
+          ] = {
+            ...location,
+            gmProperties,
+            notes,
+            imageUrl,
+            mapBackgroundImageUrl,
+          };
         });
       },
       (locationId, imageUrl) => {
@@ -246,6 +259,48 @@ export const createLocationsSlice: CreateSliceType<LocationsSlice> = (
       oldImageFilename: imageFilename,
     });
   },
+  uploadLocationMapBackground: (locationId, image) => {
+    const world = getState().worlds.currentWorld;
+    const worldId = world.currentWorldId;
+    const imageFilename =
+      world.currentWorldLocations.locationMap[locationId]
+        ?.mapBackgroundImageFilename;
+
+    if (!worldId) {
+      return new Promise((res, reject) => reject("No world found"));
+    }
+
+    return uploadLocationMapBackgroundImage({
+      worldId,
+      locationId,
+      image,
+      oldImageFilename: imageFilename,
+    });
+  },
+  updateMapBackgroundImageUrl: (locationId, filename) => {
+    const worldId = getState().worlds.currentWorld.currentWorldId ?? "";
+
+    if (!worldId) {
+      return;
+    } else if (!filename) {
+      set(
+        (store) =>
+          (store.worlds.currentWorld.currentWorldLocations.locationMap[
+            locationId
+          ].mapBackgroundImageUrl = undefined)
+      );
+      return;
+    }
+    getImageUrl(constructLocationImagePath(worldId, locationId, filename))
+      .then((url) => {
+        set((store) => {
+          store.worlds.currentWorld.currentWorldLocations.locationMap[
+            locationId
+          ].mapBackgroundImageUrl = url;
+        });
+      })
+      .catch(() => {});
+  },
   removeLocationImage: (locationId) => {
     const world = getState().worlds.currentWorld;
     const worldId = world.currentWorldId;
@@ -261,6 +316,27 @@ export const createLocationsSlice: CreateSliceType<LocationsSlice> = (
       );
     }
     return removeLocationImage({
+      worldId,
+      locationId,
+      filename,
+    });
+  },
+  removeLocationMapBackground: (locationId) => {
+    const world = getState().worlds.currentWorld;
+    const worldId = world.currentWorldId;
+    const filename =
+      world.currentWorldLocations.locationMap[locationId]
+        ?.mapBackgroundImageFilename;
+
+    if (!worldId) {
+      return new Promise((res, reject) => reject("No world found"));
+    }
+    if (!filename) {
+      return new Promise((res, reject) =>
+        reject("Location did not have an image")
+      );
+    }
+    return removeLocationMapBackgroundImage({
       worldId,
       locationId,
       filename,

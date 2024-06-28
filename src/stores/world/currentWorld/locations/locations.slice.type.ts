@@ -11,6 +11,7 @@ export type LocationWithGMProperties = Location & {
   gmProperties?: GMLocation | null;
   notes?: Uint8Array | null;
   imageUrl?: string;
+  mapBackgroundImageUrl?: string;
 };
 
 export interface LocationsSliceData {
@@ -63,7 +64,16 @@ export interface LocationsSliceActions {
     bonded: boolean
   ) => Promise<void>;
   uploadLocationImage: (locationId: string, image: File) => Promise<void>;
+  uploadLocationMapBackground: (
+    locationId: string,
+    image: File
+  ) => Promise<void>;
+  updateMapBackgroundImageUrl: (
+    locationId: string,
+    filename: string | undefined
+  ) => void;
   removeLocationImage: (locationId: string) => Promise<void>;
+  removeLocationMapBackground: (locationId: string) => Promise<void>;
   subscribeToOpenLocation: (locationId: string) => Unsubscribe;
   resetStore: () => void;
 }
