@@ -7,6 +7,8 @@ import { createWorld } from "api-calls/world/createWorld";
 import { createCurrentWorldSlice } from "./currentWorld/currentWorld.slice";
 import { deleteWorld } from "api-calls/world/deleteWorld";
 import { updateWorldGuide } from "api-calls/world/updateWorldGuide";
+import { getSystem } from "hooks/useGameSystem";
+import { GAME_SYSTEMS } from "types/GameSystems.type";
 
 export const createWorldSlice: CreateSliceType<WorldSlice> = (...params) => {
   const [set, getState] = params;
@@ -86,7 +88,14 @@ export const createWorldSlice: CreateSliceType<WorldSlice> = (...params) => {
     },
     createWorld: () => {
       const uid = getState().auth.uid;
-      return createWorld({ name: "New World", ownerIds: [uid] });
+      const system = getSystem();
+      const defaultSettingKey =
+        system === GAME_SYSTEMS.IRONSWORN ? "ironlands" : "the_forge";
+      return createWorld({
+        name: "New World",
+        ownerIds: [uid],
+        settingKey: defaultSettingKey,
+      });
     },
     deleteWorld: (worldId) => {
       return deleteWorld(worldId);
