@@ -272,7 +272,7 @@ export function OpenLocation(props: OpenLocationProps) {
       <Box display={"flex"} flexDirection={"column"}>
         <Box mt={1}>
           {location.showMap && showNewMaps && (
-            <Box sx={{ mx: { xs: -2, md: -3 } }}>
+            <Box sx={{ mx: { xs: -2, sm: -3 } }}>
               <LocationMap
                 locationId={locationId}
                 map={location.map}
@@ -281,7 +281,7 @@ export function OpenLocation(props: OpenLocationProps) {
             </Box>
           )}
 
-          <Box sx={{ mx: { xs: -2, md: -3 } }}>
+          <Box sx={{ mx: { xs: -2, sm: -3 } }}>
             <Tabs
               centered
               indicatorColor="primary"

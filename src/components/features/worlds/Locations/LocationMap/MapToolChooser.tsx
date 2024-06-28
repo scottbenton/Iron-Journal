@@ -29,12 +29,6 @@ import EraseIcon from "@mui/icons-material/FormatColorReset";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { backgroundColors } from "./backgroundColors";
 import CursorIcon from "@mui/icons-material/TouchApp";
-import { useStore } from "stores/store";
-import { MAX_FILE_SIZE, MAX_FILE_SIZE_LABEL } from "lib/storage.lib";
-import { useSnackbar } from "providers/SnackbarProvider";
-import { useConfirm } from "material-ui-confirm";
-import AddImageIcon from "@mui/icons-material/AddPhotoAlternate";
-import RemoveImageIcon from "@mui/icons-material/DisabledByDefault";
 
 export interface MapToolChooserProps {
   currentTool?: MapTool;
@@ -112,48 +106,6 @@ export function MapToolChooser(props: MapToolChooserProps) {
     ...locationConfigs[settingId],
   };
   const locationTypeOverrides = settingConfig.locationTypeOverrides ?? {};
-
-  const mapInputRef = useRef<HTMLInputElement>(null);
-  const hasMapBackground =
-    locations[currentLocationId]?.mapBackgroundImageFilename;
-  const uploadMapBackgroundImage = useStore(
-    (store) =>
-      store.worlds.currentWorld.currentWorldLocations
-        .uploadLocationMapBackground
-  );
-  const removeMapBackgroundImage = useStore(
-    (store) =>
-      store.worlds.currentWorld.currentWorldLocations
-        .removeLocationMapBackground
-  );
-
-  const { error } = useSnackbar();
-  const confirm = useConfirm();
-  const handleFileUpload = (file: File) => {
-    if (file && currentLocationId) {
-      if (file.size > MAX_FILE_SIZE) {
-        error(
-          `File is too large. The max file size is ${MAX_FILE_SIZE_LABEL}.`
-        );
-        return;
-      }
-      uploadMapBackgroundImage(currentLocationId, file).catch(() => {});
-    }
-  };
-
-  const handleFileRemove = () => {
-    if (currentLocationId) {
-      confirm({
-        description: "Are you sure you want to remove the map background?",
-        confirmationText: "Remove",
-        confirmationButtonProps: {
-          color: "error",
-        },
-      }).then(() => {
-        removeMapBackgroundImage(currentLocationId).catch(() => {});
-      });
-    }
-  };
 
   return (
     <>
@@ -343,39 +295,18 @@ export function MapToolChooser(props: MapToolChooserProps) {
               setBackgroundColorChooserOpen(false);
             }}
           >
-            <ListItemIcon>
+            <ListItemIcon
+              sx={{
+                minWidth: 24,
+                mr: 2,
+              }}
+            >
               <EraseIcon />
             </ListItemIcon>
             <ListItemText primary={"Erase"} />
           </ListItemButton>
         </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton
-            onClick={() => {
-              setBackgroundColorChooserOpen(false);
-              mapInputRef.current?.click();
-            }}
-          >
-            <ListItemIcon>
-              <AddImageIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Upload Map Background Image"} />
-          </ListItemButton>
-        </ListItem>
       </Menu>
-      <input
-        ref={mapInputRef}
-        hidden
-        accept="image/*"
-        multiple
-        type="file"
-        onChange={(evt) => {
-          const file = evt.target.files?.[0];
-          if (file) {
-            handleFileUpload(file);
-          }
-        }}
-      />
     </>
   );
 }

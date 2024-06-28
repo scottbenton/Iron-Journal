@@ -42,7 +42,6 @@ export function LocationMap(props: LocationMapProps) {
   const { locationId, map = {}, backgroundImageUrl } = props;
 
   const backgroundImageDimensions = useImageDimensions(backgroundImageUrl);
-  console.debug(backgroundImageDimensions);
 
   const s = 20;
   const maxMapDimensions = 675;
@@ -215,12 +214,12 @@ export function LocationMap(props: LocationMapProps) {
       sx={{
         bgcolor: "background.mapBackground",
         color: "#fff",
-        p: { xs: 2, md: 3 },
         overflowX: "auto",
       }}
     >
       <Box
         sx={(theme) => ({
+          p: { xs: 2, sm: 3 },
           display: "flex",
           flexDirection: "column",
           alignItems: "center",

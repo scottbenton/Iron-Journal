@@ -21,7 +21,7 @@ export function LocationBreadcrumbs(props: LocationBreadcrumbsProps) {
   return (
     <Breadcrumbs
       aria-label={"Location breadcrumbs"}
-      sx={{ mx: { xs: 2, md: 3 }, py: 1 }}
+      sx={{ mx: { xs: 2, sm: 3 }, py: 1 }}
     >
       <Link
         underline={"hover"}

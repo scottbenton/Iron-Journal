@@ -22,7 +22,15 @@ export function BackgroundColorSelectorList(
       {Object.values(MapEntryBackgroundColors).map((color) => (
         <ListItem key={color} disablePadding>
           <ListItemButton onClick={() => onSelect(color)}>
-            <ListItemIcon>
+            <ListItemIcon
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                minWidth: 24,
+                mr: 2,
+              }}
+            >
               <Box
                 sx={{
                   bgcolor: backgroundColors[color].color,
