@@ -295,7 +295,12 @@ export function MapToolChooser(props: MapToolChooserProps) {
               setBackgroundColorChooserOpen(false);
             }}
           >
-            <ListItemIcon>
+            <ListItemIcon
+              sx={{
+                minWidth: 24,
+                mr: 2,
+              }}
+            >
               <EraseIcon />
             </ListItemIcon>
             <ListItemText primary={"Erase"} />

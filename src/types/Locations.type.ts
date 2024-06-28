@@ -20,6 +20,11 @@ export enum MapEntryBackgroundColors {
   Basalt = "basalt",
 }
 
+export enum MapStrokeColors {
+  Light = "light",
+  Dark = "dark",
+}
+
 export interface BaseMapEntry {
   type?: MapEntryType | null;
   background?: {
@@ -59,6 +64,8 @@ export interface Location {
   type?: string;
   fields?: Record<string, string>;
   map?: LocationMap;
+  mapBackgroundImageFilename?: string;
+  mapStrokeColor?: MapStrokeColors;
   showMap?: boolean;
 
   updatedDate: Date;

@@ -67,7 +67,7 @@ export function PageWithImage(props: PropsWithChildren<PageWithImageProps>) {
             flexGrow: 1,
           })}
         >
-          <Box mt={1} px={{ xs: 2, md: 3 }}>
+          <Box mt={1} px={{ xs: 2, sm: 3 }}>
             <Box
               display={"flex"}
               alignItems={imageUrl ? "flex-start" : "center"}

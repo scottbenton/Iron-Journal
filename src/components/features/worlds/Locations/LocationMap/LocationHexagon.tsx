@@ -5,9 +5,14 @@ import { useGameSystemValue } from "hooks/useGameSystemValue";
 import { LocationWithGMProperties } from "stores/world/currentWorld/locations/locations.slice.type";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { IconColors } from "types/Icon.type";
-import { MapEntry, MapEntryType } from "types/Locations.type";
+import { MapEntry, MapEntryType, MapStrokeColors } from "types/Locations.type";
 import { backgroundColors } from "./backgroundColors";
 import { getValidLocations } from "./checkIsLocationCell";
+
+const mapStrokeColors: Record<MapStrokeColors, string> = {
+  [MapStrokeColors.Light]: "#ccc",
+  [MapStrokeColors.Dark]: "#333",
+};
 
 export interface LocationHexagonProps {
   x: number;
@@ -16,6 +21,7 @@ export interface LocationHexagonProps {
   locationId: string;
   locationMap: Record<string, LocationWithGMProperties>;
   mapEntry?: MapEntry;
+  hasBackgroundImage?: boolean;
   pathConnections?: {
     topLeft?: boolean;
     topRight?: boolean;
@@ -25,6 +31,7 @@ export interface LocationHexagonProps {
     bottomRight?: boolean;
   };
   onClick?: (ref: SVGPolygonElement) => void;
+  mapStrokeColor: MapStrokeColors;
 }
 
 export function LocationHexagon(props: LocationHexagonProps) {
@@ -36,7 +43,9 @@ export function LocationHexagon(props: LocationHexagonProps) {
     mapEntry,
     locationMap,
     pathConnections,
+    hasBackgroundImage,
     onClick,
+    mapStrokeColor,
   } = props;
 
   const locationIds =
@@ -145,6 +154,12 @@ export function LocationHexagon(props: LocationHexagonProps) {
               pointerEvents: "none",
               height: 0,
               overflow: "visible",
+              "& path": {
+                paintOrder: "stroke",
+                strokeWidth: size * (hasBackgroundImage ? 3 : 2) + "px",
+                strokeOpacity: hasBackgroundImage ? "100%" : "60%",
+                stroke: "black",
+              },
             }}
             width={size * 1.25}
             height={size * 1.25}
@@ -155,8 +170,20 @@ export function LocationHexagon(props: LocationHexagonProps) {
       <polygon
         className={"hexagon"}
         points={pointString}
-        stroke={mapEntry?.background?.color ? "#000" : "currentcolor"}
-        strokeOpacity={mapEntry?.background?.color ? "15%" : "100%"}
+        stroke={
+          hasBackgroundImage
+            ? mapStrokeColors[mapStrokeColor]
+            : mapEntry?.background?.color
+            ? "#000"
+            : "currentcolor"
+        }
+        strokeOpacity={
+          hasBackgroundImage
+            ? "25%"
+            : mapEntry?.background?.color
+            ? "15%"
+            : "100%"
+        }
         fill={"transparent"}
         strokeWidth="1"
         onClick={onClick ? (evt) => onClick(evt.currentTarget) : undefined}
@@ -171,8 +198,10 @@ export function LocationHexagon(props: LocationHexagonProps) {
             cx={x}
             cy={y}
             r={size / 4}
-            stroke={"currentcolor"}
+            className={"path-line"}
+            fill={"none"}
             strokeWidth={1}
+            stroke={mapStrokeColors[mapStrokeColor]}
             style={{
               background: "none",
               pointerEvents: "none",
@@ -200,7 +229,7 @@ export function LocationHexagon(props: LocationHexagonProps) {
                 y1={midY}
                 x2={x}
                 y2={y}
-                stroke={"currentcolor"}
+                stroke={mapStrokeColors[mapStrokeColor]}
                 strokeWidth="1"
                 style={{
                   background: "none",
