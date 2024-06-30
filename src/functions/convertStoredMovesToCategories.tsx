@@ -33,9 +33,15 @@ export function convertStoredMovesToCategories(
         name: storedCategory.label,
         _source: DEFAULT_SOURCE,
         description: storedCategory.description,
-        enhances: storedCategory.enhancesId ?? undefined,
-        replaces: storedCategory.replacesId ?? undefined,
+        // Todo - fix up later if necessary
+        enhances: storedCategory.enhancesId
+          ? [storedCategory.enhancesId]
+          : undefined,
+        replaces: storedCategory.replacesId
+          ? [storedCategory.replacesId]
+          : undefined,
         contents: {},
+        collections: {},
       };
     });
 
@@ -71,7 +77,7 @@ function convertStoredMove(
       type: "move",
       name: move.label,
       text: move.text,
-      replaces: move.replacesId ?? undefined,
+      replaces: move.replacesId ? [move.replacesId] : undefined,
       roll_type: "no_roll",
       _source: DEFAULT_SOURCE,
       trigger: {
@@ -79,7 +85,10 @@ function convertStoredMove(
         conditions: [],
       },
       outcomes: null,
-      oracles: move.oracles,
+      // Todo - figure out how to do oracles now
+      // oracles: move.oracles,
+      oracles: {},
+      allow_momentum_burn: false,
     };
     return m;
   } else if (move.type === MoveType.ActionRoll) {
@@ -88,7 +97,7 @@ function convertStoredMove(
       type: "move",
       name: move.label,
       text: move.text,
-      replaces: move.replacesId ?? undefined,
+      replaces: move.replacesId ? [move.replacesId] : undefined,
       roll_type: "action_roll",
       _source: DEFAULT_SOURCE,
       trigger: {
@@ -120,7 +129,10 @@ function convertStoredMove(
           },
         ],
       },
-      oracles: move.oracles,
+      // Todo - figure out how to do oracles now
+      // oracles: move.oracles,
+      oracles: {},
+      allow_momentum_burn: true,
       outcomes: {
         strong_hit: { text: "" },
         weak_hit: { text: "" },
@@ -134,7 +146,7 @@ function convertStoredMove(
       type: "move",
       name: move.label,
       text: move.text,
-      replaces: move.replacesId ?? undefined,
+      replaces: move.replacesId ? [move.replacesId] : undefined,
       roll_type: "progress_roll",
       _source: DEFAULT_SOURCE,
       trigger: {
@@ -153,7 +165,10 @@ function convertStoredMove(
       tracks: {
         category: move.category,
       },
-      oracles: move.oracles,
+      allow_momentum_burn: false,
+      // Todo - figure out how to do oracles now
+      // oracles: move.oracles,
+      oracles: {},
       outcomes: {
         strong_hit: { text: "" },
         weak_hit: { text: "" },
@@ -167,7 +182,7 @@ function convertStoredMove(
       type: "move",
       name: move.label,
       text: move.text,
-      replaces: move.replacesId ?? undefined,
+      replaces: move.replacesId ? [move.replacesId] : undefined,
       roll_type: "special_track",
       _source: DEFAULT_SOURCE,
       trigger: {
@@ -181,7 +196,10 @@ function convertStoredMove(
           },
         ],
       },
-      oracles: move.oracles,
+      allow_momentum_burn: false,
+      // Todo - figure out how the hell to do oracles now
+      // oracles: move.oracles,
+      oracles: {},
       outcomes: {
         strong_hit: { text: "" },
         weak_hit: { text: "" },

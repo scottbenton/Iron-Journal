@@ -6,10 +6,7 @@ import {
 } from "components/shared/SimpleTable";
 
 export interface OracleTableSharedResultsProps {
-  oracle:
-    | Datasworn.OracleTableSharedText
-    | Datasworn.OracleTableSharedText2
-    | Datasworn.OracleTableSharedText3;
+  oracle: Datasworn.OracleTableSharedText | Datasworn.OracleTableSharedText2;
 }
 
 export function OracleTableSharedResults(props: OracleTableSharedResultsProps) {
@@ -22,28 +19,25 @@ export function OracleTableSharedResults(props: OracleTableSharedResultsProps) {
     return null;
   }
 
-  const columns: SimpleTableColumnDefinition<Datasworn.OracleTableRowText3>[] =
+  const columns: SimpleTableColumnDefinition<Datasworn.OracleRollableRowText3>[] =
     [];
 
   const contentValues:
-    | (
-        | Datasworn.OracleColumnText
-        | Datasworn.OracleColumnText2
-        | Datasworn.OracleColumnText3
-      )[]
+    | (Datasworn.OracleColumnText | Datasworn.OracleColumnText2)[]
     | undefined = oracle.contents ? Object.values(oracle.contents) : undefined;
 
   contentValues?.forEach((subOracle) => {
     columns.push({
       label: subOracle.name,
-      renderer: (_, index) => {
-        const row = subOracle.rows[index];
-
-        return row.min !== null && row.max !== null
-          ? row.max - row.min === 0
-            ? row.min
-            : `${row.min} - ${row.max}`
-          : null;
+      renderer: (row) => {
+        if (row.roll) {
+          if (row.roll.max - row.roll.min === 0) {
+            return row.roll.min;
+          } else {
+            return `${row.roll.min} - ${row.roll.max}`;
+          }
+        }
+        return null;
       },
       textColor: "text.secondary",
     });
@@ -54,10 +48,7 @@ export function OracleTableSharedResults(props: OracleTableSharedResultsProps) {
     renderer: (row) => <MarkdownRenderer markdown={row.text} />,
   });
 
-  if (
-    oracle.oracle_type === "table_shared_text2" ||
-    oracle.oracle_type === "table_shared_text3"
-  ) {
+  if (oracle.oracle_type === "table_shared_text2") {
     columns.push({
       label: (oracle as Datasworn.OracleTableSharedText2).column_labels.text2,
       renderer: (row) =>

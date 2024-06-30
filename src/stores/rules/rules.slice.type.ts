@@ -25,11 +25,6 @@ export interface RulesSliceData {
     nonReplacedOracleCollectionMap: Record<string, Datasworn.OracleCollection>;
     oracleRollableMap: Record<string, Datasworn.OracleRollable>;
     nonReplacedOracleRollableMap: Record<string, Datasworn.OracleRollable>;
-    oracleTableRollableMap: Record<string, Datasworn.OracleTableRollable>;
-    nonReplacedOracleTableRollableMap: Record<
-      string,
-      Datasworn.OracleTableRollable
-    >;
   };
   rootMoveCollectionIds: string[];
   moveMaps: {

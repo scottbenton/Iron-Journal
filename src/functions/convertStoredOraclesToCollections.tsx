@@ -40,8 +40,12 @@ export function convertStoredOraclesToCollections(
           name: storedCollection.label,
           _source: DEFAULT_SOURCE,
           description: storedCollection.description,
-          enhances: storedCollection.enhancesId ?? undefined,
-          replaces: storedCollection.replacesId ?? undefined,
+          enhances: storedCollection.enhancesId
+            ? [storedCollection.enhancesId]
+            : undefined,
+          replaces: storedCollection.replacesId
+            ? [storedCollection.replacesId]
+            : undefined,
           contents: {},
           collections: {},
           oracle_type: "tables",
@@ -106,8 +110,8 @@ function populateCollection(
             name: subColl.label,
             _source: DEFAULT_SOURCE,
             description: subColl.description,
-            enhances: subColl.enhancesId ?? undefined,
-            replaces: subColl.replacesId ?? undefined,
+            enhances: subColl.enhancesId ? [subColl.enhancesId] : undefined,
+            replaces: subColl.replacesId ? [subColl.replacesId] : undefined,
             contents: {},
             collections: {},
             type: "oracle_collection",
@@ -142,7 +146,10 @@ function populateCollection(
 
         const hasDetails = table.columnLabels.detail;
         const tableType: "table_text" | "table_text2" = "table_text";
-        const rows: Datasworn.OracleTableRow[] = [];
+        const rows: (
+          | Datasworn.OracleRollableRowText
+          | Datasworn.OracleRollableRowText2
+        )[] = [];
 
         let total = 0;
         let runningMin = 1;
@@ -153,15 +160,21 @@ function populateCollection(
           rows.push(
             hasDetails
               ? {
-                  min,
-                  max,
+                  roll: {
+                    min,
+                    max,
+                  },
                   text: row.result,
                   text2: row.detail ?? null,
+                  _id: `${tableDataswornId}/${min}-${max}`,
                 }
               : {
-                  min,
-                  max,
+                  roll: {
+                    min,
+                    max,
+                  },
                   text: row.result,
+                  _id: `${tableDataswornId}/${min}-${max}`,
                 }
           );
 
@@ -184,10 +197,9 @@ function populateCollection(
           _id: tableDataswornId,
           type: "oracle_rollable",
           name: table.label,
-          description: table.description,
           oracle_type: tableType,
           dice: `1d${total}`,
-          replaces: table.replaces ?? undefined,
+          replaces: table.replaces ? [table.replaces] : undefined,
           _source: DEFAULT_SOURCE,
           column_labels: columnLabels,
           rows,

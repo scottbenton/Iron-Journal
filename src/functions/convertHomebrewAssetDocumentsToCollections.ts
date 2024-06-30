@@ -29,11 +29,17 @@ export function convertHomebrewAssetDocumentsToCollections(
         _id: `${homebrewId}/collections/assets/${collectionId}`,
         type: "asset_collection",
         name: storedCollection.label,
-        replaces: storedCollection.replacesId ?? undefined,
-        enhances: storedCollection.enhancesId ?? undefined,
+        // Todo - fix up later if necessary
+        replaces: storedCollection.replacesId
+          ? [storedCollection.replacesId]
+          : undefined,
+        enhances: storedCollection.enhancesId
+          ? [storedCollection.enhancesId]
+          : undefined,
         description: storedCollection.description,
         _source: DEFAULT_SOURCE,
         contents: {},
+        collections: {},
       };
     });
 

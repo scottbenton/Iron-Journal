@@ -26,8 +26,8 @@ export function OracleTableRollableAutocomplete(
 
   const oracleTableRollableMap = useStore((store) =>
     showOriginalNames
-      ? store.rules.oracleMaps.nonReplacedOracleTableRollableMap
-      : store.rules.oracleMaps.oracleTableRollableMap
+      ? store.rules.oracleMaps.nonReplacedOracleRollableMap
+      : store.rules.oracleMaps.oracleRollableMap
   );
 
   return (

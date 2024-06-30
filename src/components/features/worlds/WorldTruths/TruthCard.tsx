@@ -113,41 +113,55 @@ export function TruthCard(props: TruthCardProps) {
               />
             )}
           </Box>
-          {truthOption.table &&
-            (onSelectSubItem || typeof selectedSubItemIndex !== "number" ? (
-              <RadioGroup
-                value={selected ? selectedSubItemIndex : null}
-                onChange={(_, index) =>
-                  onSelectSubItem && onSelectSubItem(parseInt(index))
-                }
-              >
-                {truthOption.table?.rows.map((row, index) => (
-                  <FormControlLabel
-                    label={row.text}
-                    key={index}
-                    value={index}
-                    disabled={(onSelect && !selected) || !onSelectSubItem}
-                    control={
-                      <Radio
-                        checkedIcon={<HexradioChecked />}
-                        icon={<HexboxUnchecked />}
-                      />
+          {Object.keys(truthOption.oracles ?? {}).length > 0 && (
+            <>
+              {Object.keys(truthOption.oracles ?? {}).map((oracleKey) =>
+                onSelectSubItem || typeof selectedSubItemIndex !== "number" ? (
+                  <RadioGroup
+                    key={oracleKey}
+                    value={selected ? selectedSubItemIndex : null}
+                    onChange={(_, index) =>
+                      onSelectSubItem && onSelectSubItem(parseInt(index))
                     }
-                  />
-                ))}
-              </RadioGroup>
-            ) : (
-              <Box display={"flex"} alignItems={"center"} pt={1} pb={2}>
-                <HexradioChecked color={"primary"} />
-                <Typography ml={2}>
-                  {
-                    truthOption.table?.rows.find(
-                      (_, index) => index === selectedSubItemIndex
-                    )?.text
-                  }
-                </Typography>
-              </Box>
-            ))}
+                  >
+                    {Object.values(
+                      (truthOption.oracles ?? {})[oracleKey]?.rows ?? {}
+                    ).map((row, index) => (
+                      <FormControlLabel
+                        label={row.text}
+                        key={index}
+                        value={index}
+                        disabled={(onSelect && !selected) || !onSelectSubItem}
+                        control={
+                          <Radio
+                            checkedIcon={<HexradioChecked />}
+                            icon={<HexboxUnchecked />}
+                          />
+                        }
+                      />
+                    ))}
+                  </RadioGroup>
+                ) : (
+                  <Box
+                    key={oracleKey}
+                    display={"flex"}
+                    alignItems={"center"}
+                    pt={1}
+                    pb={2}
+                  >
+                    <HexradioChecked color={"primary"} />
+                    <Typography ml={2}>
+                      {
+                        truthOption.oracles?.[oracleKey].rows.find(
+                          (_, index) => index === selectedSubItemIndex
+                        )?.text
+                      }
+                    </Typography>
+                  </Box>
+                )
+              )}
+            </>
+          )}
         </Box>
         <Box
           sx={(theme) => ({

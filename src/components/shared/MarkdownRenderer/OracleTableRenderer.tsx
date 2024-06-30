@@ -21,8 +21,7 @@ export function OracleTableRenderer(props: OracleTableRendererProps) {
     return <OracleTableSharedRolls oracle={oracle} />;
   } else if (
     oracle.oracle_type === "table_shared_text" ||
-    oracle.oracle_type === "table_shared_text2" ||
-    oracle.oracle_type === "table_shared_text3"
+    oracle.oracle_type === "table_shared_text2"
   ) {
     return <OracleTableSharedResults oracle={oracle} />;
   } else if (oracle.oracle_type === "tables") {

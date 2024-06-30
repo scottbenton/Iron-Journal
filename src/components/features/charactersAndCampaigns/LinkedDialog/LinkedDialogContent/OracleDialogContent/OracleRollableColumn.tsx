@@ -15,15 +15,19 @@ export interface OracleRollableColumnProps {
 export function OracleRollableColumn(props: OracleRollableColumnProps) {
   const { oracle } = props;
 
-  const columns: SimpleTableColumnDefinition<Datasworn.OracleTableRow>[] = [
+  const columns: SimpleTableColumnDefinition<Datasworn.OracleRollableRow>[] = [
     {
       label: "Roll",
-      renderer: (row) =>
-        row.min !== null && row.max !== null
-          ? row.max - row.min === 0
-            ? row.min
-            : `${row.min} - ${row.max}`
-          : null,
+      renderer: (row) => {
+        if (row.roll) {
+          if (row.roll.max - row.roll.min === 0) {
+            return row.roll.min;
+          } else {
+            return `${row.roll.min} - ${row.roll.max}`;
+          }
+        }
+        return null;
+      },
       textColor: "text.secondary",
     },
     {
@@ -39,9 +43,9 @@ export function OracleRollableColumn(props: OracleRollableColumnProps) {
     columns.push({
       label: "Details",
       renderer: (row) =>
-        (row as Datasworn.OracleTableRowText2).text2 ? (
+        (row as Datasworn.OracleRollableRowText2).text2 ? (
           <MarkdownRenderer
-            markdown={(row as Datasworn.OracleTableRowText2).text2 ?? ""}
+            markdown={(row as Datasworn.OracleRollableRowText2).text2 ?? ""}
           />
         ) : null,
     });
@@ -51,9 +55,9 @@ export function OracleRollableColumn(props: OracleRollableColumnProps) {
     columns.push({
       label: "",
       renderer: (row) =>
-        (row as Datasworn.OracleTableRowText3).text3 ? (
+        (row as Datasworn.OracleRollableRowText3).text3 ? (
           <MarkdownRenderer
-            markdown={(row as Datasworn.OracleTableRowText3).text3 ?? ""}
+            markdown={(row as Datasworn.OracleRollableRowText3).text3 ?? ""}
           />
         ) : null,
     });

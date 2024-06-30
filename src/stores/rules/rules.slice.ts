@@ -59,12 +59,6 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
         let nonReplacedOracleRollableMap = {
           ...baseRulesetMaps.nonReplacedOracleRollableMap,
         };
-        let oracleTableRollableMap = {
-          ...baseRulesetMaps.oracleTableRollableMap,
-        };
-        let nonReplacedOracleTableRollableMap = {
-          ...baseRulesetMaps.nonReplacedOracleTableRollableMap,
-        };
 
         store.rules.expansionIds.forEach((expansionId) => {
           let expansionOracles: Record<
@@ -102,14 +96,6 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
             ...nonReplacedOracleRollableMap,
             ...expansionOracleMaps.nonReplacedOracleRollableMap,
           };
-          oracleTableRollableMap = {
-            ...oracleTableRollableMap,
-            ...expansionOracleMaps.oracleTableRollableMap,
-          };
-          nonReplacedOracleTableRollableMap = {
-            ...nonReplacedOracleTableRollableMap,
-            ...expansionOracleMaps.nonReplacedOracleTableRollableMap,
-          };
 
           Object.values(expansionOracles).forEach((oracle) => {
             if (!oracle.replaces && !oracle.enhances) {
@@ -124,8 +110,6 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
           nonReplacedOracleCollectionMap,
           oracleRollableMap,
           nonReplacedOracleRollableMap,
-          oracleTableRollableMap,
-          nonReplacedOracleTableRollableMap,
         };
         store.rules.rootOracleCollectionIds = rootOracleCollectionIds;
       }
@@ -418,27 +402,29 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
               const collection =
                 expansionAssetMaps.assetCollectionMap[collectionKey];
               if (collection.replaces) {
-                assetCollectionMap[collection.replaces] = collection;
+                // Todo - get replaces working with new replaces logic
+                // assetCollectionMap[collection.replaces] = collection;
               } else if (collection.enhances) {
-                const original = assetCollectionMap[collection.enhances];
-                if (original) {
-                  const newContents: Record<string, Datasworn.Asset> = {};
-                  const oldContents = collection.contents;
-                  if (oldContents) {
-                    Object.keys(oldContents).forEach((assetKey) => {
-                      const asset = oldContents[assetKey];
-                      newContents[assetKey] = {
-                        ...asset,
-                        category: original.name.replace("Assets", ""),
-                      };
-                      assetMap[asset._id] = newContents[assetKey];
-                    });
-                  }
-                  assetCollectionMap[collection.enhances] = {
-                    ...original,
-                    contents: { ...original.contents, ...newContents },
-                  };
-                }
+                // Todo - get enhances working with new enhances logic
+                // const original = assetCollectionMap[collection.enhances];
+                // if (original) {
+                //   const newContents: Record<string, Datasworn.Asset> = {};
+                //   const oldContents = collection.contents;
+                //   if (oldContents) {
+                //     Object.keys(oldContents).forEach((assetKey) => {
+                //       const asset = oldContents[assetKey];
+                //       newContents[assetKey] = {
+                //         ...asset,
+                //         category: original.name.replace("Assets", ""),
+                //       };
+                //       assetMap[asset._id] = newContents[assetKey];
+                //     });
+                //   }
+                //   assetCollectionMap[collection.enhances] = {
+                //     ...original,
+                //     contents: { ...original.contents, ...newContents },
+                //   };
+                // }
               }
             }
           );

@@ -17,12 +17,6 @@ export function parseOraclesIntoMaps(
   const oracleRollableMap: Record<string, Datasworn.OracleRollable> = {};
   const nonReplacedOracleRollableMap: Record<string, Datasworn.OracleRollable> =
     {};
-  const oracleTableRollableMap: Record<string, Datasworn.OracleTableRollable> =
-    {};
-  const nonReplacedOracleTableRollableMap: Record<
-    string,
-    Datasworn.OracleTableRollable
-  > = {};
 
   const parseOracleTableCollectionIntoMaps = (
     category: Datasworn.OracleCollection
@@ -31,8 +25,9 @@ export function parseOraclesIntoMaps(
     oracleCollectionMap[category._id] = category;
     nonReplacedOracleCollectionMap[category._id] = category;
     if (category.replaces) {
-      allOraclesMap[category.replaces] = category;
-      oracleCollectionMap[category.replaces] = category;
+      // Todo - fix replaces with new replaces logic
+      // allOraclesMap[category.replaces] = category;
+      // oracleCollectionMap[category.replaces] = category;
     }
     if (category.contents) {
       const sortedContents = sort
@@ -44,24 +39,11 @@ export function parseOraclesIntoMaps(
         allOraclesMap[oracleContent._id] = oracleContent;
         oracleRollableMap[oracleContent._id] = oracleContent;
         nonReplacedOracleRollableMap[oracleContent._id] = oracleContent;
-        if (
-          oracleContent.oracle_type === "table_text" ||
-          oracleContent.oracle_type === "table_text2" ||
-          oracleContent.oracle_type === "table_text3"
-        ) {
-          oracleTableRollableMap[oracleContent._id] = oracleContent;
-          nonReplacedOracleTableRollableMap[oracleContent._id] = oracleContent;
-        }
+
         if (oracleContent.replaces) {
-          allOraclesMap[oracleContent.replaces] = oracleContent;
-          oracleRollableMap[oracleContent.replaces] = oracleContent;
-          if (
-            oracleContent.oracle_type === "table_text" ||
-            oracleContent.oracle_type === "table_text2" ||
-            oracleContent.oracle_type === "table_text3"
-          ) {
-            oracleTableRollableMap[oracleContent.replaces] = oracleContent;
-          }
+          // Todo - fix replaces with new replaces logic
+          // allOraclesMap[oracleContent.replaces] = oracleContent;
+          // oracleRollableMap[oracleContent.replaces] = oracleContent;
         }
       });
     }
@@ -92,7 +74,5 @@ export function parseOraclesIntoMaps(
     nonReplacedOracleCollectionMap,
     oracleRollableMap,
     nonReplacedOracleRollableMap,
-    oracleTableRollableMap,
-    nonReplacedOracleTableRollableMap,
   };
 }

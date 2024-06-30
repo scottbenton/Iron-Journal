@@ -10,10 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@datasworn/core": "^0.0.10",
-    "@datasworn/ironsworn-classic": "^0.0.10",
-    "@datasworn/ironsworn-classic-delve": "^0.0.10",
-    "@datasworn/starforged": "^0.0.10",
+    "@datasworn/core": "file:datasworn/datasworn-core-0.1.0.tgz",
+    "@datasworn/ironsworn-classic": "file:datasworn/datasworn-ironsworn-classic-0.1.0.tgz",
+    "@datasworn/ironsworn-classic-delve": "file:datasworn/datasworn-ironsworn-classic-delve-0.1.0.tgz",
+    "@datasworn/starforged": "file:datasworn/datasworn-starforged-0.1.0.tgz",
+    "@datasworn/sundered_isles": "file:datasworn/datasworn-sundered_isles-0.1.0.tgz",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@fontsource-variable/rubik": "^5.0.22",

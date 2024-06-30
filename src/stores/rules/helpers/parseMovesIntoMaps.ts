@@ -17,7 +17,8 @@ export function parseMovesIntoMaps(
   sortedCategories.forEach((category) => {
     if (category.contents) {
       if (category.replaces) {
-        moveCategoryMap[category.replaces] = category;
+        // Todo - fix replaces with new replaces logic
+        // moveCategoryMap[category.replaces] = category;
       } else {
         moveCategoryMap[category._id] = category;
       }
@@ -31,7 +32,8 @@ export function parseMovesIntoMaps(
 
       sortedContents.forEach((move) => {
         if (move.replaces) {
-          moveMap[move.replaces] = move;
+          // Todo - fix replaces with new replaces logic
+          // moveMap[move.replaces] = move;
         }
         moveMap[move._id] = move;
         nonReplacedMoveMap[move._id] = move;

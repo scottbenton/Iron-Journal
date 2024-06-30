@@ -49,15 +49,15 @@ export function MoveDialogContent(props: MoveDialogContentProps) {
         {move.oracles && (
           <Box mt={2}>
             <Typography variant={"overline"}>
-              Roll Oracle{move.oracles.length > 1 ? "s" : ""}
+              Roll Oracle{Object.keys(move.oracles).length > 1 ? "s" : ""}
             </Typography>
             <Stack direction={"row"} flexWrap={"wrap"} spacing={1}>
-              {move.oracles.map((oracleId) => (
+              {Object.values(move.oracles).map((oracle) => (
                 <OracleButton
                   color={"inherit"}
                   variant={"outlined"}
-                  key={oracleId}
-                  oracleId={oracleId}
+                  key={oracle._id}
+                  oracleId={oracle._id}
                 />
               ))}
             </Stack>

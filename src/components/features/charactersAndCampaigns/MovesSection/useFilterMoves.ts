@@ -53,7 +53,8 @@ export function useFilterMoves() {
         isEmpty = false;
         visibleCategories[category._id] = CATEGORY_VISIBILITY.SOME;
         if (category.enhances) {
-          visibleCategories[category.enhances] = CATEGORY_VISIBILITY.SOME;
+          // TODO - fix with new enhances logic
+          // visibleCategories[category.enhances] = CATEGORY_VISIBILITY.SOME;
         }
       } else {
         visibleCategories[category._id] = CATEGORY_VISIBILITY.HIDDEN;

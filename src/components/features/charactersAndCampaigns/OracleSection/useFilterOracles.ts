@@ -60,6 +60,7 @@ export function useFilterOracles() {
           license: License.None,
         },
         contents: pinnedOracleRollables,
+        collections: {},
         oracle_type: "pinned_oracles",
       };
 
@@ -95,12 +96,13 @@ export function useFilterOracles() {
     const enhancesCollections: Record<string, string[]> = {};
 
     const filterCollection = (collection: CombinedCollectionType): boolean => {
-      if (collection.enhances) {
-        enhancesCollections[collection.enhances] = [
-          ...(enhancesCollections[collection.enhances] ?? []),
-          collection._id,
-        ];
-      }
+      // TODO - fix with new enhances logic
+      // if (collection.enhances) {
+      //   enhancesCollections[collection.enhances] = [
+      //     ...(enhancesCollections[collection.enhances] ?? []),
+      //     collection._id,
+      //   ];
+      // }
 
       const hasChildren =
         (collection.oracle_type === "tables" &&
@@ -151,7 +153,8 @@ export function useFilterOracles() {
         isEmpty = false;
         visibleCollections[collection._id] = CATEGORY_VISIBILITY.SOME;
         if (collection.enhances) {
-          visibleCollections[collection.enhances] = CATEGORY_VISIBILITY.SOME;
+          // TODO - fix with new enhances logic
+          // visibleCollections[collection.enhances] = CATEGORY_VISIBILITY.SOME;
         }
       } else {
         visibleCollections[collection._id] = CATEGORY_VISIBILITY.HIDDEN;
