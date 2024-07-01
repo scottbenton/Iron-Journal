@@ -8,97 +8,62 @@ import {
 import { useEffect, useState } from "react";
 import { useStore } from "stores/store";
 import { DialogTitleWithCloseButton } from "../DialogTitleWithCloseButton";
-import { UserDocument } from "api-calls/user/_user.type";
 import { HomebrewUpdate } from "./UpdateComponents/HomebrewUpdate";
+import { MapsUpdate } from "./UpdateComponents/MapsUpdate";
 
-const updateComponents: {
-  key: keyof Required<UserDocument>["updateAlerts"];
-  title: string;
-  component: React.ReactNode;
-}[] = [
-  {
-    key: "homebrewMigration",
+const updateComponents: Record<
+  string,
+  { title: string; component: React.ReactNode }
+> = {
+  "3.0.0": {
     title: "Homebrew Updates",
     component: <HomebrewUpdate />,
   },
-];
+  "3.3.0": {
+    title: "Locations have updated!",
+    component: <MapsUpdate />,
+  },
+};
+
+const appVersion = APP_VERSION;
 
 export function UpdateDialog() {
-  const getUser = useStore((store) => store.users.loadUserDocument);
-  const uid = useStore((store) => store.auth.uid);
-  const updateAlerts = useStore(
-    (store) => store.users.userMap[store.auth.uid]?.doc?.updateAlerts
-  );
-
-  const [isOpen, setIsOpen] = useState(false);
-  const markUpdatesAsRead = useStore((store) => store.auth.markUpdatesAsRead);
-  const [currentUpdateIndex, setCurrentUpdateIndex] = useState(0);
+  const user = useStore((store) => store.auth.userDoc);
+  console.debug(user);
+  const [shouldOpenIfUpdateHasComponent, setShouldOpenIfUpdateHasComponent] =
+    useState(false);
+  const updateUser = useStore((store) => store.auth.updateUserDoc);
 
   useEffect(() => {
-    if (uid) {
-      getUser(uid);
+    if (user && user.appVersion && appVersion !== user.appVersion) {
+      console.debug(appVersion, user.appVersion);
+      setShouldOpenIfUpdateHasComponent(true);
+    } else if (user && !user.appVersion) {
+      updateUser({ appVersion });
     }
-  }, [getUser, uid]);
+  }, [user, updateUser]);
 
-  useEffect(() => {
-    if (updateAlerts && Object.keys(updateAlerts).length > 0) {
-      setIsOpen(true);
-    }
-  }, [updateAlerts]);
+  const activeAlert = updateComponents[appVersion];
 
-  const activeAlerts = updateAlerts
-    ? Object.keys(updateAlerts).filter(
-        (alertKey) => updateAlerts[alertKey as keyof typeof updateAlerts]
-      )
-    : [];
-
-  if (!updateAlerts || activeAlerts.length === 0) {
+  if (!activeAlert || !user) {
     return null;
   }
 
-  const filteredAlertComponents = updateComponents.filter((component) =>
-    activeAlerts.includes(component.key)
-  );
-
   const handleClose = () => {
-    setIsOpen(false);
-    markUpdatesAsRead(Object.keys(updateAlerts));
+    setShouldOpenIfUpdateHasComponent(false);
+    updateUser({ appVersion });
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose}>
+    <Dialog open={shouldOpenIfUpdateHasComponent} onClose={handleClose}>
       <DialogTitleWithCloseButton onClose={handleClose}>
-        {filteredAlertComponents[currentUpdateIndex]?.title ??
-          "Update not found"}
+        {activeAlert.title}
       </DialogTitleWithCloseButton>
-      <DialogContent>
-        {filteredAlertComponents[currentUpdateIndex]?.component}
-      </DialogContent>
+      <DialogContent>{activeAlert.component}</DialogContent>
       <DialogActions>
-        {currentUpdateIndex > 0 && (
-          <Box flexGrow={1}>
-            <Button
-              color={"inherit"}
-              onClick={() => setCurrentUpdateIndex((prev) => prev - 1)}
-            >
-              Prev
-            </Button>
-          </Box>
-        )}
-        {currentUpdateIndex < filteredAlertComponents.length - 1 &&
-          filteredAlertComponents.length > 1 && (
-            <Button
-              color={"inherit"}
-              onClick={() => setCurrentUpdateIndex((prev) => prev + 1)}
-            >
-              Next
-            </Button>
-          )}
-        {currentUpdateIndex === filteredAlertComponents.length - 1 && (
-          <Button variant="contained" onClick={handleClose}>
-            Close
-          </Button>
-        )}
+        <Button variant="contained" onClick={handleClose}>
+          Close
+        </Button>
       </DialogActions>
     </Dialog>
   );

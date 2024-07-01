@@ -20,7 +20,6 @@ export interface AuthSliceActions {
   subscribe: () => Unsubscribe;
   subscribeToUser: (uid: string) => Unsubscribe;
   closeUserNameDialog: () => void;
-  markUpdatesAsRead: (updateIds: string[]) => void;
   updateUserDoc: (doc: UpdateData<UserDocument>) => void;
 }
 
