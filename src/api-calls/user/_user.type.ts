@@ -4,9 +4,7 @@ export interface UserDocument {
   displayName: string;
   photoURL?: string;
   hidePhoto?: boolean;
-  updateAlerts?: {
-    homebrewMigration: boolean;
-  };
+  appVersion?: string;
   layout?: {
     referenceSidebarLocation?: ReferenceSidebarLocation;
   };
