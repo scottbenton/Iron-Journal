@@ -29,14 +29,12 @@ const appVersion = APP_VERSION;
 
 export function UpdateDialog() {
   const user = useStore((store) => store.auth.userDoc);
-  console.debug(user);
   const [shouldOpenIfUpdateHasComponent, setShouldOpenIfUpdateHasComponent] =
     useState(false);
   const updateUser = useStore((store) => store.auth.updateUserDoc);
 
   useEffect(() => {
     if (user && user.appVersion && appVersion !== user.appVersion) {
-      console.debug(appVersion, user.appVersion);
       setShouldOpenIfUpdateHasComponent(true);
     } else if (user && !user.appVersion) {
       updateUser({ appVersion });

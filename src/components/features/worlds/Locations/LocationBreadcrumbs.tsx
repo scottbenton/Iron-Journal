@@ -64,5 +64,5 @@ function getAncestors(
     ancestorId = ancestor?.parentLocationId;
   }
 
-  return ancestors;
+  return ancestors.reverse();
 }
