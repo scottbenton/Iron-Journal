@@ -37,3 +37,8 @@ export type MapTool =
   | MoveLocationTool
   | BackgroundPaintTool
   | BackgroundEraserTool;
+
+export const draggableMapTools = [
+  MapTools.BackgroundPaint,
+  MapTools.BackgroundEraser,
+];

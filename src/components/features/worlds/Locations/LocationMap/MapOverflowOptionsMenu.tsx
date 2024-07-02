@@ -1,6 +1,6 @@
 import { IconButton, ListItemText, Menu, MenuItem } from "@mui/material";
 import { useRef, useState } from "react";
-import { MapStrokeColors } from "types/Locations.type";
+import { MapBackgroundImageFit, MapStrokeColors } from "types/Locations.type";
 import OverflowMenuIcon from "@mui/icons-material/MoreHoriz";
 import { useStore } from "stores/store";
 import { useSnackbar } from "providers/SnackbarProvider";
@@ -11,10 +11,16 @@ export interface MapOverflowOptionsMenuProps {
   locationId: string;
   hasBackgroundImage: boolean;
   mapStrokeColor: MapStrokeColors;
+  mapBackgroundImageFit: MapBackgroundImageFit;
 }
 
 export function MapOverflowOptionsMenu(props: MapOverflowOptionsMenuProps) {
-  const { locationId, hasBackgroundImage, mapStrokeColor } = props;
+  const {
+    locationId,
+    hasBackgroundImage,
+    mapStrokeColor,
+    mapBackgroundImageFit,
+  } = props;
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuParentRef = useRef<HTMLButtonElement>(null);
@@ -106,6 +112,23 @@ export function MapOverflowOptionsMenu(props: MapOverflowOptionsMenuProps) {
           >
             Use {mapStrokeColor === MapStrokeColors.Dark ? "Light" : "Dark"}{" "}
             Line Colors
+          </MenuItem>
+        )}
+        {hasBackgroundImage && (
+          <MenuItem
+            onClick={() => {
+              setIsMenuOpen(false);
+              updateLocation(locationId, {
+                mapBackgroundImageFit:
+                  mapBackgroundImageFit === MapBackgroundImageFit.Contain
+                    ? MapBackgroundImageFit.Cover
+                    : MapBackgroundImageFit.Contain,
+              }).catch(() => {});
+            }}
+          >
+            {mapBackgroundImageFit === MapBackgroundImageFit.Contain
+              ? "Crop image to default grid size"
+              : "Resize grid to fit image"}
           </MenuItem>
         )}
       </Menu>

@@ -25,6 +25,11 @@ export enum MapStrokeColors {
   Dark = "dark",
 }
 
+export enum MapBackgroundImageFit {
+  Contain = "contain",
+  Cover = "cover",
+}
+
 export interface BaseMapEntry {
   type?: MapEntryType | null;
   background?: {
@@ -65,6 +70,7 @@ export interface Location {
   fields?: Record<string, string>;
   map?: LocationMap;
   mapBackgroundImageFilename?: string;
+  mapBackgroundImageFit?: MapBackgroundImageFit;
   mapStrokeColor?: MapStrokeColors;
   showMap?: boolean;
 

@@ -10,13 +10,14 @@ import {
 import { LocationHexagon, LocationHexagonProps } from "./LocationHexagon";
 import {
   LocationMap as ILocationMap,
+  MapBackgroundImageFit,
   MapEntryBackgroundColors,
   MapEntryType,
   MapStrokeColors,
 } from "types/Locations.type";
 import { useStore } from "stores/store";
 import { useState } from "react";
-import { MapTool, MapTools } from "./MapTools.enum";
+import { MapTool, MapTools, draggableMapTools } from "./MapTools.enum";
 import { MapToolChooser } from "./MapToolChooser";
 import { arrayUnion } from "firebase/firestore";
 import { LocationItemAvatar } from "./LocationItemAvatar";
@@ -40,8 +41,22 @@ const DEFAULT_COLS = 18;
 
 export function LocationMap(props: LocationMapProps) {
   const { locationId, map = {}, backgroundImageUrl } = props;
+  const locationMap = useStore(
+    (store) => store.worlds.currentWorld.currentWorldLocations.locationMap
+  );
 
-  const backgroundImageDimensions = useImageDimensions(backgroundImageUrl);
+  const mapStrokeColor = backgroundImageUrl
+    ? locationMap[locationId]?.mapStrokeColor ?? MapStrokeColors.Dark
+    : MapStrokeColors.Light;
+  const mapBackgroundFit =
+    locationMap[locationId]?.mapBackgroundImageFit ??
+    MapBackgroundImageFit.Contain;
+
+  const backgroundImageDimensions = useImageDimensions(
+    backgroundImageUrl && mapBackgroundFit === MapBackgroundImageFit.Contain
+      ? backgroundImageUrl
+      : undefined
+  );
 
   const s = 20;
   const maxMapDimensions = 675;
@@ -72,9 +87,6 @@ export function LocationMap(props: LocationMapProps) {
   });
   const settingConfig = locationConfigs[settingId];
 
-  const locationMap = useStore(
-    (store) => store.worlds.currentWorld.currentWorldLocations.locationMap
-  );
   const createLocation = useStore(
     (store) =>
       store.worlds.currentWorld.currentWorldLocations.createSpecificLocation
@@ -91,10 +103,6 @@ export function LocationMap(props: LocationMapProps) {
 
   const [mapTool, setMapTool] = useState<MapTool>();
 
-  const mapStrokeColor = backgroundImageUrl
-    ? locationMap[locationId]?.mapStrokeColor ?? MapStrokeColors.Dark
-    : MapStrokeColors.Light;
-
   const [multiLocationChooserState, setMultiLocationChooserState] = useState<{
     open: boolean;
     locationIds: string[];
@@ -105,6 +113,8 @@ export function LocationMap(props: LocationMapProps) {
   });
 
   const { rollOracleTable } = useRoller();
+
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleHexClick = (
     row: number,
@@ -277,6 +287,7 @@ export function LocationMap(props: LocationMapProps) {
             locationId={locationId}
             hasBackgroundImage={!!backgroundImageUrl}
             mapStrokeColor={mapStrokeColor}
+            mapBackgroundImageFit={mapBackgroundFit}
           />
         </Box>
 
@@ -290,7 +301,11 @@ export function LocationMap(props: LocationMapProps) {
               width={width}
               height={height}
               href={backgroundImageUrl}
-              preserveAspectRatio="xMidYMid slice"
+              preserveAspectRatio={
+                mapBackgroundFit === MapBackgroundImageFit.Contain
+                  ? "xMidYMid slice"
+                  : "xMidYMid slice"
+              }
               style={{
                 background: "none",
                 pointerEvents: "none",
@@ -340,11 +355,32 @@ export function LocationMap(props: LocationMapProps) {
                     locationMap={locationMap}
                     mapEntry={mapEntry ?? undefined}
                     pathConnections={pathConnections}
-                    onClick={(cell) =>
-                      handleHexClick(row, col, locationIds, cell)
-                    }
+                    onClick={(cell) => {
+                      if (
+                        mapTool &&
+                        !draggableMapTools.includes(mapTool.type)
+                      ) {
+                        handleHexClick(row, col, locationIds, cell);
+                      }
+                    }}
                     hasBackgroundImage={!!backgroundImageUrl}
                     mapStrokeColor={mapStrokeColor}
+                    onMouseDown={(cell) => {
+                      if (mapTool && draggableMapTools.includes(mapTool.type)) {
+                        handleHexClick(row, col, locationIds, cell);
+                      }
+                      setIsDragging(true);
+                    }}
+                    onMouseUp={() => setIsDragging(false)}
+                    onMouseEnter={(cell) => {
+                      if (
+                        isDragging &&
+                        mapTool &&
+                        draggableMapTools.includes(mapTool.type)
+                      ) {
+                        handleHexClick(row, col, locationIds, cell);
+                      }
+                    }}
                   />
                 );
               });
