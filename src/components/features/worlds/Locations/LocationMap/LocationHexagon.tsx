@@ -31,6 +31,9 @@ export interface LocationHexagonProps {
     bottomRight?: boolean;
   };
   onClick?: (ref: SVGPolygonElement) => void;
+  onMouseDown?: (ref: SVGPolygonElement) => void;
+  onMouseUp?: (ref: SVGPolygonElement) => void;
+  onMouseEnter?: (ref: SVGPolygonElement) => void;
   mapStrokeColor: MapStrokeColors;
 }
 
@@ -45,6 +48,9 @@ export function LocationHexagon(props: LocationHexagonProps) {
     pathConnections,
     hasBackgroundImage,
     onClick,
+    onMouseDown,
+    onMouseEnter,
+    onMouseUp,
     mapStrokeColor,
   } = props;
 
@@ -187,6 +193,15 @@ export function LocationHexagon(props: LocationHexagonProps) {
         fill={"transparent"}
         strokeWidth="1"
         onClick={onClick ? (evt) => onClick(evt.currentTarget) : undefined}
+        onMouseDown={
+          onMouseDown ? (evt) => onMouseDown(evt.currentTarget) : undefined
+        }
+        onMouseUp={
+          onMouseUp ? (evt) => onMouseUp(evt.currentTarget) : undefined
+        }
+        onMouseEnter={
+          onMouseEnter ? (evt) => onMouseEnter(evt.currentTarget) : undefined
+        }
       />
       {mapEntry?.type === MapEntryType.Path &&
         (!pathConnections ||
