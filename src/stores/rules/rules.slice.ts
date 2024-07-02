@@ -447,4 +447,23 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
       }
     });
   },
+
+  setFromRuleset: (ruleset) => {
+    set((store) => {
+      store.rules.stats = ruleset.rules.stats;
+      store.rules.conditionMeters = ruleset.rules.condition_meters;
+      // store.r
+    });
+
+    const state = getState();
+    state.rules.rebuildOracles();
+    state.rules.rebuildMoves();
+    state.rules.rebuildStats();
+    state.rules.rebuildConditionMeters();
+    state.rules.rebuildNonLinearMeters();
+    state.rules.rebuildSpecialTracks();
+    state.rules.rebuildImpacts();
+    state.rules.rebuildAssets();
+    state.rules.rebuildWorldTruths();
+  },
 });

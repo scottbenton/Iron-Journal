@@ -22,7 +22,7 @@ let ruleset: Datasworn.Ruleset | undefined = undefined;
   }
 })();
 
-const defaultExpansions: Record<string, Datasworn.Expansion> = {};
+const defaultExpansions: Record<string, Datasworn.Expansion[]> = {};
 (async () => {
   if (gameSystem === GAME_SYSTEMS.IRONSWORN) {
     const delve = JSON.parse(
@@ -31,7 +31,15 @@ const defaultExpansions: Record<string, Datasworn.Expansion> = {};
           .default
       )
     ) as unknown as Datasworn.Expansion;
-    defaultExpansions[delve._id] = delve;
+    defaultExpansions[delve._id] = [delve];
+  } else {
+    const sunderedIsles = JSON.parse(
+      JSON.stringify(
+        (await import("@datasworn/sundered_isles/json/sundered_isles.json"))
+          .default
+      )
+    ) as unknown as Datasworn.Expansion;
+    defaultExpansions[sunderedIsles._id] = [sunderedIsles];
   }
 })();
 

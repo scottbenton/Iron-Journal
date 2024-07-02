@@ -3,6 +3,8 @@ import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLine
 
 export interface RulesSliceData {
   expansionIds: string[];
+  ruleset: Datasworn.Ruleset;
+
   baseRuleset?: Datasworn.Ruleset;
   progressTracks: string[];
   rootOracleCollectionIds: string[];
@@ -48,6 +50,8 @@ export interface RulesSliceActions {
   rebuildImpacts: () => void;
   rebuildAssets: () => void;
   rebuildWorldTruths: () => void;
+
+  setFromRuleset: (ruleset: Datasworn.Ruleset) => void;
 }
 
 export type RulesSlice = RulesSliceData & RulesSliceActions;
