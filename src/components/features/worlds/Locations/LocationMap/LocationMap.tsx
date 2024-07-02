@@ -357,8 +357,8 @@ export function LocationMap(props: LocationMapProps) {
                     pathConnections={pathConnections}
                     onClick={(cell) => {
                       if (
-                        mapTool &&
-                        !draggableMapTools.includes(mapTool.type)
+                        !mapTool ||
+                        (mapTool && !draggableMapTools.includes(mapTool.type))
                       ) {
                         handleHexClick(row, col, locationIds, cell);
                       }
