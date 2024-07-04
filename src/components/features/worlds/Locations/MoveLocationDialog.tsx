@@ -53,7 +53,11 @@ export function MoveLocationDialog(props: MoveLocationDialogProps) {
         return locationMap[a].name.localeCompare(locationMap[b].name);
       }
     })
-    .filter((lid) => lid !== locationId);
+    .filter(
+      (lid) =>
+        lid !== locationId &&
+        !isLocationADescendantOf(lid, locationId, locationMap)
+    );
 
   const moveLocation = useStore(
     (store) => store.worlds.currentWorld.currentWorldLocations.moveLocation
@@ -118,4 +122,22 @@ export function MoveLocationDialog(props: MoveLocationDialogProps) {
       </DialogContent>
     </Dialog>
   );
+}
+
+function isLocationADescendantOf(
+  locationId: string,
+  parentId: string,
+  locations: Record<string, LocationWithGMProperties>
+) {
+  let currentLocation: LocationWithGMProperties | undefined =
+    locations[locationId];
+  while (currentLocation) {
+    if (currentLocation.parentLocationId === parentId) {
+      return true;
+    }
+    currentLocation = currentLocation.parentLocationId
+      ? locations[currentLocation.parentLocationId]
+      : undefined;
+  }
+  return false;
 }
