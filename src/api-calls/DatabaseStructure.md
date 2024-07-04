@@ -105,3 +105,23 @@ If you are looking to export one of these fields (Hi Kat!), you can convert this
 
 In order to do this, you will need to read it into a TipTap editor (using the same extensions as the original), and then call the [export function](https://tiptap.dev/docs/editor/guide/output#introduction) of your choice.
 I've done this once before, so feel free to reach out if you need a hand!
+
+# Flattened Collection Structure (thought experiment - does not relate to the current implementation)
+
+characters
+assets
+game-logs
+notes
+note-content // kept separate from notes so that public viewers don't need to load all
+tracks
+campaigns
+worlds
+locations
+location-notes // separate from locations so public viewers don't need to load it
+location-guide-notes // needs replicated for field-level access
+lore
+lore-notes // separate from lroe so public viewers don't need to load it
+lore-gm-notes // needs replicated for field-level access
+npcs
+npc-notes // separate from npcs so public viewers don't need to load it
+npc-gm-notes // needs replicated for field-level access
