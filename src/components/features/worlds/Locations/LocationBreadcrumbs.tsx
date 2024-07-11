@@ -57,6 +57,9 @@ function getAncestors(
 
   let ancestorId = locationMap[locationId]?.parentLocationId;
   while (ancestorId) {
+    if (ancestors.includes(ancestorId)) {
+      break;
+    }
     const ancestor = locationMap[ancestorId];
     if (ancestor) {
       ancestors.push(ancestorId);

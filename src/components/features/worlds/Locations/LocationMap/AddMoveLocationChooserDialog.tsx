@@ -105,7 +105,9 @@ export function AddMoveLocationChooserDialog(
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button color={"inherit"}>Cancel</Button>
+        <Button color={"inherit"} onClick={onClose}>
+          Cancel
+        </Button>
       </DialogActions>
     </Dialog>
   );

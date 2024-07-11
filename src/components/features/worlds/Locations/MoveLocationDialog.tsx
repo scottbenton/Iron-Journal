@@ -131,10 +131,26 @@ function isLocationADescendantOf(
 ) {
   let currentLocation: LocationWithGMProperties | undefined =
     locations[locationId];
+  const seenParentIds = new Set<string>([locationId]);
+
   while (currentLocation) {
-    if (currentLocation.parentLocationId === parentId) {
+    console.debug("in here", currentLocation.parentLocationId, locationId);
+    const parentLocationId = currentLocation.parentLocationId;
+
+    if (parentLocationId) {
+      if (seenParentIds.has(parentLocationId)) {
+        console.error(
+          `Found loop in location hierarchy. ${locationId} -> ${parentLocationId}`
+        );
+        return false;
+      }
+      seenParentIds.add(parentLocationId);
+    }
+
+    if (parentLocationId === parentId) {
       return true;
     }
+
     currentLocation = currentLocation.parentLocationId
       ? locations[currentLocation.parentLocationId]
       : undefined;
