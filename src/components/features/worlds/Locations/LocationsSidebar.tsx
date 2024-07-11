@@ -63,6 +63,10 @@ function getCurrentLocationAncestors(
   const currentLocationAncestors: string[] = [];
   let currentLocation = locations[locationId];
   while (currentLocation?.parentLocationId) {
+    if (currentLocationAncestors.includes(currentLocation.parentLocationId)) {
+      currentLocationAncestors.push("root");
+      break;
+    }
     currentLocationAncestors.push(currentLocation.parentLocationId);
     currentLocation = locations[currentLocation.parentLocationId];
   }
