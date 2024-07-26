@@ -1,9 +1,11 @@
 import { Tabs, TabsProps } from "@mui/material";
 
-export interface StyledTabsProps extends TabsProps {}
+export interface StyledTabsProps extends TabsProps {
+  removeBackgroundColor?: boolean;
+}
 
 export function StyledTabs(props: StyledTabsProps) {
-  const { sx, ...otherProps } = props;
+  const { sx, removeBackgroundColor, ...otherProps } = props;
   return (
     <Tabs
       TabIndicatorProps={{
@@ -25,7 +27,9 @@ export function StyledTabs(props: StyledTabsProps) {
       sx={[
         (theme) => ({
           py: 0,
-          backgroundColor: theme.palette.background.paperInlay,
+          backgroundColor: removeBackgroundColor
+            ? undefined
+            : theme.palette.background.paperInlay,
           borderBottom: `1px solid ${theme.palette.divider}`,
           alignItems: "center",
         }),

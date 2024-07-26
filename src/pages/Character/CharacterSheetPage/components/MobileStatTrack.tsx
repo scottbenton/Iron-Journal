@@ -13,10 +13,11 @@ export interface MobileStatTrackProps {
   max: number;
   onChange: (newValue: number) => Promise<void>;
   disableRoll: boolean;
+  smallSize?: boolean;
 }
 
 export function MobileStatTrack(props: MobileStatTrackProps) {
-  const { label, value, min, max, onChange, disableRoll } = props;
+  const { label, value, min, max, onChange, disableRoll, smallSize } = props;
 
   const hasUnsavedChangesRef = useRef(false);
   const announce = useStore((store) => store.appState.announce);
@@ -53,15 +54,16 @@ export function MobileStatTrack(props: MobileStatTrackProps) {
       sx={(theme) => ({
         border: `1px solid ${theme.palette.divider}`,
         borderRadius: theme.shape.borderRadius + "px",
-        gap: 0.5,
+        gap: smallSize ? 0 : 0.5,
         py: 0.5,
-        px: 1,
+        px: smallSize ? 0 : 1,
       })}
     >
       <IconButton
         disabled={localValue <= min}
         onClick={() => handleChange(localValue - 1)}
         aria-label={`Subtract 1 ${label}`}
+        size={smallSize ? "small" : undefined}
       >
         <SubtractIcon />
       </IconButton>

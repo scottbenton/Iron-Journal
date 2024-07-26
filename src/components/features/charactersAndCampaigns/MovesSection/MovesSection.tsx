@@ -5,7 +5,13 @@ import { useFilterMoves } from "./useFilterMoves";
 import { useStore } from "stores/store";
 import { EmptyState } from "components/shared/EmptyState";
 
-export function MovesSection() {
+export interface MovesSectionProps {
+  shouldExpandLocally?: boolean;
+}
+
+export function MovesSection(props: MovesSectionProps) {
+  const { shouldExpandLocally } = props;
+
   const {
     moveCategories,
     moveMap,
@@ -64,6 +70,7 @@ export function MovesSection() {
               forceOpen={isSearchActive}
               visibleCategories={visibleMoveCategoryIds}
               visibleMoves={visibleMoveIds}
+              shouldExpandLocally={shouldExpandLocally}
             />
           ))
         ) : (

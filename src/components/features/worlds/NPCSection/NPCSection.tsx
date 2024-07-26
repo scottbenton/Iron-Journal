@@ -22,10 +22,11 @@ import { DefaultNPCSpecies, NPC } from "types/NPCs.type";
 export interface NPCSectionProps {
   isSinglePlayer?: boolean;
   showHiddenTag?: boolean;
+  hideSidebar?: boolean;
 }
 
 export function NPCSection(props: NPCSectionProps) {
-  const { isSinglePlayer, showHiddenTag } = props;
+  const { isSinglePlayer, showHiddenTag, hideSidebar } = props;
 
   const defaultNPC = useGameSystemValue<Partial<NPC>>({
     [GAME_SYSTEMS.IRONSWORN]: { species: DefaultNPCSpecies.Ironlander },
@@ -98,30 +99,32 @@ export function NPCSection(props: NPCSectionProps) {
         maxHeight={"100%"}
         height={"100%"}
       >
-        <Hidden smDown>
-          <Box overflow={"auto"} flexGrow={1} minWidth={200} maxWidth={400}>
-            <List>
-              {sortedNPCIds.map((npcId) => (
-                <ListItem key={npcId} disablePadding>
-                  <ListItemButton
-                    selected={npcId === openNPCId}
-                    onClick={() => setOpenNPCId(npcId)}
-                  >
-                    <ListItemText
-                      primary={npcs[npcId].name}
-                      secondary={
-                        !isSinglePlayer &&
-                        isWorldOwner &&
-                        showHiddenTag &&
-                        (!npcs[npcId].sharedWithPlayers ? "Hidden" : "Shared")
-                      }
-                    />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          </Box>
-        </Hidden>
+        {!hideSidebar && (
+          <Hidden smDown>
+            <Box overflow={"auto"} flexGrow={1} minWidth={200} maxWidth={400}>
+              <List>
+                {sortedNPCIds.map((npcId) => (
+                  <ListItem key={npcId} disablePadding>
+                    <ListItemButton
+                      selected={npcId === openNPCId}
+                      onClick={() => setOpenNPCId(npcId)}
+                    >
+                      <ListItemText
+                        primary={npcs[npcId].name}
+                        secondary={
+                          !isSinglePlayer &&
+                          isWorldOwner &&
+                          showHiddenTag &&
+                          (!npcs[npcId].sharedWithPlayers ? "Hidden" : "Shared")
+                        }
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          </Hidden>
+        )}
 
         <OpenNPC
           worldId={worldId}
@@ -130,6 +133,7 @@ export function NPCSection(props: NPCSectionProps) {
           locations={locations}
           sectors={sectors}
           closeNPC={() => setOpenNPCId()}
+          hideBorder={hideSidebar}
         />
       </Box>
     );

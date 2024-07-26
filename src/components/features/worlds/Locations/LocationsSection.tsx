@@ -13,10 +13,11 @@ import { OpenLocation } from "./OpenLocation";
 export interface LocationsSectionProps {
   showHiddenTag?: boolean;
   openNPCTab: () => void;
+  hideSidebar?: boolean;
 }
 
 export function LocationsSection(props: LocationsSectionProps) {
-  const { openNPCTab, showHiddenTag } = props;
+  const { openNPCTab, showHiddenTag, hideSidebar } = props;
 
   const { showGMTips } = useWorldPermissions();
 
@@ -78,14 +79,17 @@ export function LocationsSection(props: LocationsSectionProps) {
         height={"100%"}
         width={"100%"}
       >
-        <LocationsSidebar
-          locationIds={sortedLocationIds}
-          locations={locations}
-          openLocationId={openLocationId}
-          setOpenLocationId={setOpenLocationId}
-          showHiddenText={shouldShowHiddenTag ?? false}
-        />
+        {!hideSidebar && (
+          <LocationsSidebar
+            locationIds={sortedLocationIds}
+            locations={locations}
+            openLocationId={openLocationId}
+            setOpenLocationId={setOpenLocationId}
+            showHiddenText={shouldShowHiddenTag ?? false}
+          />
+        )}
         <OpenLocation
+          hideBorder={hideSidebar}
           worldId={worldId}
           locationId={openLocationId}
           location={openLocation}

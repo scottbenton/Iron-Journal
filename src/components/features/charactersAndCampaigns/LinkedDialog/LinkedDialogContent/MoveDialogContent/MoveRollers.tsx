@@ -1,5 +1,5 @@
 import { Datasworn } from "@datasworn/core";
-import { Chip, Stack } from "@mui/material";
+import { Box, Chip, Stack } from "@mui/material";
 import { StatComponent } from "components/features/characters/StatComponent";
 import { useStore } from "stores/store";
 import { MoveAssetControl } from "./MoveAssetControl";
@@ -72,7 +72,7 @@ export function MoveRollers(props: MoveRollersProps) {
       });
     });
     return (
-      <Stack spacing={0.5} direction={"row"} flexWrap={"wrap"} sx={{ mt: 0.5 }}>
+      <Box display={"flex"} flexWrap={"wrap"} gap={0.5} mt={0.5}>
         {Object.keys(statRules)
           .filter((stat) => stats[stat])
           .map((stat) =>
@@ -128,10 +128,9 @@ export function MoveRollers(props: MoveRollersProps) {
             label={"Adds"}
             updateTrack={(newValue) => updateAdds({ adds: newValue })}
             value={adds}
-            sx={{ my: 0.5 }}
           />
         )}
-      </Stack>
+      </Box>
     );
   } else if (move.roll_type === "progress_roll") {
     const trackCategory = move.tracks.category;

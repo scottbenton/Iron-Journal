@@ -35,7 +35,7 @@ export function Editor(props: EditorProps) {
               borderRadius: `${theme.shape.borderRadius}px`,
             }
           : {
-              height: "100%",
+              flexGrow: 1,
               display: "flex",
               flexDirection: "column",
             }

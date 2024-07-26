@@ -55,6 +55,7 @@ export interface OpenLocationProps {
   closeLocation: () => void;
   showHiddenTag?: boolean;
   openNPCTab: () => void;
+  hideBorder?: boolean;
 }
 
 export function OpenLocation(props: OpenLocationProps) {
@@ -65,6 +66,7 @@ export function OpenLocation(props: OpenLocationProps) {
     closeLocation,
     showHiddenTag,
     openNPCTab,
+    hideBorder,
   } = props;
   const { showGMFields, showGMTips, isGuidedGame } = useWorldPermissions();
 
@@ -192,6 +194,7 @@ export function OpenLocation(props: OpenLocationProps) {
 
   return (
     <PageWithImage
+      hideBorder={hideBorder}
       breadcrumbs={<LocationBreadcrumbs locationId={locationId} />}
       imageUrl={location.imageUrl}
       icon={icon}

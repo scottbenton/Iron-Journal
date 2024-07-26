@@ -94,6 +94,7 @@ export interface OpenNPCProps {
   sectors: Record<string, Sector>;
   npc: NPCDocumentWithGMProperties;
   closeNPC: () => void;
+  hideBorder?: boolean;
 }
 
 const nameOracles: { [key in DefaultNPCSpecies]: string | string[] } = {
@@ -112,7 +113,8 @@ const nameOracles: { [key in DefaultNPCSpecies]: string | string[] } = {
 };
 
 export function OpenNPC(props: OpenNPCProps) {
-  const { worldId, npcId, locations, npc, closeNPC, sectors } = props;
+  const { worldId, npcId, locations, npc, closeNPC, sectors, hideBorder } =
+    props;
   const confirm = useConfirm();
 
   const { showGMFields, showGMTips, isGuidedGame } = useWorldPermissions();
@@ -286,6 +288,7 @@ export function OpenNPC(props: OpenNPCProps) {
       }}
       handleImageRemove={() => removeNPCImage(npcId).catch(() => {})}
       handlePageClose={closeNPC}
+      hideBorder={hideBorder}
     >
       <Box display={"flex"} flexDirection={"column"}>
         <Box mt={1}>

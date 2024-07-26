@@ -1,7 +1,13 @@
 import { PortraitAvatar } from "components/features/characters/PortraitAvatar/PortraitAvatar";
+import { AvatarSizes } from "components/features/characters/PortraitAvatar/PortraitAvatarDisplay";
 import { useStore } from "stores/store";
 
-export function CharacterPortrait() {
+export interface CharacterPortraitProps {
+  size?: AvatarSizes;
+}
+
+export function CharacterPortrait(props: CharacterPortraitProps) {
+  const { size } = props;
   const uid = useStore((store) => store.auth.uid);
   const characterId = useStore(
     (store) => store.characters.currentCharacter.currentCharacterId ?? ""
@@ -20,6 +26,7 @@ export function CharacterPortrait() {
       characterId={characterId}
       name={characterName}
       portraitSettings={characterPortraitSettings ?? undefined}
+      size={size}
     />
   );
 }

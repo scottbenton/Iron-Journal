@@ -20,10 +20,11 @@ import { useState } from "react";
 export interface LoreSectionProps {
   isSinglePlayer?: boolean;
   showHiddenTag?: boolean;
+  hideSidebar?: boolean;
 }
 
 export function LoreSection(props: LoreSectionProps) {
-  const { isSinglePlayer, showHiddenTag } = props;
+  const { isSinglePlayer, showHiddenTag, hideSidebar } = props;
 
   const worldId = useStore((store) => store.worlds.currentWorld.currentWorldId);
   const isWorldOwner = useStore(
@@ -85,30 +86,34 @@ export function LoreSection(props: LoreSectionProps) {
         maxHeight={"100%"}
         height={"100%"}
       >
-        <Hidden smDown>
-          <Box overflow={"auto"} flexGrow={1} minWidth={200} maxWidth={400}>
-            <List>
-              {sortedLoreIds.map((loreId) => (
-                <ListItem key={loreId} disablePadding>
-                  <ListItemButton
-                    selected={loreId === openLoreId}
-                    onClick={() => setOpenLoreId(loreId)}
-                  >
-                    <ListItemText
-                      primary={lore[loreId].name}
-                      secondary={
-                        !isSinglePlayer &&
-                        isWorldOwner &&
-                        showHiddenTag &&
-                        (!lore[loreId].sharedWithPlayers ? "Hidden" : "Shared")
-                      }
-                    />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          </Box>
-        </Hidden>
+        {!hideSidebar && (
+          <Hidden smDown>
+            <Box overflow={"auto"} flexGrow={1} minWidth={200} maxWidth={400}>
+              <List>
+                {sortedLoreIds.map((loreId) => (
+                  <ListItem key={loreId} disablePadding>
+                    <ListItemButton
+                      selected={loreId === openLoreId}
+                      onClick={() => setOpenLoreId(loreId)}
+                    >
+                      <ListItemText
+                        primary={lore[loreId].name}
+                        secondary={
+                          !isSinglePlayer &&
+                          isWorldOwner &&
+                          showHiddenTag &&
+                          (!lore[loreId].sharedWithPlayers
+                            ? "Hidden"
+                            : "Shared")
+                        }
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          </Hidden>
+        )}
 
         <OpenLore
           worldId={worldId}
@@ -116,6 +121,7 @@ export function LoreSection(props: LoreSectionProps) {
           loreId={openLoreId}
           closeLore={() => setOpenLoreId(undefined)}
           tagList={[...tags.values()]}
+          hideBorder={hideSidebar}
         />
       </Box>
     );

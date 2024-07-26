@@ -29,10 +29,11 @@ export interface OpenLoreProps {
   lore: LoreDocumentWithGMProperties;
   closeLore: () => void;
   tagList: string[];
+  hideBorder?: boolean;
 }
 
 export function OpenLore(props: OpenLoreProps) {
-  const { worldId, loreId, lore, closeLore, tagList } = props;
+  const { worldId, loreId, lore, closeLore, tagList, hideBorder } = props;
 
   const { showGMFields, showGMTips, isGuidedGame } = useWorldPermissions();
 
@@ -143,6 +144,7 @@ export function OpenLore(props: OpenLoreProps) {
       }}
       handleImageRemove={() => removeLoreImage(loreId)}
       handlePageClose={closeLore}
+      hideBorder={hideBorder}
     >
       <Box display={"flex"} flexDirection={"column"}>
         <Box mt={1}>
