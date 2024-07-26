@@ -15,6 +15,7 @@ export interface PageWithImageProps {
   actions?: React.ReactNode;
   name: string;
   nameInput: React.ReactNode;
+  hideBorder?: boolean;
 
   handleImageUpload: (image: File) => void;
   handleIconSelection: (icon: IconDefinition) => void;
@@ -35,6 +36,7 @@ export function PageWithImage(props: PropsWithChildren<PageWithImageProps>) {
     handlePageClose,
     children,
     breadcrumbs,
+    hideBorder,
   } = props;
 
   const hasImage = !!imageUrl || !!icon;
@@ -61,7 +63,7 @@ export function PageWithImage(props: PropsWithChildren<PageWithImageProps>) {
               imageUrl || !!breadcrumbs
                 ? `1px solid ${theme.palette.divider}`
                 : undefined,
-            borderLeft: `1px solid ${theme.palette.divider}`,
+            borderLeft: hideBorder ? 0 : `1px solid ${theme.palette.divider}`,
             zIndex: 1,
             position: "relative",
             flexGrow: 1,

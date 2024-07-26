@@ -20,6 +20,7 @@ export interface NotesProps {
     isBeaconRequest?: boolean;
   }) => Promise<boolean | void>;
   onDelete?: (noteId: string) => void;
+  hideSidebar?: boolean;
   condensedView?: boolean;
   source:
     | { type: "character"; characterId: string }
@@ -37,6 +38,7 @@ export function Notes(props: NotesProps) {
     onSave,
     onDelete,
     condensedView,
+    hideSidebar,
     source,
   } = props;
 
@@ -75,7 +77,7 @@ export function Notes(props: NotesProps) {
       display={"flex"}
       width={"100%"}
     >
-      {(!condensedView || !selectedNoteId) && (
+      {((!hideSidebar && !condensedView) || !selectedNoteId) && (
         <NoteSidebar
           notes={notes}
           selectedNoteId={selectedNoteId}
@@ -95,7 +97,7 @@ export function Notes(props: NotesProps) {
           flexDirection={"column"}
           sx={{ overflowY: "auto" }}
         >
-          {condensedView &&
+          {(condensedView || hideSidebar) &&
             (selectedNote || selectedNoteId === ROLL_LOG_ID) && (
               <Breadcrumbs aria-label="breadcrumb" sx={{ px: 2, py: 1 }}>
                 <Link

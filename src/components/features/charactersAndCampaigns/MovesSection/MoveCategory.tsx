@@ -12,6 +12,7 @@ export interface MoveCategoryProps {
   forceOpen?: boolean;
   visibleCategories: Record<string, CATEGORY_VISIBILITY>;
   visibleMoves: Record<string, boolean>;
+  shouldExpandLocally?: boolean;
 }
 
 export function MoveCategory(props: MoveCategoryProps) {
@@ -22,6 +23,7 @@ export function MoveCategory(props: MoveCategoryProps) {
     forceOpen,
     visibleCategories,
     visibleMoves,
+    shouldExpandLocally,
   } = props;
 
   const [isExpanded, setIsExpanded] = useState(false);
@@ -55,6 +57,7 @@ export function MoveCategory(props: MoveCategoryProps) {
                 move={moveMap[move._id]}
                 disabled={!isExpandedOrForced}
                 openMove={openMove}
+                shouldExpandLocally={shouldExpandLocally}
               />
             ) : null
           )}
