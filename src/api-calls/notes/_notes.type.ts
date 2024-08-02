@@ -3,6 +3,7 @@ import { Bytes } from "firebase/firestore";
 export interface NoteDocument {
   title: string;
   order: number;
+  shared?: boolean;
 }
 
 export interface NoteContentDocument {

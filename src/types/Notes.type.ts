@@ -3,4 +3,5 @@ export interface Note {
 
   title: string;
   order: number;
+  shared: boolean;
 }

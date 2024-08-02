@@ -1,10 +1,13 @@
-import { NotesSliceData } from "./notes.slice.type";
+import { NoteSource, NotesSliceData } from "./notes.slice.type";
 
 export const defaultNotesSlice: NotesSliceData = {
-  notes: [],
+  notes: {
+    [NoteSource.Character]: [],
+    [NoteSource.Campaign]: [],
+  },
   loading: false,
   error: undefined,
 
-  openNoteId: undefined,
+  openNote: undefined,
   openNoteContent: undefined,
 };

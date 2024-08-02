@@ -134,7 +134,6 @@ function isLocationADescendantOf(
   const seenParentIds = new Set<string>([locationId]);
 
   while (currentLocation) {
-    console.debug("in here", currentLocation.parentLocationId, locationId);
     const parentLocationId = currentLocation.parentLocationId;
 
     if (parentLocationId) {

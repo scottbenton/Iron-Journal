@@ -3,28 +3,52 @@ import { Note } from "types/Notes.type";
 
 export const ROLL_LOG_ID = "roll-log";
 
+export enum NoteSource {
+  Character = "character",
+  Campaign = "campaign",
+}
+
 export interface NotesSliceData {
-  notes: Note[];
+  notes: Record<NoteSource, Note[]>;
   loading: boolean;
   error?: string;
 
-  openNoteId?: string;
+  openNote?:
+    | typeof ROLL_LOG_ID
+    | {
+        source: NoteSource;
+        id: string;
+      };
   openNoteContent?: Uint8Array | null;
 }
 
 export interface NotesSliceActions {
   subscribe: (
     campaignId: string | undefined,
+    loadAllCampaignDocs: boolean,
     characterId: string | undefined
   ) => Unsubscribe;
-  subscribeToNoteContent: (noteId: string) => Unsubscribe;
+  subscribeToNoteContent: (note: {
+    source: NoteSource;
+    id: string;
+  }) => Unsubscribe;
 
-  setOpenNoteId: (openNoteId?: string) => void;
+  setOpenNoteId: (
+    note?: typeof ROLL_LOG_ID | { source: NoteSource; id: string }
+  ) => void;
 
-  temporarilyReorderNotes: (noteId: string, order: number) => void;
+  temporarilyReorderNotes: (
+    note: { source: NoteSource; id: string },
+    order: number
+  ) => void;
 
-  addNote: (order: number) => Promise<string>;
+  addNote: (
+    source: NoteSource,
+    order: number,
+    shared?: boolean
+  ) => Promise<string>;
   updateNote: (
+    source: NoteSource,
     campaignId: string | undefined,
     characterId: string | undefined,
     noteId: string,
@@ -32,8 +56,15 @@ export interface NotesSliceActions {
     content: Uint8Array | undefined,
     isBeaconRequest?: boolean
   ) => Promise<void>;
-  updateNoteOrder: (noteId: string, order: number) => Promise<void>;
-  removeNote: (noteId: string) => Promise<void>;
+  updateNoteOrder: (
+    note: { source: NoteSource; id: string },
+    order: number
+  ) => Promise<void>;
+  updateNoteShared: (
+    note: { source: NoteSource; id: string },
+    shared: boolean
+  ) => Promise<void>;
+  removeNote: (note: { source: NoteSource; id: string }) => Promise<void>;
 
   resetStore: () => void;
 }
