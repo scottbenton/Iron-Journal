@@ -71,6 +71,16 @@ export function Notes(props: NotesProps) {
     [campaignId, characterId]
   );
 
+  const handleDelete = useCallback(
+    (unparsedId: string) => {
+      const id = parseId(unparsedId);
+      onDelete(id).then(() => {
+        setSelectedNote();
+      });
+    },
+    [onDelete, setSelectedNote]
+  );
+
   const roomPrefix =
     selectedNote && typeof selectedNote !== "string"
       ? selectedNote.source === NoteSource.Character
@@ -139,10 +149,7 @@ export function Notes(props: NotesProps) {
                 initialValue={selectedNoteContent ?? undefined}
                 showTitle
                 onSave={saveCallback}
-                onDelete={(unparsedId) => {
-                  const id = parseId(unparsedId);
-                  onDelete(id);
-                }}
+                onDelete={handleDelete}
                 extraEditorActions={
                   selectedNote.source === NoteSource.Campaign &&
                   campaignType === CampaignType.Guided &&

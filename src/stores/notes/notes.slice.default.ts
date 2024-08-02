@@ -1,4 +1,4 @@
-import { NoteSource, NotesSliceData } from "./notes.slice.type";
+import { NoteSource, NotesSliceData, ROLL_LOG_ID } from "./notes.slice.type";
 
 export const defaultNotesSlice: NotesSliceData = {
   notes: {
@@ -8,6 +8,6 @@ export const defaultNotesSlice: NotesSliceData = {
   loading: false,
   error: undefined,
 
-  openNote: undefined,
+  openNote: ROLL_LOG_ID,
   openNoteContent: undefined,
 };
