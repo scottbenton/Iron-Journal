@@ -50,24 +50,25 @@ export function Notes(props: NotesProps) {
 
   const saveCallback = useCallback(
     (
-      note: { id: string; source: NoteSource },
+      unparsedId: string,
       notes: Uint8Array,
       isBeaconRequest?: boolean,
       title?: string
-    ) =>
-      onSave
-        ? onSave(
-            note.source,
-            campaignId,
-            characterId,
-            note.id,
-            title ?? "Note",
-            notes,
-            isBeaconRequest
-          )
-        : new Promise<void>((res) => res()),
+    ) => {
+      const note = parseId(unparsedId);
+
+      return onSave(
+        note.source,
+        campaignId,
+        characterId,
+        note.id,
+        title ?? "Note",
+        notes,
+        isBeaconRequest
+      );
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [campaignId, characterId]
   );
 
   const roomPrefix =
@@ -137,16 +138,7 @@ export function Notes(props: NotesProps) {
                 id={constructId(selectedNote.source, selectedNote.id)}
                 initialValue={selectedNoteContent ?? undefined}
                 showTitle
-                onSave={(unparsedId, notes, isBeaconRequest, title) => {
-                  const { source, id } = parseId(unparsedId);
-
-                  return saveCallback(
-                    { source, id },
-                    notes,
-                    isBeaconRequest,
-                    title
-                  );
-                }}
+                onSave={saveCallback}
                 onDelete={(unparsedId) => {
                   const id = parseId(unparsedId);
                   onDelete(id);
