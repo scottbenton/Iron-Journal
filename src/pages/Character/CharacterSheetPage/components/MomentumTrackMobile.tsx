@@ -72,7 +72,6 @@ export function MomentumTrackMobile(props: MomentumTrackMobileProps) {
         display={"flex"}
         alignItems={"center"}
         justifyContent={"space-between"}
-        px={1}
         gap={0.5}
         flexGrow={1}
       >

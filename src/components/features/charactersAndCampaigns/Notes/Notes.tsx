@@ -23,7 +23,11 @@ export interface NotesProps {
 export function Notes(props: NotesProps) {
   const { condensedView, hideSidebar } = props;
 
-  const selectedNote = useStore((store) => store.notes.openNote);
+  const selectedNote = useStore(
+    (store) =>
+      store.notes.openNote ??
+      (condensedView || hideSidebar ? undefined : ROLL_LOG_ID)
+  );
   const selectedNoteItem = useStore((store) => {
     const openNote = store.notes.openNote;
     if (openNote && typeof openNote !== "string") {
