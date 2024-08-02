@@ -56,7 +56,7 @@ export function MobileStatTrack(props: MobileStatTrackProps) {
         borderRadius: theme.shape.borderRadius + "px",
         gap: smallSize ? 0 : 0.5,
         py: 0.5,
-        px: smallSize ? 0 : 1,
+        px: 0,
       })}
     >
       <IconButton

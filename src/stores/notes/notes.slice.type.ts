@@ -13,7 +13,7 @@ export interface NotesSliceData {
   loading: boolean;
   error?: string;
 
-  openNote:
+  openNote?:
     | typeof ROLL_LOG_ID
     | {
         source: NoteSource;
