@@ -10,8 +10,8 @@ export function useListenToNotes() {
   );
   const showAllCampaignDocs = useStore((store) => {
     const isGuidedCampaign =
-      store.campaigns.currentCampaign.currentCampaign?.type ??
-      CampaignType.Guided === CampaignType.Guided;
+      (store.campaigns.currentCampaign.currentCampaign?.type ??
+        CampaignType.Guided) === CampaignType.Guided;
     const isGM =
       store.campaigns.currentCampaign.currentCampaign?.gmIds?.includes(
         store.auth.uid
