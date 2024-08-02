@@ -10,10 +10,11 @@ export const addNote = createApiFunction<
     campaignId?: string;
     characterId?: string;
     order: number;
+    shared?: boolean;
   },
   string
 >((params) => {
-  const { campaignId, characterId, order } = params;
+  const { campaignId, characterId, order, shared } = params;
 
   return new Promise((resolve, reject) => {
     if (!campaignId && !characterId) {
@@ -28,6 +29,7 @@ export const addNote = createApiFunction<
       {
         order,
         title: "New Page",
+        shared: shared ?? false,
       }
     )
       .then((doc) => {

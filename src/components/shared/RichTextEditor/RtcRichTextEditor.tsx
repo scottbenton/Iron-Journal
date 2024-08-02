@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { WebrtcProvider } from "y-webrtc";
 import * as Y from "yjs";
 import { RtcEditorComponent } from "./RtcEditorComponent";
@@ -19,6 +19,7 @@ export interface RtcRichTextEditorProps {
   onDelete?: (id: string) => void;
   initialValue?: Uint8Array;
   showTitle?: boolean;
+  extraEditorActions?: ReactNode;
 }
 
 export function RtcRichTextEditor(props: RtcRichTextEditorProps) {
@@ -30,6 +31,7 @@ export function RtcRichTextEditor(props: RtcRichTextEditorProps) {
     onDelete,
     initialValue,
     showTitle,
+    extraEditorActions,
   } = props;
   const initialValueRef = useCreateRefFrom(initialValue);
 
@@ -163,6 +165,7 @@ export function RtcRichTextEditor(props: RtcRichTextEditorProps) {
       saving={saving}
       deleteNote={onDelete ? () => onDelete(id) : undefined}
       withHeading={showTitle}
+      extraEditorActions={extraEditorActions}
     />
   );
 }

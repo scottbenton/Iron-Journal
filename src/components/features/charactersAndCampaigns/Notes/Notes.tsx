@@ -1,93 +1,104 @@
-import { Box, Breadcrumbs, Link, Typography } from "@mui/material";
-import { Note } from "types/Notes.type";
+import {
+  Box,
+  Breadcrumbs,
+  Checkbox,
+  FormControlLabel,
+  Link,
+  Typography,
+} from "@mui/material";
 import { NoteSidebar } from "./NoteSidebar";
-import { ROLL_LOG_ID } from "stores/notes/notes.slice.type";
+import { NoteSource, ROLL_LOG_ID } from "stores/notes/notes.slice.type";
 import { GameLog } from "components/features/charactersAndCampaigns/GameLog";
 import { RtcRichTextEditor } from "components/shared/RichTextEditor/RtcRichTextEditor";
 import { useCallback } from "react";
+import { useStore } from "stores/store";
+import { useCampaignType } from "hooks/useCampaignType";
+import { CampaignType } from "api-calls/campaign/_campaign.type";
 
 export interface NotesProps {
-  notes: Note[];
-  selectedNoteId?: string;
-  selectedNoteContent?: Uint8Array | null;
-  openNote: (noteId?: string) => void;
-  createNote?: () => Promise<string>;
-  updateNoteOrder?: (noteId: string, order: number) => Promise<boolean | void>;
-  onSave?: (params: {
-    noteId: string;
-    title: string;
-    content?: Uint8Array;
-    isBeaconRequest?: boolean;
-  }) => Promise<boolean | void>;
-  onDelete?: (noteId: string) => void;
   hideSidebar?: boolean;
   condensedView?: boolean;
-  source:
-    | { type: "character"; characterId: string }
-    | { type: "campaign"; campaignId: string };
 }
 
 export function Notes(props: NotesProps) {
-  const {
-    notes,
-    selectedNoteId,
-    selectedNoteContent,
-    openNote,
-    createNote,
-    updateNoteOrder,
-    onSave,
-    onDelete,
-    condensedView,
-    hideSidebar,
-    source,
-  } = props;
+  const { condensedView, hideSidebar } = props;
 
-  const selectedNote = notes.find((note) => note.noteId === selectedNoteId);
+  const selectedNote = useStore((store) => store.notes.openNote);
+  const selectedNoteItem = useStore((store) => {
+    const openNote = store.notes.openNote;
+    if (openNote && typeof openNote !== "string") {
+      return store.notes.notes[openNote.source].find(
+        (note) => note.noteId === openNote.id
+      );
+    }
+    return undefined;
+  });
 
-  const roomPrefix =
-    source.type === "character"
-      ? `characters-${source.characterId}-`
-      : `campaigns-${source.campaignId}-`;
-  const roomPassword =
-    source.type === "character" ? source.characterId : source.campaignId;
+  const setSelectedNote = useStore((store) => store.notes.setOpenNoteId);
+  const selectedNoteContent = useStore((store) => store.notes.openNoteContent);
+
+  const characterId = useStore(
+    (store) => store.characters.currentCharacter.currentCharacterId
+  );
+  const campaignId = useStore(
+    (store) => store.campaigns.currentCampaign.currentCampaignId
+  );
+
+  const onSave = useStore((store) => store.notes.updateNote);
+  const onDelete = useStore((store) => store.notes.removeNote);
+  const updateNoteShared = useStore((store) => store.notes.updateNoteShared);
 
   const saveCallback = useCallback(
     (
-      noteId: string,
+      note: { id: string; source: NoteSource },
       notes: Uint8Array,
       isBeaconRequest?: boolean,
       title?: string
     ) =>
       onSave
-        ? onSave({
-            noteId,
-            title: title ?? "Note",
-            content: notes,
-            isBeaconRequest,
-          })
+        ? onSave(
+            note.source,
+            campaignId,
+            characterId,
+            note.id,
+            title ?? "Note",
+            notes,
+            isBeaconRequest
+          )
         : new Promise<void>((res) => res()),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
+  const roomPrefix =
+    selectedNote && typeof selectedNote !== "string"
+      ? selectedNote.source === NoteSource.Character
+        ? `characters-${characterId}-`
+        : `campaigns-${campaignId}-`
+      : "";
+  const roomPassword =
+    selectedNote && typeof selectedNote !== "string"
+      ? selectedNote.source === NoteSource.Character
+        ? characterId
+        : campaignId
+      : "";
+
+  const { showGuidedPlayerView, campaignType } = useCampaignType();
+
   return (
     <Box
-      height={condensedView && selectedNoteId === ROLL_LOG_ID ? "70vh" : "100%"}
+      height={condensedView && selectedNote === ROLL_LOG_ID ? "70vh" : "100%"}
       minHeight={"50vh"}
       display={"flex"}
       width={"100%"}
     >
-      {((!hideSidebar && !condensedView) || !selectedNoteId) && (
+      {((!hideSidebar && !condensedView) || !selectedNote) && (
         <NoteSidebar
-          notes={notes}
-          selectedNoteId={selectedNoteId}
-          openNote={openNote}
-          createNote={createNote}
-          updateNoteOrder={updateNoteOrder}
+          selectedNote={selectedNote}
           isMobile={condensedView ?? false}
         />
       )}
-      {(!condensedView || selectedNoteId) && (
+      {(!condensedView || selectedNote) && (
         <Box
           flexGrow={1}
           flexShrink={0}
@@ -98,40 +109,84 @@ export function Notes(props: NotesProps) {
           sx={{ overflowY: "auto" }}
         >
           {(condensedView || hideSidebar) &&
-            (selectedNote || selectedNoteId === ROLL_LOG_ID) && (
+            (selectedNote || selectedNote === ROLL_LOG_ID) && (
               <Breadcrumbs aria-label="breadcrumb" sx={{ px: 2, py: 1 }}>
                 <Link
                   underline="hover"
                   color="inherit"
-                  onClick={() => openNote()}
+                  onClick={() => setSelectedNote()}
                   sx={{ cursor: "pointer" }}
                 >
                   Notes
                 </Link>
                 <Typography color="text.primary">
-                  {selectedNoteId === ROLL_LOG_ID
+                  {selectedNote === ROLL_LOG_ID
                     ? "Roll Log"
-                    : selectedNote?.title ?? ""}
+                    : selectedNoteItem?.title ?? ""}
                 </Typography>
               </Breadcrumbs>
             )}
-          {selectedNoteId === ROLL_LOG_ID && <GameLog />}
-          {selectedNoteId &&
-            selectedNoteId !== ROLL_LOG_ID &&
+          {selectedNote === ROLL_LOG_ID && <GameLog />}
+          {selectedNote &&
+            selectedNote !== ROLL_LOG_ID &&
             selectedNote &&
             selectedNoteContent !== undefined && (
               <RtcRichTextEditor
                 roomPrefix={roomPrefix}
-                documentPassword={roomPassword}
-                id={selectedNoteId}
+                documentPassword={roomPassword ?? ""}
+                id={constructId(selectedNote.source, selectedNote.id)}
                 initialValue={selectedNoteContent ?? undefined}
                 showTitle
-                onSave={onSave ? saveCallback : undefined}
-                onDelete={onDelete}
+                onSave={(unparsedId, notes, isBeaconRequest, title) => {
+                  const { source, id } = parseId(unparsedId);
+
+                  return saveCallback(
+                    { source, id },
+                    notes,
+                    isBeaconRequest,
+                    title
+                  );
+                }}
+                onDelete={(unparsedId) => {
+                  const id = parseId(unparsedId);
+                  onDelete(id);
+                }}
+                extraEditorActions={
+                  selectedNote.source === NoteSource.Campaign &&
+                  campaignType === CampaignType.Guided &&
+                  !showGuidedPlayerView ? (
+                    <FormControlLabel
+                      label={"Shared"}
+                      sx={{ px: 1 }}
+                      control={
+                        <Checkbox
+                          checked={selectedNoteItem?.shared ?? false}
+                          onChange={(_, checked) =>
+                            updateNoteShared(selectedNote, checked).catch(
+                              () => {}
+                            )
+                          }
+                        />
+                      }
+                    />
+                  ) : undefined
+                }
               />
             )}
         </Box>
       )}
     </Box>
   );
+}
+
+function constructId(source: NoteSource, id: string) {
+  return `${source}-${id}`;
+}
+
+function parseId(id: string) {
+  const split = id.split("-");
+  return {
+    source: split[0] as NoteSource,
+    id: split[1],
+  };
 }

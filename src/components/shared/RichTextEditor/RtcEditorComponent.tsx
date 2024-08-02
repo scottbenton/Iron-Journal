@@ -13,10 +13,19 @@ export interface RtcRichTextEditorProps {
   withHeading?: boolean;
   readOnly?: boolean;
   deleteNote?: () => void;
+  extraEditorActions?: React.ReactNode;
 }
 
 export function RtcEditorComponent(props: RtcRichTextEditorProps) {
-  const { provider, doc, saving, withHeading, readOnly, deleteNote } = props;
+  const {
+    provider,
+    doc,
+    saving,
+    withHeading,
+    readOnly,
+    deleteNote,
+    extraEditorActions,
+  } = props;
 
   const user = useStore((store) => store.auth.user);
 
@@ -41,7 +50,13 @@ export function RtcEditorComponent(props: RtcRichTextEditorProps) {
       saving={saving}
       toolbar={
         editor &&
-        !readOnly && <EditorToolbar editor={editor} deleteNote={deleteNote} />
+        !readOnly && (
+          <EditorToolbar
+            editor={editor}
+            deleteNote={deleteNote}
+            extraEditorActions={extraEditorActions}
+          />
+        )
       }
     />
   );

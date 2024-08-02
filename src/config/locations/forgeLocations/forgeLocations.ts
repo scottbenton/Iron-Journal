@@ -101,7 +101,6 @@ export const forgeLocations: ILocationConfig = {
 export function getSectorRegion(locationId: string): string | undefined {
   const locations =
     useStore.getState().worlds.currentWorld.currentWorldLocations.locationMap;
-  console.debug("IN HERE");
   let location: LocationWithGMProperties | undefined = locations[locationId];
   while (location && location.type !== "sector") {
     const parentId: string | null | undefined = location.parentLocationId;

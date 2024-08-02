@@ -14,10 +14,11 @@ import { useConfirm } from "material-ui-confirm";
 export interface EditorToolbarProps {
   editor: Editor;
   deleteNote?: () => void;
+  extraEditorActions?: React.ReactNode;
 }
 
 export function EditorToolbar(props: EditorToolbarProps) {
-  const { editor, deleteNote } = props;
+  const { editor, deleteNote, extraEditorActions } = props;
   const confirm = useConfirm();
 
   if (!editor) {
@@ -133,6 +134,7 @@ export function EditorToolbar(props: EditorToolbarProps) {
           </ToggleButton>
         </Tooltip>
       </ToggleButtonGroup>
+      {extraEditorActions}
       {deleteNote && (
         <Tooltip title={"Delete Note"} enterDelay={300}>
           <ToggleButton
