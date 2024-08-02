@@ -1,5 +1,5 @@
 import { CreateSliceType } from "stores/store.type";
-import { NoteSource, NotesSlice } from "./notes.slice.type";
+import { NoteSource, NotesSlice, ROLL_LOG_ID } from "./notes.slice.type";
 import { defaultNotesSlice } from "./notes.slice.default";
 import { listenToNotes } from "api-calls/notes/listenToNotes";
 import { listenToNoteContent } from "api-calls/notes/listenToNoteContent";
@@ -83,7 +83,7 @@ export const createNotesSlice: CreateSliceType<NotesSlice> = (
         typeof currentOpenNote === "string" ||
         typeof openNote === "string"
       ) {
-        store.notes.openNote = openNote;
+        store.notes.openNote = openNote ?? ROLL_LOG_ID;
         store.notes.openNoteContent = undefined;
       } else if (
         currentOpenNote.id !== openNote.id ||
