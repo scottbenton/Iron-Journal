@@ -34,7 +34,6 @@ import { deleteHomebrewOracleTable } from "api-calls/homebrew/oracles/tables/del
 import { deleteHomebrewOracleCollection } from "api-calls/homebrew/oracles/collections/deleteHomebrewOracleCollection";
 import { createHomebrewOracleTable } from "api-calls/homebrew/oracles/tables/createHomebrewOracleTable";
 import { updateHomebrewOracleTable } from "api-calls/homebrew/oracles/tables/updateHomebrewOracleTable";
-import { convertStoredOraclesToCollections } from "functions/convertStoredOraclesToCollections";
 import { listenToHomebrewMoveCategories } from "api-calls/homebrew/moves/categories/listenToHomebrewMoveCategories";
 import { listenToHomebrewMoves } from "api-calls/homebrew/moves/moves/listenToHomebrewMoves";
 import { createHomebrewMoveCategory } from "api-calls/homebrew/moves/categories/createHomebrewMoveCategory";
@@ -43,8 +42,6 @@ import { deleteHomebrewMove } from "api-calls/homebrew/moves/moves/deleteHomebre
 import { deleteHomebrewMoveCategory } from "api-calls/homebrew/moves/categories/deleteHomebrewMoveCategory";
 import { createHomebrewMove } from "api-calls/homebrew/moves/moves/createHomebrewMove";
 import { updateHomebrewMove } from "api-calls/homebrew/moves/moves/updateHomebrewMove";
-import { convertStoredMovesToCategories } from "functions/convertStoredMovesToCategories";
-import { defaultExpansions } from "data/rulesets";
 import { createHomebrewAssetCollection } from "api-calls/homebrew/assets/collections/createHomebrewAssetCollection";
 import { updateHomebrewAssetCollection } from "api-calls/homebrew/assets/collections/updateHomebrewAssetCollection";
 import { deleteHomebrewAsset } from "api-calls/homebrew/assets/assets/deleteHomebrewAsset";
@@ -53,12 +50,18 @@ import { createHomebrewAsset } from "api-calls/homebrew/assets/assets/createHome
 import { updateHomebrewAsset } from "api-calls/homebrew/assets/assets/updateHomebrewAsset";
 import { listenToHomebrewAssetCollections } from "api-calls/homebrew/assets/collections/listenToHomebrewAssetCollections";
 import { listenToHomebrewAssets } from "api-calls/homebrew/assets/assets/listenToHomebrewAssets";
-import { convertHomebrewAssetDocumentsToCollections } from "functions/convertHomebrewAssetDocumentsToCollections";
 import { listenToHomebrewNonLinearMeters } from "api-calls/homebrew/rules/nonLinearMeters/listenToHomebrewNonLinearMeters";
 import { createHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/createHomebrewNonLinearMeter";
 import { updateHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/updateHomebrewNonLinearMeter";
 import { deleteHomebrewNonLinearMeter } from "api-calls/homebrew/rules/nonLinearMeters/deleteHomebrewNonLinearMeter";
 import { listenToHomebrewCollection } from "api-calls/homebrew/listenToHomebrewCollection";
+import { defaultExpansionIds } from "data/datasworn";
+import { Datasworn } from "@datasworn/core";
+import { formatDateToYYYYMMDD } from "lib/date.lib";
+import { constructRules } from "./helpers/constructRules";
+import { constructMoves } from "./helpers/constructMoves";
+import { constructOracles } from "./helpers/constructOracles";
+import { constructAssets } from "./helpers/constructAssets";
 
 enum ListenerRefreshes {
   Oracles,
@@ -154,25 +157,9 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
     );
   },
 
-  subscribeToHomebrewContent: (homebrewIds) => {
-    getState().rules.setExpansionIds(homebrewIds);
-
-    const defaultHomebrewIds = homebrewIds.filter(
-      (homebrewId) => defaultExpansions[homebrewId]
-    );
-
-    if (defaultHomebrewIds.length > 0) {
-      getState().rules.rebuildOracles();
-      getState().rules.rebuildMoves();
-      getState().rules.rebuildStats();
-      getState().rules.rebuildConditionMeters();
-      getState().rules.rebuildSpecialTracks();
-      getState().rules.rebuildImpacts();
-      getState().rules.rebuildNonLinearMeters();
-    }
-
-    const filteredHomebrewIds = homebrewIds.filter(
-      (homebrewId) => !defaultExpansions[homebrewId]
+  subscribeToHomebrewContent: (expansionIds) => {
+    const onlyHomebrewIds = expansionIds.filter(
+      (expansionId) => !defaultExpansionIds.includes(expansionId)
     );
 
     const listenerConfigs: ListenerConfig[] = [
@@ -245,7 +232,7 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
     ];
 
     const unsubscribes: Unsubscribe[] = [];
-    filteredHomebrewIds.forEach((homebrewId) => {
+    onlyHomebrewIds.forEach((homebrewId) => {
       unsubscribes.push(
         listenToHomebrewCollection(
           homebrewId,
@@ -277,6 +264,7 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
                   )
                 );
             });
+            getState().homebrew.rebuildDataswornExpansionIfLoaded(homebrewId);
           },
           (error) => {
             set((store) => {
@@ -309,31 +297,7 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
                   },
                 };
               });
-              switch (config.refreshes) {
-                case ListenerRefreshes.Oracles:
-                  getState().homebrew.updateDataswornOracles(homebrewId);
-                  break;
-                case ListenerRefreshes.Moves:
-                  getState().homebrew.updateDataswornMoves(homebrewId);
-                  break;
-                case ListenerRefreshes.Stats:
-                  getState().rules.rebuildStats();
-                  break;
-                case ListenerRefreshes.ConditionMeters:
-                  getState().rules.rebuildConditionMeters();
-                  break;
-                case ListenerRefreshes.SpecialTracks:
-                  getState().rules.rebuildSpecialTracks();
-                  break;
-                case ListenerRefreshes.Impacts:
-                  getState().rules.rebuildImpacts();
-                  break;
-                case ListenerRefreshes.Assets:
-                  getState().homebrew.updateDataswornAssets(homebrewId);
-                  break;
-                case ListenerRefreshes.NonLinearConditionMeters:
-                  getState().rules.rebuildNonLinearMeters();
-              }
+              getState().homebrew.rebuildDataswornExpansionIfLoaded(homebrewId);
             },
             () => {
               set((store) => {
@@ -355,15 +319,7 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
     });
 
     return () => {
-      getState().rules.setExpansionIds([]);
       unsubscribes.forEach((unsubscribe) => unsubscribe());
-      getState().rules.rebuildOracles();
-      getState().rules.rebuildMoves();
-      getState().rules.rebuildStats();
-      getState().rules.rebuildConditionMeters();
-      getState().rules.rebuildSpecialTracks();
-      getState().rules.rebuildImpacts();
-      getState().rules.rebuildNonLinearMeters();
     };
   },
 
@@ -497,25 +453,6 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
     return deleteHomebrewOracleTable({ oracleTableId });
   },
 
-  updateDataswornOracles: (homebrewId) => {
-    const homebrewCollection = getState().homebrew.collections[homebrewId];
-
-    const oracles = homebrewCollection?.oracleCollections?.data;
-    const oracleTables = homebrewCollection?.oracleTables?.data;
-
-    if (oracles && oracleTables) {
-      const collections = convertStoredOraclesToCollections(
-        homebrewId,
-        oracles,
-        oracleTables
-      );
-      set((store) => {
-        store.homebrew.collections[homebrewId].dataswornOracles = collections;
-      });
-      getState().rules.rebuildOracles();
-    }
-  },
-
   createMoveCategory: (moveCategory) => {
     return createHomebrewMoveCategory({ moveCategory });
   },
@@ -560,25 +497,6 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
   },
   deleteMove: (moveId) => {
     return deleteHomebrewMove({ moveId });
-  },
-
-  updateDataswornMoves: (homebrewId) => {
-    const homebrewCollection = getState().homebrew.collections[homebrewId];
-
-    const moveCategories = homebrewCollection?.moveCategories?.data;
-    const moves = homebrewCollection?.moves?.data;
-
-    if (moveCategories && moves) {
-      const categories = convertStoredMovesToCategories(
-        homebrewId,
-        moveCategories,
-        moves
-      );
-      set((store) => {
-        store.homebrew.collections[homebrewId].dataswornMoves = categories;
-      });
-      getState().rules.rebuildMoves();
-    }
   },
 
   createAssetCollection: (assetCollection) => {
@@ -626,22 +544,62 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
     return deleteHomebrewAsset({ assetId });
   },
 
-  updateDataswornAssets: (homebrewId) => {
-    const homebrewCollection = getState().homebrew.collections[homebrewId];
+  rebuildDataswornExpansionIfLoaded: (homebrewId) => {
+    const homebrew = getState().homebrew.collections[homebrewId];
+    if (!homebrew) return;
 
-    const assetCollections = homebrewCollection?.assetCollections?.data;
-    const assets = homebrewCollection?.assets?.data;
+    if (
+      homebrew.base &&
+      homebrew.stats?.loaded &&
+      homebrew.conditionMeters?.loaded &&
+      homebrew.nonLinearMeters?.loaded &&
+      homebrew.impactCategories?.loaded &&
+      homebrew.legacyTracks?.loaded &&
+      homebrew.oracleCollections?.loaded &&
+      homebrew.oracleTables?.loaded &&
+      homebrew.moveCategories?.loaded &&
+      homebrew.moves?.loaded &&
+      homebrew.assetCollections?.loaded &&
+      homebrew.assets?.loaded
+    ) {
+      // The whole thing is loaded, lets build our expansion.
+      const expansion: Datasworn.Expansion = {
+        _id: homebrew.base.id,
+        title: homebrew.base.title,
+        description: homebrew.base.description,
+        datasworn_version: "0.1.0",
+        date: formatDateToYYYYMMDD(new Date()),
+        url: "",
+        type: "expansion",
+        authors: [],
+        license: null,
+        oracles: constructOracles(
+          homebrewId,
+          homebrew.oracleCollections.data ?? {},
+          homebrew.oracleTables.data ?? {}
+        ),
+        moves: constructMoves(
+          homebrewId,
+          homebrew.moveCategories.data ?? {},
+          homebrew.moves.data ?? {}
+        ),
+        assets: constructAssets(
+          homebrewId,
+          homebrew.assetCollections.data ?? {},
+          homebrew.assets.data ?? {}
+        ),
+        rules: constructRules(
+          homebrew.stats.data ?? {},
+          homebrew.conditionMeters.data ?? {},
+          homebrew.impactCategories.data ?? {},
+          homebrew.legacyTracks.data ?? {}
+        ),
+        ruleset: homebrew.base.rulesetId,
+      };
 
-    if (assetCollections && assets) {
-      const collections = convertHomebrewAssetDocumentsToCollections(
-        homebrewId,
-        assetCollections,
-        assets
-      );
       set((store) => {
-        store.homebrew.collections[homebrewId].dataswornAssets = collections;
+        store.homebrew.dataswornExpansions[homebrewId] = expansion;
       });
-      getState().rules.rebuildAssets();
     }
   },
 });

@@ -6,7 +6,7 @@ import { RollResult } from "./RollResult";
 import { getRollResultLabel } from "./getRollResultLabel";
 import { RollContainer } from "./RollContainer";
 import { ReactNode } from "react";
-import { useStore } from "stores/store";
+import { getOracleRollables } from "data/datasworn";
 
 export interface RollDisplayProps {
   roll: Roll;
@@ -18,7 +18,7 @@ export interface RollDisplayProps {
 export function RollDisplay(props: RollDisplayProps) {
   const { roll, onClick, isExpanded, actions } = props;
 
-  const oracles = useStore((store) => store.rules.oracleMaps.oracleRollableMap);
+  const oracles = getOracleRollables();
 
   return (
     <Card

@@ -27,12 +27,16 @@ export interface AssetCardDialogProps {
 export function AssetCardDialog(props: AssetCardDialogProps) {
   const { open, loading, handleClose, handleAssetSelection } = props;
 
-  const assetGroups = useStore(
-    (store) => store.rules.assetMaps.assetCollectionMap
-  );
+  const assetGroups = useStore((store) => store.rules.assetCollections);
+  const allAssetGroups: Record<string, Datasworn.AssetCollection> = {};
+  Object.entries(assetGroups).map(([rulesetId, group]) => {
+    Object.entries(group.data).map(([groupId, group]) => {
+      allAssetGroups[rulesetId + groupId] = group;
+    });
+  });
 
   const [selectedTabId, setSelectedTabId] = useState<string>(
-    Object.keys(assetGroups)[0]
+    Object.keys(allAssetGroups)[0]
   );
   const [searchedAssetId, setSearchedAssetId] = useState<string>();
   const handleSearch = useCallback((groupId: string, assetId: string) => {
@@ -59,7 +63,10 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
         onClose={handleClose}
         actions={
           <Box display={{ xs: "none", sm: "block" }}>
-            <AssetCardSearch handleSearch={handleSearch} />
+            <AssetCardSearch
+              handleSearch={handleSearch}
+              assetGroups={allAssetGroups}
+            />
           </Box>
         }
       >
@@ -68,7 +75,10 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
       <DialogContent>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Box display={{ xs: "block", sm: "none" }}>
-            <AssetCardSearch handleSearch={handleSearch} />
+            <AssetCardSearch
+              handleSearch={handleSearch}
+              assetGroups={allAssetGroups}
+            />
           </Box>
           <Tabs
             value={selectedTabId}
@@ -76,14 +86,10 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
             variant={"scrollable"}
             scrollButtons={"auto"}
           >
-            {Object.keys(assetGroups)
-              .filter((group) => !assetGroups[group].enhances)
-              .map((groupKey, index) => (
-                <Tab
-                  label={assetGroups[groupKey].name}
-                  value={groupKey}
-                  key={index}
-                />
+            {Object.entries(allAssetGroups)
+              .filter(([, group]) => group.enhances)
+              .map(([groupKey, group], index) => (
+                <Tab label={group.name} value={groupKey} key={index} />
               ))}
           </Tabs>
         </Box>
@@ -97,10 +103,10 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
             </Alert>
           )} */}
           <MarkdownRenderer
-            markdown={assetGroups[selectedTabId]?.description ?? ""}
+            markdown={allAssetGroups[selectedTabId]?.description ?? ""}
           />
           <Grid container spacing={1} mt={2}>
-            {Object.values(assetGroups[selectedTabId]?.contents ?? {}).map(
+            {Object.values(allAssetGroups[selectedTabId]?.contents ?? {}).map(
               (asset, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
                   <AssetCardDialogCard

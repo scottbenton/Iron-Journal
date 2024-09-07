@@ -1,4 +1,5 @@
 import { Datasworn } from "@datasworn/core";
+import { getOracleCollections, getOracleRollables } from "data/datasworn";
 import { useMemo, useState } from "react";
 import { useStore } from "stores/store";
 import { License } from "types/Datasworn";
@@ -22,12 +23,12 @@ export type CombinedCollectionType =
 
 export function useFilterOracles() {
   const [search, setSearch] = useState("");
-  const oracleCollectionsWithoutPinnedOracles = useStore(
-    (store) => store.rules.oracleMaps.oracleCollectionMap
-  );
-  const oracles = useStore((store) => store.rules.oracleMaps.oracleRollableMap);
-  const rootOraclesWithoutPinnedOracles = useStore(
-    (store) => store.rules.rootOracleCollectionIds
+
+  const oracleCollectionsWithoutPinnedOracles = getOracleCollections();
+  const oracles = getOracleRollables();
+  const oracleTree = useStore((store) => store.rules.oracleCollections);
+  const rootOraclesWithoutPinnedOracles: string[] = Object.keys(
+    Object.values(oracleTree).map((collection) => collection.data)
   );
 
   const pinnedOracles = useStore((store) => store.settings.pinnedOraclesIds);
@@ -59,6 +60,7 @@ export function useFilterOracles() {
           url: "",
           license: License.None,
         },
+        collections: {},
         contents: pinnedOracleRollables,
         oracle_type: "pinned_oracles",
       };
@@ -95,12 +97,13 @@ export function useFilterOracles() {
     const enhancesCollections: Record<string, string[]> = {};
 
     const filterCollection = (collection: CombinedCollectionType): boolean => {
-      if (collection.enhances) {
-        enhancesCollections[collection.enhances] = [
-          ...(enhancesCollections[collection.enhances] ?? []),
-          collection._id,
-        ];
-      }
+      // TODO - figure out whatever this was supposed to be doing and fix it
+      // if (collection.enhances) {
+      //   enhancesCollections[collection.enhances] = [
+      //     ...(enhancesCollections[collection.enhances] ?? []),
+      //     collection._id,
+      //   ];
+      // }
 
       const hasChildren =
         (collection.oracle_type === "tables" &&
@@ -150,9 +153,9 @@ export function useFilterOracles() {
       if (hasOracles) {
         isEmpty = false;
         visibleCollections[collection._id] = CATEGORY_VISIBILITY.SOME;
-        if (collection.enhances) {
-          visibleCollections[collection.enhances] = CATEGORY_VISIBILITY.SOME;
-        }
+        // if (collection.enhances) {
+        //   visibleCollections[collection.enhances] = CATEGORY_VISIBILITY.SOME;
+        // }
       } else {
         visibleCollections[collection._id] = CATEGORY_VISIBILITY.HIDDEN;
       }

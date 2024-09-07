@@ -1,6 +1,5 @@
 import { Box, Card, Stack, SxProps, Theme } from "@mui/material";
 import { AssetDocument } from "api-calls/assets/_asset.type";
-import { useStore } from "stores/store";
 import { AssetOptions } from "./AssetOptions";
 import { AssetAbilities } from "./AssetAbilities";
 import { AssetControls } from "./AssetControls";
@@ -8,6 +7,7 @@ import { AssetHeader } from "./AssetHeader";
 import { AssetNameAndDescription } from "./AssetNameAndDescription";
 import { ForwardedRef, ReactNode, forwardRef } from "react";
 import { Datasworn } from "@datasworn/core";
+import { getAsset } from "data/datasworn";
 
 export interface AssetCardProps {
   assetId: string;
@@ -42,9 +42,7 @@ const AssetCardComponent = (
     sx,
   } = props;
 
-  const assetMap = useStore((store) => store.rules.assetMaps.assetMap);
-
-  const asset = assetMap[assetId];
+  const asset = getAsset(assetId);
 
   if (!asset) {
     return null;

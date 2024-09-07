@@ -1,7 +1,7 @@
-import { useStore } from "stores/store";
 import { LinkedDialogContentTitle } from "./LinkedDialogContentTitle";
 import { Box, DialogContent } from "@mui/material";
 import { AssetCard } from "components/features/assets/AssetCard";
+import { getAsset } from "data/datasworn";
 
 export interface AssetDialogContentProps {
   id: string;
@@ -13,9 +13,7 @@ export interface AssetDialogContentProps {
 export function AssetDialogContent(props: AssetDialogContentProps) {
   const { id, handleBack, handleClose, isLastItem } = props;
 
-  const assets = useStore((store) => store.rules.assetMaps.assetMap);
-
-  const asset = assets[id];
+  const asset = getAsset(id);
 
   if (!asset) {
     return (

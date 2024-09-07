@@ -1,9 +1,8 @@
-import { Box, DialogContent, Stack, Typography } from "@mui/material";
+import { DialogContent } from "@mui/material";
 import { LinkedDialogContentTitle } from "../LinkedDialogContentTitle";
-import { useStore } from "stores/store";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
-import { OracleButton } from "components/features/charactersAndCampaigns/OracleSection/OracleButton";
 import { MoveRollers } from "./MoveRollers";
+import { getMove } from "data/datasworn";
 
 export interface MoveDialogContentProps {
   id: string;
@@ -14,9 +13,8 @@ export interface MoveDialogContentProps {
 
 export function MoveDialogContent(props: MoveDialogContentProps) {
   const { id, handleBack, handleClose, isLastItem } = props;
+  const move = getMove(id);
 
-  const moves = useStore((store) => store.rules.moveMaps.moveMap);
-  const move = moves[id];
   if (!move) {
     return (
       <>
@@ -46,7 +44,8 @@ export function MoveDialogContent(props: MoveDialogContentProps) {
       <DialogContent>
         <MoveRollers move={move} />
         <MarkdownRenderer markdown={move.text} />
-        {move.oracles && (
+        {/* TODO - Reimplement */}
+        {/* {move.oracles && (
           <Box mt={2}>
             <Typography variant={"overline"}>
               Roll Oracle{move.oracles.length > 1 ? "s" : ""}
@@ -62,7 +61,7 @@ export function MoveDialogContent(props: MoveDialogContentProps) {
               ))}
             </Stack>
           </Box>
-        )}
+        )} */}
       </DialogContent>
     </>
   );

@@ -9,6 +9,7 @@ import { OracleTableSharedResults } from "./OracleTableSharedResults";
 import { OracleCollection } from "./OracleCollection";
 import { OracleRollableColumn } from "./OracleRollableColumn";
 import { OracleButton } from "components/features/charactersAndCampaigns/OracleSection/OracleButton";
+import { getOracle } from "data/datasworn";
 
 export interface OracleDialogContentProps {
   id: string;
@@ -17,11 +18,16 @@ export interface OracleDialogContentProps {
   isLastItem: boolean;
 }
 
+// TODO - remove once datasworn is updated
+interface TempDescription {
+  description?: string;
+  summary?: string;
+}
+
 export function OracleDialogContent(props: OracleDialogContentProps) {
   const { id, handleBack, handleClose, isLastItem } = props;
 
-  const oracles = useStore((store) => store.rules.oracleMaps.allOraclesMap);
-  const oracle = oracles[id];
+  const oracle = getOracle(id);
 
   const pinnedOracles = useStore((store) => store.settings.pinnedOraclesIds);
   const updatePinnedOracles = useStore(
@@ -67,18 +73,16 @@ export function OracleDialogContent(props: OracleDialogContentProps) {
         {oracle.name}
       </LinkedDialogContentTitle>
       <DialogContent>
-        {oracle.summary &&
-          (oracle.oracle_type === "column_text" ||
-            oracle.oracle_type === "column_text2" ||
-            oracle.oracle_type === "column_text3" ||
-            !oracle.description) && (
-            <MarkdownRenderer markdown={oracle.summary} />
-          )}
-        {oracle.oracle_type !== "column_text" &&
-          oracle.oracle_type !== "column_text2" &&
-          oracle.oracle_type !== "column_text3" &&
-          oracle.description && (
-            <MarkdownRenderer markdown={oracle.description} />
+        {(oracle as TempDescription).description && (
+          <MarkdownRenderer
+            markdown={(oracle as TempDescription).description ?? ""}
+          />
+        )}
+        {(oracle as TempDescription).summary &&
+          !(oracle as TempDescription).description && (
+            <MarkdownRenderer
+              markdown={(oracle as TempDescription).summary ?? ""}
+            />
           )}
         {oracle.oracle_type !== "table_shared_text" &&
           oracle.oracle_type !== "table_shared_text2" &&

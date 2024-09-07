@@ -1,5 +1,5 @@
+import { getMoveCategories, getMoves } from "data/datasworn";
 import { useMemo, useState } from "react";
-import { useStore } from "stores/store";
 
 export enum CATEGORY_VISIBILITY {
   HIDDEN,
@@ -10,11 +10,8 @@ export enum CATEGORY_VISIBILITY {
 export function useFilterMoves() {
   const [search, setSearch] = useState("");
 
-  const moveCategories = useStore(
-    (store) => store.rules.moveMaps.moveCategoryMap
-  );
-
-  const moveMap = useStore((store) => store.rules.moveMaps.moveMap);
+  const moveCategories = getMoveCategories();
+  const moveMap = getMoves();
 
   const { visibleMoveCategoryIds, visibleMoveIds, isEmpty } = useMemo(() => {
     const visibleCategories: Record<string, CATEGORY_VISIBILITY> = {};

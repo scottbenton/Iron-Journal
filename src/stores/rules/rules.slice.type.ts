@@ -1,58 +1,32 @@
 import { Datasworn } from "@datasworn/core";
-import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type";
+
+type WithRulesetLabel<T> = {
+  rulesetLabel: string;
+  data: T;
+};
 
 export interface RulesSliceData {
-  expansionIds: string[];
-  baseRuleset?: Datasworn.Ruleset;
-  progressTracks: string[];
-  rootOracleCollectionIds: string[];
-  stats: Datasworn.Rules["stats"];
-  conditionMeters: Datasworn.Rules["condition_meters"];
-  nonLinearMeters: Record<string, HomebrewNonLinearMeterDocument>;
-  specialTracks: Datasworn.Rules["special_tracks"];
-  impacts: Datasworn.Rules["impacts"];
-  assetMaps: {
-    assetCollectionMap: Record<string, Datasworn.AssetCollection>;
-    nonReplacedAssetCollectionMap: Record<string, Datasworn.AssetCollection>;
-    assetMap: Record<string, Datasworn.Asset>;
-  };
-  oracleMaps: {
-    allOraclesMap: Record<
-      string,
-      Datasworn.OracleRollable | Datasworn.OracleCollection
-    >;
-    oracleCollectionMap: Record<string, Datasworn.OracleCollection>;
-    nonReplacedOracleCollectionMap: Record<string, Datasworn.OracleCollection>;
-    oracleRollableMap: Record<string, Datasworn.OracleRollable>;
-    nonReplacedOracleRollableMap: Record<string, Datasworn.OracleRollable>;
-    oracleTableRollableMap: Record<string, Datasworn.OracleTableRollable>;
-    nonReplacedOracleTableRollableMap: Record<
-      string,
-      Datasworn.OracleTableRollable
-    >;
-  };
-  rootMoveCollectionIds: string[];
-  moveMaps: {
-    moveCategoryMap: Record<string, Datasworn.MoveCategory>;
-    nonReplacedMoveCategoryMap: Record<string, Datasworn.MoveCategory>;
-    moveMap: Record<string, Datasworn.Move>;
-    nonReplacedMoveMap: Record<string, Datasworn.Move>;
-  };
-  worldTruths: Record<string, Datasworn.Truth>;
+  rulesets: Record<string, Datasworn.Ruleset>;
+  assetCollections: Record<
+    string,
+    WithRulesetLabel<Record<string, Datasworn.AssetCollection>>
+  >;
+  moveCategories: Record<
+    string,
+    WithRulesetLabel<Record<string, Datasworn.MoveCategory>>
+  >;
+  oracleCollections: Record<
+    string,
+    WithRulesetLabel<Record<string, Datasworn.OracleCollection>>
+  >;
+  stats: Record<string, Datasworn.StatRule>;
+  conditionMeters: Record<string, Datasworn.ConditionMeterRule>;
+  specialTracks: Record<string, Datasworn.SpecialTrackRule>;
+  impacts: Record<string, Datasworn.ImpactCategory>;
 }
 
 export interface RulesSliceActions {
-  setBaseRuleset: (ruleset: Datasworn.Ruleset) => void;
-  setExpansionIds: (expansionIds: string[]) => void;
-  rebuildOracles: () => void;
-  rebuildMoves: () => void;
-  rebuildStats: () => void;
-  rebuildConditionMeters: () => void;
-  rebuildNonLinearMeters: () => void;
-  rebuildSpecialTracks: () => void;
-  rebuildImpacts: () => void;
-  rebuildAssets: () => void;
-  rebuildWorldTruths: () => void;
+  setRulesets: (rulesets: Record<string, Datasworn.Ruleset>) => void;
 }
 
 export type RulesSlice = RulesSliceData & RulesSliceActions;
