@@ -17,11 +17,11 @@ export function parseOraclesIntoMaps(
   const oracleRollableMap: Record<string, Datasworn.OracleRollable> = {};
   const nonReplacedOracleRollableMap: Record<string, Datasworn.OracleRollable> =
     {};
-  const oracleTableRollableMap: Record<string, Datasworn.OracleTableRollable> =
+  const oracleTableRollableMap: Record<string, Datasworn.OracleRollableTable> =
     {};
   const nonReplacedOracleTableRollableMap: Record<
     string,
-    Datasworn.OracleTableRollable
+    Datasworn.OracleRollableTable
   > = {};
 
   const parseOracleTableCollectionIntoMaps = (
@@ -30,10 +30,11 @@ export function parseOraclesIntoMaps(
     allOraclesMap[category._id] = category;
     oracleCollectionMap[category._id] = category;
     nonReplacedOracleCollectionMap[category._id] = category;
-    if (category.replaces) {
-      allOraclesMap[category.replaces] = category;
-      oracleCollectionMap[category.replaces] = category;
-    }
+    // TODO - check and make sure this replaces properly
+    // if (category.replaces) {
+    //   allOraclesMap[category.replaces] = category;
+    //   oracleCollectionMap[category.replaces] = category;
+    // }
     if (category.contents) {
       const sortedContents = sort
         ? Object.values(category.contents).sort((a, b) =>
@@ -52,17 +53,18 @@ export function parseOraclesIntoMaps(
           oracleTableRollableMap[oracleContent._id] = oracleContent;
           nonReplacedOracleTableRollableMap[oracleContent._id] = oracleContent;
         }
-        if (oracleContent.replaces) {
-          allOraclesMap[oracleContent.replaces] = oracleContent;
-          oracleRollableMap[oracleContent.replaces] = oracleContent;
-          if (
-            oracleContent.oracle_type === "table_text" ||
-            oracleContent.oracle_type === "table_text2" ||
-            oracleContent.oracle_type === "table_text3"
-          ) {
-            oracleTableRollableMap[oracleContent.replaces] = oracleContent;
-          }
-        }
+        // TODO - check and make sure this is replaced properly
+        // if (oracleContent.replaces) {
+        //   allOraclesMap[oracleContent.replaces] = oracleContent;
+        //   oracleRollableMap[oracleContent.replaces] = oracleContent;
+        //   if (
+        //     oracleContent.oracle_type === "table_text" ||
+        //     oracleContent.oracle_type === "table_text2" ||
+        //     oracleContent.oracle_type === "table_text3"
+        //   ) {
+        //     oracleTableRollableMap[oracleContent.replaces] = oracleContent;
+        //   }
+        // }
       });
     }
 

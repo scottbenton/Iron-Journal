@@ -11,6 +11,7 @@ import { getRollResultLabel } from "components/features/charactersAndCampaigns/R
 import { TrackTypes } from "types/Track.type";
 import { LEGACY_TrackTypes } from "types/LegacyTrack.type";
 import { rollOracle } from "./rollers/rollOracle";
+import { idMap } from "data/idMap";
 
 export const getRoll = (dieMax: number) => {
   return Math.floor(Math.random() * dieMax) + 1;
@@ -146,7 +147,8 @@ export function useRoller() {
   );
 
   const rollOracleTable = useCallback(
-    (oracleId: string, showSnackbar = true, gmsOnly = false) => {
+    (potentialOldOracleId: string, showSnackbar = true, gmsOnly = false) => {
+      const oracleId = idMap[potentialOldOracleId] ?? potentialOldOracleId;
       const oracle = newOracles[oracleId];
       if (!oracle) return undefined;
 

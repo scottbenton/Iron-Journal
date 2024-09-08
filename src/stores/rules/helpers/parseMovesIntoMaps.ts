@@ -16,11 +16,11 @@ export function parseMovesIntoMaps(
 
   sortedCategories.forEach((category) => {
     if (category.contents) {
-      if (category.replaces) {
-        moveCategoryMap[category.replaces] = category;
-      } else {
-        moveCategoryMap[category._id] = category;
-      }
+      // if (category.replaces) {
+      //   moveCategoryMap[category.replaces] = category;
+      // } else {
+      moveCategoryMap[category._id] = category;
+      // }
       nonReplacedMoveCategoryMap[category._id] = category;
 
       const sortedContents = sort
@@ -30,9 +30,9 @@ export function parseMovesIntoMaps(
         : Object.values(category.contents);
 
       sortedContents.forEach((move) => {
-        if (move.replaces) {
-          moveMap[move.replaces] = move;
-        }
+        // if (move.replaces) {
+        //   moveMap[move.replaces] = move;
+        // }
         moveMap[move._id] = move;
         nonReplacedMoveMap[move._id] = move;
       });

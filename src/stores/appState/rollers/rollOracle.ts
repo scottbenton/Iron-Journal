@@ -5,7 +5,7 @@ import { rollDie } from "./rollDie";
 function rollOracleColumn(column: Datasworn.OracleRollable):
   | {
       roll: number;
-      result: Datasworn.OracleTableRow;
+      result: Datasworn.OracleRollableRow;
     }
   | undefined {
   const roll = rollDie(column.dice);
@@ -13,7 +13,7 @@ function rollOracleColumn(column: Datasworn.OracleRollable):
     return undefined;
   }
   const result = column.rows.find(
-    (row) => row.min && row.max && row.min <= roll && row.max >= roll
+    (row) => row.roll && row.roll.min <= roll && row.roll.max >= roll
   );
   if (!result) {
     console.error("Could not find result for roll", roll);

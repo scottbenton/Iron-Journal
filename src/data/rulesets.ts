@@ -32,6 +32,14 @@ const defaultExpansions: Record<string, Datasworn.Expansion> = {};
       )
     ) as unknown as Datasworn.Expansion;
     defaultExpansions[delve._id] = delve;
+  } else if (gameSystem === GAME_SYSTEMS.STARFORGED) {
+    const sunderedIsles = JSON.parse(
+      JSON.stringify(
+        (await import("@datasworn/sundered-isles/json/sundered_isles.json"))
+          .default
+      )
+    ) as unknown as Datasworn.Expansion;
+    defaultExpansions[sunderedIsles._id] = sunderedIsles;
   }
 })();
 

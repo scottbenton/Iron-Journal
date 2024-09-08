@@ -13,9 +13,9 @@ export function parseAssetsIntoMaps(
 
   Object.values(assetCategories).forEach((category) => {
     if (category.contents) {
-      if (category.replaces) {
-        assetCollectionMap[category.replaces] = category;
-      }
+      // if (category.replaces) {
+      //   assetCollectionMap[category.replaces] = category;
+      // }
       assetCollectionMap[category._id] = category;
       nonReplacedAssetCollectionMap[category._id] = category;
 
