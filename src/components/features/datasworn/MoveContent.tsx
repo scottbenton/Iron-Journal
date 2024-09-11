@@ -13,7 +13,7 @@ export function MoveContent(props: MoveContentProps) {
     <>
       <MoveRollers move={move} />
       <MarkdownRenderer markdown={move.text} />
-      {move.oracles && (
+      {move.oracles && Object.keys(move.oracles).length > 0 && (
         <Box mt={2}>
           <Typography variant={"overline"}>
             Roll Oracle{Object.keys(move.oracles).length > 1 ? "s" : ""}
