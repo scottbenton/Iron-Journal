@@ -12,7 +12,7 @@ import remarkGfm from "remark-gfm";
 import { useStore } from "stores/store";
 import { OracleTableRenderer } from "./OracleTableRenderer";
 import { idMap } from "data/idMap";
-import { IdParser } from "@datasworn/core";
+import { Datasworn, IdParser } from "@datasworn/core";
 
 export interface MarkdownRendererProps {
   inlineParagraph?: boolean;
@@ -37,10 +37,6 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
 
   const theme = useTheme();
 
-  const newOracleMap = useStore(
-    (store) => store.rules.oracleMaps.allOraclesMap
-  );
-
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
@@ -55,10 +51,24 @@ export function MarkdownRenderer(props: MarkdownRendererProps) {
             const content =
               typeof children === "string" ? children : (children[0] as string);
             if (
-              content.match(/^{{table:[^/]+(\/collections)?\/oracles\/[^}]+}}$/)
+              content.match(
+                /^{{table:[^/]+(\/collections)?\/oracles\/[^}]+}}$/
+              ) ||
+              content.match(/^{{table>[^}]+}}$/)
             ) {
-              const id = content.replace("{{table:", "").replace("}}", "");
-              const oracle = newOracleMap[id];
+              const id = content
+                .replace("{{table:", "")
+                .replace("}}", "")
+                .replace("{{table>", "");
+              let oracle: Datasworn.OracleRollable | undefined = undefined;
+              try {
+                const tmpOracle = IdParser.get(id) as Datasworn.OracleRollable;
+                if (tmpOracle.type === "oracle_rollable") {
+                  oracle = tmpOracle;
+                }
+              } catch {
+                // Empty - if oracle is undefined we will continue parsing
+              }
               if (oracle) {
                 return <OracleTableRenderer oracle={oracle} />;
               }

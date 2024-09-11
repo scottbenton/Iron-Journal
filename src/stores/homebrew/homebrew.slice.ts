@@ -611,7 +611,6 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
           expansion.oracleTables.data ?? {}
         ),
       };
-      console.debug(dataswornExpansion);
       set((store) => {
         store.homebrew.expansions[expansionId] = dataswornExpansion;
       });
