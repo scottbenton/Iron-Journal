@@ -307,7 +307,7 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
                 };
               });
               if (
-                (config.refreshes = ListenerRefreshes.NonLinearConditionMeters)
+                config.refreshes === ListenerRefreshes.NonLinearConditionMeters
               ) {
                 getState().rules.rebuildNonLinearMeters();
               } else {
@@ -563,6 +563,7 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
 
   updateExpansionIfLoaded: (expansionId) => {
     const expansion = getState().homebrew.collections[expansionId];
+
     if (
       expansion &&
       expansion.base &&
@@ -610,9 +611,10 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
           expansion.oracleTables.data ?? {}
         ),
       };
-      set(
-        (store) => (store.homebrew.expansions[expansionId] = dataswornExpansion)
-      );
+      console.debug(dataswornExpansion);
+      set((store) => {
+        store.homebrew.expansions[expansionId] = dataswornExpansion;
+      });
       getState().rules.rebuildRules();
     }
   },

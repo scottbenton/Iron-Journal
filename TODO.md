@@ -1,0 +1,3 @@
+- Playsets
+- Get move oracles working again
+- Get cursed oracles set up properly

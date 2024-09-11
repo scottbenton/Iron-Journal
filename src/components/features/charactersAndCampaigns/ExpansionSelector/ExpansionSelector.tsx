@@ -20,7 +20,6 @@ export interface ExpansionSelectorProps {
 
 export function ExpansionSelector(props: ExpansionSelectorProps) {
   const { enabledExpansionMap, toggleEnableExpansion } = props;
-
   const baseRuleset = useGameSystemValue({
     [GAME_SYSTEMS.IRONSWORN]: "classic",
     [GAME_SYSTEMS.STARFORGED]: "starforged",

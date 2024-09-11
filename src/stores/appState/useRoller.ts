@@ -12,6 +12,7 @@ import { TrackTypes } from "types/Track.type";
 import { LEGACY_TrackTypes } from "types/LegacyTrack.type";
 import { rollOracle } from "./rollers/rollOracle";
 import { idMap } from "data/idMap";
+import { Datasworn, IdParser } from "@datasworn/core";
 
 export const getRoll = (dieMax: number) => {
   return Math.floor(Math.random() * dieMax) + 1;
@@ -33,7 +34,6 @@ export function useRoller() {
   const addRollToScreen = useStore((store) => store.appState.addRoll);
   const addRollToLog = useStore((store) => store.gameLog.addRoll);
 
-  const newOracles = useStore((store) => store.rules.oracleMaps.allOraclesMap);
   const momentum = useStore(
     (store) => store.characters.currentCharacter.currentCharacter?.momentum ?? 0
   );
@@ -149,8 +149,18 @@ export function useRoller() {
   const rollOracleTable = useCallback(
     (potentialOldOracleId: string, showSnackbar = true, gmsOnly = false) => {
       const oracleId = idMap[potentialOldOracleId] ?? potentialOldOracleId;
-      const oracle = newOracles[oracleId];
-      if (!oracle) return undefined;
+      // const oracle = newOracles[oracleId];
+
+      let oracle: Datasworn.OracleRollable | undefined;
+      try {
+        oracle = IdParser.get(oracleId) as Datasworn.OracleRollable;
+      } catch {
+        // Empty on purpose - the following if statement will handle the undefined case
+      }
+
+      if (!oracle || oracle.type !== "oracle_rollable") {
+        return undefined;
+      }
 
       const oracleRoll = rollOracle(oracle, characterId, uid, gmsOnly);
       if (!oracleRoll) return undefined;
@@ -197,7 +207,6 @@ export function useRoller() {
       return definedOracleRoll;
     },
     [
-      newOracles,
       characterId,
       uid,
       announce,
@@ -267,8 +276,14 @@ export function useRoller() {
 
   const rollClockProgression = useCallback(
     (clockTitle: string, oracleId: string) => {
-      const oracle = newOracles[oracleId];
-      if (!oracle) return undefined;
+      let oracle: Datasworn.OracleRollable | undefined = undefined;
+      try {
+        oracle = IdParser.get(oracleId) as Datasworn.OracleRollable;
+      } catch {
+        // Empty on purpose - the following if statement will handle the undefined case
+      }
+
+      if (!oracle || oracle.type !== "oracle_rollable") return undefined;
 
       const result = rollOracle(oracle, null, uid, true);
 
@@ -331,7 +346,6 @@ export function useRoller() {
       uid,
       addRollToLog,
       addRollToScreen,
-      newOracles,
     ]
   );
 
