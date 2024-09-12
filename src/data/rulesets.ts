@@ -3,21 +3,21 @@ import { getSystem } from "hooks/useGameSystem";
 import { useStore } from "stores/store";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 
+import ironswornRuleset from "@datasworn/ironsworn-classic/json/classic.json";
+import ironswornDelve from "@datasworn/ironsworn-classic-delve/json/delve.json";
+
+import starforgedRuleset from "@datasworn/starforged/json/starforged.json";
+import sunderedIsles from "@datasworn/sundered-isles/json/sundered_isles.json";
+
 const gameSystem = getSystem();
 
 let ruleset: Datasworn.Ruleset | undefined = undefined;
 (async () => {
   if (gameSystem === GAME_SYSTEMS.IRONSWORN) {
-    ruleset = JSON.parse(
-      JSON.stringify(
-        await import("@datasworn/ironsworn-classic/json/classic.json")
-      )
-    ) as Datasworn.Ruleset;
+    ruleset = ironswornRuleset as Datasworn.Ruleset;
     useStore.getState().rules.setBaseRuleset(ruleset);
   } else {
-    ruleset = JSON.parse(
-      JSON.stringify(await import("@datasworn/starforged/json/starforged.json"))
-    ) as Datasworn.Ruleset;
+    ruleset = starforgedRuleset as unknown as Datasworn.Ruleset;
     useStore.getState().rules.setBaseRuleset(ruleset);
   }
 })();
@@ -25,21 +25,11 @@ let ruleset: Datasworn.Ruleset | undefined = undefined;
 const defaultExpansions: Record<string, Datasworn.Expansion> = {};
 (async () => {
   if (gameSystem === GAME_SYSTEMS.IRONSWORN) {
-    const delve = JSON.parse(
-      JSON.stringify(
-        (await import("@datasworn/ironsworn-classic-delve/json/delve.json"))
-          .default
-      )
-    ) as unknown as Datasworn.Expansion;
+    const delve = ironswornDelve as unknown as Datasworn.Expansion;
     defaultExpansions[delve._id] = delve;
   } else if (gameSystem === GAME_SYSTEMS.STARFORGED) {
-    const sunderedIsles = JSON.parse(
-      JSON.stringify(
-        (await import("@datasworn/sundered-isles/json/sundered_isles.json"))
-          .default
-      )
-    ) as unknown as Datasworn.Expansion;
-    defaultExpansions[sunderedIsles._id] = sunderedIsles;
+    const si = sunderedIsles as unknown as Datasworn.Expansion;
+    defaultExpansions[si._id] = si;
   }
 })();
 

@@ -8,6 +8,7 @@ import { AssetHeader } from "./AssetHeader";
 import { AssetNameAndDescription } from "./AssetNameAndDescription";
 import { ForwardedRef, ReactNode, forwardRef } from "react";
 import { Datasworn } from "@datasworn/core";
+import { idMap } from "data/idMap";
 
 export interface AssetCardProps {
   assetId: string;
@@ -42,9 +43,10 @@ const AssetCardComponent = (
     sx,
   } = props;
 
+  const updatedId = idMap[assetId] ?? assetId;
   const assetMap = useStore((store) => store.rules.assetMaps.assetMap);
 
-  const asset = assetMap[assetId];
+  const asset = assetMap[updatedId];
 
   if (!asset) {
     return null;

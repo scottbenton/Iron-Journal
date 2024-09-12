@@ -1,5 +1,6 @@
-import { Datasworn } from "@datasworn/core";
+import { Datasworn, IdParser } from "@datasworn/core";
 import { RulesSliceData } from "../rules.slice.type";
+import { Primary } from "@datasworn/core/dist/StringId";
 
 export function parseMovesIntoMaps(
   moveCategories: Record<string, Datasworn.MoveCategory>,
@@ -16,11 +17,21 @@ export function parseMovesIntoMaps(
 
   sortedCategories.forEach((category) => {
     if (category.contents) {
-      // if (category.replaces) {
-      //   moveCategoryMap[category.replaces] = category;
-      // } else {
-      moveCategoryMap[category._id] = category;
-      // }
+      if (category.replaces) {
+        category.replaces.forEach((replaces) => {
+          const replaceMatches = IdParser.getMatches(
+            replaces as Primary,
+            IdParser.tree
+          );
+          replaceMatches.forEach((val, key) => {
+            if (val.type === "move_category") {
+              moveCategoryMap[key] = category;
+            }
+          });
+        });
+      } else {
+        moveCategoryMap[category._id] = category;
+      }
       nonReplacedMoveCategoryMap[category._id] = category;
 
       const sortedContents = sort
@@ -30,9 +41,19 @@ export function parseMovesIntoMaps(
         : Object.values(category.contents);
 
       sortedContents.forEach((move) => {
-        // if (move.replaces) {
-        //   moveMap[move.replaces] = move;
-        // }
+        if (move.replaces) {
+          move.replaces.forEach((replaces) => {
+            const replaceMatches = IdParser.getMatches(
+              replaces as Primary,
+              IdParser.tree
+            );
+            replaceMatches.forEach((val, key) => {
+              if (val.type === "move") {
+                moveMap[key] = move;
+              }
+            });
+          });
+        }
         moveMap[move._id] = move;
         nonReplacedMoveMap[move._id] = move;
       });

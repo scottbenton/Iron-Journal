@@ -158,7 +158,6 @@ export const createHomebrewSlice: CreateSliceType<HomebrewSlice> = (
 
   subscribeToHomebrewContent: (homebrewIds) => {
     getState().rules.setExpansionIds(homebrewIds);
-
     const defaultHomebrewIds = homebrewIds.filter(
       (homebrewId) => defaultExpansions[homebrewId]
     );

@@ -7,6 +7,7 @@ import { parseMovesIntoMaps } from "./helpers/parseMovesIntoMaps";
 import { parseAssetsIntoMaps } from "./helpers/parseAssetsIntoMaps";
 import { HomebrewNonLinearMeterDocument } from "api-calls/homebrew/rules/nonLinearMeters/_homebrewNonLinearMeter.type";
 import { defaultExpansions } from "data/rulesets";
+import { Primary } from "@datasworn/core/dist/StringId";
 
 export const createRulesSlice: CreateSliceType<RulesSlice> = (
   set,
@@ -27,6 +28,7 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
     set((store) => {
       store.rules.expansionIds = expansionIds;
     });
+    getState().rules.rebuildRules();
   },
 
   rebuildNonLinearMeters: () => {
@@ -224,18 +226,52 @@ function mergeAssetMaps(
   base: RulesSliceData["assetMaps"],
   expansion: RulesSliceData["assetMaps"]
 ): RulesSliceData["assetMaps"] {
+  const combinedAssetCollectionMap = {
+    ...base.assetCollectionMap,
+    ...expansion.assetCollectionMap,
+  };
+  const combinedNonReplacedAssetCollectionMap = {
+    ...base.nonReplacedAssetCollectionMap,
+    ...expansion.nonReplacedAssetCollectionMap,
+  };
+  const combinedAssetMap = {
+    ...base.assetMap,
+    ...expansion.assetMap,
+  };
+
+  Object.keys(expansion.assetCollectionMap).forEach((collectionKey) => {
+    const collection = expansion.assetCollectionMap[collectionKey];
+    if (collection.enhances) {
+      collection.enhances.forEach((enhances) => {
+        const replaceMatches = IdParser.getMatches(
+          enhances as Primary,
+          IdParser.tree
+        );
+        replaceMatches.forEach((val, key) => {
+          if (val.type === "asset_collection") {
+            const newContents: Record<string, Datasworn.Asset> = {
+              ...combinedAssetCollectionMap[key].contents,
+            };
+            Object.entries(collection.contents).forEach(([assetKey, asset]) => {
+              newContents[assetKey] = {
+                ...asset,
+                category: val.name.replace("Assets", ""),
+              };
+            });
+
+            combinedAssetCollectionMap[key] = {
+              ...combinedAssetCollectionMap[key],
+              contents: newContents,
+            };
+          }
+        });
+      });
+    }
+  });
+
   return {
-    assetCollectionMap: {
-      ...base.assetCollectionMap,
-      ...expansion.assetCollectionMap,
-    },
-    nonReplacedAssetCollectionMap: {
-      ...base.nonReplacedAssetCollectionMap,
-      ...expansion.nonReplacedAssetCollectionMap,
-    },
-    assetMap: {
-      ...base.assetMap,
-      ...expansion.assetMap,
-    },
+    assetCollectionMap: combinedAssetCollectionMap,
+    nonReplacedAssetCollectionMap: combinedNonReplacedAssetCollectionMap,
+    assetMap: combinedAssetMap,
   };
 }
