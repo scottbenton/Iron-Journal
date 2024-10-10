@@ -49,6 +49,8 @@ export function rollOracle(
 
   let resultString: string | undefined = undefined;
   let rolls: number | number[] | undefined = undefined;
+  let result2: string | undefined = undefined;
+  let result3: string | undefined = undefined;
 
   if (oracle.oracle_type === "table_shared_rolls") {
     const tmpRolls: number[] = [];
@@ -70,11 +72,30 @@ export function rollOracle(
     if (rollResult) {
       rolls = rollResult.roll;
       resultString = rollResult.result.text;
+      if (oracle.oracle_type === "table_text2") {
+        result2 =
+          oracle.column_labels.text2 +
+            ": " +
+            (rollResult.result as Datasworn.OracleTableRowText2).text2 ??
+          undefined;
+      }
+      if (oracle.oracle_type === "table_text3") {
+        result2 =
+          oracle.column_labels.text2 +
+            ": " +
+            (rollResult.result as Datasworn.OracleTableRowText3).text2 ??
+          undefined;
+        result3 =
+          oracle.column_labels.text3 +
+            ": " +
+            (rollResult.result as Datasworn.OracleTableRowText3).text3 ??
+          undefined;
+      }
     }
   }
 
   if (resultString && rolls !== undefined) {
-    return {
+    const roll: OracleTableRoll = {
       type: ROLL_TYPE.ORACLE_TABLE,
       rollLabel: oracle.name,
       timestamp: new Date(),
@@ -85,6 +106,15 @@ export function rollOracle(
       result: resultString,
       oracleId: oracle._id,
     };
+
+    if (result2) {
+      roll.text2 = result2;
+    }
+    if (result3) {
+      roll.text3 = result3;
+    }
+
+    return roll;
   }
 
   return undefined;
