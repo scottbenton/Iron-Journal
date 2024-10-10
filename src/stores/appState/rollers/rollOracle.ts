@@ -72,24 +72,24 @@ export function rollOracle(
     if (rollResult) {
       rolls = rollResult.roll;
       resultString = rollResult.result.text;
-      if (oracle.oracle_type === "table_text2") {
-        result2 =
-          oracle.column_labels.text2 +
-            ": " +
-            (rollResult.result as Datasworn.OracleTableRowText2).text2 ??
-          undefined;
-      }
-      if (oracle.oracle_type === "table_text3") {
-        result2 =
-          oracle.column_labels.text2 +
-            ": " +
-            (rollResult.result as Datasworn.OracleTableRowText3).text2 ??
-          undefined;
-        result3 =
-          oracle.column_labels.text3 +
-            ": " +
-            (rollResult.result as Datasworn.OracleTableRowText3).text3 ??
-          undefined;
+      if (
+        oracle.oracle_type === "table_text2" ||
+        oracle.oracle_type === "table_text3"
+      ) {
+        const columnLabel2 = oracle.column_labels.text2;
+        const text2 = (rollResult.result as Datasworn.OracleTableRowText2)
+          .text2;
+        const columnLabel3 = (oracle as Datasworn.OracleTableText3)
+          .column_labels.text3;
+        const text3 = (rollResult.result as Datasworn.OracleTableRowText3)
+          .text3;
+
+        if (text2) {
+          result2 = columnLabel2 ? `${columnLabel2}: ${text2}` : text2;
+        }
+        if (text3) {
+          result3 = columnLabel3 ? `${columnLabel3}: ${text3}` : text3;
+        }
       }
     }
   }
