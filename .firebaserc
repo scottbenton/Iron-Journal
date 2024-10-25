@@ -7,7 +7,7 @@
     "default": "iron-fellowship-dev"
   },
   "targets": {
-    "iron-fellowship-prod": {
+    "iron-journal-1ac32": {
       "hosting": {
         "app": [
           "iron-journal-1ac32"
@@ -27,7 +27,7 @@
         ]
       }
     },
-    "crew-link-prod": {
+    "starforged-crew-link": {
       "hosting": {
         "app": [
           "starforged-crew-link"
