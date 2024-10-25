@@ -34,7 +34,7 @@ jobs:
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          target: iron-fellowship-beta
+          target: beta
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.IRON_FELLOWSHIP_FIREBASE_SERVICE_ACCOUNT }}"
           channelId: live
@@ -98,7 +98,7 @@ jobs:
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          target: beta-starforged-crew-link
+          target: beta
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.CREW_LINK_FIREBASE_SERVICE_ACCOUNT }}"
           channelId: live

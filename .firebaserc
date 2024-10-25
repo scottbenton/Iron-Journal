@@ -7,36 +7,42 @@
     "default": "iron-fellowship-dev"
   },
   "targets": {
-    "iron-journal-1ac32": {
+    "iron-fellowship-prod": {
       "hosting": {
-        "iron-journal-1ac32": [
+        "app": [
           "iron-journal-1ac32"
         ],
-        "iron-fellowship-beta": [
+        "beta": [
           "iron-fellowship-beta"
         ]
       }
     },
     "iron-fellowship-dev": {
       "hosting": {
-        "iron-fellowship-dev": [
+        "app": [
+          "iron-fellowship-dev"
+        ],
+        "beta": [
           "iron-fellowship-dev"
         ]
       }
     },
-    "starforged-crew-link": {
+    "crew-link-prod": {
       "hosting": {
-        "starforged-crew-link": [
+        "app": [
           "starforged-crew-link"
         ],
-        "beta-starforged-crew-link": [
+        "beta": [
           "beta-starforged-crew-link"
         ]
       }
     },
     "crew-link-dev": {
       "hosting": {
-        "crew-link-dev": [
+        "app": [
+          "crew-link-dev"
+        ],
+        "beta": [
           "crew-link-dev"
         ]
       }
