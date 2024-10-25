@@ -6,6 +6,8 @@ import {
 
 import { ProgressTrack } from "components/features/ProgressTrack";
 import { TrackTypes } from "types/Track.type";
+import { useGameSystem } from "hooks/useGameSystem";
+import { GAME_SYSTEMS } from "types/GameSystems.type";
 
 export interface LegacyTrackProps {
   label: string;
@@ -24,6 +26,8 @@ export function LegacyTrack(props: LegacyTrackProps) {
     onIsLegacyChecked,
   } = props;
 
+  const isIronsworn = useGameSystem().gameSystem === GAME_SYSTEMS.IRONSWORN;
+
   return (
     <Box
       display={"flex"}
@@ -37,21 +41,23 @@ export function LegacyTrack(props: LegacyTrackProps) {
         useMaxRoll={isLegacy}
         hideRollButton={onIsLegacyChecked === undefined}
       />
-      <Box
-        px={2}
-        mt={4.5}
-      >
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={isLegacy ?? false}
-              onChange={(evt, value) => onIsLegacyChecked ? onIsLegacyChecked(value) : undefined}
-              disabled={onIsLegacyChecked === undefined}
-            />
-          }
-          label={"10"}
-        />
-      </Box>
+      {!isIronsworn && (
+        <Box
+          px={2}
+          mt={4.5}
+        >
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={isLegacy ?? false}
+                onChange={(evt, value) => onIsLegacyChecked ? onIsLegacyChecked(value) : undefined}
+                disabled={onIsLegacyChecked === undefined}
+              />
+            }
+            label={"10"}
+          />
+        </Box>
+      )}
     </Box>
   );
 }

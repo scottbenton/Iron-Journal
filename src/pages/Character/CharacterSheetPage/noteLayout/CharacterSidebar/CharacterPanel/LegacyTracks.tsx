@@ -61,19 +61,13 @@ export function LegacyTracks() {
   ) => {
     const specialTrack = specialTracksRules[specialTrackKey];
 
-    const newTrack: ILegacyTrack = {
-      value: 0,
-      isLegacy: checked,
-      spentExperience: {},
-    };
-
     if (specialTrack.shared && isInCampaign) {
       return updateCampaign({
-        [`specialTracks.${specialTrackKey}`]: newTrack,
+        [`specialTracks.${specialTrackKey}.isLegacy`]: checked,
       });
     } else {
       return updateCharacter({
-        [`specialTracks.${specialTrackKey}`]: newTrack,
+        [`specialTracks.${specialTrackKey}.isLegacy`]: checked,
       });
     }
   };
