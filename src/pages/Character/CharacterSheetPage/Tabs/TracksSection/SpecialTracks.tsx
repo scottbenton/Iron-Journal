@@ -60,43 +60,19 @@ export function SpecialTracks() {
     }
   };
 
-  const updateSpecialTrackExperienceChecked = (
-    specialTrackKey: string,
-    index: number,
-    checked: boolean
-  ) => {
-    const specialTrack = specialTracksRules[specialTrackKey];
-
-    if (specialTrack.shared && isInCampaign) {
-      return updateCampaign({
-        [`specialTracks.${specialTrackKey}.spentExperience.${index}`]: checked,
-      });
-    } else {
-      return updateCharacter({
-        [`specialTracks.${specialTrackKey}.spentExperience.${index}`]: checked,
-      });
-    }
-  };
-
   const updateSpecialTrackIsLegacy = (
     specialTrackKey: string,
     checked: boolean
   ) => {
     const specialTrack = specialTracksRules[specialTrackKey];
 
-    const newTrack: ILegacyTrack = {
-      value: 0,
-      isLegacy: checked,
-      spentExperience: {},
-    };
-
     if (specialTrack.shared && isInCampaign) {
       return updateCampaign({
-        [`specialTracks.${specialTrackKey}`]: newTrack,
+        [`specialTracks.${specialTrackKey}.isLegacy`]: checked,
       });
     } else {
       return updateCharacter({
-        [`specialTracks.${specialTrackKey}`]: newTrack,
+        [`specialTracks.${specialTrackKey}.isLegacy`]: checked,
       });
     }
   };
@@ -129,6 +105,10 @@ export function SpecialTracks() {
   }
   return (
     <>
+      <SectionHeading label={"Experience"} />
+      <Box px={2}>
+        <ExperienceTrack />
+      </Box>
       <SectionHeading label={"Legacy Tracks"} />
       <Stack spacing={2} px={2} sx={{ overflowX: "auto" }}>
         {Object.keys(specialTracksRules).map((specialTrackKey) => {
@@ -138,20 +118,12 @@ export function SpecialTracks() {
               key={specialTrackKey}
               label={specialTracksRules[specialTrackKey].label}
               value={specialTrackValue?.value ?? 0}
-              checkedExperience={specialTrackValue?.spentExperience ?? {}}
               onValueChange={(value) =>
                 updateSpecialTrackValue(specialTrackKey, value)
               }
-              onExperienceChecked={(index, checked) =>
-                updateSpecialTrackExperienceChecked(
-                  specialTrackKey,
-                  index,
-                  checked
-                )
-              }
               isLegacy={specialTrackValue?.isLegacy ?? false}
-              onIsLegacyChecked={(checked) =>
-                updateSpecialTrackIsLegacy(specialTrackKey, checked)
+              onIsLegacyChecked={(value) =>
+                updateSpecialTrackIsLegacy(specialTrackKey, value)
               }
             />
           );

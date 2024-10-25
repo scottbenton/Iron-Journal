@@ -27,14 +27,15 @@ const trackMoveIdSystemValues: GameSystemChooser<{
     [TrackTypes.Fray]: "classic/moves/combat/end_the_fight",
     [TrackTypes.SceneChallenge]: "",
     [TrackTypes.BondProgress]: "",
+    [TrackTypes.Legacy]: "",
   },
   [GAME_SYSTEMS.STARFORGED]: {
     [TrackTypes.Vow]: "starforged/moves/quest/fulfill_your_vow",
     [TrackTypes.Journey]: "starforged/moves/exploration/finish_an_expedition",
     [TrackTypes.Fray]: "starforged/moves/combat/take_decisive_action",
     [TrackTypes.BondProgress]: "starforged/moves/connection/forge_a_bond",
-    [TrackTypes.SceneChallenge]:
-      "starforged/moves/scene_challenge/finish_the_scene",
+    [TrackTypes.SceneChallenge]: "starforged/moves/scene_challenge/finish_the_scene",
+    [TrackTypes.Legacy]: "starforged/moves/legacy/continue_a_legacy",
   },
 };
 
@@ -52,6 +53,7 @@ export interface BaseProgressTrackProps {
   onEdit?: () => void;
   hideDifficultyLabel?: boolean;
   hideRollButton?: boolean;
+  useMaxRoll?: boolean;
 }
 
 interface ProgressTrackProgressProps extends BaseProgressTrackProps {
@@ -117,6 +119,7 @@ export function ProgressTrack(props: ProgressTracksProps) {
     onEdit,
     hideDifficultyLabel,
     hideRollButton,
+    useMaxRoll,
   } = props;
 
   const trackMoveIds = useGameSystemValue(trackMoveIdSystemValues);
@@ -171,7 +174,7 @@ export function ProgressTrack(props: ProgressTracksProps) {
       rollTrackProgress(
         trackType,
         label || "",
-        Math.min(Math.floor(value / 4), 10),
+        useMaxRoll ? 10 : Math.min(Math.floor(value / 4), 10),
         move?._id ?? ""
       );
     }

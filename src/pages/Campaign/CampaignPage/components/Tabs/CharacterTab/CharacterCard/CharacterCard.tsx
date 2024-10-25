@@ -1,15 +1,16 @@
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Box,
   Button,
   Card,
+  List,
   Stack,
   Typography,
+  ListItemButton,
+  ListItemText,
+  Collapse
 } from "@mui/material";
 import { StatComponent } from "components/features/characters/StatComponent";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { ExpandMore, ExpandLess } from "@mui/icons-material";
 import { AssetCard } from "components/features/assets/AssetCard";
 import { InitiativeStatusChip } from "components/features/characters/InitiativeStatusChip";
 import { PortraitAvatar } from "components/features/characters/PortraitAvatar/PortraitAvatar";
@@ -25,6 +26,7 @@ import {
 import { LinkComponent } from "components/shared/LinkComponent";
 import { constructCharacterSheetPath } from "pages/Character/routes";
 import { useCampaignType } from "hooks/useCampaignType";
+import { useState } from "react";
 
 export interface CharacterCardProps {
   uid: string;
@@ -70,6 +72,18 @@ export function CharacterCard(props: CharacterCardProps) {
   const removeCharacterFromCampaign = useStore(
     (store) => store.campaigns.currentCampaign.removeCharacter
   );
+
+  const [assetsOpen, setAssetsOpen] = useState(false);
+
+  const handleExpandAssets = () => {
+    setAssetsOpen(!assetsOpen);
+  };
+
+  const [tracksOpen, setTracksOpen] = useState(false);
+
+  const handleExpandTracks = () => {
+    setTracksOpen(!tracksOpen);
+  };
 
   return (
     <Card variant={"outlined"}>
@@ -146,36 +160,40 @@ export function CharacterCard(props: CharacterCardProps) {
             sx={{ mr: 1, mt: 1 }}
           />
         </Box>
-        <Accordion
-          variant={"outlined"}
-          sx={{ borderLeftWidth: 0, borderRightWidth: 0 }}
-        >
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            Assets
-          </AccordionSummary>
-          <AccordionDetails>
-            <Stack spacing={2} px={2}>
-              {storedAssets?.map((storedAsset, index) => (
-                <AssetCard
-                  key={index}
-                  storedAsset={storedAsset}
-                  assetId={storedAsset.id}
-                />
-              ))}
-            </Stack>
-          </AccordionDetails>
-        </Accordion>
-        <Accordion
-          variant="outlined"
-          sx={{ borderLeftWidth: 0, borderRightWidth: 0 }}
-        >
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            {trackLabel}
-          </AccordionSummary>
-          <AccordionDetails>
-            <TrackComponent characterId={characterId} />
-          </AccordionDetails>
-        </Accordion>
+        <List>
+          <ListItemButton
+              divider={true}
+              onClick={handleExpandAssets}
+              sx={(theme) => ({ borderTop: `1px solid ${theme.palette.divider}` })}
+          >
+            <ListItemText primary="Assets" />
+            {assetsOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={assetsOpen} timeout="auto" unmountOnExit>
+              <Stack spacing={2} p={2} >
+                {storedAssets?.map((storedAsset, index) => (
+                  <AssetCard
+                    key={index}
+                    storedAsset={storedAsset}
+                    assetId={storedAsset.id}
+                  />
+                ))}
+              </Stack>
+          </Collapse>
+          <ListItemButton
+              divider={true}
+              onClick={handleExpandTracks}
+              sx={(theme) => ({ borderTop: `1px solid ${theme.palette.divider}` })}
+          >
+            <ListItemText primary={trackLabel} />
+            {tracksOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={tracksOpen} timeout="auto" unmountOnExit>
+            <Box py={2} >
+              <TrackComponent characterId={characterId} />
+            </Box>
+          </Collapse>
+        </List>
         <Box display={"flex"} justifyContent={"flex-end"} p={1}>
           <Stack direction={"row"} spacing={1} flexWrap={"wrap"}>
             {(uid === currentUserUid || !showGuidedPlayerView) && (

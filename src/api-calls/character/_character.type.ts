@@ -32,7 +32,7 @@ export interface CharacterDocument {
   momentum: number;
 
   specialTracks?: Record<string, SpecialTrack>; // Bonds, Quests, Discoveries, etc.
-  // Ironsworn only - starforged XP is stored on specialTracks
+
   experience?: {
     earned?: number;
     spent?: number;

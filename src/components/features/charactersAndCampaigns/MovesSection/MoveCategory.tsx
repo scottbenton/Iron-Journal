@@ -28,9 +28,14 @@ export function MoveCategory(props: MoveCategoryProps) {
 
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const isExpandedOrForced = isExpanded || forceOpen;
+  if (visibleCategories[category._id] === CATEGORY_VISIBILITY.HIDDEN || category.enhances) {
+    return null;
+  }
 
-  if (visibleCategories[category._id] === CATEGORY_VISIBILITY.HIDDEN) {
+  const isExpandedOrForced = isExpanded || forceOpen;
+  const visibleContents = Object.values(category.contents).filter((move) => !move.replaces);
+
+  if (visibleContents.length === 0) {
     return null;
   }
 
@@ -49,9 +54,9 @@ export function MoveCategory(props: MoveCategoryProps) {
             mb: isExpandedOrForced ? 0.5 : 0,
           }}
         >
-          {Object.values(category.contents ?? {}).map((move, index) =>
+          {visibleContents.map((move, index) =>
             visibleCategories[category._id] === CATEGORY_VISIBILITY.ALL ||
-            visibleMoves[move._id] === true ? (
+            visibleMoves[move._id] ? (
               <Move
                 key={index}
                 move={moveMap[move._id]}
