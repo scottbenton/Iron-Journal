@@ -56,6 +56,7 @@ export function LegacyTrack(props: LegacyTrackProps) {
               />
             }
             label={"10"}
+            sx={{ mr: 0 }}
           />
         </Box>
       )}
