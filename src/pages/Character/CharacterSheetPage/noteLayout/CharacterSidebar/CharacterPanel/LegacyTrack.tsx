@@ -30,7 +30,7 @@ export function LegacyTrack(props: LegacyTrackProps) {
         onValueChange={onValueChange}
         trackType={TrackTypes.Legacy}
         useMaxRoll={value?.isLegacy ?? false}
-        hideRollButton={toggleIsLegacy === undefined}
+        hideRollButton={toggleIsLegacy === undefined || isIronsworn}
         useSmallRollButton={true}
       />
       {!isIronsworn && (

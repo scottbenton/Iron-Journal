@@ -189,7 +189,7 @@ export function CharacterCard(props: CharacterCardProps) {
             {tracksOpen ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
           <Collapse in={tracksOpen} timeout="auto" unmountOnExit>
-            <Box py={2} >
+            <Box p={2} >
               <TrackComponent characterId={characterId} />
             </Box>
           </Collapse>
