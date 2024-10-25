@@ -110,7 +110,7 @@ export function SpecialTracks() {
         <ExperienceTrack />
       </Box>
       <SectionHeading label={"Legacy Tracks"} />
-      <Stack spacing={2} px={2} sx={{ overflowX: "auto" }}>
+      <Stack spacing={2} px={2} sx={{ overflowX: "auto", pb: 1 }}>
         {Object.keys(specialTracksRules).map((specialTrackKey) => {
           const specialTrackValue = getSpecialTrackValue(specialTrackKey);
           return (
