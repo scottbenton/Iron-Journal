@@ -40,11 +40,12 @@ export function LegacyTrack(props: LegacyTrackProps) {
         trackType={TrackTypes.Legacy}
         useMaxRoll={isLegacy}
         hideRollButton={onIsLegacyChecked === undefined}
+        useSmallRollButton={true}
       />
       {!isIronsworn && (
         <Box
           px={2}
-          mt={4.5}
+          mt={5}
         >
           <FormControlLabel
             control={
