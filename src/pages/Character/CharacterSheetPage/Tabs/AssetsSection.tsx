@@ -212,7 +212,9 @@ export function AssetsSection() {
               item
               xs={12}
               sm={6}
-              xl={4}
+              md={6}
+              lg={4}
+              xl={3}
               sx={{ display: "flex", justifyContent: "center" }}
             >
               <AssetCard
