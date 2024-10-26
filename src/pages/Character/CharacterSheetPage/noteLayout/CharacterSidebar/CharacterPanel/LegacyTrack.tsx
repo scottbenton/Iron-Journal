@@ -16,20 +16,20 @@ import { useGameSystem } from "hooks/useGameSystem";
 import { useId } from "react";
 import { useStore } from "stores/store";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
-import { LEGACY_TrackTypes, LegacyTrack as LegacyTrackValue } from "types/LegacyTrack.type";
+import { LEGACY_TrackTypes } from "types/LegacyTrack.type";
 import { useConfirm } from "material-ui-confirm";
 import { useRoller } from "stores/appState/useRoller";
 
 export interface LegacyTrackProps {
   rule: Datasworn.SpecialTrackRule;
-  value?: LegacyTrackValue;
+  value: number;
+  isLegacy: boolean;
   toggleIsLegacy?: (isLegacy: boolean) => void;
   onValueChange?: (value: number) => void;
   trackType?: LEGACY_TrackTypes;
 }
 export function LegacyTrack(props: LegacyTrackProps) {
-  const { rule, value, toggleIsLegacy, onValueChange, trackType } = props;
-  const valueNumer = value?.value ?? 0;
+  const { rule, value, isLegacy, toggleIsLegacy, onValueChange, trackType } = props;
 
   const isIronsworn = useGameSystem().gameSystem === GAME_SYSTEMS.IRONSWORN;
 
@@ -51,7 +51,7 @@ export function LegacyTrack(props: LegacyTrackProps) {
       checksValue = 0;
     }
 
-    if (i < (valueNumer)) {
+    if (i < (value)) {
       checksValue++;
     }
   }
@@ -69,7 +69,7 @@ export function LegacyTrack(props: LegacyTrackProps) {
     openDialog(legacyMoveId);
     rollTrackProgress(
       rule.label,
-      value?.isLegacy ? 10 : Math.min(Math.floor(valueNumer / 4), 10),
+      isLegacy ? 10 : Math.min(Math.floor(value / 4), 10),
       move?._id ?? "",
       trackType
     );
@@ -125,8 +125,8 @@ export function LegacyTrack(props: LegacyTrackProps) {
         aria-labelledby={labelId}
         aria-valuemin={0}
         aria-valuemax={40}
-        aria-valuenow={valueNumer}
-        aria-valuetext={getValueText(valueNumer)}
+        aria-valuenow={value}
+        aria-valuetext={getValueText(value)}
       >
         {checks.map((value, index) => (
           <Box
@@ -160,13 +160,14 @@ export function LegacyTrack(props: LegacyTrackProps) {
             disabled={!toggleIsLegacy}
             control={
               <Checkbox
-                checked={value?.isLegacy}
+                checked={isLegacy}
                 onChange={(evt, value) =>
                   handleLegacyClick(value)
                 }
               />
             }
             label={"10"}
+            sx={{ pl: 1 }}
           />
         )}
         {onValueChange && (
@@ -174,7 +175,7 @@ export function LegacyTrack(props: LegacyTrackProps) {
             <IconButton
               onClick={() => {
                 if (onValueChange) {
-                  const oldValue = valueNumer;
+                  const oldValue = value;
                   const newValue = Math.max(oldValue - 1, 0);
                   onValueChange(newValue);
                   if (newValue === oldValue) {
@@ -192,7 +193,7 @@ export function LegacyTrack(props: LegacyTrackProps) {
             <IconButton
               onClick={() => {
                 if (onValueChange) {
-                  const oldValue = valueNumer;
+                  const oldValue = value;
                   const newValue = Math.min(oldValue + 1, 40);
                   onValueChange(newValue);
                   if (newValue === oldValue) {
@@ -214,8 +215,6 @@ export function LegacyTrack(props: LegacyTrackProps) {
                 aria-label="Roll Track"
                 onClick={handleRollClick}
                 sx={{
-                  // p: 0,
-                  // mr: 1,
                   height: 43,
                   width: 43,
                 }}

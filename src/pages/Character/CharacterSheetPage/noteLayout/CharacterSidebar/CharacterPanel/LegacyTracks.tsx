@@ -100,7 +100,8 @@ export function LegacyTracks() {
             <LegacyTrack
               key={specialTrackKey}
               rule={specialTracksRules[specialTrackKey]}
-              value={getSpecialTrackValue(specialTrackKey)}
+              value={getSpecialTrackValue(specialTrackKey)?.value ?? 0}
+              isLegacy={getSpecialTrackValue(specialTrackKey)?.isLegacy ?? false}
               toggleIsLegacy={(isLegacy) =>
                 updateSpecialTrackIsLegacy(specialTrackKey, isLegacy)
               }
