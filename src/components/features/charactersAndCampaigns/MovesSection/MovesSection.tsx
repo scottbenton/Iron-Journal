@@ -56,6 +56,7 @@ export function MovesSection(props: MovesSectionProps) {
         sx={{
           overflow: "auto",
           flexGrow: 1,
+          '&::-webkit-scrollbar': { width: 0 }
         }}
       >
         {!isEmpty ? (

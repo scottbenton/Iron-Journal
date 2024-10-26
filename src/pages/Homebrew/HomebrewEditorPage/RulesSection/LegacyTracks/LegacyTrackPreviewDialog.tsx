@@ -40,7 +40,9 @@ export function LegacyTrackPreviewDialog(props: LegacyTrackPreviewDialogProps) {
             <LegacyTrack
               label={legacyTrack.label}
               value={0}
+              checkedExperience={{}}
               onValueChange={() => {}}
+              onExperienceChecked={() => {}}
               isLegacy={false}
             />
           )}

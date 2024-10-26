@@ -20,6 +20,7 @@ export function ContainedTabPanel(props: ContainedTabPanelProps) {
       bgcolor={(theme) =>
         greyBackground ? theme.palette.background.paperInlay : undefined
       }
+      sx={{ '&::-webkit-scrollbar': { width: 0 }, pb: 2 }}
     >
       {children}
     </Box>

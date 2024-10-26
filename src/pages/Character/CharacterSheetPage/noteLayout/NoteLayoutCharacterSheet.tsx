@@ -85,11 +85,11 @@ export function NoteLayoutCharacterSheet() {
           sx={{
             display: "grid",
             gridTemplateColumns:
-              "minmax(320px, 350px) 1fr minmax(350px, 450px)",
+              "minmax(320px, 395px) 1fr minmax(300px, 350px)",
             height: "100%",
           }}
         >
-          <PageSidebar sx={{ p: 2, pt: 0 }}>
+          <PageSidebar sx={{ p: 2, pt: 0, pb: 0 }}>
             <CharacterSidebar />
           </PageSidebar>
           <NotesSection />

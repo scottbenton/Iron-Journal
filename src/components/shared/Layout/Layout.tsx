@@ -1,4 +1,4 @@
-import { Box, LinearProgress } from "@mui/material";
+import { Box, LinearProgress, useMediaQuery, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { UserNameDialog } from "components/shared/UserNameDialog";
 import { useStore } from "stores/store";
@@ -17,6 +17,9 @@ import { useThemeValue } from "providers/ThemeProvider/useThemeValue";
 
 export function Layout() {
   useSyncFeatureFlags();
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const state = useStore((store) => store.auth.status);
 
@@ -71,6 +74,7 @@ export function Layout() {
             flexDirection: "column",
             flexGrow: 1,
             overflowY: { xs: "unset", sm: "auto" },
+            mx: !isMobile ? 2 : undefined,
           }}
           component={"main"}
           id={"main-content"}

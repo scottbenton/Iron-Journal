@@ -5,7 +5,7 @@ import { useStore } from "stores/store";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { ExperienceTrack } from "./ExperienceTrack";
 import { ProgressTrack } from "components/features/ProgressTrack";
-import { LegacyTrack as ILegacyTrack } from "types/LegacyTrack.type";
+import { LEGACY_TrackTypes, LegacyTrack as ILegacyTrack } from "types/LegacyTrack.type";
 import { LegacyTrack } from "./LegacyTrack";
 
 export function SpecialTracks() {
@@ -60,19 +60,43 @@ export function SpecialTracks() {
     }
   };
 
-  const updateSpecialTrackIsLegacy = (
+  const updateSpecialTrackExperienceChecked = (
     specialTrackKey: string,
+    index: number,
     checked: boolean
   ) => {
     const specialTrack = specialTracksRules[specialTrackKey];
 
     if (specialTrack.shared && isInCampaign) {
       return updateCampaign({
-        [`specialTracks.${specialTrackKey}.isLegacy`]: checked,
+        [`specialTracks.${specialTrackKey}.spentExperience.${index}`]: checked,
       });
     } else {
       return updateCharacter({
-        [`specialTracks.${specialTrackKey}.isLegacy`]: checked,
+        [`specialTracks.${specialTrackKey}.spentExperience.${index}`]: checked,
+      });
+    }
+  };
+
+  const updateSpecialTrackIsLegacy = (
+    specialTrackKey: string,
+    checked: boolean
+  ) => {
+    const specialTrack = specialTracksRules[specialTrackKey];
+
+    const newTrack: ILegacyTrack = {
+      value: 0,
+      isLegacy: checked,
+      spentExperience: {},
+    };
+
+    if (specialTrack.shared && isInCampaign) {
+      return updateCampaign({
+        [`specialTracks.${specialTrackKey}`]: newTrack,
+      });
+    } else {
+      return updateCharacter({
+        [`specialTracks.${specialTrackKey}`]: newTrack,
       });
     }
   };
@@ -105,26 +129,38 @@ export function SpecialTracks() {
   }
   return (
     <>
-      <SectionHeading label={"Experience"} />
-      <Box px={2}>
-        <ExperienceTrack />
-      </Box>
       <SectionHeading label={"Legacy Tracks"} />
-      <Stack spacing={2} px={2} sx={{ overflowX: "auto", pb: 1 }}>
+      <Stack spacing={2} px={2} sx={{ overflowX: "auto" }}>
         {Object.keys(specialTracksRules).map((specialTrackKey) => {
+          const specialTrackLabel = specialTracksRules[specialTrackKey].label;
           const specialTrackValue = getSpecialTrackValue(specialTrackKey);
+
+          let trackType = undefined;
+          if (specialTrackLabel.toLowerCase() in Object.values(LEGACY_TrackTypes)) {
+            trackType = specialTrackLabel.toLowerCase() as LEGACY_TrackTypes;
+          }
+
           return (
             <LegacyTrack
               key={specialTrackKey}
-              label={specialTracksRules[specialTrackKey].label}
+              label={specialTrackLabel}
               value={specialTrackValue?.value ?? 0}
+              checkedExperience={specialTrackValue?.spentExperience ?? {}}
               onValueChange={(value) =>
                 updateSpecialTrackValue(specialTrackKey, value)
               }
-              isLegacy={specialTrackValue?.isLegacy ?? false}
-              onIsLegacyChecked={(value) =>
-                updateSpecialTrackIsLegacy(specialTrackKey, value)
+              onExperienceChecked={(index, checked) =>
+                updateSpecialTrackExperienceChecked(
+                  specialTrackKey,
+                  index,
+                  checked
+                )
               }
+              isLegacy={specialTrackValue?.isLegacy ?? false}
+              onIsLegacyChecked={(checked) =>
+                updateSpecialTrackIsLegacy(specialTrackKey, checked)
+              }
+              trackType={trackType}
             />
           );
         })}

@@ -25,6 +25,7 @@ export function LegacyTracks(props: LegacyTracksProps) {
             key={st}
             label={specialTracks[st].label}
             value={specialTrackValues[st]?.value}
+            checkedExperience={specialTrackValues[st]?.spentExperience ?? {}}
             isLegacy={specialTrackValues[st]?.isLegacy ?? false}
           />
         ))}

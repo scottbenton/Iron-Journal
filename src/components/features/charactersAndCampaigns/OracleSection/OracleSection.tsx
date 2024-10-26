@@ -67,6 +67,7 @@ export function OracleSection() {
             overflow: "auto",
             flexGrow: 1,
             py: 0,
+            '&::-webkit-scrollbar': { width: 0 }
           }}
         >
           {rootOracles.map((collectionId) => (
