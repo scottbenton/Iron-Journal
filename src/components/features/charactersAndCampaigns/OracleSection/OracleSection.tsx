@@ -63,12 +63,13 @@ export function OracleSection() {
       </Box>
       {!isEmpty ? (
         <List
-          sx={{
+          sx={(theme) => ({
             overflow: "auto",
             flexGrow: 1,
             py: 0,
-            '&::-webkit-scrollbar': { width: 0 }
-          }}
+            scrollbarColor: `${theme.palette.divider} rgba(0, 0, 0, 0)`,
+            scrollbarWidth: "thin",
+          })}
         >
           {rootOracles.map((collectionId) => (
             <OracleCollection

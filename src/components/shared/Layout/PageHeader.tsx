@@ -39,7 +39,7 @@ export function PageHeader(props: PageHeaderProps) {
         })}
       >
         <Container
-          maxWidth={false}
+          maxWidth={"xl"}
           sx={{
             display: "flex",
             flexWrap: "wrap",

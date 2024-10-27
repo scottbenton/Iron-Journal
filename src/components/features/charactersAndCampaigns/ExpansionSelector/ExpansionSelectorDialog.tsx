@@ -3,6 +3,7 @@ import { DialogTitleWithCloseButton } from "components/shared/DialogTitleWithClo
 import { useEffect, useState } from "react";
 import { ExpansionSelector } from "./ExpansionSelector";
 import { useStore } from "stores/store";
+import { ExpansionOptions } from "types/ExpansionOptions.type";
 
 export interface ExpansionSelectorDialogProps {
   open: boolean;
@@ -25,30 +26,59 @@ export function ExpansionSelectorDialog(props: ExpansionSelectorDialogProps) {
   const campaignHomebrewIds = useStore(
     (store) => store.campaigns.currentCampaign.currentCampaign?.expansionIds
   );
+  const characterCompatibilityIds = useStore(
+    (store) => store.characters.currentCharacter.currentCharacter?.compatibilityExpansionIds
+  );
+  const campaignCompatibilityIds = useStore(
+    (store) => store.campaigns.currentCampaign.currentCampaign?.compatibilityExpansionIds
+  );
 
-  const [enabledExpansions, setEnabledExpansions] = useState<
-    Record<string, boolean>
+  const [expansionOptions, setExpansionOptions] = useState<
+    Record<string, ExpansionOptions>
   >({});
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const defaultExpansions: Record<string, boolean> = {};
+    const expansions: Record<string, ExpansionOptions> = {};
 
     if (campaignId) {
       campaignHomebrewIds?.forEach((homebrewId) => {
-        defaultExpansions[homebrewId] = true;
+        expansions[homebrewId] = ExpansionOptions.ENABLED;
+      });
+      campaignCompatibilityIds?.forEach((expansionId) => {
+        expansions[expansionId] = ExpansionOptions.COMPATIBILITY;
       });
     } else if (characterId) {
       characterHomebrewIds?.forEach((homebrewId) => {
-        defaultExpansions[homebrewId] = true;
+        expansions[homebrewId] = ExpansionOptions.ENABLED;
+      });
+      characterCompatibilityIds?.forEach((expansionId) => {
+        expansions[expansionId] = ExpansionOptions.COMPATIBILITY;
       });
     }
 
-    setEnabledExpansions(defaultExpansions);
-  }, [characterId, campaignId, characterHomebrewIds, campaignHomebrewIds]);
+    setExpansionOptions(expansions);
+  }, [
+    characterId,
+    campaignId,
+    characterHomebrewIds,
+    campaignHomebrewIds,
+    characterCompatibilityIds,
+    campaignCompatibilityIds,
+    open
+  ]);
 
   const toggleEnableExpansion = (expansionId: string, enabled: boolean) => {
-    setEnabledExpansions((prev) => ({ ...prev, [expansionId]: enabled }));
+    setExpansionOptions((prev) => ({
+      ...prev,
+      [expansionId]: enabled ? ExpansionOptions.ENABLED : ExpansionOptions.DISABLED
+    }));
+  };
+  const toggleExpansionCompatibility = (expansionId: string, enabled: boolean) => {
+    setExpansionOptions((prev) => ({
+      ...prev,
+      [expansionId]: enabled ? ExpansionOptions.COMPATIBILITY : ExpansionOptions.ENABLED
+    }));
   };
 
   const updateCurrentCharacter = useStore(
@@ -60,12 +90,17 @@ export function ExpansionSelectorDialog(props: ExpansionSelectorDialogProps) {
 
   const handleSave = () => {
     setLoading(true);
-    const expansionIds = Object.keys(enabledExpansions).filter(
-      (expansionId) => enabledExpansions[expansionId]
+    const expansionIds = Object.keys(expansionOptions).filter(
+      (expansionId) =>
+        expansionOptions[expansionId] === ExpansionOptions.ENABLED ||
+        expansionOptions[expansionId] === ExpansionOptions.COMPATIBILITY
+    );
+    const compatibilityExpansionIds = Object.keys(expansionOptions).filter(
+      (expansionId) => expansionOptions[expansionId] === ExpansionOptions.COMPATIBILITY
     );
 
     if (campaignId) {
-      updateCurrentCampaign({ expansionIds })
+      updateCurrentCampaign({ expansionIds, compatibilityExpansionIds })
         .then(() => {
           onClose();
         })
@@ -74,7 +109,7 @@ export function ExpansionSelectorDialog(props: ExpansionSelectorDialogProps) {
           setLoading(false);
         });
     } else if (characterId) {
-      updateCurrentCharacter({ expansionIds })
+      updateCurrentCharacter({ expansionIds, compatibilityExpansionIds })
         .then(() => {
           onClose();
         })
@@ -95,8 +130,9 @@ export function ExpansionSelectorDialog(props: ExpansionSelectorDialogProps) {
       </DialogTitleWithCloseButton>
       <DialogContent>
         <ExpansionSelector
-          enabledExpansionMap={enabledExpansions}
+          expansionMap={expansionOptions}
           toggleEnableExpansion={toggleEnableExpansion}
+          toggleExpansionCompatibility={toggleExpansionCompatibility}
         />
       </DialogContent>
       <DialogActions>

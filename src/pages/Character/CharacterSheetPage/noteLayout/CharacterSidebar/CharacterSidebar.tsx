@@ -34,7 +34,6 @@ export function CharacterSidebar() {
         scrollButtons={false}
         value={selectedTab}
         onChange={(evt, value) => handleTabChange(value)}
-        sx={{ mx: -2 }}
       >
         <StyledTab label="Character" value={Tabs.Character} />
         <StyledTab label="Tracks" value={Tabs.Tracks} />
@@ -42,19 +41,19 @@ export function CharacterSidebar() {
       </StyledTabs>
 
       <ContainedTabPanel
-        overflowAuto={true}
+        overflowAuto={false}
         isVisible={selectedTab === Tabs.Character}
       >
         <CharacterPanel />
       </ContainedTabPanel>
       <ContainedTabPanel
-        overflowAuto={true}
+        overflowAuto={false}
         isVisible={selectedTab === Tabs.Tracks}
       >
         <TracksPanel />
       </ContainedTabPanel>
       <ContainedTabPanel
-        overflowAuto={true}
+        overflowAuto={false}
         isVisible={selectedTab === Tabs.Assets}
       >
         <AssetsPanel />

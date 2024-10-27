@@ -2,14 +2,16 @@ import { Datasworn } from "@datasworn/core";
 import { Box, Tooltip, Typography } from "@mui/material";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import GroupIcon from "@mui/icons-material/Group";
+import { getCompatibleText } from "functions/getCompatibleText";
 
 export interface AssetNameAndDescriptionProps {
   asset: Datasworn.Asset;
   showSharedIcon?: boolean;
+  compatibilityExpansionIds?: string[];
 }
 
 export function AssetNameAndDescription(props: AssetNameAndDescriptionProps) {
-  const { asset, showSharedIcon } = props;
+  const { asset, showSharedIcon, compatibilityExpansionIds } = props;
 
   return (
     <>
@@ -32,7 +34,14 @@ export function AssetNameAndDescription(props: AssetNameAndDescriptionProps) {
       </Box>
       {asset.requirement && (
         <Box color={(theme) => theme.palette.text.secondary}>
-          <MarkdownRenderer inheritColor markdown={asset.requirement} />
+          <MarkdownRenderer
+            inheritColor
+            markdown={
+              compatibilityExpansionIds
+                ? getCompatibleText(compatibilityExpansionIds, asset.requirement)
+                : asset.requirement
+            }
+          />
         </Box>
       )}
     </>

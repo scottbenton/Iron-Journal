@@ -3,10 +3,8 @@ import {
   ButtonBase,
   Checkbox,
   FormControlLabel,
-  IconButton, Link,
+  IconButton,
   Typography,
-  useMediaQuery,
-  useTheme,
 } from "@mui/material";
 import UncheckedIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckedIcon from "@mui/icons-material/CheckBox";
@@ -20,6 +18,9 @@ import { useStore } from "stores/store";
 import { useRoller } from "stores/appState/useRoller";
 import { LEGACY_TrackTypes } from "types/LegacyTrack.type";
 import { useConfirm } from "material-ui-confirm";
+import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
+import { useIsMobile } from "hooks/useIsMobile";
+import starforged from "@datasworn/starforged/json/starforged.json";
 
 export interface LegacyTrackProps {
   label: string;
@@ -44,8 +45,7 @@ export function LegacyTrack(props: LegacyTrackProps) {
     trackType
   } = props;
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useIsMobile();
 
   const checks = [];
   let checksIndex = 0;
@@ -70,9 +70,11 @@ export function LegacyTrack(props: LegacyTrackProps) {
 
   const openDialog = useStore((store) => store.appState.openDialog);
   const moveMap = useStore((store) => store.rules.moveMaps.moveMap);
-  const legacyMoveId = "move:starforged/legacy/continue_a_legacy";
-  const experienceMoveId = "move:starforged/legacy/earn_experience";
-  const move = legacyMoveId in moveMap ? moveMap[legacyMoveId] : undefined;
+
+  const legacyMoveId = starforged.moves.legacy.contents.continue_a_legacy._id;
+  const experienceMoveId = starforged.moves.legacy.contents.earn_experience._id;
+
+  const move = Object.keys(moveMap).includes(legacyMoveId) ? moveMap[legacyMoveId] : undefined;
 
   const { rollTrackProgress } = useRoller();
   const handleRollClick = () => {
@@ -91,14 +93,16 @@ export function LegacyTrack(props: LegacyTrackProps) {
     confirm({
       title: "Mark Legacy",
       description: (
-        <div>
-          {`Are you sure you want to ${checked ? "mark" : "unmark"} this track as completed? `}
-          {"Your progress will be cleared. See "}
-          <Link onClick={() => openDialog(experienceMoveId)} >
-            Earn Experience
-          </Link>
-          {" for more information."}
-        </div>
+        <MarkdownRenderer
+          markdown={
+            `Are you sure you want to ${
+              checked ? "mark" : "unmark"
+            } this track as completed? Your progress will be cleared. See [Earn Experience](datasworn:${
+              experienceMoveId
+            }) for more information.`
+          }
+          inlineParagraph
+        />
       ),
       confirmationText: "Confirm",
       confirmationButtonProps: {
@@ -270,15 +274,15 @@ export function LegacyTrack(props: LegacyTrackProps) {
                     borderColor: isMobile ? theme.palette.divider : "transparent",
                     borderLeftColor:
                       index !== 0 ? theme.palette.divider : undefined,
-                    width: isMobile ? 32 : 42,
-                    height: isMobile ? 32 : 42,
+                    width: isMobile ? 29 : 42,
+                    height: isMobile ? 29 : 42,
                   })}
                 >
                   <ProgressTrackTick
                     value={value}
                     key={index}
                     aria-hidden
-                    size={{ mobile: 30, desktop: 40 }}
+                    size={{ mobile: 28, desktop: 40 }}
                   />
                 </Box>
               ))}
@@ -291,7 +295,7 @@ export function LegacyTrack(props: LegacyTrackProps) {
                   justifyContent={"center"}
                   fontSize={isMobile ? 14 : 18}
                   key={index}
-                  width={isMobile ? 32 : 42}
+                  width={isMobile ? 29 : 42}
                 >
                   <Checkbox
                     sx={{ p: 0 }}

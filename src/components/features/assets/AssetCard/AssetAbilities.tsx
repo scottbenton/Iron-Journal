@@ -2,15 +2,17 @@ import { Datasworn } from "@datasworn/core";
 import { Box, Checkbox, Typography } from "@mui/material";
 import { MarkdownRenderer } from "components/shared/MarkdownRenderer";
 import { AssetDocument } from "api-calls/assets/_asset.type";
+import { getCompatibleText } from "functions/getCompatibleText";
 
 export interface AssetAbilitiesProps {
   asset: Datasworn.Asset;
   storedAsset?: AssetDocument;
   onAbilityToggle?: (abilityIndex: number, checked: boolean) => void;
+  compatibilityExpansionIds?: string[];
 }
 
 export function AssetAbilities(props: AssetAbilitiesProps) {
-  const { asset, storedAsset, onAbilityToggle } = props;
+  const { asset, storedAsset, onAbilityToggle, compatibilityExpansionIds } = props;
 
   return (
     <Box flexGrow={1}>
@@ -32,7 +34,14 @@ export function AssetAbilities(props: AssetAbilitiesProps) {
                 <b>{ability.name}: </b>
               </Typography>
             )}
-            <MarkdownRenderer markdown={ability.text} inlineParagraph />
+            <MarkdownRenderer
+              markdown={
+                compatibilityExpansionIds
+                ? getCompatibleText(compatibilityExpansionIds, ability.text)
+                : ability.text
+              }
+              inlineParagraph
+            />
           </Box>
         </Box>
       ))}

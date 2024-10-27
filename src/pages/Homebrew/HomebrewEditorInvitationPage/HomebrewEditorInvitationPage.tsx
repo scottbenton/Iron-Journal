@@ -34,7 +34,11 @@ export function HomebrewEditorInvitationPage() {
     return [];
   }, [homebrewId]);
 
-  useListenToHomebrewContent(homebrewIds);
+  const compatibilityIds = useMemo(() => {
+    return [];
+  }, [])
+
+  useListenToHomebrewContent(homebrewIds, compatibilityIds);
 
   const homebrewDetails = useStore(
     (store) =>

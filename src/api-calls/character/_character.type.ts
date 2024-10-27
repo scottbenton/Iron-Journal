@@ -53,6 +53,7 @@ export interface CharacterDocument {
   }>;
 
   expansionIds?: string[];
+  compatibilityExpansionIds?: string[];
   customTracks?: {
     [trackName: string]: number;
   };

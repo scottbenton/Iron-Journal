@@ -18,6 +18,7 @@ import {
   constructCampaignSheetPath,
 } from "pages/Campaign/routes";
 import { constructCharacterSheetPath } from "../routes";
+import { ExpansionOptions } from "types/ExpansionOptions.type";
 
 export interface Form {
   name: string;
@@ -29,7 +30,7 @@ export interface Form {
       y: number;
     };
   };
-  enabledExpansionMap: Record<string, boolean>;
+  expansionMap: Record<string, ExpansionOptions>;
   stats: Record<string, number>;
   assets: AssetDocument[];
 }
@@ -60,8 +61,13 @@ export function CharacterCreatePageContent() {
       parsedStats[statKey] = values.stats[statKey];
     });
 
-    const expansionIds = Object.keys(values.enabledExpansionMap ?? {}).filter(
-      (expansionId) => values.enabledExpansionMap[expansionId]
+    const expansionIds = Object.keys(values.expansionMap ?? {}).filter(
+      (expansionId) =>
+        values.expansionMap[expansionId] === ExpansionOptions.ENABLED ||
+        values.expansionMap[expansionId] === ExpansionOptions.COMPATIBILITY
+    );
+    const compatibilityExpansionIds = Object.keys(values.expansionMap ?? {}).filter(
+      (expansionId) => values.expansionMap[expansionId] === ExpansionOptions.COMPATIBILITY
     );
 
     createCharacter(
@@ -69,7 +75,8 @@ export function CharacterCreatePageContent() {
       parsedStats,
       values.assets,
       values.portrait,
-      expansionIds
+      expansionIds,
+      compatibilityExpansionIds
     )
       .then((characterId) => {
         if (campaignId) {

@@ -26,6 +26,9 @@ export function useSyncStore() {
   const expansionIds = useStore(
     (store) => store.campaigns.currentCampaign.currentCampaign?.expansionIds
   );
+  const compatibilityExpansionIds = useStore(
+    (store) => store.campaigns.currentCampaign.currentCampaign?.compatibilityExpansionIds
+  );
 
   useEffect(() => {
     setCampaignId(campaignId);
@@ -51,7 +54,7 @@ export function useSyncStore() {
   useListenToSettings();
   useListenToLogs();
 
-  useListenToHomebrewContent(expansionIds ?? []);
+  useListenToHomebrewContent(expansionIds ?? [], compatibilityExpansionIds ?? []);
 
   useSyncTheme();
 }

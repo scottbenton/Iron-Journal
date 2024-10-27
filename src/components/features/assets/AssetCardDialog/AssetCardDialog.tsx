@@ -16,6 +16,8 @@ import { AssetCardSearch } from "./AssetCardSearch";
 import { AssetCardDialogCard } from "./AssetCardDialogCard";
 import { Datasworn } from "@datasworn/core";
 import { useStore } from "stores/store";
+import { getCompatibleText } from "functions/getCompatibleText";
+import { getCompatibleAssetContents } from "functions/getCompatibleAssetContents";
 
 export interface AssetCardDialogProps {
   open: boolean;
@@ -52,6 +54,8 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
     };
     handleAssetSelection(storedAsset);
   };
+
+  const compatibilityExpansionIds = useStore((store) => store.rules.compatibilityExpansionIds);
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth={"md"} fullWidth>
@@ -97,10 +101,10 @@ export function AssetCardDialog(props: AssetCardDialogProps) {
             </Alert>
           )} */}
           <MarkdownRenderer
-            markdown={assetGroups[selectedTabId]?.description ?? ""}
+            markdown={getCompatibleText(compatibilityExpansionIds, assetGroups[selectedTabId]?.description)}
           />
           <Grid container spacing={1} mt={2}>
-            {Object.values(assetGroups[selectedTabId]?.contents ?? {}).map(
+            {Object.values(getCompatibleAssetContents(compatibilityExpansionIds, assetGroups[selectedTabId])).map(
               (asset, index) => (
                 <Grid item xs={12} sm={6} md={4} key={index}>
                   <AssetCardDialogCard

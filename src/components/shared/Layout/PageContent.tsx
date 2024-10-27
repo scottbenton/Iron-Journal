@@ -1,5 +1,6 @@
-import { Breakpoint, Container, Paper, SxProps, Theme, useMediaQuery, useTheme } from "@mui/material";
+import { Breakpoint, Container, Paper, SxProps, Theme } from "@mui/material";
 import { PropsWithChildren } from "react";
+import { useIsMobile } from "hooks/useIsMobile";
 
 export interface PageContentProps extends PropsWithChildren {
   isPaper?: boolean;
@@ -12,13 +13,12 @@ export interface PageContentProps extends PropsWithChildren {
 export function PageContent(props: PageContentProps) {
   const { children, isPaper, viewHeight, hiddenHeader, maxWidth, sx } = props;
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useIsMobile();
 
   return (
     <Container
       component={isPaper ? Paper : "div"}
-      maxWidth={maxWidth ?? false}
+      maxWidth={maxWidth ?? "xl"}
       sx={[
         (theme) => ({
           position: "relative",
