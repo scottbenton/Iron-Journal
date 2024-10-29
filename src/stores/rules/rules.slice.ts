@@ -31,12 +31,6 @@ export const createRulesSlice: CreateSliceType<RulesSlice> = (
     getState().rules.rebuildRules();
   },
 
-  setCompatibilityExpansionIds: (expansionIds) => {
-    set((store) => {
-      store.rules.compatibilityExpansionIds = expansionIds;
-    });
-  },
-
   rebuildNonLinearMeters: () => {
     set((store) => {
       let nonLinearMeters: Record<string, HomebrewNonLinearMeterDocument> = {};

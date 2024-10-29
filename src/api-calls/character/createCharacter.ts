@@ -16,12 +16,11 @@ export const createCharacter = createApiFunction<
     stats: StatsMap;
     assets: AssetDocument[];
     expansionIds?: string[];
-    compatibilityExpansionIds?: string[];
   },
   string
 >((params) => {
   return new Promise((resolve, reject) => {
-    const { uid, name, stats, assets, expansionIds, compatibilityExpansionIds } = params;
+    const { uid, name, stats, assets, expansionIds } = params;
     const character: CharacterDocument = {
       uid: uid,
       name: name,
@@ -32,9 +31,6 @@ export const createCharacter = createApiFunction<
     };
     if (expansionIds) {
       character.expansionIds = expansionIds;
-    }
-    if (compatibilityExpansionIds) {
-      character.compatibilityExpansionIds = compatibilityExpansionIds;
     }
 
     addDoc(getCharacterCollection(), character)

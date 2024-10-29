@@ -45,7 +45,6 @@ const AssetCardComponent = (
 
   const updatedId = idMap[assetId] ?? assetId;
   const assetMap = useStore((store) => store.rules.assetMaps.assetMap);
-  const compatibilityExpansionIds = useStore((store) => store.rules.compatibilityExpansionIds);
 
   const asset = assetMap[updatedId];
 
@@ -113,7 +112,6 @@ const AssetCardComponent = (
       >
         <AssetNameAndDescription
           asset={asset}
-          compatibilityExpansionIds={compatibilityExpansionIds}
           showSharedIcon={showSharedIcon}
         />
         <AssetOptions
@@ -123,7 +121,6 @@ const AssetCardComponent = (
         />
         <AssetAbilities
           asset={asset}
-          compatibilityExpansionIds={compatibilityExpansionIds}
           storedAsset={storedAsset}
           onAbilityToggle={onAssetAbilityToggle}
         />

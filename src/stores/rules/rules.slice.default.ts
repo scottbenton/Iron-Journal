@@ -17,7 +17,6 @@ import { RulesSliceData } from "./rules.slice.type";
 
 export const defaultRulesSlice: RulesSliceData = {
   expansionIds: [],
-  compatibilityExpansionIds: [],
   baseRuleset: defaultRuleset,
   progressTracks: defaultProgressTracks,
   stats: defaultStats,

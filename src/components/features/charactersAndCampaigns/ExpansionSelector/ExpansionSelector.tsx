@@ -10,18 +10,16 @@ import {
 } from "@mui/material";
 import { EmptyState } from "components/shared/EmptyState";
 import { defaultExpansions } from "data/rulesets";
-import { ExpansionOptions } from "types/ExpansionOptions.type";
 
 const expansions = Object.values(defaultExpansions);
 
 export interface ExpansionSelectorProps {
-  expansionMap: Record<string, ExpansionOptions>;
+  enabledExpansionMap: Record<string, boolean>;
   toggleEnableExpansion: (expansionId: string, enabled: boolean) => void;
-  toggleExpansionCompatibility: (expansionId: string, enabled: boolean) => void;
 }
 
 export function ExpansionSelector(props: ExpansionSelectorProps) {
-  const { expansionMap, toggleEnableExpansion, toggleExpansionCompatibility } = props;
+  const { enabledExpansionMap, toggleEnableExpansion } = props;
   const baseRuleset = useGameSystemValue({
     [GAME_SYSTEMS.IRONSWORN]: "classic",
     [GAME_SYSTEMS.STARFORGED]: "starforged",
@@ -37,7 +35,7 @@ export function ExpansionSelector(props: ExpansionSelectorProps) {
       homebrewExpansionMap[expansionId]?.base?.rulesetId === baseRuleset
   );
 
-  const notFoundExpansionIds = Object.keys(expansionMap).filter(
+  const notFoundExpansionIds = Object.keys(enabledExpansionMap).filter(
     (key) =>
       !expansions.some((expansion) => expansion._id === key) &&
       !expansionIds.includes(key)
@@ -50,37 +48,18 @@ export function ExpansionSelector(props: ExpansionSelectorProps) {
           <Typography variant={"overline"}>Official Expansions</Typography>
           <FormGroup>
             {expansions.map((expansion) => (
-              <Box key={expansion._id} display={"flex"} flexDirection={"row"}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={
-                        expansionMap[expansion._id] === ExpansionOptions.ENABLED ||
-                        expansionMap[expansion._id] === ExpansionOptions.COMPATIBILITY
-                      }
-                      onChange={(evt, checked) => {
-                        toggleEnableExpansion(expansion._id, checked)
-                      }}
-                    />
-                  }
-                  label={expansion.title ?? "Unnamed Expansion"}
-                />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      disabled={
-                        !expansionMap[expansion._id] ||
-                        expansionMap[expansion._id] === ExpansionOptions.DISABLED
-                      }
-                      checked={expansionMap[expansion._id] === ExpansionOptions.COMPATIBILITY}
-                      onChange={(evt, checked) =>
-                        toggleExpansionCompatibility(expansion._id, checked)
-                      }
-                    />
-                  }
-                  label={"Enforce compatibility"}
-                />
-              </Box>
+              <FormControlLabel
+                key={expansion._id}
+                control={
+                  <Switch
+                    checked={enabledExpansionMap[expansion._id] ?? false}
+                    onChange={(evt, checked) =>
+                      toggleEnableExpansion(expansion._id, checked)
+                    }
+                  />
+                }
+                label={expansion.title ?? "Unnamed Expansion"}
+              />
             ))}
           </FormGroup>
         </Box>
@@ -94,7 +73,7 @@ export function ExpansionSelector(props: ExpansionSelectorProps) {
                 key={expansionId}
                 control={
                   <Switch
-                    checked={expansionMap[expansionId] !== ExpansionOptions.DISABLED}
+                    checked={enabledExpansionMap[expansionId] ?? false}
                     onChange={(evt, checked) =>
                       toggleEnableExpansion(expansionId, checked)
                     }
@@ -110,7 +89,7 @@ export function ExpansionSelector(props: ExpansionSelectorProps) {
                 key={expansionId}
                 control={
                   <Switch
-                    checked={expansionMap[expansionId] !== ExpansionOptions.DISABLED}
+                    checked={enabledExpansionMap[expansionId] ?? false}
                     onChange={(evt, checked) =>
                       toggleEnableExpansion(expansionId, checked)
                     }

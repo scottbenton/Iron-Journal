@@ -37,12 +37,6 @@ export function useSyncStore() {
   const campaignExpansionIds = useStore(
     (store) => store.campaigns.currentCampaign.currentCampaign?.expansionIds
   );
-  const characterCompatibilityExpansionIds = useStore(
-    (store) => store.characters.currentCharacter.currentCharacter?.compatibilityExpansionIds
-  );
-  const campaignCompatibilityExpansionIds = useStore(
-    (store) => store.campaigns.currentCampaign.currentCampaign?.compatibilityExpansionIds
-  );
 
   const setCurrentCharacterId = useStore(
     (store) => store.characters.currentCharacter.setCurrentCharacterId
@@ -101,9 +95,9 @@ export function useSyncStore() {
   useListenToLogs();
   useListenToCurrentCampaignCharacters();
 
-  const expansionIds = (campaignId ? campaignExpansionIds : characterExpansionIds) ?? [];
-  const compatibilityIds = (campaignId ? campaignCompatibilityExpansionIds : characterCompatibilityExpansionIds) ?? [];
-  useListenToHomebrewContent(expansionIds, compatibilityIds);
+  useListenToHomebrewContent(
+    (campaignId ? campaignExpansionIds : characterExpansionIds) ?? []
+  );
 
   useSyncTheme();
 }

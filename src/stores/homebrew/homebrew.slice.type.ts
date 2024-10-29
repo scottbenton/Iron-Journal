@@ -52,7 +52,7 @@ export interface HomebrewSliceData {
 
 export interface HomebrewSliceActions {
   subscribe: (uid: string) => Unsubscribe;
-  subscribeToHomebrewContent: (homebrewIds: string[], compatibilityIds: string[]) => Unsubscribe;
+  subscribeToHomebrewContent: (homebrewIds: string[]) => Unsubscribe;
 
   createExpansion: (expansion: ExpansionDocument) => Promise<string>;
   updateExpansion: (
