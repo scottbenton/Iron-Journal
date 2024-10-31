@@ -1,6 +1,6 @@
 import { AssetCard } from "../AssetCard/AssetCard";
-import { Button } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { LoadingButton } from "@mui/lab";
+import { useEffect, useRef, useState } from "react";
 
 export interface AssetCardDialogCardProps {
   assetId: string;
@@ -8,12 +8,22 @@ export interface AssetCardDialogCardProps {
   searched: boolean;
   clearSearched: () => void;
   loading?: boolean;
+  selectLabel?: string;
+  disabled?: boolean;
 }
 
 export function AssetCardDialogCard(props: AssetCardDialogCardProps) {
-  const { assetId, selectAsset, searched, clearSearched, loading } = props;
+  const { assetId, selectAsset, searched, clearSearched, loading, selectLabel, disabled = false } = props;
 
   const assetRef = useRef<HTMLDivElement | null>(null);
+
+  const [buttonLoading, setButtonLoading] = useState(false);
+
+  useEffect(() => {
+    if (!loading) {
+      setButtonLoading(false);
+    }
+  }, [loading]);
 
   useEffect(() => {
     if (searched) {
@@ -28,10 +38,28 @@ export function AssetCardDialogCard(props: AssetCardDialogCardProps) {
       assetId={assetId}
       showSharedIcon
       actions={
-        <Button color={"inherit"} onClick={selectAsset} disabled={loading}>
-          Select
-        </Button>
+        <LoadingButton
+          color={"inherit"}
+          onClick={() => {
+            setButtonLoading(true);
+            selectAsset()
+          }}
+          loading={buttonLoading}
+          variant={"contained"}
+          sx={{
+            width: "40%",
+            boxShadow: "none",
+            ":hover": {
+              boxShadow: "none",
+            }
+          }}
+        >
+          {selectLabel ?? "Select"}
+        </LoadingButton>
       }
+      sx={{
+        filter: disabled ? "grayscale(30%) opacity(70%)" : undefined
+      }}
     />
   );
 }
