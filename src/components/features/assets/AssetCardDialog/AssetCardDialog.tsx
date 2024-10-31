@@ -23,17 +23,23 @@ export interface AssetCardDialogProps {
   handleClose: () => void;
   handleAssetSelection: (asset: Omit<AssetDocument, "order">) => void;
   actionIsHide?: boolean;
+  campaignId?: string;
 }
 
 export function AssetCardDialog(props: AssetCardDialogProps) {
-  const { open, loading, handleClose, handleAssetSelection, actionIsHide = false } = props;
+  const { open, loading, handleClose, handleAssetSelection, actionIsHide = false, campaignId } = props;
 
   const assetGroups = useStore(
     (store) => store.rules.assetMaps.assetCollectionMap
   );
-  const hiddenAssets = useStore(
+  let hiddenAssets = useStore(
     (store) => store.campaigns.currentCampaign.currentCampaign?.hiddenAssetIds
-  )
+  );
+  const campaigns = useStore((store) => store.campaigns.campaignMap);
+
+  if (!hiddenAssets && campaignId && Object.keys(campaigns).includes(campaignId)) {
+    hiddenAssets = campaigns[campaignId].hiddenAssetIds;
+  }
 
   const [selectedTabId, setSelectedTabId] = useState<string>(
     Object.keys(assetGroups)[0]
