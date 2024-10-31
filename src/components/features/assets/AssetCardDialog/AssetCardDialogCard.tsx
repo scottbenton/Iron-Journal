@@ -1,6 +1,7 @@
 import { AssetCard } from "../AssetCard/AssetCard";
 import { LoadingButton } from "@mui/lab";
 import { useEffect, useRef, useState } from "react";
+import { CircularProgress } from "@mui/material";
 
 export interface AssetCardDialogCardProps {
   assetId: string;
@@ -46,20 +47,19 @@ export function AssetCardDialogCard(props: AssetCardDialogCardProps) {
           }}
           loading={buttonLoading}
           variant={"contained"}
+          disableRipple
+          disableElevation
+          loadingIndicator={
+            <CircularProgress color={"inherit"} size={16} disableShrink sx={{ animationDuration: "600ms" }}/>
+          }
           sx={{
             width: "40%",
-            boxShadow: "none",
-            ":hover": {
-              boxShadow: "none",
-            }
           }}
         >
           {selectLabel ?? "Select"}
         </LoadingButton>
       }
-      sx={{
-        filter: disabled ? "grayscale(30%) opacity(70%)" : undefined
-      }}
+      disabled={disabled}
     />
   );
 }
