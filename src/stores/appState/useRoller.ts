@@ -219,10 +219,10 @@ export function useRoller() {
 
   const rollTrackProgress = useCallback(
     (
-      trackType: TrackTypes | LEGACY_TrackTypes,
       trackLabel: string,
       trackProgress: number,
-      moveId: string
+      moveId: string,
+      trackType?: TrackTypes | LEGACY_TrackTypes,
     ) => {
       const challenge1 = getRoll(10);
       const challenge2 = getRoll(10);
@@ -242,7 +242,7 @@ export function useRoller() {
         challenge1,
         challenge2,
         trackProgress,
-        trackType,
+        trackType: trackType ?? "",
         result,
         characterId,
         uid,
@@ -259,10 +259,13 @@ export function useRoller() {
           addRollToScreen(rollId, trackProgressRoll);
         })
         .catch(() => {});
+
+      const rollString = trackProgressRoll.trackType
+        ? `${trackProgressRoll.trackType} ${trackProgressRoll.rollLabel}`
+        : trackProgressRoll.rollLabel;
+
       announce(
-        `Rolled progress for ${trackProgressRoll.trackType} ${
-          trackProgressRoll.rollLabel
-        }. Your progress was ${trackProgressRoll.trackProgress} against a ${
+        `Rolled progress for ${rollString}. Your progress was ${trackProgressRoll.trackProgress} against a ${
           trackProgressRoll.challenge1
         } and a ${trackProgressRoll.challenge2} for a ${getRollResultLabel(
           trackProgressRoll.result

@@ -36,9 +36,6 @@ export interface LocationMapProps {
   map?: ILocationMap;
 }
 
-const DEFAULT_ROWS = 13;
-const DEFAULT_COLS = 18;
-
 export function LocationMap(props: LocationMapProps) {
   const { locationId, map = {}, backgroundImageUrl } = props;
   const locationMap = useStore(
@@ -68,14 +65,6 @@ export function LocationMap(props: LocationMapProps) {
       maxMapDimensions,
       backgroundImageDimensions
     );
-
-  // const rows = 13;
-  // const cols = 18;
-
-  // // Calculate SVG dimensions
-  // const width: number =
-  //   cols * s * Math.sqrt(3) + (s * Math.sqrt(3)) / 2 - cols + 6; // Updated
-  // const height: number = rows * 1.5 * s + s / 2 + 1; // Updated
 
   const verticalSpacing: number = 1.5 * s; // Updated
   const horizontalSpacing: number = s * Math.sqrt(3); // Updated
@@ -430,7 +419,7 @@ export function LocationMap(props: LocationMapProps) {
 
                           paintOrder: "stroke",
                           stroke: "#000000",
-                          strokeOpacity: !!backgroundImageUrl ? "100%" : "60%",
+                          strokeOpacity: backgroundImageUrl ? "100%" : "60%",
                           strokeWidth: s / 12,
                           strokeLinecap: "butt",
                           strokeLinejoin: "miter",
