@@ -49,7 +49,6 @@ export function NavRail() {
           display: "flex",
           flexDirection: "column",
           flexShrink: 0,
-          borderRight: `1px solid ${theme.palette.divider}`,
           bgcolor: theme.palette.darkGrey.main,
           color: theme.palette.darkGrey.contrastText,
           py: 2,
