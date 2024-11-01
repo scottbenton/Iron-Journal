@@ -24,6 +24,7 @@ export interface AssetCardProps {
   ) => void;
 
   showSharedIcon?: boolean;
+  disabled?: boolean;
   sx?: SxProps<Theme>;
 }
 
@@ -40,6 +41,7 @@ const AssetCardComponent = (
     onAssetOptionChange,
     onAssetControlChange,
     showSharedIcon,
+    disabled,
     sx,
   } = props;
 
@@ -98,7 +100,9 @@ const AssetCardComponent = (
         ...sx,
       }}
     >
-      <AssetHeader asset={asset} onAssetRemove={onAssetRemove} />
+      <Box sx={{ filter: disabled ? "grayscale(30%) opacity(70%)" : undefined }}>
+        <AssetHeader asset={asset} onAssetRemove={onAssetRemove} />
+      </Box>
       <Box
         flexGrow={1}
         display={"flex"}
@@ -110,25 +114,34 @@ const AssetCardComponent = (
           borderBottomRightRadius: theme.shape.borderRadius,
         })}
       >
-        <AssetNameAndDescription
-          asset={asset}
-          showSharedIcon={showSharedIcon}
-        />
-        <AssetOptions
-          options={assetOptions}
-          storedAsset={storedAsset}
-          onAssetOptionChange={onAssetOptionChange}
-        />
-        <AssetAbilities
-          asset={asset}
-          storedAsset={storedAsset}
-          onAbilityToggle={onAssetAbilityToggle}
-        />
-        <AssetControls
-          controls={assetControls}
-          storedAsset={storedAsset}
-          onControlChange={onAssetControlChange}
-        />
+        <Box
+          flexGrow={1}
+          display={"flex"}
+          flexDirection={"column"}
+          sx={{
+            filter: disabled ? "grayscale(30%) opacity(70%)" : undefined
+          }}
+        >
+          <AssetNameAndDescription
+            asset={asset}
+            showSharedIcon={showSharedIcon}
+          />
+          <AssetOptions
+            options={assetOptions}
+            storedAsset={storedAsset}
+            onAssetOptionChange={onAssetOptionChange}
+          />
+          <AssetAbilities
+            asset={asset}
+            storedAsset={storedAsset}
+            onAbilityToggle={onAssetAbilityToggle}
+          />
+          <AssetControls
+            controls={assetControls}
+            storedAsset={storedAsset}
+            onControlChange={onAssetControlChange}
+          />
+        </Box>
         {actions && (
           <Stack
             direction={"row"}

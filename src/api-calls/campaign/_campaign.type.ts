@@ -14,6 +14,7 @@ export interface CampaignDocument {
   gmIds?: string[];
   worldId?: string;
   expansionIds?: string[];
+  hiddenAssetIds?: string[];
   customTracks?: Record<string, number>;
   conditionMeters?: Record<string, number>;
   specialTracks?: Record<string, LegacyTrack>;

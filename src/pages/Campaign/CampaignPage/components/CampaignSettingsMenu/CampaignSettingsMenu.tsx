@@ -17,6 +17,7 @@ import { useStore } from "stores/store";
 import { useCampaignType } from "hooks/useCampaignType";
 import { CampaignType } from "api-calls/campaign/_campaign.type";
 import HomebrewIcon from "@mui/icons-material/PlaylistAdd";
+import AssetCardsIcon from "@mui/icons-material/AutoAwesomeMotion";
 import { ExpansionSelectorDialog } from "components/features/charactersAndCampaigns/ExpansionSelector/ExpansionSelectorDialog";
 import StepDownIcon from "@mui/icons-material/PersonRemove";
 import LeaveIcon from "@mui/icons-material/Logout";
@@ -26,6 +27,8 @@ import ThemeIcon from "@mui/icons-material/ColorLens";
 import { ThemeChooserDialog } from "components/shared/Layout/ThemeChooserDialog";
 import LayoutIcon from "@mui/icons-material/ViewComfy";
 import { LayoutChooserDialog } from "components/shared/Layout/LayoutChooserDialog";
+import { AssetCardDialog } from "components/features/assets/AssetCardDialog";
+import { AssetDocument } from "api-calls/assets/_asset.type";
 
 export function CampaignSettingsMenu() {
   const confirm = useConfirm();
@@ -41,7 +44,8 @@ export function CampaignSettingsMenu() {
     useState(false);
   const [themeDialogOpen, setThemeDialogOpen] = useState(false);
   const [layoutDialogOpen, setLayoutDialogOpen] = useState(false);
-
+  const [assetDialogOpen, setAssetDialogOpen] = useState(false);
+  const [hideAssetsLoading, setHideAssetsLoading] = useState(false);
   const [isEditCampaignOpen, setIsEditCampaignOpen] = useState(false);
   const handleClose = () => setAnchorElement(null);
 
@@ -105,6 +109,24 @@ export function CampaignSettingsMenu() {
   const removeSelfAsGuide = () => {
     updateCampaignGM(uid, true).catch(() => {});
   };
+
+  const hiddenAssets = useStore(
+    (store) => store.campaigns.currentCampaign.currentCampaign?.hiddenAssetIds
+  )
+  const updateHiddenAssets = useStore(
+    (store) => store.campaigns.currentCampaign.updateHiddenAssets
+  );
+
+  const handleHideAsset = (asset: Omit<AssetDocument, "order">) => {
+    setHideAssetsLoading(true);
+    const isHidden = hiddenAssets && hiddenAssets.includes(asset.id);
+    updateHiddenAssets(asset.id, !isHidden)
+      .catch(() => {})
+      .finally(() => {
+        setHideAssetsLoading(false);
+      });
+  };
+
   return (
     <>
       <Tooltip title={"Campaign Settings"}>
@@ -154,6 +176,19 @@ export function CampaignSettingsMenu() {
               <HomebrewIcon fontSize={"small"} />
             </ListItemIcon>
             <ListItemText>Expansions & Homebrew</ListItemText>
+          </MenuItem>
+        )}
+        {!showGuidedPlayerView && (
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              setAssetDialogOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <AssetCardsIcon fontSize={"small"} />
+            </ListItemIcon>
+            <ListItemText>Edit Assets Deck</ListItemText>
           </MenuItem>
         )}
         {!showGuidedPlayerView && (
@@ -238,6 +273,13 @@ export function CampaignSettingsMenu() {
       <LayoutChooserDialog
         open={layoutDialogOpen}
         onClose={() => setLayoutDialogOpen(false)}
+      />
+      <AssetCardDialog
+        open={assetDialogOpen}
+        loading={hideAssetsLoading}
+        handleClose={() => setAssetDialogOpen(false)}
+        handleAssetSelection={(asset) => handleHideAsset(asset)}
+        actionIsHide
       />
     </>
   );
