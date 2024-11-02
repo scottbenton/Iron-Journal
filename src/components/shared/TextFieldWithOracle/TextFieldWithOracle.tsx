@@ -21,7 +21,6 @@ export function TextFieldWithOracle(props: TextFieldWithOracleProps) {
   const handleOracleRoll = async () => {
     if (getOracleValue) {
       const value = await getOracleValue();
-      console.log(value);
       onChange(value);
       announce(`Updated ${label} to ${value}`);
     }

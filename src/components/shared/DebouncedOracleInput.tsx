@@ -71,8 +71,6 @@ export function DebouncedOracleInput(props: DebouncedOracleInputProps) {
     return result?.result ?? "";
   };
 
-  console.log(value);
-
   return (
     <TextFieldWithOracle
       value={value}
