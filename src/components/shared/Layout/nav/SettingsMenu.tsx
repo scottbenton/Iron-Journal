@@ -59,11 +59,11 @@ export function SettingsMenu() {
     (store) => store.auth.status === AUTH_STATE.AUTHENTICATED
   );
 
-  const hideDice = useStore((store) => store.auth.userDoc?.hideDice);
+  const hide3dDice = useStore((store) => store.auth.userDoc?.hide3dDice);
   const updateUser = useStore((store) => store.auth.updateUserDoc);
 
   const toggleDice = () => {
-    updateUser({ hideDice: !hideDice })
+    updateUser({ hide3dDice: !hide3dDice })
   };
 
   return (
@@ -178,7 +178,7 @@ export function SettingsMenu() {
               <DieIcon />
             </ListItemIcon>
             <ListItemText>
-              { hideDice ? "Show Animated Dice" : "Hide Animated Dice"}
+              { hide3dDice ? "Show Animated Dice" : "Hide Animated Dice"}
             </ListItemText>
           </MenuItem>
         )}

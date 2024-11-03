@@ -20,8 +20,8 @@ export interface RollResult {
   value: number
 }
 
-export const getRolls = async (challengeDice: number, actionDice: number, theme: Theme, hideDice: boolean): Promise<RollResult[]> => {
-  if (hideDice) {
+export const getRolls = async (challengeDice: number, actionDice: number, theme: Theme, hide3dDice: boolean): Promise<RollResult[]> => {
+  if (hide3dDice) {
     const rolls: RollResult[] = [];
     for(let challenges = 0; challenges < challengeDice; challenges++) {
       rolls.push({
@@ -65,8 +65,8 @@ export function useRoller() {
     (store) => store.characters.currentCharacter.currentCharacter?.momentum ?? 0
   );
 
-  const hideDice = useStore(
-    (store) => store.auth.userDoc?.hideDice
+  const hide3dDice = useStore(
+    (store) => store.auth.userDoc?.hide3dDice
   );
 
   const theme = useTheme();
@@ -79,7 +79,7 @@ export function useRoller() {
       adds?: number,
       showSnackbar = true
     ) => {
-      const results = await getRolls(2, 1, theme, hideDice === true);
+      const results = await getRolls(2, 1, theme, hide3dDice === true);
       const challenge1 = results[0].value;
       const challenge2 = results[1].value;
       const action = results[2].value;
@@ -178,7 +178,7 @@ export function useRoller() {
       verboseScreenReaderRolls,
       momentum,
       theme,
-      hideDice
+      hide3dDice
     ]
   );
 
@@ -198,7 +198,7 @@ export function useRoller() {
         return undefined;
       }
 
-      const oracleRoll = await rollOracle(oracle, characterId, uid, gmsOnly, theme, !showSnackbar || hideDice === true);
+      const oracleRoll = await rollOracle(oracle, characterId, uid, gmsOnly, theme, !showSnackbar || hide3dDice === true);
       if (!oracleRoll) return undefined;
 
       let result = oracleRoll.result ?? "";
@@ -251,7 +251,7 @@ export function useRoller() {
       campaignId,
       verboseScreenReaderRolls,
       theme,
-      hideDice
+      hide3dDice
     ]
   );
 
@@ -262,7 +262,7 @@ export function useRoller() {
       moveId: string,
       trackType?: TrackTypes | LEGACY_TrackTypes,
     ) => {
-      const results = await getRolls(2, 0, theme, hideDice === true);
+      const results = await getRolls(2, 0, theme, hide3dDice === true);
       const challenge1 = results[0].value;
       const challenge2 = results[1].value;
 
@@ -321,7 +321,7 @@ export function useRoller() {
       characterId,
       uid,
       theme,
-      hideDice
+      hide3dDice
     ]
   );
 
@@ -336,7 +336,7 @@ export function useRoller() {
 
       if (!oracle || oracle.type !== "oracle_rollable") return undefined;
 
-      const result = await rollOracle(oracle, null, uid, true, theme, hideDice === true);
+      const result = await rollOracle(oracle, null, uid, true, theme, hide3dDice === true);
 
       if (!result) return undefined;
 
@@ -398,7 +398,7 @@ export function useRoller() {
       addRollToLog,
       addRollToScreen,
       theme,
-      hideDice
+      hide3dDice
     ]
   );
 

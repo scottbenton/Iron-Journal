@@ -2,7 +2,7 @@
 #dice-box canvas {
   position: fixed;
   pointer-events: none;
-  z-index: 100;
+  z-index: 2000; /* nav and modals are in the 1000-1200 range, snackbar is 10000+ range */
   width: 100%;
   height: 100%;
 }

@@ -3,13 +3,13 @@ import { OracleTableRoll, ROLL_TYPE } from "types/DieRolls.type";
 import { rollDie } from "./rollDie";
 import { Theme } from "@mui/material";
 
-async function rollOracleColumn(column: Datasworn.OracleRollable, theme: Theme, hideDice: boolean):
+async function rollOracleColumn(column: Datasworn.OracleRollable, theme: Theme, hide3dDice: boolean):
   Promise<| {
     roll: number;
     result: Datasworn.OracleRollableRow;
   }
     | undefined> {
-  const roll = await rollDie(column.dice, theme, hideDice);
+  const roll = await rollDie(column.dice, theme, hide3dDice);
   if (!roll) {
     return undefined;
   }
@@ -33,7 +33,7 @@ export async function rollOracle(
   uid: string,
   gmsOnly: boolean,
   theme: Theme,
-  hideDice: boolean,
+  hide3dDice: boolean,
 ): Promise<OracleTableRoll | undefined> {
   // We cannot roll across multiple tables like this
   if (oracle.oracle_type === "tables") {
@@ -58,7 +58,7 @@ export async function rollOracle(
     resultString = Object.values(oracle.contents ?? {})
       .sort((c1, c2) => c1.name.localeCompare(c2.name))
       .map(async (col) => {
-        const rollResult = await rollOracleColumn(col, theme, hideDice);
+        const rollResult = await rollOracleColumn(col, theme, hide3dDice);
         if (!rollResult) {
           return "";
         } else {
@@ -69,7 +69,7 @@ export async function rollOracle(
       .join("\n");
     rolls = tmpRolls;
   } else {
-    const rollResult = await rollOracleColumn(oracle, theme, hideDice);
+    const rollResult = await rollOracleColumn(oracle, theme, hide3dDice);
     if (rollResult) {
       rolls = rollResult.roll;
       resultString = rollResult.result.text;

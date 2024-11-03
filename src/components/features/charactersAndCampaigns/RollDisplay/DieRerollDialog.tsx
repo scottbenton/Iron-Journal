@@ -64,8 +64,8 @@ export function DieRerollDialog(props: DieRerollDialogProps) {
     matchedNegativeMomentum,
   };
 
-  const hideDice = useStore(
-    (store) => store.auth.userDoc?.hideDice
+  const hide3dDice = useStore(
+    (store) => store.auth.userDoc?.hide3dDice
   );
 
   const theme = useTheme();
@@ -75,8 +75,8 @@ export function DieRerollDialog(props: DieRerollDialogProps) {
     type: "challenge" | "action"
   ) => {
     const roll = type === "challenge"
-      ? await getRolls(1, 0, theme, hideDice === true)
-      : await getRolls(0, 1, theme, hideDice === true);
+      ? await getRolls(1, 0, theme, hide3dDice === true)
+      : await getRolls(0, 1, theme, hide3dDice === true);
     setter(roll[0].value);
     info(`Rerolled ${type} die for a new value of ${roll[0].value}`);
   };
