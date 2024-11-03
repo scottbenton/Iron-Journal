@@ -5,6 +5,7 @@ import { StatComponent } from "components/features/characters/StatComponent";
 import { useEffect, useRef } from "react";
 import { useDebouncedState } from "hooks/useDebouncedState";
 import { useStore } from "stores/store";
+import ResetIcon from "@mui/icons-material/Replay";
 
 export interface MobileStatTrackProps {
   label: string;
@@ -15,10 +16,11 @@ export interface MobileStatTrackProps {
   disableRoll: boolean;
   smallSize?: boolean;
   ignoreAdds?: boolean;
+  resetValue?: number;
 }
 
 export function MobileStatTrack(props: MobileStatTrackProps) {
-  const { label, value, min, max, onChange, disableRoll, smallSize, ignoreAdds } = props;
+  const { label, value, min, max, onChange, disableRoll, smallSize, ignoreAdds, resetValue } = props;
 
   const hasUnsavedChangesRef = useRef(false);
   const announce = useStore((store) => store.appState.announce);
@@ -50,6 +52,7 @@ export function MobileStatTrack(props: MobileStatTrackProps) {
   return (
     <Stack
       alignItems="center"
+      justifyContent="space-between"
       direction={smallSize ? "column" : "row"}
       sx={(theme) => ({
         boxShadow: smallSize ? `inset 0px 0px 0px 1px ${theme.palette.divider}` : undefined,
@@ -63,17 +66,51 @@ export function MobileStatTrack(props: MobileStatTrackProps) {
     >
       { smallSize && (
         <>
-          <StatComponent
-            disableRoll={disableRoll}
-            label={label}
-            value={localValue}
-            sx={{
-              width: 65,
-              borderBottomLeftRadius: 0,
-              borderBottomRightRadius: 0,
-            }}
-            ignoreAdds={ignoreAdds}
-          />
+          <Box
+            onClick={() => resetValue !== undefined ? handleChange(resetValue) : {}}
+            position={"relative"}
+            sx={resetValue !== undefined ? (theme) => ({
+              outlineColor: theme.palette.primary.main,
+              outlineWidth: 0,
+              outlineStyle: "solid",
+              borderTopLeftRadius: 8,
+              borderTopRightRadius: 8,
+              transition: theme.transitions.create(
+                ["border-color", "outline-width"],
+                { duration: theme.transitions.duration.shorter }
+              ),
+              "&:hover": {
+                outlineWidth: 2,
+                borderColor: theme.palette.primary.main,
+                cursor: "pointer",
+              },
+            }) : undefined }
+          >
+            <StatComponent
+              disableRoll={disableRoll}
+              label={label}
+              value={localValue}
+              sx={{
+                width: 60,
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0,
+              }}
+              ignoreAdds={ignoreAdds}
+            />
+            {resetValue !== undefined && (
+              <ResetIcon
+                aria-label={"Reset Momentum Button"}
+                sx={(theme) => ({
+                  position: "absolute",
+                  top: theme.spacing(3.25),
+                  left: theme.spacing(0.25),
+                  width: theme.spacing(1.5),
+                  height: theme.spacing(1.5),
+                  color: theme.palette.action.active,
+                })}
+              />
+            )}
+          </Box>
           <Box>
             <IconButton
               disabled={localValue <= min}

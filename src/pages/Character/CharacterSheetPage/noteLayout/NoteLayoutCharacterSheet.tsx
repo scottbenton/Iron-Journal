@@ -85,7 +85,7 @@ export function NoteLayoutCharacterSheet() {
           sx={{
             display: "grid",
             gridTemplateColumns:
-              "minmax(320px, 400px) 1fr minmax(250px, 300px)",
+              "minmax(320px, 380px) 1fr minmax(250px, 300px)",
             height: "100%",
           }}
         >

@@ -3,7 +3,7 @@ import { useGameSystem } from "hooks/useGameSystem";
 import { ProgressTrackSection } from "./ProgressTrackSection";
 import { GAME_SYSTEMS } from "types/GameSystems.type";
 import { TrackTypes } from "types/Track.type";
-import { Checkbox, FormControlLabel } from "@mui/material";
+import { Box, Checkbox, FormControlLabel } from "@mui/material";
 import { useState } from "react";
 
 export function TracksPanel() {
@@ -12,7 +12,7 @@ export function TracksPanel() {
   const [showCompletedTracks, setShowCompletedTracks] = useState(false);
 
   return (
-    <>
+    <Box pl={2} width={"calc(100% - 16px)"} >
       <FormControlLabel
         control={
           <Checkbox
@@ -46,6 +46,6 @@ export function TracksPanel() {
         />
       )}
       <ClockSection />
-    </>
+    </Box>
   );
 }

@@ -63,6 +63,15 @@ export function CharacterConditionMeters() {
   });
 
   const maxMomentum = momentumTrack.max - numberOfActiveDebilities;
+
+  let momentumResetValue = momentumTrack.startingValue;
+
+  if (numberOfActiveDebilities >= 2) {
+    momentumResetValue = 0;
+  } else if (numberOfActiveDebilities === 1) {
+    momentumResetValue = 1;
+  }
+
   const momentum = useStore(
     (store) => store.characters.currentCharacter.currentCharacter?.momentum ?? 0
   );
@@ -116,6 +125,7 @@ export function CharacterConditionMeters() {
           max={maxMomentum}
           smallSize
           ignoreAdds={true}
+          resetValue={momentumResetValue}
         />
         <MobileStatTrack
           label={"Adds"}
@@ -125,6 +135,7 @@ export function CharacterConditionMeters() {
           min={-9}
           max={9}
           smallSize
+          resetValue={0}
         />
       </Box>
     </Box>

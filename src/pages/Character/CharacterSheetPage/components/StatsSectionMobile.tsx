@@ -10,13 +10,6 @@ export function StatsSectionMobile() {
     (store) => store.characters.currentCharacter.currentCharacter?.stats
   );
 
-  const adds = useStore(
-    (store) => store.characters.currentCharacter.currentCharacter?.adds ?? 0
-  );
-  const updateAdds = useStore(
-    (store) => store.characters.currentCharacter.updateCurrentCharacter
-  );
-
   return (
     <Box mt={1} mx={-1}>
       <Box
@@ -25,22 +18,16 @@ export function StatsSectionMobile() {
         justifyContent={"center"}
         flexDirection={"row"}
         flexWrap={"wrap"}
-        gap={0.5}
+        gap={0.75}
       >
         {Object.keys(ruleStats).map((statKey) => (
           <StatComponent
             key={statKey}
             label={ruleStats[statKey].label}
             value={stats?.[statKey] ?? 0}
-            sx={{ width: 54 }}
+            sx={{ width: 60 }}
           />
         ))}
-        <StatComponent
-          label={"Adds"}
-          updateTrack={(newValue) => updateAdds({ adds: newValue })}
-          value={adds}
-          sx={{ width: 54 }}
-        />
       </Box>
     </Box>
   );

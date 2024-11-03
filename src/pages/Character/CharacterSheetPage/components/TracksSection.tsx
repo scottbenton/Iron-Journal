@@ -5,10 +5,7 @@ import ResetIcon from "@mui/icons-material/Replay";
 import { useStore } from "stores/store";
 import { useIsMobile } from "hooks/useIsMobile";
 import { MobileStatTrack } from "./MobileStatTrack";
-import { MomentumTrackMobile } from "./MomentumTrackMobile";
 import { NonLinearMeters } from "./NonLinearMeters";
-
-export type TRACK_KEYS = "health" | "spirit" | "supply" | "momentum";
 
 export function TracksSection() {
   const conditionMeters = useStore((store) => store.rules.conditionMeters);
@@ -89,15 +86,22 @@ export function TracksSection() {
 
   const isMobile = useIsMobile();
 
+  const adds = useStore(
+    (store) => store.characters.currentCharacter.currentCharacter?.adds ?? 0
+  );
+  const updateAdds = useStore(
+    (store) => store.characters.currentCharacter.updateCurrentCharacter
+  );
+
   return (
     <Grid
       container
-      spacing={isMobile ? 1 : 2}
-      sx={isMobile ? { mt: 0 } : undefined}
+      spacing={isMobile ? 0.75 : 2}
+      sx={isMobile ? { mt: 0, justifyContent: "center" } : undefined}
     >
       {Object.keys(conditionMeters).map((conditionMeterKey) =>
         isMobile ? (
-          <Grid item xs={6} key={conditionMeterKey}>
+          <Grid item key={conditionMeterKey}>
             <MobileStatTrack
               label={conditionMeters[conditionMeterKey].label}
               value={getConditionMeterValue(conditionMeterKey)}
@@ -107,6 +111,7 @@ export function TracksSection() {
               disableRoll={!conditionMeters[conditionMeterKey].rollable}
               min={conditionMeters[conditionMeterKey].min}
               max={conditionMeters[conditionMeterKey].max}
+              smallSize
             />
           </Grid>
         ) : (
@@ -124,15 +129,33 @@ export function TracksSection() {
         )
       )}
       {isMobile ? (
-        <Grid item xs={6}>
-          <MomentumTrackMobile
-            value={momentum}
-            onChange={(newValue) => updateMomentum(newValue)}
-            min={momentumTrack.min}
-            max={maxMomentum ?? momentumTrack.max}
-            resetValue={momentumResetValue ?? momentumTrack.startingValue}
-          />
-        </Grid>
+        <>
+          <Grid item>
+            <MobileStatTrack
+              label={"Momentum"}
+              value={momentum}
+              onChange={(newValue) => updateMomentum(newValue)}
+              disableRoll={true}
+              min={momentumTrack.min}
+              max={maxMomentum ?? momentumTrack.max}
+              smallSize
+              ignoreAdds={true}
+              resetValue={momentumResetValue}
+            />
+          </Grid>
+          <Grid item>
+            <MobileStatTrack
+              label={"Adds"}
+              value={adds}
+              onChange={(newValue) => updateAdds({ adds: newValue })}
+              disableRoll={true}
+              min={-9}
+              max={9}
+              smallSize
+              resetValue={0}
+            />
+          </Grid>
+        </>
       ) : (
         <Grid item xs={12}>
           <Box display={"flex"}>

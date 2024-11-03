@@ -30,7 +30,6 @@ export function PageHeader(props: PageHeaderProps) {
           pt: isEmpty ? 4 : 2,
           pb: isEmpty ? 8 : 6,
           mb: isEmpty ? -8 : -4,
-          // width: "100vw",
           backgroundColor:
             isLightTheme && background?.type === "separator"
               ? theme.palette.darkGrey.main
