@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@3d-dice/dice-box": "^1.1.4",
     "@datasworn/core": "^0.1.0-0",
     "@datasworn/ironsworn-classic": "^0.1.0-0",
     "@datasworn/ironsworn-classic-delve": "^0.1.0-0",

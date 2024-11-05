@@ -36,7 +36,7 @@ export function OracleListItem(props: OracleListItemProps) {
         />
       }
       disabled={disabled}
-      onClick={() => rollOracleTable(oracle._id, true)}
+      onClick={() => rollOracleTable(oracle._id, true, false)}
     >
       <ListItemText primary={oracle.name} />
     </ListItemButtonWithSecondaryAction>

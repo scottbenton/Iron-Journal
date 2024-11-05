@@ -105,7 +105,7 @@ export function LocationMap(props: LocationMapProps) {
 
   const [isDragging, setIsDragging] = useState(false);
 
-  const handleHexClick = (
+  const handleHexClick = async (
     row: number,
     col: number,
     locationIds: string[] | undefined,
@@ -120,7 +120,8 @@ export function LocationMap(props: LocationMapProps) {
         updateLocation(locationId, {
           [`map.${row}.${col}.type`]:
             currentCell?.type === MapEntryType.Path ? null : MapEntryType.Path,
-        }).catch(() => {});
+        }).catch(() => {
+        });
       }
     } else if (mapTool?.type === MapTools.AddLocation) {
       const type = mapTool.locationType;
@@ -134,15 +135,17 @@ export function LocationMap(props: LocationMapProps) {
         type: type,
         updatedDate: new Date(),
         createdDate: new Date(),
-        ...(configCreateLocation ? configCreateLocation(rollOracleTable) : {}),
+        ...(configCreateLocation ? await configCreateLocation(rollOracleTable) : {}),
       })
         .then((id) => {
           updateLocation(locationId, {
             [`map.${row}.${col}.type`]: MapEntryType.Location,
             [`map.${row}.${col}.locationIds`]: arrayUnion(id),
-          }).catch(() => {});
+          }).catch(() => {
+          });
         })
-        .catch(() => {});
+        .catch(() => {
+        });
       setMapTool(undefined);
     } else if (mapTool?.type === MapTools.MoveLocation) {
       const locationToMove = locationMap[mapTool.locationId];
@@ -153,14 +156,16 @@ export function LocationMap(props: LocationMapProps) {
           locationId,
           row,
           col
-        ).catch(() => {});
+        ).catch(() => {
+        });
         setMapTool(undefined);
       }
     } else if (mapTool?.type === MapTools.BackgroundPaint) {
       const color = mapTool.color;
       updateLocation(locationId, {
         [`map.${row}.${col}.background.color`]: color,
-      }).catch(() => {});
+      }).catch(() => {
+      });
     } else if (!mapTool && locationIds) {
       const filteredLocationIds = getValidLocations(
         locationId,
@@ -179,7 +184,8 @@ export function LocationMap(props: LocationMapProps) {
     } else if (mapTool?.type === MapTools.BackgroundEraser) {
       updateLocation(locationId, {
         [`map.${row}.${col}.background`]: null,
-      }).catch(() => {});
+      }).catch(() => {
+      });
     }
   };
 
