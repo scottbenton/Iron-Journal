@@ -29,6 +29,8 @@ import LayoutIcon from "@mui/icons-material/ViewComfy";
 import { LayoutChooserDialog } from "components/shared/Layout/LayoutChooserDialog";
 import { AssetCardDialog } from "components/features/assets/AssetCardDialog";
 import { AssetDocument } from "api-calls/assets/_asset.type";
+import { HideOraclesDialog } from "./HideOraclesDialog";
+import OracleHideIcon from '@mui/icons-material/PlaylistRemove';
 
 export function CampaignSettingsMenu() {
   const confirm = useConfirm();
@@ -44,6 +46,7 @@ export function CampaignSettingsMenu() {
     useState(false);
   const [themeDialogOpen, setThemeDialogOpen] = useState(false);
   const [layoutDialogOpen, setLayoutDialogOpen] = useState(false);
+  const [oraclesDialogOpen, setOraclesDialogOpen] = useState(false);
   const [assetDialogOpen, setAssetDialogOpen] = useState(false);
   const [hideAssetsLoading, setHideAssetsLoading] = useState(false);
   const [isEditCampaignOpen, setIsEditCampaignOpen] = useState(false);
@@ -195,6 +198,19 @@ export function CampaignSettingsMenu() {
           <MenuItem
             onClick={() => {
               handleClose();
+              setOraclesDialogOpen(true);
+            }}
+          >
+            <ListItemIcon>
+              <OracleHideIcon />
+            </ListItemIcon>
+            <ListItemText>Hide Oracles</ListItemText>
+          </MenuItem>
+        )}
+        {!showGuidedPlayerView && (
+          <MenuItem
+            onClick={() => {
+              handleClose();
               setThemeDialogOpen(true);
             }}
           >
@@ -280,6 +296,10 @@ export function CampaignSettingsMenu() {
         handleClose={() => setAssetDialogOpen(false)}
         handleAssetSelection={(asset) => handleHideAsset(asset)}
         actionIsHide
+      />
+      <HideOraclesDialog
+        open={oraclesDialogOpen}
+        onClose={() => setOraclesDialogOpen(false)}
       />
     </>
   );

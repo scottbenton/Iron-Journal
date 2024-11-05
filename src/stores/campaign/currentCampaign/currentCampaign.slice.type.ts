@@ -28,6 +28,10 @@ export interface CurrentCampaignSliceActions {
     assetId: string,
     isHidden: boolean
   ) => Promise<void>;
+  updateHiddenOracles: (
+    oracleId: string,
+    isHidden: boolean
+  ) => Promise<void>;
 
   resetStore: () => void;
 }
