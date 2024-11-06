@@ -1,14 +1,15 @@
 import { Datasworn } from "@datasworn/core";
 import { OracleTableRoll, ROLL_TYPE } from "types/DieRolls.type";
 import { rollDie } from "./rollDie";
+import { Theme } from "@mui/material";
 
-function rollOracleColumn(column: Datasworn.OracleRollable):
-  | {
-      roll: number;
-      result: Datasworn.OracleRollableRow;
-    }
-  | undefined {
-  const roll = rollDie(column.dice);
+async function rollOracleColumn(column: Datasworn.OracleRollable, theme: Theme, hide3dDice: boolean):
+  Promise<| {
+    roll: number;
+    result: Datasworn.OracleRollableRow;
+  }
+    | undefined> {
+  const roll = await rollDie(column.dice, theme, hide3dDice);
   if (!roll) {
     return undefined;
   }
@@ -26,12 +27,14 @@ function rollOracleColumn(column: Datasworn.OracleRollable):
   };
 }
 
-export function rollOracle(
+export async function rollOracle(
   oracle: Datasworn.OracleCollection | Datasworn.OracleRollable,
   characterId: string | null,
   uid: string,
-  gmsOnly: boolean
-): OracleTableRoll | undefined {
+  gmsOnly: boolean,
+  theme: Theme,
+  hide3dDice: boolean,
+): Promise<OracleTableRoll | undefined> {
   // We cannot roll across multiple tables like this
   if (oracle.oracle_type === "tables") {
     console.error("Oracle table collections cannot be rolled");
@@ -54,8 +57,8 @@ export function rollOracle(
     const tmpRolls: number[] = [];
     resultString = Object.values(oracle.contents ?? {})
       .sort((c1, c2) => c1.name.localeCompare(c2.name))
-      .map((col) => {
-        const rollResult = rollOracleColumn(col);
+      .map(async (col) => {
+        const rollResult = await rollOracleColumn(col, theme, hide3dDice);
         if (!rollResult) {
           return "";
         } else {
@@ -66,7 +69,7 @@ export function rollOracle(
       .join("\n");
     rolls = tmpRolls;
   } else {
-    const rollResult = rollOracleColumn(oracle);
+    const rollResult = await rollOracleColumn(oracle, theme, hide3dDice);
     if (rollResult) {
       rolls = rollResult.roll;
       resultString = rollResult.result.text;

@@ -70,7 +70,7 @@ export function OracleListItem(props: OracleListItemProps) {
         </>
       }
       disabled={disabled}
-      onClick={!actionIsHide ? () => rollOracleTable(oracle._id, true) : undefined}
+      onClick={!actionIsHide ? () => rollOracleTable(oracle._id, true, false) : undefined}
       sx={{
         filter: hidden ? "grayscale(30%) opacity(70%)" : undefined
       }}
