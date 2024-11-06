@@ -2,14 +2,14 @@ import { ButtonBase, CircularProgress } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 
-export interface HideOracleButtonProps {
+export interface ToggleVisibilityButtonProps {
   onToggleVisibility: () => void;
   loading: boolean;
   hidden?: boolean;
 }
 
 export function ToggleVisibilityButton(
-  props: HideOracleButtonProps
+  props: ToggleVisibilityButtonProps
 ) {
   const { onToggleVisibility, loading, hidden } = props;
 
@@ -32,7 +32,7 @@ export function ToggleVisibilityButton(
       }}
       disabled={loading}
       disableRipple
-      aria-label={"Toggle visibility"}
+      aria-label={hidden ? "Show Item" : "Hide Item"}
       sx={{
         borderRadius: "50%",
         p: 1,
