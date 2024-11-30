@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { AppProviders } from "providers/AppProviders";
 import { Router } from "Router";
+import "./polyfills";
 
 import "@fontsource-variable/rubik";
 import "@fontsource/bebas-neue";
