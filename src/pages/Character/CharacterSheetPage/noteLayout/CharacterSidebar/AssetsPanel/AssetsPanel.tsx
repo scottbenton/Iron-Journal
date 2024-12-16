@@ -121,7 +121,7 @@ export function AssetsPanel() {
     (store) => store.campaigns.currentCampaign.assets.updateAssetControl
   );
   return (
-    <>
+    <Box pl={2} width={"calc(100% - 16px)"} >
       {isInCampaign && isStarforged && (
         <>
           <SidebarHeading
@@ -229,6 +229,6 @@ export function AssetsPanel() {
           })
         }
       />
-    </>
+    </Box>
   );
 }

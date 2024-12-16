@@ -8,7 +8,7 @@ import { Box } from "@mui/material";
 
 export function CharacterPanel() {
   return (
-    <Box pl={2} >
+    <Box pl={2} width={"calc(100% - 16px)"} >
       <CharacterDetails />
       <CharacterStats />
       <CharacterConditionMeters />
