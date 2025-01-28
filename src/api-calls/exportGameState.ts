@@ -5,24 +5,11 @@ import { getProgressTracks } from "./tracks/getProgressTracks";
 
 export async function exportGameState(campaignId: string, characterId: string): Promise<string> {
   try {
-    let campaign = null;
-    if (campaignId) {
-      try {
-        campaign = await getCampaign(campaignId);
-      } catch (error) {
-        console.warn("Could not find campaign:", error.message);
-      }
-    }
-    let character = null;
-    try {
-      character = await getCharacter(characterId);
-    } catch (error) {
-      console.warn("Could not find character:", error.message);
-    }
+    const campaign = campaignId ? await getCampaign(campaignId).catch(() => null) : null;
+    const character = characterId ? await getCharacter(characterId).catch(() => null) : null;
 
-    const assets = await getAssets(characterId, campaignId || undefined);
-
-    const tracks = await getProgressTracks(campaignId || undefined, characterId, "active");
+    const assets = characterId || campaignId ? await getAssets({ characterId, campaignId }).catch(() => []) : [];
+    const tracks = characterId || campaignId ? await getProgressTracks({ campaignId, characterId, status: "active" }).catch(() => []) : [];
 
     const gameState = {
       campaign,
