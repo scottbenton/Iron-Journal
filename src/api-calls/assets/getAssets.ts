@@ -15,12 +15,13 @@ export const getAssets = createApiFunction<GetAssetsParams, AssetDocument[]>(asy
   const { characterId, campaignId } = params;
 
   if (!characterId && !campaignId) {
-    throw new Error("Either character or campaign ID must be defined.");
+    console.warn("Neither character nor campaign ID provided. Returning empty asset list.");
+    return [];
   }
 
   const collectionRef = characterId
     ? getCharacterAssetCollection(characterId)
-    : getCampaignAssetCollection(campaignId as string);
+    : getCampaignAssetCollection(campaignId!);
 
   const querySnapshot = await getDocs(collectionRef);
   return querySnapshot.docs.map(doc => doc.data() as AssetDocument);
