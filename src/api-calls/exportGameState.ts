@@ -19,7 +19,7 @@ export async function exportGameState(campaignId: string, characterId: string): 
       tracks,
     };
 
-    return JSON.stringify(gameState);
+    return gameState;
   } catch (error) {
     throw new Error("Failed to export game state: " + error.message);
   }
