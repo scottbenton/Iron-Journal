@@ -8,8 +8,8 @@ export async function exportGameState(campaignId: string, characterId: string): 
     const campaign = campaignId ? await getCampaign(campaignId).catch(() => null) : null;
     const character = characterId ? await getCharacter(characterId).catch(() => null) : null;
 
-    const assets = characterId || campaignId ? await getAssets({ characterId, campaignId }).catch(() => []) : [];
-    const tracks = characterId || campaignId ? await getProgressTracks({ campaignId, characterId, status: "active" }).catch(() => []) : [];
+    const assets = character ? await getAssets({ characterId }).catch(() => []) : [];
+    const tracks = character ? await getProgressTracks({ characterId, status: "active" }).catch(() => []) : [];
 
     const gameState = {
       campaign,
