@@ -1,20 +1,16 @@
 import { getCampaign } from "./campaign/getCampaign";
 import { getCharacter } from "./character/getCharacter";
-import { listenToAssets } from "./assets/listenToAssets";
-import { listenToProgressTracks } from "./tracks/listenToProgressTracks";
+import { getAssets } from "./assets/getAssets";
+import { getProgressTracks } from "./tracks/getProgressTracks";
 
 export async function exportGameState(campaignId: string, characterId: string): Promise<string> {
   try {
     const campaign = await getCampaign(campaignId);
     const character = await getCharacter(characterId);
 
-    const assets = await new Promise((resolve, reject) => {
-      listenToAssets(characterId, campaignId, resolve, reject);
-    });
+    const assets = await getAssets(characterId, campaignId);
 
-    const tracks = await new Promise((resolve, reject) => {
-      listenToProgressTracks(campaignId, characterId, "active", resolve, reject);
-    });
+    const tracks = await getProgressTracks(campaignId, characterId, "active");
 
     const gameState = {
       campaign,
