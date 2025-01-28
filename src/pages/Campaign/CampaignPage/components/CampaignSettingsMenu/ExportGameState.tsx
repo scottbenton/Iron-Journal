@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress, Typography } from '@mui/material';
-import { exportGameState } from 'src/api-calls/exportGameState';
+import { exportGameState } from '../../../../../../api-calls/exportGameState';
 
 const ExportGameState: React.FC<{ open: boolean; onClose: () => void; campaignId: string; characterId: string }> = ({ open, onClose, campaignId, characterId }) => {
   const [loading, setLoading] = useState(false);
