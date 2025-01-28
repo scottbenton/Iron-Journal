@@ -13,7 +13,12 @@ export async function exportGameState(campaignId: string, characterId: string): 
         console.warn("Could not find campaign:", error.message);
       }
     }
-    const character = await getCharacter(characterId);
+    let character = null;
+    try {
+      character = await getCharacter(characterId);
+    } catch (error) {
+      console.warn("Could not find character:", error.message);
+    }
 
     const assets = await getAssets(characterId, campaignId || undefined);
 
