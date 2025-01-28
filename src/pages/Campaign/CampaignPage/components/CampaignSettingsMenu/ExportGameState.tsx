@@ -10,7 +10,7 @@ const ExportGameState: React.FC<{ campaignId: string; characterId: string }> = (
     setError(null);
     try {
       const gameState = await exportGameState(campaignId, characterId);
-      const blob = new Blob([gameState], { type: 'application/json' });
+      const blob = new Blob([JSON.stringify(gameState)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
