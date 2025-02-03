@@ -43,10 +43,9 @@ export async function exportGameState(exportData: {
       })),
       // Add timestamps for export metadata
       exportedAt: new Date().toISOString(),
-      version: "1.0", // Consider using your app version here
     };
 
-    return JSON.stringify(gameState, null, 2);
+    return gameState;
   } catch (error) {
     throw new Error(
       "Failed to export game state: " +
