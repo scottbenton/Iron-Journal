@@ -35,7 +35,7 @@ import UsernameIcon from "@mui/icons-material/AccountCircle";
 import TokenIcon from "@mui/icons-material/Contacts";
 import { CustomTokenDialog } from "./CustomTokenDialog/CustomTokenDialog";
 import { activeFeatureFlags } from "hooks/featureFlags/activeFeatureFlags";
-import ExportGameState from "pages/Campaign/CampaignPage/components/CampaignSettingsMenu/ExportGameState";
+import { ExportGameState } from "pages/Campaign/CampaignPage/components/CampaignSettingsMenu/ExportGameState";
 
 export function SettingsMenu() {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -236,8 +236,6 @@ export function SettingsMenu() {
       <ExportGameState
         open={exportDialogOpen}
         onClose={() => setExportDialogOpen(false)}
-        campaignId={"your-campaign-id"} // Replace with actual campaignId
-        characterId={"your-character-id"} // Replace with actual characterId
       />
     </>
   );

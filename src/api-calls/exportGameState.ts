@@ -1,25 +1,56 @@
-import { getCampaign } from "./campaign/getCampaign";
-import { getCharacter } from "./character/getCharacter";
 import { getAssets } from "./assets/getAssets";
 import { getProgressTracks } from "./tracks/getProgressTracks";
 
-export async function exportGameState(campaignId: string, characterId: string): Promise<string> {
+export async function exportGameState(exportData: {
+  campaigns: any[];
+  characters: any[];
+}): Promise<string> {
   try {
-    const campaign = campaignId ? await getCampaign(campaignId).catch(() => null) : null;
-    const character = characterId ? await getCharacter(characterId).catch(() => null) : null;
+    // Process assets and tracks for all characters
+    const assetsByCharacter = await Promise.all(
+      exportData.characters.map(async (character) => {
+        try {
+          return await getAssets({ characterId: character.id });
+        } catch (e) {
+          console.error("Failed to load assets for character", character.id, e);
+          return [];
+        }
+      })
+    );
 
-    const assets = character ? await getAssets({ characterId }).catch(() => []) : [];
-    const tracks = character ? await getProgressTracks({ characterId, status: "active" }).catch(() => []) : [];
+    const tracksByCharacter = await Promise.all(
+      exportData.characters.map(async (character) => {
+        try {
+          return await getProgressTracks({
+            characterId: character.id,
+            status: "active",
+          });
+        } catch (e) {
+          console.error("Failed to load tracks for character", character.id, e);
+          return [];
+        }
+      })
+    );
 
     const gameState = {
-      campaign,
-      character,
-      assets,
-      tracks,
+      // Include raw campaign data
+      campaigns: exportData.campaigns,
+      // Enrich characters with their associated data
+      characters: exportData.characters.map((character, index) => ({
+        ...character,
+        assets: assetsByCharacter[index],
+        tracks: tracksByCharacter[index],
+      })),
+      // Add timestamps for export metadata
+      exportedAt: new Date().toISOString(),
+      version: "1.0", // Consider using your app version here
     };
 
-    return gameState;
+    return JSON.stringify(gameState, null, 2);
   } catch (error) {
-    throw new Error("Failed to export game state: " + error.message);
+    throw new Error(
+      "Failed to export game state: " +
+        (error instanceof Error ? error.message : "Unknown error")
+    );
   }
 }

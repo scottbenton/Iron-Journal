@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, CircularProgress, Typography } from '@mui/material';
 import { exportGameState } from '../../../../../api-calls/exportGameState';
+import { useStore } from "stores/store";
 
-const ExportGameState: React.FC<{ open: boolean; onClose: () => void; campaignId: string; characterId: string }> = ({ open, onClose, campaignId, characterId }) => {
+export function ExportGameState({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const campaigns = useStore((store) => Object.values(store.campaigns.campaignMap));
+  const characters = useStore((store) =>
+    Object.entries(store.characters.characterMap).map(([id, character]) => ({
+      ...character,
+      id // Add ID to character objects
+    }))
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -11,7 +19,12 @@ const ExportGameState: React.FC<{ open: boolean; onClose: () => void; campaignId
     setLoading(true);
     setError(null);
     try {
-      const gameState = await exportGameState(campaignId, characterId);
+      const exportData = {
+        campaigns,
+        characters,
+        // Add other global state as needed
+      };
+      const gameState = await exportGameState(exportData);
       const blob = new Blob([JSON.stringify(gameState)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -30,6 +43,10 @@ const ExportGameState: React.FC<{ open: boolean; onClose: () => void; campaignId
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Export Game State</DialogTitle>
       <DialogContent>
+        <Typography variant="body1" paragraph>
+          This will export your complete game state including all campaigns,
+          characters, and associated data into a JSON file for backup purposes.
+        </Typography>
         {error && <Typography color="error">{error}</Typography>}
       </DialogContent>
       <DialogActions>
@@ -42,6 +59,4 @@ const ExportGameState: React.FC<{ open: boolean; onClose: () => void; campaignId
       </DialogActions>
     </Dialog>
   );
-};
-
-export default ExportGameState;
+}
