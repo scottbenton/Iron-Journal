@@ -32,6 +32,7 @@ export function ExportGameState({ open, onClose }: { open: boolean; onClose: () 
       a.download = 'game-state.json';
       a.click();
       URL.revokeObjectURL(url);
+      onClose();
     } catch (err) {
       setError('Failed to export game state.');
     } finally {
