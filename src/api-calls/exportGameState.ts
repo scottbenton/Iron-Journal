@@ -4,13 +4,20 @@ import { getProgressTracks } from "./tracks/getProgressTracks";
 export async function exportGameState(exportData: {
   campaigns: any[];
   characters: any[];
+  assetMap: Record<string, Datasworn.Asset>;
 }): Promise<string> {
   try {
     // Process assets and tracks for all characters
     const assetsByCharacter = await Promise.all(
       exportData.characters.map(async (character) => {
         try {
-          return await getAssets({ characterId: character.id });
+          return await getAssets({ characterId: character.id }).then(
+            (storedAssets) =>
+              storedAssets.map((asset) => ({
+                ...exportData.assetMap[asset.id],
+                ...asset,
+              }))
+          );
         } catch (e) {
           console.error("Failed to load assets for character", character.id, e);
           return [];

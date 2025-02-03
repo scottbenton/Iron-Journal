@@ -8,9 +8,10 @@ export function ExportGameState({ open, onClose }: { open: boolean; onClose: () 
   const characters = useStore((store) =>
     Object.entries(store.characters.characterMap).map(([id, character]) => ({
       ...character,
-      id // Add ID to character objects
+      id
     }))
   );
+  const assetMap = useStore((store) => store.rules.assetMaps.assetMap);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,6 +23,7 @@ export function ExportGameState({ open, onClose }: { open: boolean; onClose: () 
       const exportData = {
         campaigns,
         characters,
+        assetMap,
         // Add other global state as needed
       };
       const gameState = await exportGameState(exportData);
